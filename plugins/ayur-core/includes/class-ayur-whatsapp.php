@@ -39,9 +39,9 @@ class Ayur_WhatsApp {
         $enabled = get_option('ayur_whatsapp_enabled', 'yes');
         if ($enabled !== 'yes') return;
 
-        $phone = get_option('ayur_whatsapp_phone', '919876543210');
+        $phone = get_option('ayur_whatsapp_phone', '918888686858');
         $raw_phone = preg_replace('/[^0-9]/', '', $phone);
-        $message = get_option('ayur_whatsapp_message', 'Namaste! I would like some advice on selecting the right Ayurvedic product for my wellness needs.');
+        $message = get_option('ayur_whatsapp_message', 'Namaste Bhagyoday Ayurveda! I would like some guidance on choosing the right Ayurvedic wellness formulation.');
         $wa_url = 'https://wa.me/' . $raw_phone . '?text=' . rawurlencode($message);
 
         ?>
@@ -79,14 +79,14 @@ class Ayur_WhatsApp {
                     <tr>
                         <th scope="row"><label for="ayur_whatsapp_phone"><?php _e('WhatsApp Number (with country code)', 'ayur-core'); ?></label></th>
                         <td>
-                            <input name="ayur_whatsapp_phone" type="text" id="ayur_whatsapp_phone" value="<?php echo esc_attr(get_option('ayur_whatsapp_phone', '919876543210')); ?>" class="regular-text" placeholder="919876543210" />
-                            <p class="description"><?php _e('Include 91 for India without plus sign (e.g. 919876543210).', 'ayur-core'); ?></p>
+                            <input name="ayur_whatsapp_phone" type="text" id="ayur_whatsapp_phone" value="<?php echo esc_attr(get_option('ayur_whatsapp_phone', '918888686858')); ?>" class="regular-text" placeholder="918888686858" />
+                            <p class="description"><?php _e('Include 91 for India without plus sign (e.g. 918888686858).', 'ayur-core'); ?></p>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="ayur_whatsapp_message"><?php _e('Pre-filled Greeting Message', 'ayur-core'); ?></label></th>
                         <td>
-                            <textarea name="ayur_whatsapp_message" id="ayur_whatsapp_message" rows="3" class="large-text"><?php echo esc_textarea(get_option('ayur_whatsapp_message', 'Namaste! I would like some advice on selecting the right Ayurvedic product for my wellness needs.')); ?></textarea>
+                            <textarea name="ayur_whatsapp_message" id="ayur_whatsapp_message" rows="3" class="large-text"><?php echo esc_textarea(get_option('ayur_whatsapp_message', 'Namaste Bhagyoday Ayurveda! I would like some guidance on choosing the right Ayurvedic wellness formulation.')); ?></textarea>
                         </td>
                     </tr>
                 </table>

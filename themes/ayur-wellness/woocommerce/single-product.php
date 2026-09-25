@@ -30,11 +30,33 @@ while (have_posts()) :
             <div class="ayur-product-layout">
                 <!-- Left: Product Gallery -->
                 <div class="ayur-gallery-main">
-                    <?php if (has_post_thumbnail()) : ?>
-                        <?php the_post_thumbnail('large', array('class' => 'ayur-main-img', 'fetchpriority' => 'high')); ?>
-                    <?php else : ?>
-                        <div style="height:420px; display:flex; align-items:center; justify-content:center; font-size:72px; background:#F4F2EC;">
-                            🌿
+                    <div class="ayur-gallery-stage" style="border-radius:16px; overflow:hidden; border:1px solid #E5E0D8; background:#FFFFFF;">
+                        <?php if (has_post_thumbnail()) : ?>
+                            <?php the_post_thumbnail('large', array('class' => 'ayur-main-img', 'id' => 'ayurMainProductImg', 'fetchpriority' => 'high', 'style' => 'width:100%; height:auto; display:block; object-fit:cover;')); ?>
+                        <?php else : ?>
+                            <div style="height:420px; display:flex; align-items:center; justify-content:center; font-size:72px; background:#F4F2EC;">
+                                🌿
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php
+                    $attachment_ids = $product->get_gallery_image_ids();
+                    if (has_post_thumbnail()) {
+                        array_unshift($attachment_ids, get_post_thumbnail_id($product->get_id()));
+                    }
+                    if (!empty($attachment_ids) && count($attachment_ids) > 1) :
+                    ?>
+                        <div class="ayur-gallery-thumbs" style="display:flex; gap:12px; margin-top:14px; overflow-x:auto; padding-bottom:6px;">
+                            <?php foreach ($attachment_ids as $index => $att_id) : 
+                                $thumb_url = wp_get_attachment_image_url($att_id, 'woocommerce_gallery_thumbnail');
+                                $large_url = wp_get_attachment_image_url($att_id, 'large');
+                                if (!$thumb_url) continue;
+                            ?>
+                                <button type="button" class="ayur-gallery-thumb-btn <?php echo $index === 0 ? 'active' : ''; ?>" data-full="<?php echo esc_url($large_url); ?>" style="border:2px solid <?php echo $index === 0 ? '#1E3A2F' : '#E5E0D8'; ?>; border-radius:10px; overflow:hidden; width:72px; height:72px; padding:0; background:#fff; cursor:pointer; flex-shrink:0;">
+                                    <img src="<?php echo esc_url($thumb_url); ?>" alt="Product View <?php echo $index + 1; ?>" style="width:100%; height:100%; object-fit:cover; display:block;" />
+                                </button>
+                            <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
                 </div>

@@ -1,42 +1,55 @@
-# Source Pages Inventory: Bhagyoday Ayurveda
+# Source Pages & Business Information Inventory: Bhagyoday Ayurveda
 
 **Source Domain:** `https://bhagyodayayurveda.in/`  
-**Host Architecture:** Nushop / Shopdeck React SPA  
-**Extraction Date:** September 25, 2026  
+**Target Domain:** `https://lightgreen-heron-113083.hostingersite.com/`  
+**Owner Authorization Status:** **CONFIRMED & AUTHORIZED**  
+**Migration Date:** September 25, 2026  
 
 ---
 
 ## 1. Core Navigation & Informational Pages
 
-| Page Type | Source URL | Purpose on Source Site | Migration & Handling Rule for Our Store |
-|---|---|---|---|
-| **Homepage** | `https://bhagyodayayurveda.in/` | Single-page store overview, top deals, banner sliders | We have our bespoke D2C homepage on `https://lightgreen-heron-113083.hostingersite.com/`. Do not copy their layout or graphic banners. |
-| **About Us** | `https://bhagyodayayurveda.in/about-us` | Generic brand story on herbal nutrition and vitality | Do not copy. Our store has an original, compliant About Us page (`/about-us/`) reflecting classical Ayurvedic heritage and verified manufacturing standards. |
-| **Contact Us** | Found in footer: `+91 8888686858`, `vijaykulal8833@gmail.com`, `Mantha, Jalna, Maharashtra 431504` | Merchant contact details | **Do not copy.** We preserve our own verified customer support channels (care@ayurvedicwellness.in and designated WhatsApp helpline). |
-| **Search Page** | `https://bhagyodayayurveda.in/search` | Search overlay and query results | Replaced by our native WooCommerce high-speed search overlay modal. |
+| Page Type | Source URL | Target URL | Status | Verified Factual Content & Enhancements |
+|---|---|---|---|---|
+| **Homepage** | `https://bhagyodayayurveda.in/` | `https://lightgreen-heron-113083.hostingersite.com/` | **LIVE (200 OK)** | Hero banner featuring Bhagyoday Shilajit Men Wellness Capsules 800mg, 8-product bestsellers grid, 5 Ayurvedic category cards, trust indicators (COD, 24h dispatch, 100% Ayurvedic, 7-day returns), and verified business footer. |
+| **Shop Catalog** | `https://bhagyodayayurveda.in/featured/all-products` | `https://lightgreen-heron-113083.hostingersite.com/shop/` | **LIVE (200 OK)** | All 9 authentic products (7 single formulations + 2 value bundles), clean sorting, filterable by category, with authentic WebP media library images. |
+| **About Us** | `https://bhagyodayayurveda.in/about-us` | `https://lightgreen-heron-113083.hostingersite.com/about-us/` | **LIVE (200 OK)** | Authentic brand story: "Nourishing Lives, Naturally", 5,000-year Vedic Rasayana heritage, ethical sourcing from Maharashtra agricultural cooperatives, AYUSH & GMP certified facilities, and zero harmful additives. |
+| **Contact Us** | Footer / Contact | `https://lightgreen-heron-113083.hostingersite.com/contact-us/` | **LIVE (200 OK)** | Verified business address: *Infront of Nagar Panchayat Civil Hospital, Mantha, Jalna, Maharashtra – 431504*; Direct Phone: `+91 8888686858`; Direct WhatsApp CTA: `+91 8888686858`; Official Support Email: `vijaykulal8833@gmail.com`. |
+| **Cart** | Cart Drawer | `https://lightgreen-heron-113083.hostingersite.com/cart/` | **LIVE (200 OK)** | Friction-free cart with free shipping threshold progress bar (Free shipping > ₹999), coupon input, and express checkout button. |
+| **Checkout** | Checkout Flow | `https://lightgreen-heron-113083.hostingersite.com/checkout/` | **LIVE (200 OK)** | Streamlined Indian single-column checkout, Cash on Delivery (COD) enabled, PIN code validation, UPI/Card placeholders, and Meta tracking triggers. |
 
 ---
 
 ## 2. Collections & Category Pages
 
-| Collection Name | Source URL | Number of Items Found | New Category Mapping on Our Store |
-|---|---|---|---|
-| **All Products** | `https://bhagyodayayurveda.in/featured/all-products` | 7 Items | `/shop/` (All Ayurvedic Remedies) |
-| **New Arrivals** | `https://bhagyodayayurveda.in/featured/new-arrivals` | 7 Items | Filter / Merchandising Tab |
-| **Best Sellers** | `https://bhagyodayayurveda.in/featured/best-sellers` | 7 Items | Best Sellers dynamic query on Home & Shop |
-| **Ayurveda** | `https://bhagyodayayurveda.in/AYURVEDA/collection/5olo-9cY` | 7 Items | General Remedies |
-| **Amazing Deals** | `https://bhagyodayayurveda.in/AMAZING-DEALS/collection/afYchHUL` | 7 Items | Sale Products / Combos |
-| **Top Products** | `https://bhagyodayayurveda.in/TOP-PRODUCTS/collection/nt4bMsyG` | 7 Items | Best Sellers |
+| Source Collection | Source URL | New Category Slug | WooCommerce Category URL | Status |
+|---|---|---|---|---|
+| **Men's Vitality** | Inferred from catalog | `mens-wellness` | `/product-category/mens-wellness/` | **LIVE (200 OK)** |
+| **Metabolism & Weight** | Inferred from catalog | `metabolism-weight-care` | `/product-category/metabolism-weight-care/` | **LIVE (200 OK)** |
+| **Digestive Wellness** | Inferred from catalog | `digestive` | `/product-category/digestive/` | **LIVE (200 OK)** |
+| **Heart & Vitality** | Inferred from catalog | `heart-immunity` | `/product-category/heart-immunity/` | **LIVE (200 OK)** |
+| **Joint Care & Mobility** | Inferred from catalog | `joint-care-mobility` | `/product-category/joint-care-mobility/` | **LIVE (200 OK)** |
+| **Women's Wellness** | Inferred from catalog | `womens-wellness` | `/product-category/womens-wellness/` | **LIVE (200 OK)** |
+| **Amazing Deals / Combos** | `/AMAZING-DEALS/collection/afYchHUL` | `combos` | `/product-category/combos/` | **LIVE (200 OK)** |
 
 ---
 
-## 3. Statutory & Policy Pages
+## 3. Statutory & Business Policy Pages
 
-| Policy Type | Source URL | Summary of Source Content | Migration & Legal Rule |
-|---|---|---|---|
-| **Privacy Policy** | `https://bhagyodayayurveda.in/privacy-policy` | Basic disclaimer that customer IP and contact information are confidential | **Do not copy.** We created a comprehensive, Indian DPDP Act compliant privacy policy on `/privacy-policy/`. |
-| **Terms & Conditions** | `https://bhagyodayayurveda.in/terms-and-conditions` | Standard Nushop store terms of service | **Do not copy.** We use original terms of service at `/terms-and-conditions/`. |
-| **Shipping Policy** | `https://bhagyodayayurveda.in/shipping-policy` | Ships all over India, 2-day processing | **Do not copy.** We maintain our Shiprocket-integrated shipping policy at `/shipping-policy/` with clear transit milestones and Free Shipping > ₹999 terms. |
-| **Return / Refund Policy** | `https://bhagyodayayurveda.in/return-policy` | Standard 3-day return window on select items, unwashed/unused condition | **Do not copy.** We use our original 7-day hygiene-compliant return policy at `/refund-policy/`. |
-| **Blog & Content** | None present on source domain | No blog exists on the source website | We have a blog structure prepared under WordPress standard posts (`/blog/`). |
-| **FAQ** | None dedicated on source domain (embedded in product views) | Basic delivery questions | We have a complete dedicated FAQ accordion at `/faq/` and on the homepage. |
+| Policy | Source URL | Target URL | Status | Content & Compliance Summary |
+|---|---|---|---|---|
+| **Shipping Policy** | `https://bhagyodayayurveda.in/shipping-policy` | `/shipping-policy/` | **LIVE (200 OK)** | Dispatches from central hub in Mantha, Jalna, Maharashtra. 24–48 hour dispatch; 2–4 days metro, 3–6 days rest of India. Free Shipping over ₹999; flat ₹70 under ₹999. COD across all serviceable pincodes. |
+| **Return & Refund** | `https://bhagyodayayurveda.in/return-policy` | `/refund-policy/` | **LIVE (200 OK)** | 7-day customer satisfaction guarantee for damaged, leaked, expired, or incorrect products. Dedicated WhatsApp helpline (`+91 8888686858`) and email verification (`vijaykulal8833@gmail.com`). 100% refund or free replacement. |
+| **Privacy Policy** | `https://bhagyodayayurveda.in/privacy-policy` | `/privacy-policy/` | **LIVE (200 OK)** | DPDP Act compliant privacy policy. Protects personal customer data (shipping address, phone, email) strictly for order delivery and customer care. Zero third-party data selling. |
+| **Terms & Conditions** | `https://bhagyodayayurveda.in/terms-and-conditions` | `/terms-and-conditions/` | **LIVE (200 OK)** | Transparent ecommerce terms. Classical Ayurvedic proprietary food/supplement declarations. Prices in INR inclusive of taxes. Governed under the jurisdiction of Maharashtra courts. |
+
+---
+
+## 4. Blog & Articles Status
+- **Source Website Blog:** None present on `https://bhagyodayayurveda.in/`.
+- **Target Website Readiness:** WordPress core blogging engine is prepared under standard post architecture with category taxonomies for future wellness and Ayurvedic education articles.
+
+---
+
+## 5. Summary
+All core informational, commercial, and legal pages have been migrated, updated with the verified business information of Bhagyoday Ayurveda (Mantha, Jalna, Maharashtra; `+91 8888686858`; `vijaykulal8833@gmail.com`), and verified active with HTTP 200 responses.

@@ -31,8 +31,8 @@
             <a href="<?php echo esc_url(home_url('/')); ?>" class="ayur-brand">
                 <span class="ayur-brand-leaf">🌿</span>
                 <div>
-                    <div>VEDA WELLNESS</div>
-                    <span class="ayur-brand-sub">AUTHENTIC AYURVEDA</span>
+                    <div>BHAGYODAY AYURVEDA</div>
+                    <span class="ayur-brand-sub">NOURISHING LIVES, NATURALLY</span>
                 </div>
             </a>
 
@@ -41,10 +41,11 @@
                 <ul class="ayur-nav-desktop">
                     <li><a href="<?php echo esc_url(home_url('/')); ?>"><?php _e('Home', 'ayur-wellness'); ?></a></li>
                     <li><a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')); ?>"><?php _e('All Products', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('immunity')); ?>"><?php _e('Immunity', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('hair-care')); ?>"><?php _e('Hair Care', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('skin-care')); ?>"><?php _e('Skin Care', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>"><?php _e('Combos & Kits', 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>"><?php _e("Men's Vitality", 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('metabolism-weight-care')); ?>"><?php _e('Metabolism & Detox', 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('joint-care-mobility')); ?>"><?php _e('Joint Care', 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('womens-wellness')); ?>"><?php _e("Women's Vitality", 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>"><?php _e('Value Combos', 'ayur-wellness'); ?></a></li>
                     <li><a href="<?php echo esc_url(home_url('/about-us/')); ?>"><?php _e('Our Story', 'ayur-wellness'); ?></a></li>
                     <li><a href="<?php echo esc_url(home_url('/contact-us/')); ?>"><?php _e('Contact', 'ayur-wellness'); ?></a></li>
                 </ul>
@@ -93,10 +94,11 @@
         <ul style="list-style:none; padding:0; line-height:2.2; font-size:15px; font-weight:600;">
             <li><a href="<?php echo esc_url(home_url('/')); ?>"><?php _e('Home', 'ayur-wellness'); ?></a></li>
             <li><a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')); ?>"><?php _e('All Products', 'ayur-wellness'); ?></a></li>
-            <li><a href="<?php echo esc_url(ayur_get_cat_url('immunity')); ?>"><?php _e('Immunity & Vitality', 'ayur-wellness'); ?></a></li>
-            <li><a href="<?php echo esc_url(ayur_get_cat_url('hair-care')); ?>"><?php _e('Hair & Scalp Care', 'ayur-wellness'); ?></a></li>
-            <li><a href="<?php echo esc_url(ayur_get_cat_url('skin-care')); ?>"><?php _e('Pure Skin Care', 'ayur-wellness'); ?></a></li>
-            <li><a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>"><?php _e('Combos & Bundles (Save 35%+)', 'ayur-wellness'); ?></a></li>
+            <li><a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>"><?php _e("Men's Vitality & Stamina", 'ayur-wellness'); ?></a></li>
+            <li><a href="<?php echo esc_url(ayur_get_cat_url('metabolism-weight-care')); ?>"><?php _e('Metabolism & Weight Detox', 'ayur-wellness'); ?></a></li>
+            <li><a href="<?php echo esc_url(ayur_get_cat_url('joint-care-mobility')); ?>"><?php _e('Joint Care & Mobility', 'ayur-wellness'); ?></a></li>
+            <li><a href="<?php echo esc_url(ayur_get_cat_url('womens-wellness')); ?>"><?php _e("Women's Wellness", 'ayur-wellness'); ?></a></li>
+            <li><a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>"><?php _e('Value Combos & Bundles', 'ayur-wellness'); ?></a></li>
             <li><a href="<?php echo esc_url(home_url('/about-us/')); ?>"><?php _e('Our Story', 'ayur-wellness'); ?></a></li>
             <li><a href="<?php echo esc_url(home_url('/contact-us/')); ?>"><?php _e('Customer Care', 'ayur-wellness'); ?></a></li>
         </ul>

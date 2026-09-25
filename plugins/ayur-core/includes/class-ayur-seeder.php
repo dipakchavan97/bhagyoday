@@ -69,7 +69,7 @@ class Ayur_Seeder {
             ),
             'contact-us' => array(
                 'title'   => 'Contact Us',
-                'content' => '<h2>We are here to assist your wellness journey</h2><p>Our team of Ayurvedic consultants and customer care specialists are available Monday to Saturday, 9:00 AM to 7:00 PM IST.</p><p><strong>Customer Care:</strong> care@ayurvedicwellness.in<br><strong>WhatsApp Support:</strong> +91 98765 43210<br><strong>Corporate Address:</strong> Mumbai, Maharashtra, India - 400001</p>',
+                'content' => '<h2>We are here to assist your wellness journey</h2><p>Our team of Ayurvedic consultants and customer care specialists are available Monday to Saturday, 9:00 AM to 7:00 PM IST.</p><p><strong>Customer Care:</strong> vijaykulal8833@gmail.com<br><strong>WhatsApp Support:</strong> +91 8888686858<br><strong>Corporate & Dispatch Address:</strong> Bhagyoday Ayurveda, Infront of Nagar Panchayat Civil Hospital, Mantha, Jalna, Maharashtra - 431504</p>',
             ),
             'faq' => array(
                 'title'   => 'Frequently Asked Questions',

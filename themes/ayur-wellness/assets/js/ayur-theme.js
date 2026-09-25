@@ -9,7 +9,20 @@
         initStickyHeader();
         initMobileDrawer();
         initSearchModal();
+        initGallerySwitcher();
     });
+
+    function initGallerySwitcher() {
+        $(document).on('click', '.ayur-gallery-thumb-btn', function(e) {
+            e.preventDefault();
+            var fullUrl = $(this).data('full');
+            if (fullUrl) {
+                $('#ayurMainProductImg').attr('src', fullUrl).attr('srcset', '');
+                $('.ayur-gallery-thumb-btn').css('border-color', '#E5E0D8').removeClass('active');
+                $(this).css('border-color', '#1E3A2F').addClass('active');
+            }
+        });
+    }
 
     function initStickyHeader() {
         var $header = $('#ayurHeader');

@@ -50,13 +50,13 @@ if (!defined('ABSPATH')) {
             <div>
                 <div class="ayur-brand" style="color:#FFFFFF; margin-bottom:15px;">
                     <span class="ayur-brand-leaf">🌿</span>
-                    <div>VEDA WELLNESS</div>
+                    <div>BHAGYODAY AYURVEDA</div>
                 </div>
                 <p style="line-height:1.7; font-size:13px; color:#9CA3AF; margin-bottom:18px;">
-                    Dedicated to reviving authentic 5,000-year-old Vedic formulations for contemporary daily wellness. Ethical herb harvesting, lab-standardized extraction, and pure mind-body balance.
+                    Nourishing Lives, Naturally. Authentic classical Ayurvedic formulations and herbal nutrition, ethically crafted in Maharashtra to nurture your holistic wellness.
                 </p>
                 <div style="font-size:12px; color:#C5A059; font-weight:600;">
-                    AYUSH Licensed Facility • Heavy Metal Tested
+                    AYUSH Licensed • GMP Quality Standards • 100% Herbal
                 </div>
             </div>
 
@@ -65,10 +65,11 @@ if (!defined('ABSPATH')) {
                 <h4><?php _e('Explore Remedies', 'ayur-wellness'); ?></h4>
                 <ul class="ayur-footer-links">
                     <li><a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>"><?php _e('All Ayurvedic Products', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('immunity')); ?>"><?php _e('Immunity & Vitality', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('hair-care')); ?>"><?php _e('Hair & Scalp Rituals', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('skin-care')); ?>"><?php _e('Pure Skin Nourishment', 'ayur-wellness'); ?></a></li>
-                    <li><a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>"><?php _e('Curated Wellness Combos', 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>"><?php _e("Men's Vitality & Stamina", 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('metabolism-weight-care')); ?>"><?php _e('Metabolism & Daily Detox', 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('joint-care-mobility')); ?>"><?php _e('Joint Care & Mobility', 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('womens-wellness')); ?>"><?php _e("Women's Wellness", 'ayur-wellness'); ?></a></li>
+                    <li><a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>"><?php _e('Value Combos & Packs', 'ayur-wellness'); ?></a></li>
                 </ul>
             </div>
 
@@ -86,13 +87,14 @@ if (!defined('ABSPATH')) {
 
             <!-- Contact & Help -->
             <div>
-                <h4><?php _e('Expert Support', 'ayur-wellness'); ?></h4>
+                <h4><?php _e('Bhagyoday Care', 'ayur-wellness'); ?></h4>
                 <p style="font-size:13px; color:#D1D5DB; margin-bottom:12px;">
-                    Have questions about dosages, herbal interactions, or order tracking?
+                    Have questions about dosages, herbal ingredients, or order tracking?
                 </p>
                 <div style="font-size:13px; line-height:1.8;">
-                    <div>📱 <strong>WhatsApp:</strong> +91 98765 43210</div>
-                    <div>✉️ <strong>Email:</strong> care@ayurvedicwellness.in</div>
+                    <div>📱 <strong>WhatsApp:</strong> <a href="https://wa.me/918888686858" target="_blank" rel="noopener noreferrer" style="color:#D1D5DB;">+91 8888686858</a></div>
+                    <div>✉️ <strong>Email:</strong> <a href="mailto:vijaykulal8833@gmail.com" style="color:#D1D5DB;">vijaykulal8833@gmail.com</a></div>
+                    <div>📍 <strong>Address:</strong> Mantha, Jalna, Maharashtra 431504</div>
                     <div>🕒 <strong>Hours:</strong> Mon - Sat (9am - 7pm IST)</div>
                 </div>
             </div>
@@ -101,7 +103,7 @@ if (!defined('ABSPATH')) {
         <!-- Statutory Disclaimer & Copyright -->
         <div class="ayur-footer-bottom">
             <div>
-                <p style="margin:0 0 4px 0;">&copy; <?php echo date('Y'); ?> Veda Wellness India. All rights reserved.</p>
+                <p style="margin:0 0 4px 0;">&copy; <?php echo date('Y'); ?> Bhagyoday Ayurveda. All rights reserved.</p>
                 <p style="font-size:11px; color:#6B7280; margin:0;">
                     *Disclaimer: Ayurvedic food supplements and classical preparations are intended to maintain wellness and support vitality; not intended to diagnose, treat, cure, or prevent any clinical disease.
                 </p>

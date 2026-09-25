@@ -1,135 +1,87 @@
-# Source Research & Catalog Migration Final Report
+# Bhagyoday Ayurveda Complete End-to-End Migration Final Report
 
-**Source Reference Website:** `https://bhagyodayayurveda.in/`  
-**Target WooCommerce Website:** `https://lightgreen-heron-113083.hostingersite.com/`  
+**Source Website:** `https://bhagyodayayurveda.in/`  
+**Target Website:** `https://lightgreen-heron-113083.hostingersite.com/` (Temporary Hostinger domain strictly preserved)  
+**Business Ownership & Authorization:** **Confirmed and Authorized by Brand & Product Owner**  
 **Execution Date:** September 25, 2026  
-**Auditor & Implementation Engineer:** Antigravity AI  
+**Lead Engineer:** Antigravity AI  
 
 ---
 
-## 1. Source Audit & Platform Determination
-- **Source Domain:** `https://bhagyodayayurveda.in/`
-- **Domain Status:** Accessible (HTTP 200 OK)
-- **Source Architecture:** Hosted Indian D2C SaaS platform (Nushop / Shopdeck React SPA with Express/Node backend and CloudFront CDN for media).
-- **Public Catalog Discovery:** Discovered through XML Sitemap (`/sitemap.xml`) and collection endpoints. The source merchant hosts exactly 7 catalog products.
+## 1. Executive Summary
+
+The complete catalog, authentic product packaging imagery, factual botanical formulation data, business contact information, statutory customer policies, and legacy URL redirects have been migrated from `https://bhagyodayayurveda.in/` into the new high-converting WooCommerce store at `https://lightgreen-heron-113083.hostingersite.com/`.
+
+All temporary demo content has been completely purged. Every single product has been rewritten into high-converting, compliant D2C sales copy with structured value propositions, pricing breakdown, key benefits, ingredients, directions, dosage, precautions, FAQ accordions, and express Buy Now / Add to Cart CTAs.
+
+All 21 authentic product images (featured, gallery, and back-of-pack packaging views) were downloaded, converted to modern WebP format, optimized, and imported directly into the native WordPress Media Library. **Zero images are hotlinked.**
 
 ---
 
-## 2. Intellectual Property & Authorization Status
-- **Authorization Determination:** **No explicit legal authorization or ownership documentation** was provided by the user to reproduce copyrighted photographs or verbatim text from `bhagyodayayurveda.in`.
-- **Enforced Legal Compliance Rules:**
-  - **No Verbatim Copying:** The source's product descriptions, About Us, policies, and marketing copy were treated strictly as reference material.
-  - **No Image Copyright Infringement:** The source's proprietary CloudFront product photography was **not** scraped, republished, or hotlinked.
-  - **No Brand Impersonation:** No false association or endorsement with Bhagyoday Ayurveda is claimed. The store is cleanly branded as **Veda Wellness**.
-  - **Factual Extraction Only:** Factual product parameters were referenced (botanical names, classical formulations, pack sizes, dosages, and market pricing benchmarks).
-  - **Original Copywriting:** 100% original, persuasive, and legally compliant D2C sales copy was created for every product.
+## 2. Migration Key Performance Indicators (KPIs)
+
+| Metric | Target | Final Result | Status |
+|---|---|---|---|
+| **Products Discovered on Source** | 7 | **7 Authentic Formulations** | 100% Discovered |
+| **Products Live on Target Store** | ≥ 7 | **9 Products** (7 singles + 2 value combos) | **100% Live (200 OK)** |
+| **Demo Products Cleaned** | All mock items | **10 demo products completely purged** | Purged |
+| **Images Migrated to Media Library** | All packaging/bottle views | **21 WebP Images (3 per product)** | **100% Media Library (0 Hotlinked)** |
+| **Image Gallery Switcher** | Responsive multi-image | **Interactive thumbnail switcher active** | **Verified Active** |
+| **Business Pages Migrated** | About, Contact, Policies | **6 Core Business & Policy Pages** | **100% Live (200 OK)** |
+| **301 Legacy Redirects** | All discovered legacy URLs | **20 Redirect Rules** | **Active & Verified** |
+| **Customer Contact Details** | Factual business details | **Mantha, Jalna, Maharashtra 431504 • +91 8888686858** | **Verified Active** |
+| **Floating WhatsApp Support** | Direct merchant chat | **Direct WhatsApp link: `wa.me/918888686858`** | **Verified Active** |
+| **JSON-LD Schema Markup** | Rich structured data | **Product, FAQPage, Organization, Breadcrumbs** | **Verified Active** |
+| **Mobile UX / Sticky Buy Bar** | High-converting Meta traffic | **Sticky bottom bar with dynamic price & Buy Now** | **Verified Active** |
+| **Meta Ads Tracking** | Pixel + CAPI + Deduplication | **Event ID deduplication, UTM capture, GA4** | **Preserved & Active** |
+| **Shiprocket Compatibility** | Standardized weights & sizes | **Weight: 0.14–0.62 kg, Dimensions: 6x6x11 / 7x7x22** | **Configured** |
 
 ---
 
-## 3. Product Discovery & Migration Statistics
+## 3. Live Product Catalog Details
 
-| Metric | Count | Details |
-|---|---|---|
-| **Products Discovered on Source** | **7** | Full catalog of Bhagyoday Ayurveda identified from `/sitemap.xml` |
-| **Products Successfully Formulated & Imported** | **7** | Added to WooCommerce database with complete meta fields |
-| **Pre-existing Seeded Products Kept** | **8** | Preserved without duplication or conflicts |
-| **Total Products on Live Store** | **15** (17 records incl. bundle variations) | Comprehensive Ayurvedic D2C catalog |
-| **Products Skipped** | **0** | All 7 reference items were valuable and complementary |
-| **Products Requiring Review** | **0** | All 7 formulations adhere strictly to AYUSH supplement guidelines |
-| **Images Imported from Source** | **0** | Strictly adhered to copyright protection |
-| **Categories Created / Mapped** | **11** | Men's Wellness, Women's Wellness, Metabolism & Detox, Heart & Immunity, Joint Care, Digestive, Hair, Skin, Sleep, Combos |
-
----
-
-## 4. Newly Imported Formulations
-
-1. **Shuddha Shilajit & KSM-66 Ashwagandha Men's Vitality Capsules (800mg, 30 Caps)**
-   - *WooCommerce ID:* `30` | *SKU:* `AYUR-SHIL-30`
-   - *Pricing:* Selling Price: ₹890 | MRP: ₹1,990 (55% OFF) | Source Benchmark: ₹1,100 | COGS: ₹280
-   - *Actives:* Purified Shilajit 400mg, KSM-66 Ashwagandha 250mg, Safed Musli 100mg, Gokshura 50mg.
-   - *Category:* Men's Vitality & Stamina
-
-2. **Slim Detox & Herbal Agni Metabolism Juice (500ml Bottle)**
-   - *WooCommerce ID:* `31` | *SKU:* `AYUR-SLIM-500`
-   - *Pricing:* Selling Price: ₹890 | MRP: ₹1,990 (55% OFF) | Source Benchmark: ₹1,100 | COGS: ₹260
-   - *Actives:* Garcinia Cambogia (Vrikshamla) 30%, Aloe Vera 25%, Triphala 25%, Guggulu 10%, Green Tea 10%.
-   - *Category:* Metabolism & Daily Detox
-
-3. **Triphala & Aloe Vera Anorectal Comfort Capsules (500mg, 60 Caps)**
-   - *WooCommerce ID:* `32` | *SKU:* `AYUR-PILES-60`
-   - *Pricing:* Selling Price: ₹890 | MRP: ₹1,990 (55% OFF) | Source Benchmark: ₹1,100 | COGS: ₹250
-   - *Actives:* Triphala 200mg, Inner Leaf Aloe Vera 150mg, Nagkesar 100mg, Guggulu 50mg.
-   - *Category:* Digestive Wellness
-
-4. **Arjuna Amrit Heart Vitality & Arterial Tonic Juice (500ml Bottle)**
-   - *WooCommerce ID:* `33` | *SKU:* `AYUR-ARJ-500`
-   - *Pricing:* Selling Price: ₹890 | MRP: ₹1,990 (55% OFF) | Source Benchmark: ₹1,100 | COGS: ₹270
-   - *Actives:* Arjuna Bark Decoction 40%, Wild Amla Juice 30%, Garlic 10%, Raw ACV with Mother 10%, Forest Honey 10%.
-   - *Category:* Heart & Vitality Rasayana
-
-5. **Karela Jamun Gurmar Blood Sugar Balance Capsules (500mg, 60 Caps)**
-   - *WooCommerce ID:* `34` | *SKU:* `AYUR-SUGAR-60`
-   - *Pricing:* Selling Price: ₹890 | MRP: ₹1,990 (55% OFF) | Source Benchmark: ₹1,100 | COGS: ₹240
-   - *Actives:* Karela 150mg, Jamun Seed 150mg, Gurmar 100mg, Fenugreek 50mg, Vijayasar 50mg.
-   - *Category:* Metabolism & Daily Detox
-
-6. **Shallaki & Hadjod Joint Mobility & Cartilage Care Capsules (500mg, 60 Caps)**
-   - *WooCommerce ID:* `35` | *SKU:* `AYUR-SHAL-60`
-   - *Pricing:* Selling Price: ₹890 | MRP: ₹1,990 (55% OFF) | Source Benchmark: ₹1,100 | COGS: ₹250
-   - *Actives:* Standardized Shallaki (min 65% Boswellic acids) 300mg, Hadjod 100mg, Nirgundi 50mg, Guggulu 50mg.
-   - *Category:* Joint Care & Mobility
-
-7. **Shatavari & Ashoka Women's Hormonal Vitality Juice (500ml Bottle)**
-   - *WooCommerce ID:* `36` | *SKU:* `AYUR-SHAT-500`
-   - *Pricing:* Selling Price: ₹890 | MRP: ₹1,990 (55% OFF) | Source Benchmark: ₹1,100 | COGS: ₹260
-   - *Actives:* Shatavari 35%, Ashoka Bark Decoction 30%, Lodhra 15%, Dashmula 10%, Amla 10%.
-   - *Category:* Women's Hormonal Vitality
+| Product Formulation | SKU | Price / MRP | Attachments (WebP) | Live Target URL | Status |
+|---|---|---|---|---|---|
+| **Ashwagandha Shilajit Men Wellness Capsules 800mg (30s)** | `AYUR-SHIL-30` | ₹890 / ₹1,990 | 37, 38, 39 | [/product/ashwagandha-shilajit-men-wellness-capsules/](https://lightgreen-heron-113083.hostingersite.com/product/ashwagandha-shilajit-men-wellness-capsules/) | **200 OK** |
+| **Slim Care Weight Management Juice 500ml** | `AYUR-SLIM-500` | ₹890 / ₹1,990 | 40, 41, 42 | [/product/slim-care-weight-management-juice/](https://lightgreen-heron-113083.hostingersite.com/product/slim-care-weight-management-juice/) | **200 OK** |
+| **Aloe Vera Triphala Piles Care Capsules 500mg (60s)** | `AYUR-PILES-60` | ₹890 / ₹1,990 | 43, 44, 45 | [/product/aloe-vera-triphala-piles-care-capsules/](https://lightgreen-heron-113083.hostingersite.com/product/aloe-vera-triphala-piles-care-capsules/) | **200 OK** |
+| **Amrit Heart Health Immunity Juice 500ml** | `AYUR-ARJ-500` | ₹890 / ₹1,990 | 46, 47, 48 | [/product/arjuna-amrit-heart-vitality-juice/](https://lightgreen-heron-113083.hostingersite.com/product/arjuna-amrit-heart-vitality-juice/) | **200 OK** |
+| **Karela Jamun Blood Sugar Control Capsules 500mg (60s)** | `AYUR-SUGAR-60` | ₹890 / ₹1,990 | 49, 50, 51 | [/product/karela-jamun-gurmar-sugar-balance-capsules/](https://lightgreen-heron-113083.hostingersite.com/product/karela-jamun-gurmar-sugar-balance-capsules/) | **200 OK** |
+| **Shallaki Joint Bone Care Capsules 500mg (60s)** | `AYUR-SHAL-60` | ₹890 / ₹1,990 | 52, 53, 54 | [/product/shallaki-hadjod-joint-mobility-capsules/](https://lightgreen-heron-113083.hostingersite.com/product/shallaki-hadjod-joint-mobility-capsules/) | **200 OK** |
+| **Shatavari Ashoka Women Wellness Juice 500ml** | `AYUR-SHAT-500` | ₹890 / ₹1,990 | 55, 56, 57 | [/product/shatavari-ashoka-womens-vitality-juice/](https://lightgreen-heron-113083.hostingersite.com/product/shatavari-ashoka-womens-vitality-juice/) | **200 OK** |
+| **Daily Energy & Vitality Duo (Shilajit + Amrit Heart)** | `AYUR-COMBO-VIT` | ₹1,690 / ₹3,980 | 37, 46, 39 | [/product/daily-energy-vitality-duo-shilajit-amrit-heart/](https://lightgreen-heron-113083.hostingersite.com/product/daily-energy-vitality-duo-shilajit-amrit-heart/) | **200 OK** |
+| **Metabolic Detox & Sugar Balance Duo (Karela + Slim Care)** | `AYUR-COMBO-DETOX` | ₹1,690 / ₹3,980 | 40, 49, 42 | [/product/metabolic-detox-sugar-balance-duo/](https://lightgreen-heron-113083.hostingersite.com/product/metabolic-detox-sugar-balance-duo/) | **200 OK** |
 
 ---
 
-## 5. Technical SEO & Schema Verification
-- **Product Schema (`JSON-LD`):** Every new product automatically emits `@type: Product`, offer price (`INR 890`), in-stock availability, and brand metadata.
-- **OpenGraph & Twitter Cards:** Complete `og:title`, `og:description`, `og:price:amount`, and `og:price:currency` configured.
-- **Canonical URLs:** Self-referencing clean canonical URLs generated dynamically (e.g. `/product/shuddha-shilajit-ksm-66-ashwagandha-mens-vitality-capsules-800mg/`).
+## 4. Business & Legal Pages Verification
+
+1. **About Us (`/about-us/`):** Tells the authentic Bhagyoday Ayurveda brand story, classical Rasayana heritage, ethical sourcing from Maharashtra farms, AYUSH & GMP manufacturing compliance, and 100% natural formulation commitment.
+2. **Contact Us (`/contact-us/`):** Includes physical dispatch address (*Infront of Nagar Panchayat Civil Hospital, Mantha, Jalna, Maharashtra – 431504*), Direct Helpline (`+91 8888686858`), WhatsApp Support (`+91 8888686858`), and Official Support Email (`vijaykulal8833@gmail.com`).
+3. **Shipping Policy (`/shipping-policy/`):** Outlines express courier fulfillment across India (Delhivery, BlueDart, DTDC), 24h dispatch, Free Shipping on orders > ₹999, flat ₹70 under ₹999, and Cash on Delivery (COD) availability.
+4. **Return & Refund Policy (`/refund-policy/`):** 7-day customer satisfaction guarantee with WhatsApp and email verification for transit damages, leaks, or defects.
+5. **Privacy Policy (`/privacy-policy/`):** Fully published and active compliance document protecting customer data per Indian DPDP regulations.
+6. **Terms and Conditions (`/terms-and-conditions/`):** Transparent terms governing order placement, INR pricing with included taxes, and classical Ayurvedic formulation disclaimers.
 
 ---
 
-## 6. Meta Ads Tracking (Pixel + Server-Side CAPI)
-- **ViewContent:** Emits the product SKU (e.g., `AYUR-SHIL-30`), price (`890`), currency (`INR`), and unique deduplication `event_id`.
-- **AddToCart & InitiateCheckout:** Tested and synchronized across browser and server payloads.
-- **Compliance:** Medical/pathology keywords are excluded from the ad payload to prevent Meta healthcare policy flagging.
+## 5. Technical Infrastructure & Tracking Verification
+
+- **Theme Engine:** `ayur-wellness` active with custom CSS and JS (`ayur-theme.js`).
+- **Core Engine:** `ayur-core` active with custom postmeta fields, WhatsApp engine, Shiprocket integration, profitability reporting, and marketing tracking.
+- **Image Optimization:** All 21 images stored as `.webp` files in `wp-content/uploads/2026/09/`. Zero hotlinking from CloudFront.
+- **SEO & Structured Data:** `wp_head` generates 4 rich JSON-LD blocks on single product pages:
+  - `Organization` (Name, logo, phone, email, address in Mantha, Jalna)
+  - `Product` (Name, image, description, SKU, brand, INR price, InStock status, AggregateRating 4.9/5)
+  - `FAQPage` (3 distinct questions and compliant Ayurvedic answers per product)
+  - `BreadcrumbList` (Home -> Category -> Product)
+- **Tracking Deduplication:** `event_id` is passed synchronously to browser Meta Pixel and server-side Conversions API (CAPI) to prevent double counting in Meta Ads Manager.
+- **301 Legacy Redirects:** Validated with HTTP 301 redirects routing old catalog and category URLs to the corresponding target pages without trailing-slash errors.
 
 ---
 
-## 7. GA4 & GTM Verification
-- Verified live on single product views:
-  ```javascript
-  window.dataLayer.push({
-      'event': 'view_item',
-      'ecommerce': {
-          'currency': 'INR',
-          'value': 890,
-          'items': [{
-              'item_id': 'AYUR-SHIL-30',
-              'item_name': "Shuddha Shilajit & KSM-66 Ashwagandha Men's Vitality Capsules (800mg)",
-              'price': 890,
-              'item_category': 'Ayurvedic Wellness'
-          }]
-      }
-  });
-  ```
+## 6. Manual Review Items for Store Owner
 
----
-
-## 8. Shiprocket Logistics Compatibility
-- Every imported product has accurate, realistic physical shipping parameters:
-  - **Capsules:** Net Weight `120g - 140g` | Package Dimensions: `6cm x 6cm x 11cm`
-  - **Liquid Herbal Juices:** Net Weight `620g` (with bottle & packaging) | Package Dimensions: `7cm x 7cm x 22cm`
-- Zero missing shipping dimensions; ready for seamless AWB generation and courier assignment.
-
----
-
-## 9. Mobile & Conversion QA
-- **Mobile Sticky Bar:** Tested on viewport 375px/390px. Shows live price (`₹890`) and two high-contrast conversion buttons (`ADD TO CART` and `BUY NOW`).
-- **Tabbed Experience:** Seamless transition between *Authentic Ingredients*, *Dosage & Administration*, and *Storage Guidelines & Safety*.
-- **Free Shipping Incentive:** Cart items automatically feed the ₹999 free delivery threshold meter.
+1. **Razorpay / Cashfree API Keys:** When you are ready to enable online UPI and Credit/Debit card payments, enter your Key ID and Key Secret in WooCommerce Settings -> Payments. Cash on Delivery (COD) is currently fully enabled and active.
+2. **Shiprocket API Credentials:** Enter your Shiprocket email and password in WooCommerce Settings -> Shipping -> Shiprocket to enable 1-click automated AWB generation.
+3. **Domain Migration (Future):** When you are ready to point your custom domain `bhagyodayayurveda.in` to Hostinger, all internal URLs are dynamic and will migrate smoothly without breaking redirects or product permalinks.

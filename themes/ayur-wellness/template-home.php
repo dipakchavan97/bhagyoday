@@ -46,13 +46,13 @@ get_header();
                                 Special Launch Offer
                             </span>
                             <h3 style="color:#FFFFFF; font-size:22px; margin:14px 0 8px 0; font-family:'Cinzel', serif;">
-                                KSM-66® Ashwagandha
+                                Ashwagandha Shilajit
                             </h3>
                             <p style="color:#D1D5DB; font-size:13px; margin-bottom:16px;">
-                                500mg Standardized Organic Root Extract for Stress Relief & Stamina.
+                                800mg Pure Shodhit Shilajit & Ashwagandha for Natural Stamina & Vitality.
                             </p>
                             <div style="font-size:24px; font-weight:800; color:#FFFFFF; margin-bottom:14px;">
-                                ₹499 <span style="font-size:14px; color:#9CA3AF; text-decoration:line-through; font-weight:400;">₹799</span>
+                                ₹890 <span style="font-size:14px; color:#9CA3AF; text-decoration:line-through; font-weight:400;">₹1,990</span>
                             </div>
                             <a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')); ?>" class="ayur-btn-primary" style="width:100%; justify-content:center; padding:12px;">
                                 ORDER NOW
@@ -79,14 +79,14 @@ get_header();
                     <div class="ayur-trust-icon">🔬</div>
                     <div>
                         <div class="ayur-trust-title">Lab Tested & Certified</div>
-                        <div class="ayur-trust-desc">Heavy metal tested in GMP lab</div>
+                        <div class="ayur-trust-desc">AYUSH Licensed • GMP Facility</div>
                     </div>
                 </div>
                 <div class="ayur-trust-item">
                     <div class="ayur-trust-icon">⚡</div>
                     <div>
                         <div class="ayur-trust-title">Express Delivery in India</div>
-                        <div class="ayur-trust-desc">2-4 days transit via Delhivery</div>
+                        <div class="ayur-trust-desc">2-5 days transit from Maharashtra</div>
                     </div>
                 </div>
                 <div class="ayur-trust-item">
@@ -110,35 +110,40 @@ get_header();
             </div>
 
             <div class="ayur-categories-grid">
-                <a href="<?php echo esc_url(ayur_get_cat_url('immunity')); ?>" class="ayur-cat-card">
-                    <div class="ayur-cat-icon">🛡️</div>
-                    <div class="ayur-cat-name">Immunity</div>
-                    <span style="font-size:12px; color:#6B7280;">Curcumin & Rasayana</span>
+                <a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>" class="ayur-cat-card">
+                    <div class="ayur-cat-icon">💪</div>
+                    <div class="ayur-cat-name">Men's Vitality</div>
+                    <span style="font-size:12px; color:#6B7280;">Shilajit & Ashwagandha</span>
+                </a>
+                <a href="<?php echo esc_url(ayur_get_cat_url('metabolism-weight-care')); ?>" class="ayur-cat-card">
+                    <div class="ayur-cat-icon">🍃</div>
+                    <div class="ayur-cat-name">Metabolism & Detox</div>
+                    <span style="font-size:12px; color:#6B7280;">Slim Care & Sugar Balance</span>
                 </a>
                 <a href="<?php echo esc_url(ayur_get_cat_url('digestive')); ?>" class="ayur-cat-card">
-                    <div class="ayur-cat-icon">🍃</div>
-                    <div class="ayur-cat-name">Digestion</div>
-                    <span style="font-size:12px; color:#6B7280;">Triphala & Gut Detox</span>
-                </a>
-                <a href="<?php echo esc_url(ayur_get_cat_url('hair-care')); ?>" class="ayur-cat-card">
                     <div class="ayur-cat-icon">✨</div>
-                    <div class="ayur-cat-name">Hair Care</div>
-                    <span style="font-size:12px; color:#6B7280;">Bhringraj & Rosemary</span>
+                    <div class="ayur-cat-name">Piles & Gut Comfort</div>
+                    <span style="font-size:12px; color:#6B7280;">Aloe Vera & Triphala</span>
                 </a>
-                <a href="<?php echo esc_url(ayur_get_cat_url('skin-care')); ?>" class="ayur-cat-card">
+                <a href="<?php echo esc_url(ayur_get_cat_url('heart-immunity')); ?>" class="ayur-cat-card">
+                    <div class="ayur-cat-icon">❤️</div>
+                    <div class="ayur-cat-name">Heart & Immunity</div>
+                    <span style="font-size:12px; color:#6B7280;">Arjuna Bark & Wild Amla</span>
+                </a>
+                <a href="<?php echo esc_url(ayur_get_cat_url('joint-care-mobility')); ?>" class="ayur-cat-card">
+                    <div class="ayur-cat-icon">🦴</div>
+                    <div class="ayur-cat-name">Joint & Mobility</div>
+                    <span style="font-size:12px; color:#6B7280;">Shallaki 65% & Hadjod</span>
+                </a>
+                <a href="<?php echo esc_url(ayur_get_cat_url('womens-wellness')); ?>" class="ayur-cat-card">
                     <div class="ayur-cat-icon">🌸</div>
-                    <div class="ayur-cat-name">Skin Care</div>
-                    <span style="font-size:12px; color:#6B7280;">Kumkumadi & Saffron</span>
-                </a>
-                <a href="<?php echo esc_url(ayur_get_cat_url('stress-sleep')); ?>" class="ayur-cat-card">
-                    <div class="ayur-cat-icon">🌙</div>
-                    <div class="ayur-cat-name">Sleep & Stress</div>
-                    <span style="font-size:12px; color:#6B7280;">KSM-66 Ashwagandha</span>
+                    <div class="ayur-cat-name">Women's Wellness</div>
+                    <span style="font-size:12px; color:#6B7280;">Shatavari & Ashoka Juice</span>
                 </a>
                 <a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>" class="ayur-cat-card" style="border-color:var(--ayur-gold); background:#FAF6EE;">
                     <div class="ayur-cat-icon" style="background:#F0E4CE;">🎁</div>
-                    <div class="ayur-cat-name" style="color:#A6833D;">Combos & Kits</div>
-                    <span style="font-size:12px; color:#78350F; font-weight:700;">Save Up to 40%</span>
+                    <div class="ayur-cat-name" style="color:#A6833D;">Value Combos</div>
+                    <span style="font-size:12px; color:#78350F; font-weight:700;">Save Up to 57%</span>
                 </a>
             </div>
         </div>
@@ -157,7 +162,7 @@ get_header();
                 <?php
                 $args = array(
                     'post_type'      => 'product',
-                    'posts_per_page' => 4,
+                    'posts_per_page' => 8,
                     'orderby'        => 'menu_order',
                     'order'          => 'ASC',
                 );

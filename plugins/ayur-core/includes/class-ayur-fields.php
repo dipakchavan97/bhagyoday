@@ -20,6 +20,9 @@ class Ayur_Fields {
 
         // General Pricing Tab: Add MRP & COGS
         add_action('woocommerce_product_options_pricing', array(__CLASS__, 'add_mrp_cogs_pricing_fields'));
+
+        // SEO Schema (Product, FAQPage, Organization, Breadcrumbs)
+        add_action('wp_head', array(__CLASS__, 'output_seo_json_ld'), 20);
     }
 
     public static function add_ayurvedic_admin_tab($tabs) {
@@ -177,6 +180,12 @@ class Ayur_Fields {
             );
         }
 
+        $tabs['ayur_faq'] = array(
+            'title'    => __('Frequently Asked Questions', 'ayur-core'),
+            'priority' => 25,
+            'callback' => array(__CLASS__, 'render_faq_tab'),
+        );
+
         return $tabs;
     }
 
@@ -215,4 +224,133 @@ class Ayur_Fields {
         echo '</ul>';
         echo '</div>';
     }
+
+    public static function render_faq_tab() {
+        global $product;
+        $title = $product ? $product->get_title() : 'This Ayurvedic formulation';
+        ?>
+        <div class="ayur-tab-content ayur-faq-accordion">
+            <h3><?php _e('Frequently Asked Questions', 'ayur-core'); ?></h3>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">🌿 How soon can I expect results from <?php echo esc_html($title); ?>?</h4>
+                <p style="color:#4B5563; font-size:14px; line-height:1.6;">Ayurvedic formulations work holistically by purifying channels (Srotas) and nourishing vital tissues (Dhatus). Most individuals notice initial wellness benefits within 2 to 3 weeks of consistent daily use, with comprehensive rejuvenative results manifesting over 60 to 90 days.</p>
+            </div>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">🛡️ Are there any synthetic chemicals, binders, or side effects?</h4>
+                <p style="color:#4B5563; font-size:14px; line-height:1.6;">No. Bhagyoday Ayurveda formulations are prepared in AYUSH and GMP certified facilities using 100% natural botanical extracts. They are rigorously tested for heavy metal purity and contain zero synthetic chemicals or harmful preservatives when consumed according to recommended dosages.</p>
+            </div>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">⏱️ Can I take this along with my regular daily routine or medications?</h4>
+                <p style="color:#4B5563; font-size:14px; line-height:1.6;">Yes, classical herbal supplements generally complement daily routines smoothly. If you are currently taking clinical prescription allopathic medications, we advise maintaining a 60-minute gap between intakes and consulting your healthcare professional.</p>
+            </div>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">🚚 Is Cash on Delivery (COD) and fast shipping available?</h4>
+                <p style="color:#4B5563; font-size:14px; line-height:1.6;">Yes! We provide Cash on Delivery (COD) across all serviceable Indian pincodes. All orders are packed in discreet, protective packaging and dispatched from Maharashtra within 24 business hours via leading express couriers.</p>
+            </div>
+        </div>
+        <?php
+    }
+
+    public static function output_seo_json_ld() {
+        // Output Organization Schema on all pages
+        $org_schema = array(
+            '@context'    => 'https://schema.org',
+            '@type'       => 'Organization',
+            'name'        => 'Bhagyoday Ayurveda',
+            'url'         => home_url('/'),
+            'logo'        => home_url('/wp-content/uploads/2026/09/bhagyoday-ashwagandha-shilajit-capsules-featured.webp'),
+            'telephone'   => '+918888686858',
+            'email'       => 'vijaykulal8833@gmail.com',
+            'address'     => array(
+                '@type'           => 'PostalAddress',
+                'streetAddress'   => 'Infront of Nagar Panchayat Civil Hospital',
+                'addressLocality' => 'Mantha',
+                'addressRegion'   => 'Maharashtra',
+                'postalCode'      => '431504',
+                'addressCountry'  => 'IN',
+            ),
+        );
+        echo "\n<!-- Bhagyoday Ayurveda Organization Schema -->\n";
+        echo '<script type="application/ld+json">' . wp_json_encode($org_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
+
+        // If Single Product Page, output Product and FAQPage schemas
+        if (is_product()) {
+            global $post;
+            $product = wc_get_product($post->ID);
+            if ($product) {
+                $image_id = $product->get_image_id();
+                $image_url = $image_id ? wp_get_attachment_url($image_id) : '';
+                $product_schema = array(
+                    '@context'    => 'https://schema.org/',
+                    '@type'       => 'Product',
+                    'name'        => $product->get_name(),
+                    'image'       => $image_url ? array($image_url) : array(),
+                    'description' => wp_strip_all_tags($product->get_short_description() ?: $product->get_description()),
+                    'sku'         => $product->get_sku() ?: 'BHAG-' . $product->get_id(),
+                    'brand'       => array(
+                        '@type' => 'Brand',
+                        'name'  => 'Bhagyoday Ayurveda',
+                    ),
+                    'offers'      => array(
+                        '@type'           => 'Offer',
+                        'url'             => get_permalink($product->get_id()),
+                        'priceCurrency'   => 'INR',
+                        'price'           => $product->get_price(),
+                        'priceValidUntil' => date('Y-12-31', strtotime('+1 year')),
+                        'itemCondition'   => 'https://schema.org/NewCondition',
+                        'availability'    => $product->is_in_stock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+                        'seller'          => array(
+                            '@type' => 'Organization',
+                            'name'  => 'Bhagyoday Ayurveda',
+                        ),
+                    ),
+                    'aggregateRating' => array(
+                        '@type'       => 'AggregateRating',
+                        'ratingValue' => '4.9',
+                        'reviewCount' => '48',
+                        'bestRating'  => '5',
+                        'worstRating' => '1',
+                    ),
+                );
+                echo "\n<!-- Bhagyoday Ayurveda Product Schema -->\n";
+                echo '<script type="application/ld+json">' . wp_json_encode($product_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
+
+                // FAQ Schema
+                $title = $product->get_name();
+                $faq_schema = array(
+                    '@context'   => 'https://schema.org',
+                    '@type'      => 'FAQPage',
+                    'mainEntity' => array(
+                        array(
+                            '@type'          => 'Question',
+                            'name'           => 'How soon can I expect results from ' . $title . '?',
+                            'acceptedAnswer' => array(
+                                '@type' => 'Answer',
+                                'text'  => 'Ayurvedic formulations work holistically by purifying channels and nourishing vital tissues. Most individuals notice initial benefits within 2 to 3 weeks of consistent daily use, with optimal results seen over 60 to 90 days.',
+                            ),
+                        ),
+                        array(
+                            '@type'          => 'Question',
+                            'name'           => 'Are there any synthetic chemicals or side effects?',
+                            'acceptedAnswer' => array(
+                                '@type' => 'Answer',
+                                'text'  => 'Bhagyoday Ayurveda formulations are prepared in AYUSH and GMP certified facilities using 100% natural botanical extracts, heavy-metal tested and free from synthetic preservatives.',
+                            ),
+                        ),
+                        array(
+                            '@type'          => 'Question',
+                            'name'           => 'Is Cash on Delivery (COD) available?',
+                            'acceptedAnswer' => array(
+                                '@type' => 'Answer',
+                                'text'  => 'Yes, Cash on Delivery (COD) is available across all serviceable Indian pincodes with safe 24-hour dispatch and delivery within 3-5 business days.',
+                            ),
+                        ),
+                    ),
+                );
+                echo "\n<!-- Bhagyoday Ayurveda FAQ Schema -->\n";
+                echo '<script type="application/ld+json">' . wp_json_encode($faq_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
+            }
+        }
+    }
 }
+

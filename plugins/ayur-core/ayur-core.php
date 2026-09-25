@@ -25,6 +25,7 @@ require_once AYUR_CORE_PATH . 'includes/class-ayur-whatsapp.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-cart-checkout.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-profitability.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-seeder.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-migrator.php';
 
 /**
  * Main Plugin Initialization
@@ -54,6 +55,7 @@ class Ayur_Core {
         Ayur_Cart_Checkout::init();
         Ayur_Profitability::init();
         Ayur_Seeder::init();
+        Ayur_Migrator::init();
     }
 
     public function enqueue_assets() {
