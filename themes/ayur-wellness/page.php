@@ -1,19 +1,27 @@
 <?php
 /**
  * Generic Page Template for Ayur Wellness
+ * Editorial Architecture — Bhagyoday Ayurveda
  */
+
+defined('ABSPATH') || exit;
 
 get_header();
 ?>
 
-<div class="ayur-page-header" style="background:#FAF8F5; border-bottom:1px solid #E5E0D8; padding:40px 0;">
+<div class="ayur-page-header">
     <div class="ayur-container">
-        <h1 class="ayur-section-title" style="margin:0; font-size:32px;"><?php the_title(); ?></h1>
+        <nav class="ayur-breadcrumbs" aria-label="<?php esc_attr_e('Breadcrumbs', 'ayur-wellness'); ?>">
+            <a href="<?php echo esc_url(home_url('/')); ?>"><?php _e('Home', 'ayur-wellness'); ?></a>
+            <span class="ayur-breadcrumb-sep"><?php echo ayur_svg_icon('chevron-right', '', 11); ?></span>
+            <span class="ayur-breadcrumb-current"><?php the_title(); ?></span>
+        </nav>
+        <h1 class="ayur-page-title"><?php the_title(); ?></h1>
     </div>
 </div>
 
-<div class="ayur-container" style="padding:50px 20px;">
-    <div style="background:#FFFFFF; border:1px solid #E5E0D8; border-radius:12px; padding:36px; box-shadow:var(--ayur-shadow-soft); max-width:960px; margin:0 auto; line-height:1.8;">
+<div class="ayur-container ayur-page-content-wrap">
+    <div class="ayur-page-entry">
         <?php
         while (have_posts()) :
             the_post();

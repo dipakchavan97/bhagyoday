@@ -7,73 +7,270 @@
 defined('ABSPATH') || exit;
 
 get_header();
+
+// Fetch hero spotlight product (Ashwagandha Shilajit or first published product)
+$hero_product = null;
+$hero_query = new WP_Query(array(
+    'post_type'      => 'product',
+    'name'           => 'ashwagandha-shilajit-men-wellness-capsules',
+    'posts_per_page' => 1,
+));
+if ($hero_query->have_posts()) {
+    $hero_query->the_post();
+    $hero_product = wc_get_product(get_the_ID());
+    wp_reset_postdata();
+}
+if (!$hero_product) {
+    $fallback_query = new WP_Query(array('post_type' => 'product', 'posts_per_page' => 1));
+    if ($fallback_query->have_posts()) {
+        $fallback_query->the_post();
+        $hero_product = wc_get_product(get_the_ID());
+        wp_reset_postdata();
+    }
+}
 ?>
 
 <main id="primary" class="site-main ayur-homepage">
 
-    <!-- 1. Hero Section -->
+    <!-- 1. Editorial Hero Section -->
     <section class="ayur-hero">
         <div class="ayur-container">
             <div class="ayur-hero-grid">
+                <!-- Hero Text Column -->
                 <div class="ayur-hero-text">
-                    <div class="ayur-hero-badge">
-                        <?php echo ayur_svg_icon('sparkles', '', 14); ?>
-                        <span>Classical Botanical Formulations</span>
-                    </div>
-                    <h1 class="ayur-hero-title">Ancient Ayurvedic Wisdom.<br>Modern Daily Wellness.</h1>
+                    <span class="ayur-hero-eyebrow"><?php _e('BHAGYODAY AYURVEDA', 'ayur-wellness'); ?></span>
+                    <h1 class="ayur-hero-title">
+                        Ancient Wisdom.<br>
+                        <span>Made for Modern Wellness.</span>
+                    </h1>
                     <p class="ayur-hero-desc">
-                        Handcrafted with standardized botanical actives to restore vitality, digestive balance, and holistic equilibrium. Prepared ethically in Maharashtra with zero synthetic fillers.
+                        <?php _e('Thoughtfully crafted Ayurvedic wellness products inspired by traditional Indian knowledge.', 'ayur-wellness'); ?>
                     </p>
-                    <div class="ayur-hero-ctas">
-                        <a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')); ?>" class="ayur-btn-primary">
-                            <span>Shop Best Sellers</span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 16); ?>
+                    <div class="ayur-hero-actions">
+                        <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="ayur-btn-primary">
+                            <span><?php _e('EXPLORE WELLNESS', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
                         </a>
-                        <a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>" class="ayur-btn-secondary">
-                            <span>Explore Bundles</span>
+                        <a href="<?php echo esc_url(home_url('/about-us/')); ?>" class="ayur-btn-secondary">
+                            <span><?php _e('OUR STORY', 'ayur-wellness'); ?></span>
                         </a>
-                    </div>
-                    <div class="ayur-hero-trust-pills">
-                        <span class="ayur-pill">
-                            <?php echo ayur_svg_icon('leaf', '', 14); ?>
-                            <span>100% Botanical Actives</span>
-                        </span>
-                        <span class="ayur-pill-sep">•</span>
-                        <span class="ayur-pill">
-                            <?php echo ayur_svg_icon('truck', '', 14); ?>
-                            <span>Pan-India Delivery</span>
-                        </span>
-                        <span class="ayur-pill-sep">•</span>
-                        <span class="ayur-pill">
-                            <?php echo ayur_svg_icon('credit-card', '', 14); ?>
-                            <span>COD Available</span>
-                        </span>
                     </div>
                 </div>
 
-                <!-- Hero Spotlight Product Card -->
+                <!-- Hero Product Visual Column -->
                 <div class="ayur-hero-visual">
-                    <div class="ayur-hero-card">
-                        <div class="ayur-spotlight-inner">
-                            <div class="ayur-spotlight-top">
-                                <span class="ayur-spotlight-tag">Featured Formulation</span>
-                                <span class="ayur-spotlight-icon"><?php echo ayur_svg_icon('leaf', '', 24); ?></span>
-                            </div>
-                            <h3 class="ayur-spotlight-title">Ashwagandha Shilajit Capsules</h3>
-                            <p class="ayur-spotlight-desc">
-                                800mg Pure Shodhit Shilajit & Ashwagandha root extract for endurance, natural stamina, and stress resilience.
-                            </p>
-                            <div class="ayur-spotlight-meta">
-                                <span class="ayur-spotlight-price">₹890</span>
-                                <span class="ayur-spotlight-mrp">MRP ₹1,990</span>
-                                <span class="ayur-spotlight-save">Save 55%</span>
-                            </div>
-                            <div class="ayur-spotlight-actions">
-                                <a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')); ?>" class="ayur-btn-primary" style="width:100%; justify-content:center;">
-                                    <?php echo ayur_svg_icon('shopping-bag', '', 16); ?>
-                                    <span>Explore Remedies</span>
+                    <div class="ayur-hero-stage">
+                        <?php if ($hero_product && has_post_thumbnail($hero_product->get_id())) : ?>
+                            <a href="<?php echo esc_url($hero_product->get_permalink()); ?>" class="ayur-hero-img-link" aria-label="<?php echo esc_attr($hero_product->get_name()); ?>">
+                                <?php echo get_the_post_thumbnail($hero_product->get_id(), 'large', array(
+                                    'class' => 'ayur-hero-img',
+                                    'fetchpriority' => 'high',
+                                    'alt' => esc_attr($hero_product->get_name())
+                                )); ?>
+                            </a>
+                            <div class="ayur-hero-card-meta">
+                                <span class="ayur-hero-card-cat"><?php _e('FEATURED FORMULATION', 'ayur-wellness'); ?></span>
+                                <a href="<?php echo esc_url($hero_product->get_permalink()); ?>" class="ayur-hero-card-title">
+                                    <?php echo esc_html($hero_product->get_name()); ?>
                                 </a>
+                                <div class="ayur-hero-card-pricing">
+                                    <span class="ayur-hero-price">₹<?php echo number_format($hero_product->get_price()); ?></span>
+                                    <?php
+                                    $hero_mrp = get_post_meta($hero_product->get_id(), '_ayur_mrp', true);
+                                    if ($hero_mrp && (float)$hero_mrp > (float)$hero_product->get_price()) :
+                                    ?>
+                                        <span class="ayur-hero-mrp">MRP ₹<?php echo number_format($hero_mrp); ?></span>
+                                    <?php endif; ?>
+                                </div>
                             </div>
+                        <?php else : ?>
+                            <div class="ayur-hero-placeholder">
+                                <?php echo ayur_svg_icon('leaf', '', 48); ?>
+                                <span><?php _e('Classical Ayurvedic Botanical Formulations', 'ayur-wellness'); ?></span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Subtle Horizontal Trust Rail -->
+    <section class="ayur-trust-rail" aria-label="<?php esc_attr_e('Brand Promises', 'ayur-wellness'); ?>">
+        <div class="ayur-container">
+            <div class="ayur-trust-rail-inner">
+                <div class="ayur-trust-rail-item">
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('shield-check', '', 19); ?></span>
+                    <span class="ayur-trust-rail-text"><?php _e('Secure Payments', 'ayur-wellness'); ?></span>
+                </div>
+                <div class="ayur-trust-rail-sep" aria-hidden="true"></div>
+                <div class="ayur-trust-rail-item">
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('truck', '', 19); ?></span>
+                    <span class="ayur-trust-rail-text"><?php _e('Pan-India Delivery', 'ayur-wellness'); ?></span>
+                </div>
+                <div class="ayur-trust-rail-sep" aria-hidden="true"></div>
+                <div class="ayur-trust-rail-item">
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('package', '', 19); ?></span>
+                    <span class="ayur-trust-rail-text"><?php _e('Carefully Packed', 'ayur-wellness'); ?></span>
+                </div>
+                <div class="ayur-trust-rail-sep" aria-hidden="true"></div>
+                <div class="ayur-trust-rail-item">
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('headphones', '', 19); ?></span>
+                    <span class="ayur-trust-rail-text"><?php _e('Customer Support', 'ayur-wellness'); ?></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Shop by Wellness Categories -->
+    <section class="ayur-section ayur-categories-section">
+        <div class="ayur-container">
+            <div class="ayur-section-header">
+                <span class="ayur-section-eyebrow"><?php _e('CURATED DISCIPLINES', 'ayur-wellness'); ?></span>
+                <h2 class="ayur-section-title"><?php _e('Shop by Wellness', 'ayur-wellness'); ?></h2>
+                <p class="ayur-section-desc"><?php _e('Time-tested botanical therapies formulated for specific bodily balances.', 'ayur-wellness'); ?></p>
+            </div>
+
+            <div class="ayur-categories-grid">
+                <a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-content">
+                        <span class="ayur-cat-tag"><?php _e('STAMINA & ENDURANCE', 'ayur-wellness'); ?></span>
+                        <h3 class="ayur-cat-title"><?php _e("Men's Wellness", 'ayur-wellness'); ?></h3>
+                        <span class="ayur-cat-link-text">
+                            <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="<?php echo esc_url(ayur_get_cat_url('womens-wellness')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-content">
+                        <span class="ayur-cat-tag"><?php _e('HORMONAL HARMONY', 'ayur-wellness'); ?></span>
+                        <h3 class="ayur-cat-title"><?php _e("Women's Wellness", 'ayur-wellness'); ?></h3>
+                        <span class="ayur-cat-link-text">
+                            <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="<?php echo esc_url(ayur_get_cat_url('heart-immunity')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-content">
+                        <span class="ayur-cat-tag"><?php _e('HEART & IMMUNITY', 'ayur-wellness'); ?></span>
+                        <h3 class="ayur-cat-title"><?php _e('Daily Vitality', 'ayur-wellness'); ?></h3>
+                        <span class="ayur-cat-link-text">
+                            <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="<?php echo esc_url(ayur_get_cat_url('digestive')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-content">
+                        <span class="ayur-cat-tag"><?php _e('GUT & METABOLISM', 'ayur-wellness'); ?></span>
+                        <h3 class="ayur-cat-title"><?php _e('Digestive Wellness', 'ayur-wellness'); ?></h3>
+                        <span class="ayur-cat-link-text">
+                            <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="<?php echo esc_url(ayur_get_cat_url('joint-care-mobility')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-content">
+                        <span class="ayur-cat-tag"><?php _e('FLEXIBILITY & COMFORT', 'ayur-wellness'); ?></span>
+                        <h3 class="ayur-cat-title"><?php _e('Joint & Mobility', 'ayur-wellness'); ?></h3>
+                        <span class="ayur-cat-link-text">
+                            <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>" class="ayur-cat-block ayur-cat-block-highlight">
+                    <div class="ayur-cat-content">
+                        <span class="ayur-cat-tag"><?php _e('SYNERGISTIC REGIMENS', 'ayur-wellness'); ?></span>
+                        <h3 class="ayur-cat-title"><?php _e('Therapy Bundles', 'ayur-wellness'); ?></h3>
+                        <span class="ayur-cat-link-text">
+                            <span><?php _e('Explore Bundles', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Product Section: Explore Our Wellness Essentials -->
+    <section class="ayur-section ayur-products-section">
+        <div class="ayur-container">
+            <div class="ayur-section-header">
+                <span class="ayur-section-eyebrow"><?php _e('CLASSICAL FORMULATIONS', 'ayur-wellness'); ?></span>
+                <h2 class="ayur-section-title"><?php _e('Explore Our Wellness Essentials', 'ayur-wellness'); ?></h2>
+                <p class="ayur-section-desc"><?php _e('Pure botanical actives prepared in small batches with zero synthetic fillers.', 'ayur-wellness'); ?></p>
+            </div>
+
+            <div class="ayur-products-grid">
+                <?php
+                $products_query = new WP_Query(array(
+                    'post_type'      => 'product',
+                    'posts_per_page' => 8,
+                    'orderby'        => 'menu_order',
+                    'order'          => 'ASC',
+                ));
+
+                if ($products_query->have_posts()) :
+                    while ($products_query->have_posts()) : $products_query->the_post();
+                        wc_get_template_part('content', 'product');
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                    echo '<p class="ayur-no-products">' . __('Remedies arriving shortly...', 'ayur-wellness') . '</p>';
+                endif;
+                ?>
+            </div>
+
+            <div class="ayur-catalog-action">
+                <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="ayur-btn-primary">
+                    <span><?php _e('VIEW ALL FORMULATIONS', 'ayur-wellness'); ?></span>
+                    <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Editorial Brand Story (Clean, open layout — not a card) -->
+    <section class="ayur-section ayur-story-section">
+        <div class="ayur-container">
+            <div class="ayur-story-grid">
+                <div class="ayur-story-heading-col">
+                    <span class="ayur-section-eyebrow"><?php _e('OUR HERITAGE', 'ayur-wellness'); ?></span>
+                    <h2 class="ayur-story-title">
+                        Rooted in Authentic Indian Knowledge.
+                    </h2>
+                </div>
+                <div class="ayur-story-body-col">
+                    <p class="ayur-story-lead">
+                        <?php _e('Bhagyoday Ayurveda was founded on a simple principle: to bring the uncompromised potency of classical Indian herbs into contemporary daily life without synthetic shortcuts or industrial fillers.', 'ayur-wellness'); ?>
+                    </p>
+                    <p class="ayur-story-sub">
+                        <?php _e('Our botanical actives are responsibly harvested, authenticated for pharmacological purity, and prepared in small controlled batches at our central facility in Mantha, Jalna, Maharashtra. Every formulation preserves the whole herb matrix for optimal bioavailability.', 'ayur-wellness'); ?>
+                    </p>
+                    <div class="ayur-story-pillars">
+                        <div class="ayur-story-pillar">
+                            <span class="ayur-pillar-num">01</span>
+                            <h4><?php _e('Standardized Actives', 'ayur-wellness'); ?></h4>
+                            <p><?php _e('Tested botanical extracts with verified active marker concentrations.', 'ayur-wellness'); ?></p>
+                        </div>
+                        <div class="ayur-story-pillar">
+                            <span class="ayur-pillar-num">02</span>
+                            <h4><?php _e('Hygienic Small Batches', 'ayur-wellness'); ?></h4>
+                            <p><?php _e('Cleanroom manufacturing adhering to traditional Ayurvedic decoctions.', 'ayur-wellness'); ?></p>
+                        </div>
+                        <div class="ayur-story-pillar">
+                            <span class="ayur-pillar-num">03</span>
+                            <h4><?php _e('Direct Hub Dispatch', 'ayur-wellness'); ?></h4>
+                            <p><?php _e('Shipped in protective packaging directly from our warehouse to your home.', 'ayur-wellness'); ?></p>
                         </div>
                     </div>
                 </div>
@@ -81,298 +278,59 @@ get_header();
         </div>
     </section>
 
-    <!-- 2. Trust Bar -->
-    <section class="ayur-trust-bar">
-        <div class="ayur-container">
-            <div class="ayur-trust-grid">
-                <div class="ayur-trust-item">
-                    <div class="ayur-trust-icon"><?php echo ayur_svg_icon('leaf', '', 22); ?></div>
-                    <div class="ayur-trust-content">
-                        <div class="ayur-trust-title">Pure Botanical Extracts</div>
-                        <div class="ayur-trust-desc">Zero artificial binders, colors, or fillers</div>
-                    </div>
-                </div>
-                <div class="ayur-trust-item">
-                    <div class="ayur-trust-icon"><?php echo ayur_svg_icon('badge-check', '', 22); ?></div>
-                    <div class="ayur-trust-content">
-                        <div class="ayur-trust-title">Hygienic Manufacturing</div>
-                        <div class="ayur-trust-desc">Small-batch quality-controlled production</div>
-                    </div>
-                </div>
-                <div class="ayur-trust-item">
-                    <div class="ayur-trust-icon"><?php echo ayur_svg_icon('truck', '', 22); ?></div>
-                    <div class="ayur-trust-content">
-                        <div class="ayur-trust-title">Pan-India Express Shipping</div>
-                        <div class="ayur-trust-desc">Dispatched directly from Jalna warehouse</div>
-                    </div>
-                </div>
-                <div class="ayur-trust-item">
-                    <div class="ayur-trust-icon"><?php echo ayur_svg_icon('credit-card', '', 22); ?></div>
-                    <div class="ayur-trust-content">
-                        <div class="ayur-trust-title">UPI & COD Available</div>
-                        <div class="ayur-trust-desc">Pay online or upon doorstep delivery</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. Shop By Health Goal (Horizontal Swipe on Mobile) -->
-    <section class="ayur-section ayur-categories-section">
-        <div class="ayur-container">
-            <div class="ayur-section-header">
-                <span class="ayur-section-tag">Targeted Remedies</span>
-                <h2 class="ayur-section-title">Shop by Health Goal</h2>
-                <p class="ayur-section-desc">Classical herbal formulations designed to address specific daily wellness needs.</p>
-            </div>
-
-            <div class="ayur-categories-scroll-wrapper">
-                <div class="ayur-categories-grid">
-                    <a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>" class="ayur-cat-card">
-                        <div class="ayur-cat-icon"><?php echo ayur_svg_icon('activity', '', 22); ?></div>
-                        <div class="ayur-cat-name">Men's Vitality</div>
-                        <span class="ayur-cat-sub">Shilajit & Ashwagandha</span>
-                    </a>
-                    <a href="<?php echo esc_url(ayur_get_cat_url('metabolism-weight-care')); ?>" class="ayur-cat-card">
-                        <div class="ayur-cat-icon"><?php echo ayur_svg_icon('leaf', '', 22); ?></div>
-                        <div class="ayur-cat-name">Metabolism & Detox</div>
-                        <span class="ayur-cat-sub">Slim Care & Sugar Balance</span>
-                    </a>
-                    <a href="<?php echo esc_url(ayur_get_cat_url('digestive')); ?>" class="ayur-cat-card">
-                        <div class="ayur-cat-icon"><?php echo ayur_svg_icon('sparkles', '', 22); ?></div>
-                        <div class="ayur-cat-name">Piles & Gut Comfort</div>
-                        <span class="ayur-cat-sub">Aloe Vera & Triphala</span>
-                    </a>
-                    <a href="<?php echo esc_url(ayur_get_cat_url('heart-immunity')); ?>" class="ayur-cat-card">
-                        <div class="ayur-cat-icon"><?php echo ayur_svg_icon('heart', '', 22); ?></div>
-                        <div class="ayur-cat-name">Heart & Immunity</div>
-                        <span class="ayur-cat-sub">Arjuna Bark & Wild Amla</span>
-                    </a>
-                    <a href="<?php echo esc_url(ayur_get_cat_url('joint-care-mobility')); ?>" class="ayur-cat-card">
-                        <div class="ayur-cat-icon"><?php echo ayur_svg_icon('shield-check', '', 22); ?></div>
-                        <div class="ayur-cat-name">Joint & Mobility</div>
-                        <span class="ayur-cat-sub">Shallaki & Hadjod</span>
-                    </a>
-                    <a href="<?php echo esc_url(ayur_get_cat_url('womens-wellness')); ?>" class="ayur-cat-card">
-                        <div class="ayur-cat-icon"><?php echo ayur_svg_icon('leaf', '', 22); ?></div>
-                        <div class="ayur-cat-name">Women's Wellness</div>
-                        <span class="ayur-cat-sub">Shatavari & Ashoka Juice</span>
-                    </a>
-                    <a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>" class="ayur-cat-card ayur-cat-bundle">
-                        <div class="ayur-cat-icon"><?php echo ayur_svg_icon('package', '', 22); ?></div>
-                        <div class="ayur-cat-name">Value Bundles</div>
-                        <span class="ayur-cat-sub" style="color:var(--color-gold); font-weight:700;">Save Up to 55%</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. Featured Best Sellers (Horizontal Swipe on Mobile) -->
-    <section class="ayur-section ayur-products-section">
-        <div class="ayur-container">
-            <div class="ayur-section-header">
-                <span class="ayur-section-tag">Most Loved Formulations</span>
-                <h2 class="ayur-section-title">Best Sellers Across India</h2>
-                <p class="ayur-section-desc">Authentic small-batch herbal formulations prepared with verified botanical purity.</p>
-            </div>
-
-            <div class="ayur-products-scroll-wrapper">
-                <div class="ayur-products-grid">
-                    <?php
-                    $args = array(
-                        'post_type'      => 'product',
-                        'posts_per_page' => 8,
-                        'orderby'        => 'menu_order',
-                        'order'          => 'ASC',
-                    );
-                    $loop = new WP_Query($args);
-
-                    if ($loop->have_posts()) :
-                        while ($loop->have_posts()) : $loop->the_post();
-                            wc_get_template_part('content', 'product');
-                        endwhile;
-                        wp_reset_postdata();
-                    else :
-                        echo '<p style="grid-column:1/-1; text-align:center; color:#888;">Fresh Ayurvedic remedies arriving shortly...</p>';
-                    endif;
-                    ?>
-                </div>
-            </div>
-
-            <div class="ayur-catalog-cta-wrap">
-                <a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/')); ?>" class="ayur-btn-primary">
-                    <span>View Complete Catalog</span>
-                    <?php echo ayur_svg_icon('arrow-right', '', 16); ?>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. Promotional Bundle Banner -->
-    <section class="ayur-container ayur-promo-wrap">
-        <div class="ayur-promo-banner">
-            <div class="ayur-promo-content">
-                <span class="ayur-promo-tag">Synergistic Formulations</span>
-                <h3 class="ayur-promo-title">Complete Ayurvedic Therapy Bundles</h3>
-                <p class="ayur-promo-desc">
-                    Experience dual wellness synergy with our classical pairing rituals. Bundle your favorite daily wellness juices and capsules to save up to 55% with complimentary express delivery.
-                </p>
-                <div class="ayur-promo-cta-row">
-                    <a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>" class="ayur-btn-primary">
-                        <span>Shop Bundles & Save</span>
-                        <?php echo ayur_svg_icon('arrow-right', '', 16); ?>
-                    </a>
-                </div>
-            </div>
-            <div class="ayur-promo-badge-box">
-                <div class="ayur-promo-badge-large">UP TO 55% OFF</div>
-                <div class="ayur-promo-badge-sub">On Complete Daily Therapy Kits</div>
-                <div class="ayur-promo-badge-detail">Free Pan-India Delivery Included</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. Classical Ayurvedic Ingredients Spotlight -->
-    <section class="ayur-section ayur-ingredients-section">
-        <div class="ayur-container">
-            <div class="ayur-section-header">
-                <span class="ayur-section-tag">Pure Botanicals</span>
-                <h2 class="ayur-section-title">Standardized Botanical Actives</h2>
-                <p class="ayur-section-desc">Carefully selected herbal extracts honoring traditional Ayurvedic pharmacology.</p>
-            </div>
-
-            <div class="ayur-ingredients-grid">
-                <div class="ayur-ingredient-card">
-                    <div class="ayur-ingredient-icon"><?php echo ayur_svg_icon('sparkles', '', 28); ?></div>
-                    <h4 class="ayur-ingredient-title">Shuddha Shilajit</h4>
-                    <p class="ayur-ingredient-desc">
-                        Purified Himalayan mineral pitch rich in natural fulvic acid to support cellular vitality, physical endurance, and deep rejuvenation.
-                    </p>
-                </div>
-                <div class="ayur-ingredient-card">
-                    <div class="ayur-ingredient-icon"><?php echo ayur_svg_icon('leaf', '', 28); ?></div>
-                    <h4 class="ayur-ingredient-title">Terminalia Arjuna</h4>
-                    <p class="ayur-ingredient-desc">
-                        Revered classical bark extract providing natural polyphenols to support arterial tone, cardiovascular wellness, and vital circulation.
-                    </p>
-                </div>
-                <div class="ayur-ingredient-card">
-                    <div class="ayur-ingredient-icon"><?php echo ayur_svg_icon('shield-check', '', 28); ?></div>
-                    <h4 class="ayur-ingredient-title">Shallaki (Boswellia)</h4>
-                    <p class="ayur-ingredient-desc">
-                        Standardized Boswellia serrata gum resin to nourish synovial joint fluid, ease morning stiffness, and maintain flexible movement.
-                    </p>
-                </div>
-                <div class="ayur-ingredient-card">
-                    <div class="ayur-ingredient-icon"><?php echo ayur_svg_icon('heart', '', 28); ?></div>
-                    <h4 class="ayur-ingredient-title">Shatavari & Ashoka</h4>
-                    <p class="ayur-ingredient-desc">
-                        Venerated female tonic botanicals that nourish vital tissues, encourage endocrine balance, and support monthly cycle comfort.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 7. Why Bhagyoday Ayurveda? (Authenticity Section) -->
-    <section class="ayur-section ayur-why-us-section">
-        <div class="ayur-container">
-            <div class="ayur-section-header">
-                <span class="ayur-section-tag">Authentic & Transparent</span>
-                <h2 class="ayur-section-title">Why Bhagyoday Ayurveda?</h2>
-                <p class="ayur-section-desc">Rooted in authentic tradition, crafted with modern discipline, and delivered with genuine care.</p>
-            </div>
-
-            <div class="ayur-why-grid">
-                <div class="ayur-why-card">
-                    <div class="ayur-why-icon"><?php echo ayur_svg_icon('leaf', '', 24); ?></div>
-                    <h4 class="ayur-why-title">Authentic Formulations</h4>
-                    <p class="ayur-why-desc">
-                        Every formula is prepared according to traditional Ayurvedic concepts, utilizing genuine herbs without synthetic chemicals or adulterants.
-                    </p>
-                </div>
-
-                <div class="ayur-why-card">
-                    <div class="ayur-why-icon"><?php echo ayur_svg_icon('badge-check', '', 24); ?></div>
-                    <h4 class="ayur-why-title">Standardized Actives</h4>
-                    <p class="ayur-why-desc">
-                        We prioritize consistency and potency by utilizing standardized botanical extracts tested for purity and microbiological safety.
-                    </p>
-                </div>
-
-                <div class="ayur-why-card">
-                    <div class="ayur-why-icon"><?php echo ayur_svg_icon('map-pin', '', 24); ?></div>
-                    <h4 class="ayur-why-title">Direct Hub Dispatch</h4>
-                    <p class="ayur-why-desc">
-                        Shipped directly from our central facility in Mantha, Jalna, Maharashtra in tamper-evident protective transit packaging.
-                    </p>
-                </div>
-
-                <div class="ayur-why-card">
-                    <div class="ayur-why-icon"><?php echo ayur_svg_icon('headphones', '', 24); ?></div>
-                    <h4 class="ayur-why-title">Dedicated Support</h4>
-                    <p class="ayur-why-desc">
-                        Have dosage or product questions? Connect directly with our team via phone at +91 8888686858 or instant WhatsApp assistance.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 8. FAQ Accordion -->
+    <!-- 6. FAQ Accordion (Clean & Minimal) -->
     <section class="ayur-section ayur-faq-section">
         <div class="ayur-container ayur-faq-container">
             <div class="ayur-section-header">
-                <span class="ayur-section-tag">Clear Answers</span>
-                <h2 class="ayur-section-title">Frequently Asked Questions</h2>
+                <span class="ayur-section-eyebrow"><?php _e('FREQUENTLY ASKED QUESTIONS', 'ayur-wellness'); ?></span>
+                <h2 class="ayur-section-title"><?php _e('Clear Answers & Guidance', 'ayur-wellness'); ?></h2>
             </div>
 
             <div class="ayur-faq-list">
                 <details class="ayur-faq-details" open>
                     <summary class="ayur-faq-summary">
-                        <span>Are your formulations 100% vegetarian and chemical-free?</span>
+                        <span><?php _e('Are your formulations 100% vegetarian and chemical-free?', 'ayur-wellness'); ?></span>
                         <span class="ayur-faq-arrow"><?php echo ayur_svg_icon('chevron-down', '', 16); ?></span>
                     </summary>
                     <div class="ayur-faq-body">
                         <p>
-                            Yes. All our capsule supplements utilize 100% plant-based vegetable cellulose (HPMC). We use zero animal gelatin, zero chemical binders, zero artificial colors, and zero parabens.
+                            <?php _e('Yes. All our capsules use 100% plant-derived cellulose (HPMC). We use zero animal gelatin, zero synthetic colors, zero artificial binders, and zero parabens.', 'ayur-wellness'); ?>
                         </p>
                     </div>
                 </details>
 
                 <details class="ayur-faq-details">
                     <summary class="ayur-faq-summary">
-                        <span>How long does delivery take across India?</span>
+                        <span><?php _e('How long does delivery take across India?', 'ayur-wellness'); ?></span>
                         <span class="ayur-faq-arrow"><?php echo ayur_svg_icon('chevron-down', '', 16); ?></span>
                     </summary>
                     <div class="ayur-faq-body">
                         <p>
-                            Orders are dispatched within 24 hours via reliable couriers integrated through Shiprocket (Delhivery, BlueDart, DTDC). Metro deliveries typically arrive in 2–3 business days, while other locations take 3–5 business days. Tracking updates are provided via SMS and WhatsApp.
+                            <?php _e('Orders are dispatched within 24 hours from our Maharashtra warehouse via integrated couriers (Delhivery, BlueDart, DTDC). Metro deliveries take 2–3 business days, while non-metro locations take 3–5 business days. Tracking is provided via SMS and WhatsApp.', 'ayur-wellness'); ?>
                         </p>
                     </div>
                 </details>
 
                 <details class="ayur-faq-details">
                     <summary class="ayur-faq-summary">
-                        <span>Can I pay using Cash on Delivery (COD)?</span>
+                        <span><?php _e('Can I pay using Cash on Delivery (COD)?', 'ayur-wellness'); ?></span>
                         <span class="ayur-faq-arrow"><?php echo ayur_svg_icon('chevron-down', '', 16); ?></span>
                     </summary>
                     <div class="ayur-faq-body">
                         <p>
-                            Yes! Cash on Delivery is available across serviceable Indian pincodes. For prepaid orders paid via UPI or Cards, you also enjoy prioritized express dispatch.
+                            <?php _e('Yes! Cash on Delivery is available across serviceable Indian pincodes. Prepaid orders via UPI, Cards, and Net Banking enjoy prioritized express dispatch.', 'ayur-wellness'); ?>
                         </p>
                     </div>
                 </details>
 
                 <details class="ayur-faq-details">
                     <summary class="ayur-faq-summary">
-                        <span>How can I reach customer support for dosage or order inquiries?</span>
+                        <span><?php _e('How can I contact customer support for dosage questions?', 'ayur-wellness'); ?></span>
                         <span class="ayur-faq-arrow"><?php echo ayur_svg_icon('chevron-down', '', 16); ?></span>
                     </summary>
                     <div class="ayur-faq-body">
                         <p>
-                            You can reach us directly by calling +91 8888686858, emailing vijaykulal8833@gmail.com, or tapping the WhatsApp button on the bottom right of the screen for real-time assistance.
+                            <?php _e('You can reach our customer support team directly at +91 8888686858, via WhatsApp, or by emailing vijaykulal8833@gmail.com. We are available Monday through Saturday from 9:00 AM to 7:00 PM IST.', 'ayur-wellness'); ?>
                         </p>
                     </div>
                 </details>

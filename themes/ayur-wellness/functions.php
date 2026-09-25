@@ -226,11 +226,11 @@ function ayur_get_cart_drawer_content_html() {
     ?>
     <div class="ayur-drawer-header">
         <div class="ayur-drawer-title-wrap">
-            <span class="ayur-drawer-title"><?php _e('Your Wellness Cart', 'ayur-wellness'); ?></span>
+            <span class="ayur-drawer-title"><?php _e('Your Cart', 'ayur-wellness'); ?></span>
             <span class="ayur-drawer-count-badge"><?php echo esc_html($count); ?></span>
         </div>
         <button type="button" class="ayur-drawer-close-btn" id="ayurCloseCartDrawer" aria-label="<?php esc_attr_e('Close Cart', 'ayur-wellness'); ?>">
-            <?php echo ayur_svg_icon('x', '', 20); ?>
+            <?php echo ayur_svg_icon('x', '', 18, 1.6); ?>
         </button>
     </div>
 
@@ -238,9 +238,9 @@ function ayur_get_cart_drawer_content_html() {
     <div class="ayur-drawer-shipping-bar">
         <div class="ayur-drawer-shipping-text">
             <?php if ($remaining <= 0) : ?>
-                <span class="unlocked"><?php echo ayur_svg_icon('check', '', 16); ?> <strong><?php _e('You have unlocked FREE Pan-India Delivery', 'ayur-wellness'); ?></strong></span>
+                <span class="unlocked"><?php echo ayur_svg_icon('check', '', 15); ?> <strong><?php _e('You have unlocked FREE Pan-India Delivery', 'ayur-wellness'); ?></strong></span>
             <?php else : ?>
-                <span><?php echo ayur_svg_icon('truck', '', 16); ?> <?php printf(__('Add <strong>₹%s</strong> more for <strong>FREE Delivery</strong>', 'ayur-wellness'), number_format($remaining)); ?></span>
+                <span><?php echo ayur_svg_icon('truck', '', 15); ?> <?php printf(__('Add <strong>₹%s</strong> more for <strong>FREE Delivery</strong>', 'ayur-wellness'), number_format($remaining)); ?></span>
             <?php endif; ?>
         </div>
         <div class="ayur-drawer-progress-track">
@@ -251,13 +251,13 @@ function ayur_get_cart_drawer_content_html() {
     <?php if ($cart->is_empty()) : ?>
         <div class="ayur-drawer-empty-state">
             <div class="ayur-drawer-empty-icon">
-                <?php echo ayur_svg_icon('shopping-bag', '', 48, 1.25); ?>
+                <?php echo ayur_svg_icon('shopping-bag', '', 40, 1.4); ?>
             </div>
             <h4><?php _e('Your cart is empty', 'ayur-wellness'); ?></h4>
             <p><?php _e('Explore authentic classical formulations crafted to support your holistic wellness routine.', 'ayur-wellness'); ?></p>
             <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="ayur-btn-primary ayur-btn-empty-shop">
-                <?php _e('Explore Formulations', 'ayur-wellness'); ?>
-                <?php echo ayur_svg_icon('arrow-right', '', 16); ?>
+                <span><?php _e('Explore Formulations', 'ayur-wellness'); ?></span>
+                <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
             </a>
         </div>
     <?php else : ?>
@@ -296,15 +296,15 @@ function ayur_get_cart_drawer_content_html() {
 
                             <div class="ayur-drawer-item-actions">
                                 <div class="ayur-drawer-qty-stepper">
-                                    <button type="button" class="ayur-drawer-qty-btn ayur-qty-decrease" data-key="<?php echo esc_attr($cart_item_key); ?>" data-delta="-1" aria-label="<?php esc_attr_e('Decrease quantity', 'ayur-wellness'); ?>">
+                                    <button type="button" class="ayur-drawer-qty-btn" data-cart-key="<?php echo esc_attr($cart_item_key); ?>" data-action="dec" aria-label="<?php esc_attr_e('Decrease quantity', 'ayur-wellness'); ?>">
                                         <?php echo ayur_svg_icon('minus', '', 12); ?>
                                     </button>
                                     <span class="ayur-drawer-qty-val"><?php echo esc_html($cart_item['quantity']); ?></span>
-                                    <button type="button" class="ayur-drawer-qty-btn ayur-qty-increase" data-key="<?php echo esc_attr($cart_item_key); ?>" data-delta="1" aria-label="<?php esc_attr_e('Increase quantity', 'ayur-wellness'); ?>">
+                                    <button type="button" class="ayur-drawer-qty-btn" data-cart-key="<?php echo esc_attr($cart_item_key); ?>" data-action="inc" aria-label="<?php esc_attr_e('Increase quantity', 'ayur-wellness'); ?>">
                                         <?php echo ayur_svg_icon('plus', '', 12); ?>
                                     </button>
                                 </div>
-                                <button type="button" class="ayur-drawer-remove-btn" data-key="<?php echo esc_attr($cart_item_key); ?>" title="<?php esc_attr_e('Remove item', 'ayur-wellness'); ?>" aria-label="<?php esc_attr_e('Remove item', 'ayur-wellness'); ?>">
+                                <button type="button" class="ayur-drawer-item-remove" data-cart-key="<?php echo esc_attr($cart_item_key); ?>" title="<?php esc_attr_e('Remove item', 'ayur-wellness'); ?>" aria-label="<?php esc_attr_e('Remove item', 'ayur-wellness'); ?>">
                                     <?php echo ayur_svg_icon('trash', '', 15); ?>
                                 </button>
                             </div>
@@ -322,19 +322,10 @@ function ayur_get_cart_drawer_content_html() {
                 <span class="ayur-drawer-subtotal-val"><?php echo WC()->cart->get_cart_subtotal(); ?></span>
             </div>
 
-            <div class="ayur-drawer-trust-row">
-                <span class="ayur-trust-chip"><?php echo ayur_svg_icon('shield-check', '', 14); ?> <?php _e('100% Authentic', 'ayur-wellness'); ?></span>
-                <span class="ayur-trust-chip"><?php echo ayur_svg_icon('lock', '', 14); ?> <?php _e('Secure Checkout', 'ayur-wellness'); ?></span>
-                <span class="ayur-trust-chip"><?php echo ayur_svg_icon('truck', '', 14); ?> <?php _e('Pan-India COD', 'ayur-wellness'); ?></span>
-            </div>
-
             <div class="ayur-drawer-cta-group">
                 <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="ayur-btn-primary ayur-btn-drawer-checkout">
-                    <span><?php _e('Proceed to Checkout', 'ayur-wellness'); ?></span>
-                    <?php echo ayur_svg_icon('arrow-right', '', 16); ?>
-                </a>
-                <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="ayur-btn-secondary ayur-btn-drawer-viewcart">
-                    <?php _e('View Cart & Details', 'ayur-wellness'); ?>
+                    <span><?php _e('PROCEED TO CHECKOUT', 'ayur-wellness'); ?></span>
+                    <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
                 </a>
             </div>
         </div>

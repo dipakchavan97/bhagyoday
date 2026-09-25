@@ -11,22 +11,25 @@ get_header();
 
 <div class="ayur-archive-banner">
     <div class="ayur-container">
-        <nav class="ayur-breadcrumbs" aria-label="Breadcrumb">
-            <a href="<?php echo esc_url(home_url('/')); ?>">Home</a>
+        <nav class="ayur-breadcrumbs" aria-label="<?php esc_attr_e('Breadcrumbs', 'ayur-wellness'); ?>">
+            <a href="<?php echo esc_url(home_url('/')); ?>"><?php _e('Home', 'ayur-wellness'); ?></a>
             <span class="ayur-breadcrumb-sep"><?php echo ayur_svg_icon('chevron-right', '', 11); ?></span>
             <span class="ayur-breadcrumb-current"><?php woocommerce_page_title(); ?></span>
         </nav>
+        <span class="ayur-archive-eyebrow"><?php _e('DISCOVER AUTHENTIC FORMULATIONS', 'ayur-wellness'); ?></span>
         <h1 class="ayur-archive-title"><?php woocommerce_page_title(); ?></h1>
         <?php
         $term_desc = term_description();
         if ($term_desc) : ?>
             <div class="ayur-archive-desc"><?php echo $term_desc; ?></div>
+        <?php else : ?>
+            <p class="ayur-archive-lead"><?php _e('Time-honored Ayurvedic botanicals prepared ethically in small batches with zero synthetic fillers.', 'ayur-wellness'); ?></p>
         <?php endif; ?>
 
-        <!-- Category Filter Pills -->
-        <div class="ayur-cat-pills-row">
+        <!-- Refined Category Filter Pills -->
+        <div class="ayur-cat-pills-row" role="navigation" aria-label="<?php esc_attr_e('Filter by category', 'ayur-wellness'); ?>">
             <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="ayur-cat-pill <?php echo is_shop() ? 'active' : ''; ?>">
-                All Remedies
+                <?php _e('All Formulations', 'ayur-wellness'); ?>
             </a>
             <?php
             $cats = get_terms(array('taxonomy' => 'product_cat', 'hide_empty' => false));
@@ -72,10 +75,10 @@ get_header();
     <?php else : ?>
         <div class="ayur-empty-state">
             <div class="ayur-empty-icon"><?php echo ayur_svg_icon('leaf', '', 40); ?></div>
-            <p><?php _e('No Ayurvedic remedies found in this category.', 'ayur-wellness'); ?></p>
+            <p><?php _e('No Ayurvedic formulations found in this category.', 'ayur-wellness'); ?></p>
             <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="ayur-btn-primary">
-                <span>View All Products</span>
-                <?php echo ayur_svg_icon('arrow-right', '', 16); ?>
+                <span><?php _e('View All Formulations', 'ayur-wellness'); ?></span>
+                <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
             </a>
         </div>
     <?php endif; ?>
