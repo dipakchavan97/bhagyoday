@@ -49,9 +49,9 @@ class Ayur_Cart_Checkout {
         <div class="ayur-shipping-progress-box" data-threshold="<?php echo esc_attr($threshold); ?>">
             <div class="ayur-progress-text">
                 <?php if ($remaining <= 0) : ?>
-                    <span class="unlocked">🎉 <strong><?php _e('Congratulations! You have unlocked FREE Express Delivery!', 'ayur-core'); ?></strong></span>
+                    <span class="unlocked"><?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('check', '', 15) : ''; ?> <strong><?php _e('You have unlocked FREE Pan-India Delivery', 'ayur-core'); ?></strong></span>
                 <?php else : ?>
-                    <span>🚚 <?php printf(__('Add <strong>₹%s</strong> more to unlock <strong>FREE Express Shipping</strong>', 'ayur-core'), number_format($remaining)); ?></span>
+                    <span><?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('truck', '', 15) : ''; ?> <?php printf(__('Add <strong>₹%s</strong> more for <strong>FREE Delivery</strong>', 'ayur-core'), number_format($remaining)); ?></span>
                 <?php endif; ?>
             </div>
             <div class="ayur-progress-bar-wrap">
@@ -122,11 +122,11 @@ class Ayur_Cart_Checkout {
      */
     public static function render_cod_security_notice() {
         ?>
-        <div class="ayur-checkout-trust-badge" style="margin: 15px 0; padding: 12px 16px; background: #FAF8F5; border-radius: 8px; border: 1px solid #E5E0D8; font-size: 13px; color: #4B5563; display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 20px;">🛡️</span>
+        <div class="ayur-checkout-trust-badge" style="margin: 15px 0; padding: 14px 18px; background: #FAF7F0; border-radius: 8px; border: 1px solid rgba(23,59,47,0.1); font-size: 13px; color: #222522; display: flex; align-items: center; gap: 12px;">
+            <span style="color: #315C45; display: inline-flex;"><?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('shield-check', '', 22) : ''; ?></span>
             <div>
-                <strong><?php _e('100% Secure & Authentic Guaranteed:', 'ayur-core'); ?></strong>
-                <div><?php _e('Instant UPI / Card refunds on returns. For COD orders, automated phone verification will confirm dispatch.', 'ayur-core'); ?></div>
+                <strong style="color: #173B2F;"><?php _e('100% Authentic & Secure Guarantee:', 'ayur-core'); ?></strong>
+                <div style="color: #5F6762; font-size: 12px; margin-top: 2px;"><?php _e('Instant UPI / Card refunds on returns. For COD orders, automated phone verification confirms dispatch.', 'ayur-core'); ?></div>
             </div>
         </div>
         <?php

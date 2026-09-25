@@ -26,6 +26,9 @@ class Ayur_Fields {
 
         // Phase 3 Review Verification: Purge unverified / mock seeded product reviews
         add_action('init', array(__CLASS__, 'purge_unverified_product_reviews'), 99);
+
+        // Sanitize legacy database emojis
+        add_action('init', array(__CLASS__, 'strip_database_emojis'), 90);
     }
 
     public static function add_ayurvedic_admin_tab($tabs) {
@@ -235,19 +238,19 @@ class Ayur_Fields {
         <div class="ayur-tab-content ayur-faq-accordion">
             <h3><?php _e('Frequently Asked Questions', 'ayur-core'); ?></h3>
             <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">🌿 How soon can I expect results from <?php echo esc_html($title); ?>?</h4>
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">How soon can I expect results from <?php echo esc_html($title); ?>?</h4>
                 <p style="color:#4B5563; font-size:14px; line-height:1.6;">Ayurvedic formulations work holistically by purifying channels (Srotas) and nourishing vital tissues (Dhatus). Most individuals notice initial wellness benefits within 2 to 3 weeks of consistent daily use, with comprehensive rejuvenative results manifesting over 60 to 90 days.</p>
             </div>
             <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">🛡️ Are there any synthetic chemicals, binders, or side effects?</h4>
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">Are there any synthetic chemicals, binders, or side effects?</h4>
                 <p style="color:#4B5563; font-size:14px; line-height:1.6;">No. Bhagyoday Ayurveda formulations are prepared in AYUSH and GMP certified facilities using 100% natural botanical extracts. They are rigorously tested for heavy metal purity and contain zero synthetic chemicals or harmful preservatives when consumed according to recommended dosages.</p>
             </div>
             <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">⏱️ Can I take this along with my regular daily routine or medications?</h4>
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">Can I take this along with my regular daily routine or medications?</h4>
                 <p style="color:#4B5563; font-size:14px; line-height:1.6;">Yes, classical herbal supplements generally complement daily routines smoothly. If you are currently taking clinical prescription allopathic medications, we advise maintaining a 60-minute gap between intakes and consulting your healthcare professional.</p>
             </div>
             <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">🚚 Is Cash on Delivery (COD) and fast shipping available?</h4>
+                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">Is Cash on Delivery (COD) and fast shipping available?</h4>
                 <p style="color:#4B5563; font-size:14px; line-height:1.6;">Yes! We provide Cash on Delivery (COD) across all serviceable Indian pincodes. All orders are packed in discreet, protective packaging and dispatched from Maharashtra within 24 business hours via leading express couriers.</p>
             </div>
         </div>
@@ -385,6 +388,57 @@ class Ayur_Fields {
                 update_post_meta($p->get_id(), '_wc_rating_count', array());
             }
         }
+    }
+
+    /**
+     * Sanitize legacy emojis from WordPress database (posts & postmeta)
+     */
+    public static function strip_database_emojis() {
+        if (get_option('ayur_db_emojis_sanitized_v3')) {
+            return;
+        }
+        global $wpdb;
+
+        $pattern = '/[\x{1F600}-\x{1F64F}\x{1F300}-\x{1F5FF}\x{1F680}-\x{1F6FF}\x{1F1E0}-\x{1F1FF}\x{2702}-\x{27B0}\x{24C2}-\x{1F251}\x{1F900}-\x{1F9FF}\x{1FA70}-\x{1FAFF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}\x{2713}\x{2714}\x{2605}\x{2606}]/u';
+
+        // 1. Sanitize posts table
+        $posts = $wpdb->get_results("SELECT ID, post_title, post_content, post_excerpt FROM {$wpdb->posts} WHERE post_type IN ('product', 'page', 'post')");
+        if ($posts) {
+            foreach ($posts as $post) {
+                $clean_title = trim(preg_replace($pattern, '', $post->post_title));
+                $clean_content = preg_replace($pattern, '', $post->post_content);
+                $clean_excerpt = preg_replace($pattern, '', $post->post_excerpt);
+
+                if ($clean_title !== $post->post_title || $clean_content !== $post->post_content || $clean_excerpt !== $post->post_excerpt) {
+                    $wpdb->update(
+                        $wpdb->posts,
+                        array(
+                            'post_title'   => $clean_title,
+                            'post_content' => $clean_content,
+                            'post_excerpt' => $clean_excerpt,
+                        ),
+                        array('ID' => $post->ID)
+                    );
+                }
+            }
+        }
+
+        // 2. Sanitize postmeta table for Ayurvedic metadata
+        $metas = $wpdb->get_results("SELECT meta_id, meta_key, meta_value FROM {$wpdb->postmeta} WHERE meta_key IN ('_ayur_benefits', '_ayur_certifications', '_ayur_net_quantity', '_ayur_dosage', '_ayur_precautions')");
+        if ($metas) {
+            foreach ($metas as $meta) {
+                $clean_val = preg_replace($pattern, '', $meta->meta_value);
+                if ($clean_val !== $meta->meta_value) {
+                    $wpdb->update(
+                        $wpdb->postmeta,
+                        array('meta_value' => $clean_val),
+                        array('meta_id' => $meta->meta_id)
+                    );
+                }
+            }
+        }
+
+        update_option('ayur_db_emojis_sanitized_v3', 1);
     }
 }
 

@@ -414,7 +414,7 @@ class Ayur_Tracking {
     public static function render_admin_page() {
         ?>
         <div class="wrap" style="max-width:900px;">
-            <h1><?php _e('🌿 Marketing Tracking & Attribution Suite', 'ayur-core'); ?></h1>
+            <h1><?php _e('Marketing Tracking & Attribution Suite', 'ayur-core'); ?></h1>
             <p><?php _e('Configure Meta Pixel + Conversions API (CAPI) deduplicated tracking, GA4, and UTM attribution for Meta Ads traffic.', 'ayur-core'); ?></p>
 
             <form method="post" action="options.php" style="background:#fff; padding:25px; border-radius:8px; border:1px solid #ccd0d4; box-shadow:0 1px 3px rgba(0,0,0,0.05);">

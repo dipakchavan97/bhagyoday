@@ -99,7 +99,7 @@ class Ayur_Shiprocket {
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap:wrap; gap:10px;">
                 <div>
                     <h3 style="margin:0; font-family:'Cinzel', serif; color:#1E3A2F; font-size:18px;">
-                        🚚 <?php _e('Live Shipment & Delivery Tracking', 'ayur-core'); ?>
+                        <?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('truck', '', 18) : ''; ?> <?php _e('Live Shipment & Delivery Tracking', 'ayur-core'); ?>
                     </h3>
                     <p style="margin:4px 0 0 0; color:#6B7280; font-size:13px;">
                         <?php _e('Dispatched via verified temperature-controlled Ayurvedic delivery partner.', 'ayur-core'); ?>
@@ -131,7 +131,7 @@ class Ayur_Shiprocket {
                     $circle_bg = $is_passed ? '#1E3A2F' : '#E5E7EB';
                     $circle_color = $is_passed ? '#FFFFFF' : '#9CA3AF';
                     $title_color = $is_passed ? '#1E3A2F' : '#9CA3AF';
-                    $check_icon = $is_passed ? '✓' : $step_num;
+                    $check_icon = $is_passed ? (function_exists('ayur_svg_icon') ? ayur_svg_icon('check', '', 14) : '•') : $step_num;
 
                     echo '<div style="padding:10px; background:' . ($is_passed ? '#FFFFFF' : 'transparent') . '; border-radius:8px; border:1px solid ' . ($is_passed ? '#D1FAE5' : 'transparent') . ';">';
                     echo '<div style="width:28px; height:28px; border-radius:50%; background:' . $circle_bg . '; color:' . $circle_color . '; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; margin-bottom:8px;">' . $check_icon . '</div>';
@@ -145,10 +145,10 @@ class Ayur_Shiprocket {
 
             <div style="margin-top:18px; padding-top:15px; border-top:1px dashed #D1D5DB; display:flex; justify-content:space-between; align-items:center; font-size:13px; flex-wrap:wrap; gap:10px;">
                 <span style="color:#4B5563;">
-                    📍 <?php _e('Delivery to:', 'ayur-core'); ?> <strong><?php echo esc_html($order->get_shipping_city() ?: $order->get_billing_city()); ?>, <?php echo esc_html($order->get_shipping_postcode() ?: $order->get_billing_postcode()); ?></strong>
+                    <?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('map-pin', '', 14) : ''; ?> <?php _e('Delivery to:', 'ayur-core'); ?> <strong><?php echo esc_html($order->get_shipping_city() ?: $order->get_billing_city()); ?>, <?php echo esc_html($order->get_shipping_postcode() ?: $order->get_billing_postcode()); ?></strong>
                 </span>
                 <span style="color:#059669; font-weight:600;">
-                    🛡️ <?php _e('Estimated Delivery: 2-4 Business Days', 'ayur-core'); ?>
+                    <?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('shield-check', '', 14) : ''; ?> <?php _e('Estimated Delivery: 2-4 Business Days', 'ayur-core'); ?>
                 </span>
             </div>
         </div>
@@ -158,7 +158,7 @@ class Ayur_Shiprocket {
     public static function render_admin_page() {
         ?>
         <div class="wrap" style="max-width:900px;">
-            <h1><?php _e('🚚 Shiprocket Logistics & Courier Integration', 'ayur-core'); ?></h1>
+            <h1><?php _e('Shiprocket Logistics & Courier Integration', 'ayur-core'); ?></h1>
             <p><?php _e('Connect your Shiprocket account for automated courier assignment (Delhivery, Bluedart, DTDC), AWB generation, and customer tracking.', 'ayur-core'); ?></p>
 
             <form method="post" action="options.php" style="background:#fff; padding:25px; border-radius:8px; border:1px solid #ccd0d4; box-shadow:0 1px 3px rgba(0,0,0,0.05);">

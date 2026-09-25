@@ -20,7 +20,7 @@ class Ayur_Profitability {
 
         wp_add_dashboard_widget(
             'ayur_d2c_profitability_widget',
-            __('🌿 Ayurvedic D2C Unit Economics & Contribution Dashboard', 'ayur-core'),
+            __('Ayurvedic D2C Unit Economics & Contribution Dashboard', 'ayur-core'),
             array(__CLASS__, 'render_profitability_widget')
         );
     }
