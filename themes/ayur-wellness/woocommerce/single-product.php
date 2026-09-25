@@ -111,9 +111,9 @@ while (have_posts()) :
                         </div>
                     <?php endif; ?>
 
-                    <!-- Live Stock Urgency Badge -->
-                    <div class="ayur-stock-alert">
-                        🔥 In Stock — Limited small-batch botanical formulation available
+                    <!-- Stock & Quality Reassurance Badge -->
+                    <div class="ayur-stock-alert" style="background:#F0FDF4; border:1px solid #BBF7D0; color:#166534; font-weight:600; padding:10px 14px; border-radius:8px; margin-bottom:18px; font-size:13px; display:flex; align-items:center; gap:8px;">
+                        <span>🌿</span> In Stock — Authentic small-batch botanical formulation ready for immediate dispatch
                     </div>
 
                     <!-- Add to Cart / Buy Now CTAs -->

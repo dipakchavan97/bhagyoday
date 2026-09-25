@@ -27,8 +27,12 @@ try:
         print("Savings Badge:", save.group(1).strip() if save else "N/A")
         
         # Gallery
-        main_img = re.search(r'id="ayurMainProductImg"[^>]*src="([^"]+)"', html)
-        print("Main Image:", main_img.group(1) if main_img else "NOT FOUND")
+        img_match = re.search(r'<img[^>]+id="ayurMainProductImg"[^>]*>', html)
+        if img_match:
+            src_match = re.search(r'src="([^"]+)"', img_match.group(0))
+            print("Main Image:", src_match.group(1) if src_match else "SRC NOT FOUND")
+        else:
+            print("Main Image: NOT FOUND")
         thumbs = re.findall(r'class="ayur-gallery-thumb-btn[^"]*"[^>]*data-full="([^"]+)"', html)
         print(f"Gallery Thumbnails count: {len(thumbs)}")
         for i, t in enumerate(thumbs):

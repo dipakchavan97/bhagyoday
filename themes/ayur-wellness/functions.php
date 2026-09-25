@@ -105,13 +105,22 @@ function ayur_get_discount_badge($product) {
  * Helper: Star Rating HTML
  */
 function ayur_get_star_rating_html($product) {
-    $rating = $product ? (float) $product->get_average_rating() : 5.0;
-    if ($rating == 0) $rating = 5.0;
-    $count = $product ? $product->get_review_count() : 12;
-    if ($count == 0) $count = 14;
+    if (!$product) return '';
+    $rating = (float) $product->get_average_rating();
+    $count = (int) $product->get_review_count();
 
-    return '<div class="ayur-product-rating">
-        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-        <span class="ayur-rating-count">(' . $count . ')</span>
-    </div>';
+    if ($count > 0 && $rating > 0) {
+        $full_stars = min(5, max(1, (int) round($rating)));
+        $stars_html = str_repeat('★', $full_stars) . str_repeat('☆', 5 - $full_stars);
+        return '<div class="ayur-product-rating">
+            <span style="color:#F59E0B;">' . $stars_html . '</span>
+            <span class="ayur-rating-count">(' . $count . ')</span>
+        </div>';
+    }
+
+    if (is_product()) {
+        return '<div class="ayur-product-rating"><a href="#reviews" class="ayur-be-first-review" style="color:#2D5A46; font-size:12px; font-weight:600; text-decoration:none;">⭐ Be the first to review</a></div>';
+    }
+
+    return '';
 }

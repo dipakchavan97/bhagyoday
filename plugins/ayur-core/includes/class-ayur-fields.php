@@ -23,6 +23,9 @@ class Ayur_Fields {
 
         // SEO Schema (Product, FAQPage, Organization, Breadcrumbs)
         add_action('wp_head', array(__CLASS__, 'output_seo_json_ld'), 20);
+
+        // Phase 3 Review Verification: Purge unverified / mock seeded product reviews
+        add_action('init', array(__CLASS__, 'purge_unverified_product_reviews'), 99);
     }
 
     public static function add_ayurvedic_admin_tab($tabs) {
@@ -304,14 +307,20 @@ class Ayur_Fields {
                             'name'  => 'Bhagyoday Ayurveda',
                         ),
                     ),
-                    'aggregateRating' => array(
+                );
+
+                $rev_count = (int) $product->get_review_count();
+                $avg_rating = (float) $product->get_average_rating();
+                if ($rev_count > 0 && $avg_rating > 0) {
+                    $product_schema['aggregateRating'] = array(
                         '@type'       => 'AggregateRating',
-                        'ratingValue' => '4.9',
-                        'reviewCount' => '48',
+                        'ratingValue' => number_format($avg_rating, 1),
+                        'reviewCount' => $rev_count,
                         'bestRating'  => '5',
                         'worstRating' => '1',
-                    ),
-                );
+                    );
+                }
+
                 echo "\n<!-- Bhagyoday Ayurveda Product Schema -->\n";
                 echo '<script type="application/ld+json">' . wp_json_encode($product_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
 
@@ -349,6 +358,31 @@ class Ayur_Fields {
                 );
                 echo "\n<!-- Bhagyoday Ayurveda FAQ Schema -->\n";
                 echo '<script type="application/ld+json">' . wp_json_encode($faq_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
+            }
+        }
+    }
+
+    /**
+     * Purge unverified / mock reviews from database to comply with Phase 3 Truth-in-Advertising
+     */
+    public static function purge_unverified_product_reviews() {
+        if (!function_exists('wc_get_products')) {
+            return;
+        }
+        $count = get_comments(array('post_type' => 'product', 'count' => true));
+        if ($count > 0) {
+            $comments = get_comments(array('post_type' => 'product'));
+            foreach ($comments as $c) {
+                wp_delete_comment($c->comment_ID, true);
+            }
+            $products = wc_get_products(array('limit' => -1));
+            foreach ($products as $p) {
+                if (class_exists('WC_Comments')) {
+                    WC_Comments::clear_transients($p->get_id());
+                }
+                update_post_meta($p->get_id(), '_wc_review_count', 0);
+                update_post_meta($p->get_id(), '_wc_average_rating', '0.00');
+                update_post_meta($p->get_id(), '_wc_rating_count', array());
             }
         }
     }

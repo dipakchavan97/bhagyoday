@@ -36,6 +36,7 @@ class Ayur_Migrator {
             '/AMAZING-DEALS/collection/afYchHUL' => '/product-category/combos/',
             '/TOP-PRODUCTS/collection/nt4bMsyG' => '/shop/',
             '/return-policy' => '/refund-policy/',
+            '/search' => '/shop/',
         );
 
         $path = rtrim(strtok($uri, '?'), '/');
@@ -46,27 +47,8 @@ class Ayur_Migrator {
     }
 
     public static function check_migration_trigger() {
-        if (isset($_GET['ayur_run_source_migration']) && $_GET['ayur_run_source_migration'] === 'bhagyoday_auth_2026') {
-            ini_set('display_errors', '1');
-            error_reporting(E_ALL);
-            header('Content-Type: application/json; charset=utf-8');
-
-            try {
-                $results = self::execute_migration();
-                echo json_encode(array(
-                    'success' => true,
-                    'timestamp' => current_time('mysql'),
-                    'results' => $results,
-                ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-            } catch (Throwable $e) {
-                echo json_encode(array(
-                    'success' => false,
-                    'error' => $e->getMessage(),
-                    'file'  => $e->getFile(),
-                    'line'  => $e->getLine(),
-                ), JSON_PRETTY_PRINT);
-            }
-            exit;
+        if (isset($_GET['ayur_run_source_migration'])) {
+            wp_die('Migration complete. This endpoint has been permanently deactivated for production security.', 'Access Denied', array('response' => 403));
         }
     }
 
@@ -178,8 +160,8 @@ class Ayur_Migrator {
             // 4. Attach Images
             $attached_images = self::attach_product_images($saved_id, $item);
 
-            // 5. Seed Reviews if needed
-            self::seed_product_reviews($saved_id, $item['title']);
+            // 5. Reviews: Not seeded to comply with Phase 3 Truth-in-Advertising
+            // self::seed_product_reviews($saved_id, $item['title']);
 
             $imported_products[] = array(
                 'id'       => $saved_id,
@@ -388,40 +370,7 @@ class Ayur_Migrator {
     }
 
     public static function seed_product_reviews($product_id, $product_name) {
-        $existing_comments = get_comments(array('post_id' => $product_id, 'count' => true));
-        if ($existing_comments > 0) return;
-
-        $reviews = array(
-            array(
-                'author'  => 'Sunil Deshmukh',
-                'email'   => 'sunil.deshmukh.mh@gmail.com',
-                'rating'  => 5,
-                'content' => '100% genuine Ayurvedic medicine. Very fast delivery to Pune within 3 days. Quality and packaging is top-notch.',
-            ),
-            array(
-                'author'  => 'Kavita Joshi',
-                'email'   => 'kavita.joshi.pune@gmail.com',
-                'rating'  => 5,
-                'content' => 'Authentic herbal taste and real results. Been using it for 3 weeks and feeling significantly more energetic. Highly recommend Bhagyoday Ayurveda!',
-            ),
-        );
-
-        foreach ($reviews as $rev) {
-            $comment_data = array(
-                'comment_post_ID'      => $product_id,
-                'comment_author'       => $rev['author'],
-                'comment_author_email' => $rev['email'],
-                'comment_content'      => $rev['content'],
-                'comment_type'         => 'review',
-                'comment_approved'     => 1,
-                'comment_date'         => current_time('mysql'),
-            );
-            $comment_id = wp_insert_comment($comment_data);
-            if ($comment_id) {
-                update_comment_meta($comment_id, 'rating', $rev['rating']);
-                update_comment_meta($comment_id, 'verified', 1);
-            }
-        }
+        return; // Compliance: Never publish unverified or fabricated reviews
     }
 
     public static function get_authentic_catalog_data() {

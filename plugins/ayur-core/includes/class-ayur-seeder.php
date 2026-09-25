@@ -482,43 +482,13 @@ class Ayur_Seeder {
             update_post_meta($id, '_ayur_batch', 'AY-2026-09');
             update_post_meta($id, '_ayur_expiry', '24 Months from Mfd.');
 
-            // Add realistic 5-star verified reviews
-            self::seed_sample_reviews($id, $p['title']);
+            // Reviews are NOT seeded to comply with Phase 3 Truth-in-Advertising
+            // self::seed_sample_reviews($id, $p['title']);
         }
     }
 
     public static function seed_sample_reviews($product_id, $product_name) {
-        $reviews = array(
-            array(
-                'author'  => 'Pooja Sharma',
-                'email'   => 'pooja.sharma.test@gmail.com',
-                'rating'  => 5,
-                'content' => 'Outstanding quality! The herbal aroma is completely authentic and you can feel the purity immediately. Delivery was fast within 3 days to Pune.',
-            ),
-            array(
-                'author'  => 'Rajesh Varma',
-                'email'   => 'rajesh.varma.test@gmail.com',
-                'rating'  => 5,
-                'content' => 'Genuine Ayurvedic formulation without unnecessary chemicals. Been using it for 3 weeks and feeling significantly more energetic and balanced.',
-            ),
-        );
-
-        foreach ($reviews as $rev) {
-            $comment_data = array(
-                'comment_post_ID'      => $product_id,
-                'comment_author'       => $rev['author'],
-                'comment_author_email' => $rev['email'],
-                'comment_content'      => $rev['content'],
-                'comment_type'         => 'review',
-                'comment_approved'     => 1,
-                'comment_date'         => current_time('mysql'),
-            );
-            $comment_id = wp_insert_comment($comment_data);
-            if ($comment_id) {
-                update_comment_meta($comment_id, 'rating', $rev['rating']);
-                update_comment_meta($comment_id, 'verified', 1);
-            }
-        }
+        return; // Compliance: Never publish unverified or fabricated reviews
     }
 
     public static function seed_coupons() {

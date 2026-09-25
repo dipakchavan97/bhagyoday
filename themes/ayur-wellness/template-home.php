@@ -28,8 +28,8 @@ get_header();
                             EXPLORE COMBOS (SAVE 35%)
                         </a>
                     </div>
-                    <div style="margin-top:28px; display:flex; align-items:center; gap:16px; font-size:13px; color:#A7B3AE;">
-                        <span>⭐ <strong>4.9/5</strong> Rating</span>
+                    <div style="margin-top:28px; display:flex; align-items:center; gap:16px; font-size:13px; color:#A7B3AE; flex-wrap:wrap;">
+                        <span>🌿 <strong>100% Classical</strong> Actives</span>
                         <span>•</span>
                         <span>🚚 <strong>Free Shipping</strong> Above ₹999</span>
                         <span>•</span>
@@ -257,94 +257,84 @@ get_header();
     <section class="ayur-section" style="padding-top:20px;">
         <div class="ayur-container">
             <div class="ayur-section-header">
-                <span class="ayur-section-tag">Purity in Every Drop</span>
-                <h2 class="ayur-section-title">Classical Botanical Actives</h2>
-                <p class="ayur-section-desc">Standardized extracts from organically grown medicinal herbs adhering to classical scripture.</p>
+                <span class="ayur-section-tag">Purity in Every Formulation</span>
+                <h2 class="ayur-section-title">Authentic Botanical Actives</h2>
+                <p class="ayur-section-desc">Traditional standardized extracts prepared in accordance with classical Ayurvedic pharmacology.</p>
             </div>
 
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:24px;">
                 <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; text-align:center;">
+                    <div style="font-size:36px; margin-bottom:12px;">🏔️</div>
+                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">Shuddha Shilajit</h4>
+                    <p style="font-size:13px; color:#6B7280; line-height:1.6;">
+                        Classical Himalayan mineral pitch purified through Triphala Shodhana. Naturally rich in fulvic acid to support cellular energy reserves and natural stamina.
+                    </p>
+                </div>
+                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; text-align:center;">
+                    <div style="font-size:36px; margin-bottom:12px;">🌳</div>
+                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">Terminalia Arjuna</h4>
+                    <p style="font-size:13px; color:#6B7280; line-height:1.6;">
+                        Revered classical Hridaya Rasayana bark decoction providing natural polyphenols to support healthy circulation, arterial flexibility, and vital stamina.
+                    </p>
+                </div>
+                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; text-align:center;">
                     <div style="font-size:36px; margin-bottom:12px;">🌿</div>
-                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">KSM-66® Ashwagandha</h4>
+                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">Shallaki (Boswellia)</h4>
                     <p style="font-size:13px; color:#6B7280; line-height:1.6;">
-                        High-concentration, full-spectrum root extract clinically studied to reduce cortisol and replenish natural Ojas (vital energy).
-                    </p>
-                </div>
-                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; text-align:center;">
-                    <div style="font-size:36px; margin-bottom:12px;">🌾</div>
-                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">Curcumin 95%</h4>
-                    <p style="font-size:13px; color:#6B7280; line-height:1.6;">
-                        Standardized 95% curcuminoids paired with Piperine for 2000% higher bioavailability to soothe inflamed joints and tissues.
-                    </p>
-                </div>
-                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; text-align:center;">
-                    <div style="font-size:36px; margin-bottom:12px;">🌱</div>
-                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">Maha Bhringraj</h4>
-                    <p style="font-size:13px; color:#6B7280; line-height:1.6;">
-                        "Keshraj" — The sovereign herb for hair. Slow-cooked in cold-pressed virgin sesame oil to revive thinning follicles.
+                        Standardized to 65% Boswellic acids to support synovial joint lubrication, morning cartilage comfort, and ease of active daily mobility.
                     </p>
                 </div>
                 <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; text-align:center;">
                     <div style="font-size:36px; margin-bottom:12px;">🌸</div>
-                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">Kashmiri Kesar</h4>
+                    <h4 style="margin-bottom:8px; font-family:'Cinzel', serif;">Shatavari & Ashoka</h4>
                     <p style="font-size:13px; color:#6B7280; line-height:1.6;">
-                        Authentic grade-A saffron stigmas handpicked for Kumkumadi Tailam to restore luminous, non-greasy golden skin complexion.
+                        Venerated female Nari Rasayana herbs that nourish internal tissues, support balanced natural hormonal rhythm, and promote cycle comfort.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 7. Verified Reviews & Testimonials -->
+    <!-- 7. Our Quality & Manufacturing Commitments -->
     <section class="ayur-section" style="background:#FAF8F5;">
         <div class="ayur-container">
             <div class="ayur-section-header">
-                <span class="ayur-section-tag">Real Customer Stories</span>
-                <h2 class="ayur-section-title">Trusted by Thousands Across India</h2>
-                <p class="ayur-section-desc">Read honest experiences from verified customers using our herbal formulations daily.</p>
+                <span class="ayur-section-tag">Pure & Verifiable</span>
+                <h2 class="ayur-section-title">The Bhagyoday Ayurveda Promise</h2>
+                <p class="ayur-section-desc">Every bottle represents our dedication to classical Vedic wisdom, hygiene, and authentic customer wellness.</p>
             </div>
 
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
-                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; box-shadow:var(--ayur-shadow-soft);">
-                    <div style="color:#F59E0B; margin-bottom:10px;">★★★★★</div>
-                    <p style="font-size:14px; line-height:1.7; color:#374151; margin-bottom:16px;">
-                        "The Maha Bhringraj oil is magical. Unlike commercial synthetic oils, this has the rich authentic herbal aroma of real Kshir Pak preparation. Within 4 weeks my hair fall reduced by 70%!"
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px;">
+                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; box-shadow:var(--ayur-shadow-soft); text-align:center;">
+                    <div style="font-size:32px; margin-bottom:12px;">🛡️</div>
+                    <h4 style="font-family:'Cinzel', serif; margin-bottom:8px; color:#1E3A2F;">AYUSH & GMP Standards</h4>
+                    <p style="font-size:13px; line-height:1.6; color:#4B5563;">
+                        Manufactured in strictly audited, hygienic facilities adhering to Good Manufacturing Practices and classical extraction protocols.
                     </p>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="width:36px; height:36px; border-radius:50%; background:#1E3A2F; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">P</div>
-                        <div>
-                            <div style="font-weight:700; font-size:14px; color:#1E3A2F;">Pooja Sharma</div>
-                            <div style="font-size:11px; color:#059669;">✓ Verified Buyer (Pune, Maharashtra)</div>
-                        </div>
-                    </div>
                 </div>
 
-                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; box-shadow:var(--ayur-shadow-soft);">
-                    <div style="color:#F59E0B; margin-bottom:10px;">★★★★★</div>
-                    <p style="font-size:14px; line-height:1.7; color:#374151; margin-bottom:16px;">
-                        "Been taking the KSM-66 Ashwagandha every night. My sleep quality has improved dramatically, and I wake up without morning grogginess. Genuine Ayurvedic purity without chemicals."
+                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; box-shadow:var(--ayur-shadow-soft); text-align:center;">
+                    <div style="font-size:32px; margin-bottom:12px;">🧪</div>
+                    <h4 style="font-family:'Cinzel', serif; margin-bottom:8px; color:#1E3A2F;">Heavy Metal Tested</h4>
+                    <p style="font-size:13px; line-height:1.6; color:#4B5563;">
+                        Zero chemical adulterants, artificial colorants, or synthetic binders. Each batch is verified for elemental botanical purity.
                     </p>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="width:36px; height:36px; border-radius:50%; background:#1E3A2F; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">R</div>
-                        <div>
-                            <div style="font-weight:700; font-size:14px; color:#1E3A2F;">Rajesh Varma</div>
-                            <div style="font-size:11px; color:#059669;">✓ Verified Buyer (Bengaluru, Karnataka)</div>
-                        </div>
-                    </div>
                 </div>
 
-                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; box-shadow:var(--ayur-shadow-soft);">
-                    <div style="color:#F59E0B; margin-bottom:10px;">★★★★★</div>
-                    <p style="font-size:14px; line-height:1.7; color:#374151; margin-bottom:16px;">
-                        "The Triphala detox capsules are gentle and non-cramping. Fast delivery to Delhi in just 2 days via Delhivery with live WhatsApp tracking updates. Truly a 5-star brand!"
+                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; box-shadow:var(--ayur-shadow-soft); text-align:center;">
+                    <div style="font-size:32px; margin-bottom:12px;">📍</div>
+                    <h4 style="font-family:'Cinzel', serif; margin-bottom:8px; color:#1E3A2F;">Direct Hub Dispatch</h4>
+                    <p style="font-size:13px; line-height:1.6; color:#4B5563;">
+                        Dispatched directly from our central facility in Mantha, Jalna, Maharashtra in tamper-evident protective packaging.
                     </p>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="width:36px; height:36px; border-radius:50%; background:#1E3A2F; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">A</div>
-                        <div>
-                            <div style="font-weight:700; font-size:14px; color:#1E3A2F;">Ananya Desai</div>
-                            <div style="font-size:11px; color:#059669;">✓ Verified Buyer (New Delhi)</div>
-                        </div>
-                    </div>
+                </div>
+
+                <div style="background:#fff; border-radius:12px; border:1px solid var(--ayur-border); padding:24px; box-shadow:var(--ayur-shadow-soft); text-align:center;">
+                    <div style="font-size:32px; margin-bottom:12px;">💵</div>
+                    <h4 style="font-family:'Cinzel', serif; margin-bottom:8px; color:#1E3A2F;">Pan-India COD</h4>
+                    <p style="font-size:13px; line-height:1.6; color:#4B5563;">
+                        Cash on Delivery available across all serviceable Indian pincodes with dedicated WhatsApp delivery updates and 7-day support.
+                    </p>
                 </div>
             </div>
         </div>

@@ -842,7 +842,8 @@ h1, h2, h3, h4, h5, h6 {
         grid-template-columns: repeat(2, 1fr);
     }
     .ayur-products-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
     .ayur-trust-grid {
         grid-template-columns: 1fr;
@@ -853,5 +854,73 @@ h1, h2, h3, h4, h5, h6 {
     .ayur-footer-bottom {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+/* Mobile Sticky Purchase Bar */
+.ayur-mobile-sticky-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .ayur-mobile-sticky-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #FFFFFF;
+        border-top: 1px solid #E5E0D8;
+        padding: 10px 16px;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 9999;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+        gap: 12px;
+    }
+    .ayur-sticky-price {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+    }
+    .ayur-sticky-price span:first-child {
+        font-size: 18px;
+        font-weight: 800;
+        color: #1E3A2F;
+    }
+    .ayur-sticky-mrp {
+        font-size: 11px;
+        color: #9CA3AF;
+        text-decoration: line-through;
+    }
+    .ayur-sticky-actions {
+        display: flex;
+        gap: 8px;
+        flex: 1;
+        justify-content: flex-end;
+    }
+    .ayur-sticky-btn {
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+    .ayur-sticky-add-cart {
+        background: #F4F2EC;
+        color: #1E3A2F !important;
+        border: 1px solid #1E3A2F;
+    }
+    .ayur-sticky-buy-now {
+        background: #C9A84C;
+        color: #1A1A1A !important;
+        border: 1px solid #B8973B;
+        box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
+    }
+    body.single-product {
+        padding-bottom: 75px;
     }
 }
