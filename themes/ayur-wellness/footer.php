@@ -90,7 +90,7 @@ if (!defined('ABSPATH')) {
     </div>
 </footer>
 
-<!-- Interactive Slide-In Cart Drawer (Desktop & Mobile) -->
+<!-- Interactive Slide-In Cart Drawer (Desktop & Mobile - Phase 11) -->
 <div class="ayur-cart-drawer-wrap" id="ayurCartDrawerWrap" aria-hidden="true">
     <div class="ayur-drawer-backdrop" id="ayurCartDrawerBackdrop"></div>
     <div class="ayur-cart-drawer" id="ayurCartDrawer" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Shopping Cart Drawer', 'ayur-wellness'); ?>">
@@ -98,32 +98,38 @@ if (!defined('ABSPATH')) {
     </div>
 </div>
 
-<!-- Mobile Native App Bottom Navigation Bar (Section 24: Home, Shop, Search, Account, Cart) -->
+<?php
+// On single product pages, the sticky purchase bar is active. We only display bottom nav on non-single-product pages to prevent overlap.
+$is_single_prod = function_exists('is_product') && is_product();
+if (!$is_single_prod) :
+?>
+<!-- Mobile Native App Bottom Navigation Bar (Phase 10: Home, Shop, Search, Account, Cart) -->
 <nav class="ayur-mobile-bottom-nav" aria-label="<?php esc_attr_e('Mobile Navigation', 'ayur-wellness'); ?>">
     <a href="<?php echo esc_url(home_url('/')); ?>" class="ayur-bottom-nav-item <?php echo is_front_page() ? 'active' : ''; ?>">
-        <?php echo ayur_svg_icon('home', '', 20, 1.6); ?>
+        <?php echo ayur_svg_icon('home', '', 20, 1.75); ?>
         <span><?php _e('Home', 'ayur-wellness'); ?></span>
     </a>
     <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="ayur-bottom-nav-item <?php echo (function_exists('is_shop') && (is_shop() || is_product_taxonomy())) ? 'active' : ''; ?>">
-        <?php echo ayur_svg_icon('grid', '', 20, 1.6); ?>
+        <?php echo ayur_svg_icon('grid', '', 20, 1.75); ?>
         <span><?php _e('Shop', 'ayur-wellness'); ?></span>
     </a>
     <button type="button" class="ayur-bottom-nav-item" id="ayurBottomNavSearch" aria-label="<?php esc_attr_e('Search Catalog', 'ayur-wellness'); ?>">
-        <?php echo ayur_svg_icon('search', '', 20, 1.6); ?>
+        <?php echo ayur_svg_icon('search', '', 20, 1.75); ?>
         <span><?php _e('Search', 'ayur-wellness'); ?></span>
     </button>
     <a href="<?php echo esc_url(function_exists('wc_get_account_endpoint_url') ? wc_get_account_endpoint_url('dashboard') : home_url('/my-account/')); ?>" class="ayur-bottom-nav-item <?php echo (function_exists('is_account_page') && is_account_page()) ? 'active' : ''; ?>">
-        <?php echo ayur_svg_icon('user', '', 20, 1.6); ?>
+        <?php echo ayur_svg_icon('user', '', 20, 1.75); ?>
         <span><?php _e('Account', 'ayur-wellness'); ?></span>
     </a>
     <button type="button" class="ayur-bottom-nav-item ayur-cart-trigger" aria-label="<?php esc_attr_e('Open Shopping Cart', 'ayur-wellness'); ?>">
         <div class="ayur-bottom-cart-badge-wrap">
-            <?php echo ayur_svg_icon('shopping-bag', '', 20, 1.6); ?>
+            <?php echo ayur_svg_icon('shopping-bag', '', 20, 1.75); ?>
             <span class="ayur-cart-badge"><?php echo (function_exists('WC') && WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
         </div>
         <span><?php _e('Cart', 'ayur-wellness'); ?></span>
     </button>
 </nav>
+<?php endif; ?>
 
 <?php wp_footer(); ?>
 </body>

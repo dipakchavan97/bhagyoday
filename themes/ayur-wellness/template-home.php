@@ -32,7 +32,7 @@ if (!$hero_product) {
 
 <main id="primary" class="site-main ayur-homepage">
 
-    <!-- 1. Editorial Hero Section -->
+    <!-- 1. Editorial Hero Section (Phase 4 & Phase 5) -->
     <section class="ayur-hero">
         <div class="ayur-container">
             <div class="ayur-hero-grid">
@@ -57,7 +57,7 @@ if (!$hero_product) {
                     </div>
                 </div>
 
-                <!-- Hero Product Visual Column -->
+                <!-- Hero Product Visual & Feature Column (Phase 4 & Phase 5) -->
                 <div class="ayur-hero-visual">
                     <div class="ayur-hero-stage">
                         <?php if ($hero_product && has_post_thumbnail($hero_product->get_id())) : ?>
@@ -68,11 +68,14 @@ if (!$hero_product) {
                                     'alt' => esc_attr($hero_product->get_name())
                                 )); ?>
                             </a>
+                            <!-- Phase 5: FEATURED FORMULATION Info -->
                             <div class="ayur-hero-card-meta">
                                 <span class="ayur-hero-card-cat"><?php _e('FEATURED FORMULATION', 'ayur-wellness'); ?></span>
-                                <a href="<?php echo esc_url($hero_product->get_permalink()); ?>" class="ayur-hero-card-title">
-                                    <?php echo esc_html($hero_product->get_name()); ?>
-                                </a>
+                                <h3 class="ayur-hero-card-title">
+                                    <a href="<?php echo esc_url($hero_product->get_permalink()); ?>">
+                                        <?php echo esc_html($hero_product->get_name()); ?>
+                                    </a>
+                                </h3>
                                 <div class="ayur-hero-card-pricing">
                                     <span class="ayur-hero-price">₹<?php echo number_format($hero_product->get_price()); ?></span>
                                     <?php
@@ -81,6 +84,12 @@ if (!$hero_product) {
                                     ?>
                                         <span class="ayur-hero-mrp">MRP ₹<?php echo number_format($hero_mrp); ?></span>
                                     <?php endif; ?>
+                                </div>
+                                <div class="ayur-hero-card-cta">
+                                    <a href="<?php echo esc_url($hero_product->get_permalink()); ?>" class="ayur-hero-cta-btn">
+                                        <span><?php _e('VIEW FORMULATION', 'ayur-wellness'); ?></span>
+                                        <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                                    </a>
                                 </div>
                             </div>
                         <?php else : ?>
@@ -95,34 +104,34 @@ if (!$hero_product) {
         </div>
     </section>
 
-    <!-- 2. Subtle Horizontal Trust Rail -->
+    <!-- 2. Subtle Horizontal Trust Rail (Phase 6) -->
     <section class="ayur-trust-rail" aria-label="<?php esc_attr_e('Brand Promises', 'ayur-wellness'); ?>">
         <div class="ayur-container">
             <div class="ayur-trust-rail-inner">
                 <div class="ayur-trust-rail-item">
-                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('shield-check', '', 19); ?></span>
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('shield-check', '', 18); ?></span>
                     <span class="ayur-trust-rail-text"><?php _e('Secure Payments', 'ayur-wellness'); ?></span>
                 </div>
                 <div class="ayur-trust-rail-sep" aria-hidden="true"></div>
                 <div class="ayur-trust-rail-item">
-                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('truck', '', 19); ?></span>
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('truck', '', 18); ?></span>
                     <span class="ayur-trust-rail-text"><?php _e('Pan-India Delivery', 'ayur-wellness'); ?></span>
                 </div>
                 <div class="ayur-trust-rail-sep" aria-hidden="true"></div>
                 <div class="ayur-trust-rail-item">
-                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('package', '', 19); ?></span>
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('package', '', 18); ?></span>
                     <span class="ayur-trust-rail-text"><?php _e('Carefully Packed', 'ayur-wellness'); ?></span>
                 </div>
                 <div class="ayur-trust-rail-sep" aria-hidden="true"></div>
                 <div class="ayur-trust-rail-item">
-                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('headphones', '', 19); ?></span>
+                    <span class="ayur-trust-rail-icon"><?php echo ayur_svg_icon('headphones', '', 18); ?></span>
                     <span class="ayur-trust-rail-text"><?php _e('Customer Support', 'ayur-wellness'); ?></span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. Shop by Wellness Categories -->
+    <!-- 3. Shop by Wellness Categories (Phase 7: 2-Column Mobile Tiles with SVG Icons) -->
     <section class="ayur-section ayur-categories-section">
         <div class="ayur-container">
             <div class="ayur-section-header">
@@ -133,67 +142,85 @@ if (!$hero_product) {
 
             <div class="ayur-categories-grid">
                 <a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-icon-wrap">
+                        <?php echo ayur_svg_icon('zap', 'ayur-cat-icon', 22); ?>
+                    </div>
                     <div class="ayur-cat-content">
-                        <span class="ayur-cat-tag"><?php _e('STAMINA & ENDURANCE', 'ayur-wellness'); ?></span>
+                        <span class="ayur-cat-tag"><?php _e('STAMINA & VITALITY', 'ayur-wellness'); ?></span>
                         <h3 class="ayur-cat-title"><?php _e("Men's Wellness", 'ayur-wellness'); ?></h3>
                         <span class="ayur-cat-link-text">
                             <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                            <?php echo ayur_svg_icon('arrow-right', '', 13); ?>
                         </span>
                     </div>
                 </a>
 
                 <a href="<?php echo esc_url(ayur_get_cat_url('womens-wellness')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-icon-wrap">
+                        <?php echo ayur_svg_icon('sparkles', 'ayur-cat-icon', 22); ?>
+                    </div>
                     <div class="ayur-cat-content">
                         <span class="ayur-cat-tag"><?php _e('HORMONAL HARMONY', 'ayur-wellness'); ?></span>
                         <h3 class="ayur-cat-title"><?php _e("Women's Wellness", 'ayur-wellness'); ?></h3>
                         <span class="ayur-cat-link-text">
                             <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                            <?php echo ayur_svg_icon('arrow-right', '', 13); ?>
                         </span>
                     </div>
                 </a>
 
                 <a href="<?php echo esc_url(ayur_get_cat_url('heart-immunity')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-icon-wrap">
+                        <?php echo ayur_svg_icon('heart', 'ayur-cat-icon', 22); ?>
+                    </div>
                     <div class="ayur-cat-content">
-                        <span class="ayur-cat-tag"><?php _e('HEART & IMMUNITY', 'ayur-wellness'); ?></span>
-                        <h3 class="ayur-cat-title"><?php _e('Daily Vitality', 'ayur-wellness'); ?></h3>
+                        <span class="ayur-cat-tag"><?php _e('CARDIO & IMMUNITY', 'ayur-wellness'); ?></span>
+                        <h3 class="ayur-cat-title"><?php _e('Heart & Vitality', 'ayur-wellness'); ?></h3>
                         <span class="ayur-cat-link-text">
                             <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                            <?php echo ayur_svg_icon('arrow-right', '', 13); ?>
                         </span>
                     </div>
                 </a>
 
                 <a href="<?php echo esc_url(ayur_get_cat_url('digestive')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-icon-wrap">
+                        <?php echo ayur_svg_icon('flame', 'ayur-cat-icon', 22); ?>
+                    </div>
                     <div class="ayur-cat-content">
                         <span class="ayur-cat-tag"><?php _e('GUT & METABOLISM', 'ayur-wellness'); ?></span>
                         <h3 class="ayur-cat-title"><?php _e('Digestive Wellness', 'ayur-wellness'); ?></h3>
                         <span class="ayur-cat-link-text">
                             <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                            <?php echo ayur_svg_icon('arrow-right', '', 13); ?>
                         </span>
                     </div>
                 </a>
 
                 <a href="<?php echo esc_url(ayur_get_cat_url('joint-care-mobility')); ?>" class="ayur-cat-block">
+                    <div class="ayur-cat-icon-wrap">
+                        <?php echo ayur_svg_icon('shield-check', 'ayur-cat-icon', 22); ?>
+                    </div>
                     <div class="ayur-cat-content">
                         <span class="ayur-cat-tag"><?php _e('FLEXIBILITY & COMFORT', 'ayur-wellness'); ?></span>
-                        <h3 class="ayur-cat-title"><?php _e('Joint & Mobility', 'ayur-wellness'); ?></h3>
+                        <h3 class="ayur-cat-title"><?php _e('Joint Mobility', 'ayur-wellness'); ?></h3>
                         <span class="ayur-cat-link-text">
                             <span><?php _e('View Remedies', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                            <?php echo ayur_svg_icon('arrow-right', '', 13); ?>
                         </span>
                     </div>
                 </a>
 
                 <a href="<?php echo esc_url(ayur_get_cat_url('combos')); ?>" class="ayur-cat-block ayur-cat-block-highlight">
+                    <div class="ayur-cat-icon-wrap">
+                        <?php echo ayur_svg_icon('package', 'ayur-cat-icon', 22); ?>
+                    </div>
                     <div class="ayur-cat-content">
                         <span class="ayur-cat-tag"><?php _e('SYNERGISTIC REGIMENS', 'ayur-wellness'); ?></span>
                         <h3 class="ayur-cat-title"><?php _e('Therapy Bundles', 'ayur-wellness'); ?></h3>
                         <span class="ayur-cat-link-text">
                             <span><?php _e('Explore Bundles', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
+                            <?php echo ayur_svg_icon('arrow-right', '', 13); ?>
                         </span>
                     </div>
                 </a>
@@ -201,7 +228,7 @@ if (!$hero_product) {
         </div>
     </section>
 
-    <!-- 4. Product Section: Explore Our Wellness Essentials -->
+    <!-- 4. Product Section: Explore Our Wellness Essentials (Phase 8 & Phase 9: 2-Column Grid) -->
     <section class="ayur-section ayur-products-section">
         <div class="ayur-container">
             <div class="ayur-section-header">
@@ -239,7 +266,7 @@ if (!$hero_product) {
         </div>
     </section>
 
-    <!-- 5. Editorial Brand Story (Clean, open layout — not a card) -->
+    <!-- 5. Editorial Brand Story -->
     <section class="ayur-section ayur-story-section">
         <div class="ayur-container">
             <div class="ayur-story-grid">
@@ -278,7 +305,7 @@ if (!$hero_product) {
         </div>
     </section>
 
-    <!-- 6. FAQ Accordion (Clean & Minimal) -->
+    <!-- 6. FAQ Accordion -->
     <section class="ayur-section ayur-faq-section">
         <div class="ayur-container ayur-faq-container">
             <div class="ayur-section-header">
