@@ -59,6 +59,8 @@ Requires PHP: 8.0
     --transition-fast: 150ms ease;
     --transition-base: 250ms ease;
     --transition-smooth: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    /* Mobile Layout Tokens */
+    --mobile-purchase-bar-height: 76px;
 }
 
 /* ==========================================================================
@@ -3199,69 +3201,9 @@ p:last-child {
     line-height: 15px;
 }
 
-/* Mobile Sticky Bar on Single Product Page */
+/* Mobile Sticky Bar on Single Product Page (Mobile Only - Strictly Hidden on Desktop) */
 .ayur-mobile-sticky-bar {
-    display: none;
-    position: fixed;
-    bottom: 64px;
-    left: 0;
-    width: 100%;
-    background-color: var(--color-white);
-    border-top: 1px solid var(--color-border);
-    padding: 10px 16px;
-    z-index: 998;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 -4px 16px rgba(23, 59, 47, 0.06);
-}
-
-.ayur-sticky-info {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-}
-
-.ayur-sticky-price {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--color-forest);
-}
-
-.ayur-sticky-mrp {
-    font-size: 12px;
-    color: var(--color-muted);
-    text-decoration: line-through;
-}
-
-.ayur-sticky-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.ayur-sticky-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    height: 38px;
-    padding: 0 16px;
-    border-radius: var(--radius-btn);
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.ayur-sticky-add-cart {
-    background-color: transparent;
-    border: 1px solid var(--color-forest);
-    color: var(--color-forest);
-}
-
-.ayur-sticky-buy-now {
-    background-color: var(--color-forest);
-    border: 1px solid var(--color-forest);
-    color: var(--color-white);
+    display: none !important;
 }
 
 /* ==========================================================================
@@ -4096,7 +4038,7 @@ select:focus {
     /* Mobile Single Product Page (Phase 6 High-Conversion Architecture) */
     .ayur-single-product-wrap {
         padding-top: 14px;
-        padding-bottom: 40px;
+        padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 24px) !important;
     }
 
     .ayur-breadcrumbs {
@@ -4568,25 +4510,120 @@ select:focus {
         color: var(--color-white);
     }
 
-    /* Mobile Sticky Bar on Single Product */
+    /* Mobile Sticky Purchase Bar on Single Product (Targeted Mobile Purchase Dock Fix) */
     .ayur-mobile-sticky-bar {
-        background-color: var(--color-white);
-        border-top: 1px solid var(--color-border);
-        height: 60px;
-        box-shadow: 0 -4px 16px rgba(23, 59, 47, 0.06);
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        min-height: 72px;
+        height: auto;
+        background-color: #FFFFFF;
+        border-top: 1px solid rgba(23, 59, 47, 0.1);
+        box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);
+        padding: 10px 12px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+        z-index: 1000;
+        box-sizing: border-box;
+    }
+
+    .ayur-mobile-sticky-bar,
+    .ayur-mobile-sticky-bar * {
+        box-sizing: border-box;
+    }
+
+    .ayur-sticky-inner {
+        display: grid;
+        grid-template-columns: minmax(90px, 1.05fr) minmax(72px, 0.9fr) minmax(84px, 1.05fr);
+        gap: 8px;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ayur-sticky-actions {
+        display: contents;
+    }
+
+    .sticky-purchase-price,
+    .ayur-sticky-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+        line-height: 1.2;
+        overflow: hidden;
     }
 
     .ayur-sticky-price {
-        font-size: 19px;
+        font-size: 21px;
         font-weight: 700;
-        color: var(--color-forest);
+        color: var(--color-forest, #173B2F);
+        line-height: 1.15;
+        white-space: nowrap;
+        letter-spacing: -0.01em;
+    }
+
+    .ayur-sticky-mrp {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--color-muted, #718096);
+        text-decoration: line-through;
+        line-height: 1.2;
+        white-space: nowrap;
+        margin-top: 1px;
+    }
+
+    .ayur-sticky-save {
+        font-size: 11px;
+        font-weight: 600;
+        color: #1B7A43;
+        line-height: 1.2;
+        white-space: nowrap;
+        margin-top: 1px;
     }
 
     .ayur-sticky-btn {
-        height: 40px;
-        font-size: 12px;
-        font-weight: 600;
-        border-radius: var(--radius-btn);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 48px;
+        min-height: 48px;
+        border-radius: 8px;
+        font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        box-sizing: border-box;
+        text-align: center;
+        white-space: nowrap;
+        padding: 0 8px;
+        text-decoration: none !important;
+        transition: background-color 0.15s ease, transform 0.1s ease;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .ayur-sticky-btn:active {
+        transform: scale(0.98);
+    }
+
+    .ayur-sticky-add-cart {
+        background-color: #F4F6F4;
+        border: 1.5px solid var(--color-forest, #173B2F);
+        color: var(--color-forest, #173B2F);
+    }
+
+    .ayur-sticky-buy-now {
+        background-color: var(--color-forest, #173B2F);
+        border: 1.5px solid var(--color-forest, #173B2F);
+        color: #FFFFFF !important;
+        box-shadow: 0 2px 6px rgba(23, 59, 47, 0.2);
     }
 
     /* Mobile Overlap Elimination: Single Product vs Standard Pages */
@@ -4595,14 +4632,24 @@ select:focus {
     }
 
     body.single-product .ayur-mobile-sticky-bar {
-        display: flex;
-        bottom: 0;
-        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-        z-index: 1000;
+        display: block !important;
     }
 
     body.single-product .ayur-footer-main {
-        padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 20px) !important;
+    }
+
+    /* Scroll padding and scroll margin to prevent sticky bar overlaying content on scroll */
+    html {
+        scroll-padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 20px);
+    }
+
+    .ayur-product-accordion {
+        scroll-margin-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 16px);
+    }
+
+    .ayur-story-block {
+        padding-bottom: 8px;
     }
 
     body:not(.single-product) .ayur-mobile-bottom-nav {
@@ -4628,7 +4675,7 @@ select:focus {
     }
 
     body.single-product .ayur-wa-float-container {
-        bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+        bottom: calc(var(--mobile-purchase-bar-height, 76px) + 12px) !important;
     }
 
     .ayur-wa-btn {

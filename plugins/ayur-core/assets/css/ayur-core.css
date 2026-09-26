@@ -127,59 +127,10 @@
     font-size: 14px;
 }
 
-/* Sticky Mobile Purchase Bar */
+/* Sticky Mobile Purchase Bar (Delegated to ayur-wellness theme for unified layout) */
 @media (max-width: 768px) {
     .ayur-mobile-sticky-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: #FFFFFF;
-        padding: 12px 16px;
-        box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        z-index: 9998;
-        border-top: 1px solid #E5E7EB;
-    }
-    .ayur-sticky-price {
-        font-weight: 700;
-        font-size: 18px;
-        color: #173B2F;
-        display: flex;
-        flex-direction: column;
-    }
-    .ayur-sticky-mrp {
-        font-size: 11px;
-        color: #9CA3AF;
-        text-decoration: line-through;
-        font-weight: 400;
-    }
-    .ayur-sticky-actions {
-        display: flex;
-        gap: 8px;
-        flex: 1;
-    }
-    .ayur-sticky-btn {
-        flex: 1;
-        padding: 12px 14px;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 13px;
-        text-align: center;
-        border: none;
-        cursor: pointer;
-        text-decoration: none !important;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    .ayur-sticky-add-cart {
-        background: #F3F4F6;
-        color: #173B2F;
-    }
-    .ayur-sticky-buy-now {
-        background: #173B2F;
-        color: #FFFFFF !important;
+        box-sizing: border-box;
     }
 }
+

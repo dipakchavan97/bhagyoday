@@ -465,26 +465,41 @@ while (have_posts()) :
     </article>
 
     <!-- Native Mobile Sticky Bottom Bar -->
-    <div class="ayur-mobile-sticky-bar" id="ayurMobileStickyBar">
-        <div class="ayur-sticky-info">
-            <span class="ayur-sticky-price">₹<?php echo number_format($price); ?></span>
-            <?php if ($mrp > $price) : ?>
-                <span class="ayur-sticky-mrp">MRP ₹<?php echo number_format($mrp); ?></span>
-            <?php endif; ?>
-            <?php if ($net_qty) : ?>
-                <span class="ayur-sticky-pack-sub"><?php echo esc_html($net_qty); ?></span>
-            <?php endif; ?>
-        </div>
-        <div class="ayur-sticky-actions">
-            <button type="button" class="ayur-sticky-btn ayur-sticky-add-cart" data-product-id="<?php echo esc_attr($product_id); ?>">
-                <?php echo ayur_svg_icon('shopping-bag', '', 15); ?>
-                <span><?php _e('ADD', 'ayur-wellness'); ?></span>
-            </button>
-            <a href="<?php echo esc_url(add_query_arg(array('ayur_quick_buy' => $product_id), home_url('/'))); ?>" class="ayur-sticky-btn ayur-sticky-buy-now">
-                <span><?php _e('BUY NOW', 'ayur-wellness'); ?></span>
-            </a>
+    <div class="ayur-mobile-sticky-bar" id="ayurMobileStickyBar" role="region" aria-label="<?php esc_attr_e('Mobile Purchase Bar', 'ayur-wellness'); ?>">
+        <div class="ayur-sticky-inner">
+            <div class="sticky-purchase-price ayur-sticky-info">
+                <span class="ayur-sticky-price">₹<?php echo number_format($price); ?></span>
+                <?php if ($mrp > $price) : ?>
+                    <span class="ayur-sticky-mrp">MRP ₹<?php echo number_format($mrp); ?></span>
+                <?php endif; ?>
+                <?php
+                if ($mrp > $price) :
+                    $save_pct = round((($mrp - $price) / $mrp) * 100);
+                    if ($save_pct >= 5) : ?>
+                        <span class="ayur-sticky-save"><?php echo sprintf(__('Save %d%%', 'ayur-wellness'), $save_pct); ?></span>
+                    <?php endif;
+                endif;
+                ?>
+            </div>
+            <div class="ayur-sticky-actions">
+                <button type="button" class="ayur-sticky-btn ayur-sticky-add-cart" data-product-id="<?php echo esc_attr($product_id); ?>" aria-label="<?php esc_attr_e('Add to cart', 'ayur-wellness'); ?>">
+                    <span><?php _e('ADD', 'ayur-wellness'); ?></span>
+                </button>
+                <a href="<?php echo esc_url(add_query_arg(array('ayur_quick_buy' => $product_id), home_url('/'))); ?>" class="ayur-sticky-btn ayur-sticky-buy-now" aria-label="<?php esc_attr_e('Buy now', 'ayur-wellness'); ?>">
+                    <span><?php _e('BUY NOW', 'ayur-wellness'); ?></span>
+                </a>
+            </div>
         </div>
     </div>
+    <script>
+    (function() {
+        var b = document.getElementById('ayurMobileStickyBar');
+        if (b) {
+            var h = b.offsetHeight || 76;
+            document.documentElement.style.setProperty('--mobile-purchase-bar-height', h + 'px');
+        }
+    })();
+    </script>
 
     <?php
 endwhile;

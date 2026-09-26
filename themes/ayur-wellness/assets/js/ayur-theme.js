@@ -519,12 +519,32 @@
     }
 
     /**
-     * Mobile Sticky Purchase Bar Interaction
+     * Mobile Sticky Purchase Bar Interaction & Dynamic Height Synchronization
      */
     function initMobileStickyBar() {
-        var $bar = $('#ayurMobileStickyBar');
-        if (!$bar.length) return;
+        var bar = document.getElementById('ayurMobileStickyBar');
+        if (!bar) return;
 
+        function updateStickyBarHeight() {
+            var h = bar.offsetHeight;
+            if (h > 0) {
+                document.documentElement.style.setProperty('--mobile-purchase-bar-height', h + 'px');
+            }
+        }
+
+        updateStickyBarHeight();
+
+        if (typeof window.ResizeObserver !== 'undefined') {
+            var ro = new ResizeObserver(function() {
+                updateStickyBarHeight();
+            });
+            ro.observe(bar);
+        } else {
+            window.addEventListener('resize', updateStickyBarHeight, { passive: true });
+            window.addEventListener('orientationchange', updateStickyBarHeight, { passive: true });
+        }
+
+        var $bar = $(bar);
         $bar.find('.ayur-sticky-add-cart').on('click', function(e) {
             e.preventDefault();
             var productId = $(this).data('product-id');
