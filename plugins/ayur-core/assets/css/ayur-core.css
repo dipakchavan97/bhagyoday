@@ -4,8 +4,8 @@
 
 /* Free Shipping Progress Bar */
 .ayur-shipping-progress-box {
-    background: #FAF8F5;
-    border: 1px solid #E5E0D8;
+    background: #FAF7F0;
+    border: 1px solid #E9DDC8;
     border-radius: 10px;
     padding: 14px 18px;
     margin-bottom: 24px;
@@ -14,12 +14,12 @@
 }
 .ayur-progress-text {
     font-size: 14px;
-    color: #1E3A2F;
+    color: #173B2F;
     margin-bottom: 8px;
     font-weight: 500;
 }
 .ayur-progress-text .unlocked {
-    color: #065F46;
+    color: #315C45;
     font-weight: 700;
 }
 .ayur-progress-bar-wrap {
@@ -31,7 +31,7 @@
 }
 .ayur-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #1E3A2F 0%, #2D5A46 100%);
+    background: linear-gradient(90deg, #173B2F 0%, #315C45 100%);
     border-radius: 999px;
     transition: width 0.4s ease-in-out;
 }
@@ -80,7 +80,7 @@
     position: absolute;
     right: 70px;
     white-space: nowrap;
-    background: #1E3A2F;
+    background: #173B2F;
     color: #FFFFFF;
     padding: 6px 12px;
     border-radius: 6px;
@@ -97,23 +97,23 @@
     padding: 10px 0;
 }
 .ayur-tab-content h3 {
-    font-family: 'Cinzel', serif;
-    color: #1E3A2F;
+    font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
+    color: #173B2F;
     font-size: 20px;
     margin-bottom: 12px;
 }
 .ayur-ingredients-box, .ayur-usage-box {
-    background: #FAF8F5;
-    border-left: 3px solid #1E3A2F;
+    background: #FAF7F0;
+    border-left: 3px solid #173B2F;
     padding: 16px;
     border-radius: 0 8px 8px 0;
     font-size: 15px;
     line-height: 1.7;
-    color: #374151;
+    color: #222522;
 }
 .ayur-note {
     font-size: 13px;
-    color: #6B7280;
+    color: #5C6A64;
     margin-top: 10px;
 }
 .ayur-spec-list {
@@ -146,7 +146,7 @@
     .ayur-sticky-price {
         font-weight: 700;
         font-size: 18px;
-        color: #1E3A2F;
+        color: #173B2F;
         display: flex;
         flex-direction: column;
     }
@@ -176,10 +176,10 @@
     }
     .ayur-sticky-add-cart {
         background: #F3F4F6;
-        color: #1E3A2F;
+        color: #173B2F;
     }
     .ayur-sticky-buy-now {
-        background: #1E3A2F;
+        background: #173B2F;
         color: #FFFFFF !important;
     }
 }

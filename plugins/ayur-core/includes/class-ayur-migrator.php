@@ -288,7 +288,7 @@ class Ayur_Migrator {
                 'content' => '<!-- wp:group {"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
 <h2>Nourishing Lives, Naturally</h2>
-<p class="lead" style="font-size:18px; color:#1E3A2F; line-height:1.7;">Bhagyoday Ayurveda brings you a thoughtfully curated range of premium Ayurvedic formulations and wellness supplements, crafted to nurture your body from within. Each product is deeply rooted in 5,000-year-old classical Vedic wisdom and prepared with pure, authentic natural botanicals to support your journey toward holistic wellness.</p>
+<p class="lead" style="font-size:18px; color:#173B2F; line-height:1.7;">Bhagyoday Ayurveda brings you a thoughtfully curated range of premium Ayurvedic formulations and wellness supplements, crafted to nurture your body from within. Each product is deeply rooted in 5,000-year-old classical Vedic wisdom and prepared with pure, authentic natural botanicals to support your journey toward holistic wellness.</p>
 
 <h3>The Bhagyoday Philosophy</h3>
 <p>We blend time-tested Ayurvedic principles with modern hygienic standards to deliver wellness remedies that truly work. Our products are formulated for health-conscious individuals who seek natural, effective solutions to enhance their vitality and well-being. Whether you are a busy professional managing everyday stress, a homemaker nurturing your family, or someone looking to strengthen immunity and energy levels, Bhagyoday Ayurveda is your trusted partner in health.</p>
@@ -304,7 +304,7 @@ class Ayur_Migrator {
 <h3>Our Mission</h3>
 <p>At Bhagyoday Ayurveda, we believe that vibrant health is the foundation of a blessed, prosperous life. We are committed to transparency, quality, and authenticity in every product we create, ensuring that you receive only the finest Ayurvedic nutrition. Our mission is to empower you to take charge of your health naturally, so you can live each day with renewed energy, harmony, and confidence.</p>
 
-<p style="font-style:italic; font-weight:600; color:#1E3A2F; margin-top:24px;">— The Bhagyoday Ayurveda Family, Mantha, Maharashtra</p>
+<p style="font-style:italic; font-weight:600; color:#173B2F; margin-top:24px;">— The Bhagyoday Ayurveda Family, Mantha, Maharashtra</p>
 </div>
 <!-- /wp:group -->'
             ),
@@ -315,8 +315,8 @@ class Ayur_Migrator {
 <h2>We Are Here To Assist Your Wellness Journey</h2>
 <p>Have questions about selecting the right Ayurvedic remedy, understanding herbal ingredients, or tracking your order? Our dedicated wellness team in Maharashtra is here to support you.</p>
 
-<div style="background:#F9F7F2; border:1px solid #E5E0D8; border-radius:12px; padding:28px; margin:24px 0;">
-<h3 style="margin-top:0; color:#1E3A2F;">Bhagyoday Ayurveda Customer Care</h3>
+<div style="background:#FAF7F0; border:1px solid #E9DDC8; border-radius:12px; padding:28px; margin:24px 0;">
+<h3 style="margin-top:0; color:#173B2F;">Bhagyoday Ayurveda Customer Care</h3>
 <p><strong>Corporate & Dispatch Address:</strong><br>Bhagyoday Ayurveda<br>Infront of Nagar Panchayat Civil Hospital,<br>Mantha, District Jalna, Maharashtra – 431504, India</p>
 
 <p><strong>Direct Phone Helpline:</strong> +91 8888686858<br>

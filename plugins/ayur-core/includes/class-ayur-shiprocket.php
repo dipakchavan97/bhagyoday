@@ -95,20 +95,20 @@ class Ayur_Shiprocket {
         }
 
         ?>
-        <div class="ayur-tracking-card" style="margin: 30px 0; background: #FAF8F5; border: 1px solid #E5E0D8; border-radius: 12px; padding: 24px;">
+        <div class="ayur-tracking-card" style="margin: 30px 0; background: #FAF7F0; border: 1px solid #E9DDC8; border-radius: 12px; padding: 24px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap:wrap; gap:10px;">
                 <div>
-                    <h3 style="margin:0; font-family:'Cinzel', serif; color:#1E3A2F; font-size:18px;">
+                    <h3 style="margin:0; font-family:'Cormorant Garamond', Georgia, serif; color:#173B2F; font-size:18px;">
                         <?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('truck', '', 18) : ''; ?> <?php _e('Live Shipment & Delivery Tracking', 'ayur-core'); ?>
                     </h3>
-                    <p style="margin:4px 0 0 0; color:#6B7280; font-size:13px;">
+                    <p style="margin:4px 0 0 0; color:#5C6A64; font-size:13px;">
                         <?php _e('Dispatched via verified temperature-controlled Ayurvedic delivery partner.', 'ayur-core'); ?>
                     </p>
                 </div>
                 <div style="text-align:right;">
                     <span style="font-size:12px; color:#4B5563;"><?php _e('Courier:', 'ayur-core'); ?> <strong><?php echo esc_html($courier); ?></strong></span>
                     <?php if ($awb) : ?>
-                        <div style="font-size:12px; color:#1E3A2F;">AWB: <strong><?php echo esc_html($awb); ?></strong></div>
+                        <div style="font-size:12px; color:#173B2F;">AWB: <strong><?php echo esc_html($awb); ?></strong></div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -128,9 +128,9 @@ class Ayur_Shiprocket {
                 echo '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:12px; text-align:center;">';
                 foreach ($milestones as $step_num => $m) {
                     $is_passed = ($step_num <= $current_step);
-                    $circle_bg = $is_passed ? '#1E3A2F' : '#E5E7EB';
+                    $circle_bg = $is_passed ? '#173B2F' : '#E5E7EB';
                     $circle_color = $is_passed ? '#FFFFFF' : '#9CA3AF';
-                    $title_color = $is_passed ? '#1E3A2F' : '#9CA3AF';
+                    $title_color = $is_passed ? '#173B2F' : '#9CA3AF';
                     $check_icon = $is_passed ? (function_exists('ayur_svg_icon') ? ayur_svg_icon('check', '', 14) : '•') : $step_num;
 
                     echo '<div style="padding:10px; background:' . ($is_passed ? '#FFFFFF' : 'transparent') . '; border-radius:8px; border:1px solid ' . ($is_passed ? '#D1FAE5' : 'transparent') . ';">';

@@ -237,21 +237,21 @@ class Ayur_Fields {
         ?>
         <div class="ayur-tab-content ayur-faq-accordion">
             <h3><?php _e('Frequently Asked Questions', 'ayur-core'); ?></h3>
-            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">How soon can I expect results from <?php echo esc_html($title); ?>?</h4>
-                <p style="color:#4B5563; font-size:14px; line-height:1.6;">Ayurvedic formulations work holistically by purifying channels (Srotas) and nourishing vital tissues (Dhatus). Most individuals notice initial wellness benefits within 2 to 3 weeks of consistent daily use, with comprehensive rejuvenative results manifesting over 60 to 90 days.</p>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E9DDC8; padding-bottom:12px;">
+                <h4 style="color:#173B2F; margin-bottom:6px; font-size:16px;">How soon can I expect results from <?php echo esc_html($title); ?>?</h4>
+                <p style="color:#5C6A64; font-size:14px; line-height:1.6;">Ayurvedic formulations work holistically by purifying channels (Srotas) and nourishing vital tissues (Dhatus). Most individuals notice initial wellness benefits within 2 to 3 weeks of consistent daily use, with comprehensive rejuvenative results manifesting over 60 to 90 days.</p>
             </div>
-            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">Are there any synthetic chemicals, binders, or side effects?</h4>
-                <p style="color:#4B5563; font-size:14px; line-height:1.6;">No. Bhagyoday Ayurveda formulations are prepared in AYUSH and GMP certified facilities using 100% natural botanical extracts. They are rigorously tested for heavy metal purity and contain zero synthetic chemicals or harmful preservatives when consumed according to recommended dosages.</p>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E9DDC8; padding-bottom:12px;">
+                <h4 style="color:#173B2F; margin-bottom:6px; font-size:16px;">Are there any synthetic chemicals, binders, or side effects?</h4>
+                <p style="color:#5C6A64; font-size:14px; line-height:1.6;">No. Bhagyoday Ayurveda formulations are prepared in AYUSH and GMP certified facilities using 100% natural botanical extracts. They are rigorously tested for heavy metal purity and contain zero synthetic chemicals or harmful preservatives when consumed according to recommended dosages.</p>
             </div>
-            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">Can I take this along with my regular daily routine or medications?</h4>
-                <p style="color:#4B5563; font-size:14px; line-height:1.6;">Yes, classical herbal supplements generally complement daily routines smoothly. If you are currently taking clinical prescription allopathic medications, we advise maintaining a 60-minute gap between intakes and consulting your healthcare professional.</p>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E9DDC8; padding-bottom:12px;">
+                <h4 style="color:#173B2F; margin-bottom:6px; font-size:16px;">Can I take this along with my regular daily routine or medications?</h4>
+                <p style="color:#5C6A64; font-size:14px; line-height:1.6;">Yes, classical herbal supplements generally complement daily routines smoothly. If you are currently taking clinical prescription allopathic medications, we advise maintaining a 60-minute gap between intakes and consulting your healthcare professional.</p>
             </div>
-            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E5E0D8; padding-bottom:12px;">
-                <h4 style="color:#1E3A2F; margin-bottom:6px; font-size:16px;">Is Cash on Delivery (COD) and fast shipping available?</h4>
-                <p style="color:#4B5563; font-size:14px; line-height:1.6;">Yes! We provide Cash on Delivery (COD) across all serviceable Indian pincodes. All orders are packed in discreet, protective packaging and dispatched from Maharashtra within 24 business hours via leading express couriers.</p>
+            <div class="ayur-faq-item" style="margin-bottom:16px; border-bottom:1px solid #E9DDC8; padding-bottom:12px;">
+                <h4 style="color:#173B2F; margin-bottom:6px; font-size:16px;">Is Cash on Delivery (COD) and fast shipping available?</h4>
+                <p style="color:#5C6A64; font-size:14px; line-height:1.6;">Yes! We provide Cash on Delivery (COD) across all serviceable Indian pincodes. All orders are packed in discreet, protective packaging and dispatched from Maharashtra within 24 business hours via leading express couriers.</p>
             </div>
         </div>
         <?php
