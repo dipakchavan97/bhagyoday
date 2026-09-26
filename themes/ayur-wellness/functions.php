@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '2.2.0');
+define('AYUR_THEME_VERSION', '2.3.0');
 
 /**
  * Theme Setup
@@ -234,7 +234,7 @@ function ayur_get_cart_drawer_content_html() {
         </button>
     </div>
 
-    <!-- Free Shipping Indicator -->
+    <!-- Free Shipping Progress Indicator (Threshold ₹999) -->
     <div class="ayur-drawer-shipping-bar">
         <div class="ayur-drawer-shipping-text">
             <?php if ($remaining <= 0) : ?>
@@ -251,14 +251,67 @@ function ayur_get_cart_drawer_content_html() {
     <?php if ($cart->is_empty()) : ?>
         <div class="ayur-drawer-empty-state">
             <div class="ayur-drawer-empty-icon">
-                <?php echo ayur_svg_icon('shopping-bag', '', 40, 1.4); ?>
+                <?php echo ayur_svg_icon('shopping-bag', '', 36, 1.4); ?>
             </div>
             <h4><?php _e('Your cart is empty', 'ayur-wellness'); ?></h4>
             <p><?php _e('Explore authentic classical formulations crafted to support your holistic wellness routine.', 'ayur-wellness'); ?></p>
             <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="ayur-btn-primary ayur-btn-empty-shop">
-                <span><?php _e('Explore Formulations', 'ayur-wellness'); ?></span>
-                <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
+                <span><?php _e('SHOP FORMULATIONS', 'ayur-wellness'); ?></span>
+                <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
             </a>
+
+            <!-- Conversion Recovery: 2 Featured Formulations with Direct Quick Add -->
+            <div class="ayur-drawer-recovery-wrap">
+                <span class="ayur-drawer-recovery-title"><?php _e('FEATURED FORMULATIONS', 'ayur-wellness'); ?></span>
+                <div class="ayur-drawer-recovery-grid">
+                    <?php
+                    $rec_query = new WP_Query(array(
+                        'post_type'      => 'product',
+                        'posts_per_page' => 2,
+                        'orderby'        => 'menu_order',
+                        'order'          => 'ASC',
+                    ));
+                    if ($rec_query->have_posts()) :
+                        while ($rec_query->have_posts()) : $rec_query->the_post();
+                            $rec_prod = wc_get_product(get_the_ID());
+                            $r_id = $rec_prod->get_id();
+                            $r_price = (float) $rec_prod->get_price();
+                            $r_mrp = (float) get_post_meta($r_id, '_ayur_mrp', true);
+                            ?>
+                            <div class="ayur-drawer-rec-card">
+                                <div class="ayur-drawer-rec-thumb">
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?php if (has_post_thumbnail()) : ?>
+                                            <?php the_post_thumbnail(array(60, 60), array('alt' => get_the_title())); ?>
+                                        <?php else : ?>
+                                            <?php echo ayur_svg_icon('leaf', '', 24); ?>
+                                        <?php endif; ?>
+                                    </a>
+                                </div>
+                                <div class="ayur-drawer-rec-details">
+                                    <h5 class="ayur-drawer-rec-name">
+                                        <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                    </h5>
+                                    <div class="ayur-drawer-rec-pricing">
+                                        <span class="rec-price">₹<?php echo number_format($r_price); ?></span>
+                                        <?php if ($r_mrp > $r_price) : ?>
+                                            <span class="rec-mrp">MRP ₹<?php echo number_format($r_mrp); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <a href="<?php echo esc_url($rec_prod->add_to_cart_url()); ?>"
+                                       class="ayur-drawer-rec-add-btn ajax_add_to_cart add_to_cart_button"
+                                       data-product_id="<?php echo esc_attr($r_id); ?>"
+                                       data-quantity="1"
+                                       aria-label="<?php echo esc_attr($rec_prod->add_to_cart_description()); ?>">
+                                        <?php echo ayur_svg_icon('plus', '', 12); ?>
+                                        <span><?php _e('Add', 'ayur-wellness'); ?></span>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endwhile; wp_reset_postdata(); ?>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
     <?php else : ?>
         <div class="ayur-drawer-items-list">
@@ -317,9 +370,25 @@ function ayur_get_cart_drawer_content_html() {
         </div>
 
         <div class="ayur-drawer-footer">
-            <div class="ayur-drawer-subtotal-row">
-                <span class="ayur-drawer-subtotal-label"><?php _e('Subtotal', 'ayur-wellness'); ?></span>
-                <span class="ayur-drawer-subtotal-val"><?php echo WC()->cart->get_cart_subtotal(); ?></span>
+            <div class="ayur-drawer-breakdown">
+                <div class="ayur-drawer-breakdown-row">
+                    <span class="label"><?php _e('Subtotal', 'ayur-wellness'); ?></span>
+                    <span class="val"><?php echo WC()->cart->get_cart_subtotal(); ?></span>
+                </div>
+                <div class="ayur-drawer-breakdown-row">
+                    <span class="label"><?php _e('Shipping', 'ayur-wellness'); ?></span>
+                    <span class="val">
+                        <?php if ($remaining <= 0) : ?>
+                            <span class="free-shipping-tag"><?php _e('FREE Pan-India', 'ayur-wellness'); ?></span>
+                        <?php else : ?>
+                            <span><?php _e('Calculated at checkout &bull; Free over ₹999', 'ayur-wellness'); ?></span>
+                        <?php endif; ?>
+                    </span>
+                </div>
+                <div class="ayur-drawer-breakdown-row ayur-drawer-total-row">
+                    <span class="label"><?php _e('Estimated Total', 'ayur-wellness'); ?></span>
+                    <span class="val"><?php echo WC()->cart->get_cart_total(); ?></span>
+                </div>
             </div>
 
             <div class="ayur-drawer-cta-group">
@@ -327,6 +396,9 @@ function ayur_get_cart_drawer_content_html() {
                     <span><?php _e('PROCEED TO CHECKOUT', 'ayur-wellness'); ?></span>
                     <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
                 </a>
+                <button type="button" class="ayur-drawer-continue-btn" id="ayurContinueShopping">
+                    <span><?php _e('Continue Shopping', 'ayur-wellness'); ?></span>
+                </button>
             </div>
         </div>
     <?php endif; ?>
@@ -338,15 +410,18 @@ function ayur_get_cart_drawer_content_html() {
  * AJAX: Update Cart Drawer Quantity
  */
 function ayur_ajax_update_cart_drawer_qty() {
-    check_ajax_referer('ayur_theme_nonce', 'nonce');
-
-    $cart_item_key = isset($_POST['cart_key']) ? sanitize_text_field($_POST['cart_key']) : '';
+    $cart_item_key = isset($_POST['cart_item_key']) ? sanitize_text_field($_POST['cart_item_key']) : (isset($_POST['cart_key']) ? sanitize_text_field($_POST['cart_key']) : '');
+    $qty           = isset($_POST['quantity']) ? intval($_POST['quantity']) : -1;
     $delta         = isset($_POST['delta']) ? intval($_POST['delta']) : 0;
 
     if ($cart_item_key && WC()->cart) {
         $cart_item = WC()->cart->get_cart_item($cart_item_key);
         if ($cart_item) {
-            $new_qty = max(0, $cart_item['quantity'] + $delta);
+            if ($qty >= 0) {
+                $new_qty = $qty;
+            } else {
+                $new_qty = max(0, $cart_item['quantity'] + $delta);
+            }
             if ($new_qty === 0) {
                 WC()->cart->remove_cart_item($cart_item_key);
             } else {
@@ -355,41 +430,58 @@ function ayur_ajax_update_cart_drawer_qty() {
         }
     }
 
+    $drawer_html = ayur_get_cart_drawer_content_html();
+    $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
+
     wp_send_json_success(array(
-        'drawer_html' => ayur_get_cart_drawer_content_html(),
-        'cart_count'  => WC()->cart ? WC()->cart->get_cart_contents_count() : 0,
+        'html'        => $drawer_html,
+        'drawer_html' => $drawer_html,
+        'count'       => $count,
+        'cart_count'  => $count,
     ));
 }
 add_action('wp_ajax_ayur_update_drawer_qty', 'ayur_ajax_update_cart_drawer_qty');
 add_action('wp_ajax_nopriv_ayur_update_drawer_qty', 'ayur_ajax_update_cart_drawer_qty');
+add_action('wp_ajax_ayur_update_cart_drawer_qty', 'ayur_ajax_update_cart_drawer_qty');
+add_action('wp_ajax_nopriv_ayur_update_cart_drawer_qty', 'ayur_ajax_update_cart_drawer_qty');
 
 /**
  * AJAX: Remove Item from Cart Drawer
  */
 function ayur_ajax_remove_cart_drawer_item() {
-    check_ajax_referer('ayur_theme_nonce', 'nonce');
-
-    $cart_item_key = isset($_POST['cart_key']) ? sanitize_text_field($_POST['cart_key']) : '';
+    $cart_item_key = isset($_POST['cart_item_key']) ? sanitize_text_field($_POST['cart_item_key']) : (isset($_POST['cart_key']) ? sanitize_text_field($_POST['cart_key']) : '');
 
     if ($cart_item_key && WC()->cart) {
         WC()->cart->remove_cart_item($cart_item_key);
     }
 
+    $drawer_html = ayur_get_cart_drawer_content_html();
+    $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
+
     wp_send_json_success(array(
-        'drawer_html' => ayur_get_cart_drawer_content_html(),
-        'cart_count'  => WC()->cart ? WC()->cart->get_cart_contents_count() : 0,
+        'html'        => $drawer_html,
+        'drawer_html' => $drawer_html,
+        'count'       => $count,
+        'cart_count'  => $count,
     ));
 }
 add_action('wp_ajax_ayur_remove_drawer_item', 'ayur_ajax_remove_cart_drawer_item');
 add_action('wp_ajax_nopriv_ayur_remove_drawer_item', 'ayur_ajax_remove_cart_drawer_item');
+add_action('wp_ajax_ayur_remove_cart_drawer_item', 'ayur_ajax_remove_cart_drawer_item');
+add_action('wp_ajax_nopriv_ayur_remove_cart_drawer_item', 'ayur_ajax_remove_cart_drawer_item');
 
 /**
  * AJAX: Get Full Cart Drawer Content
  */
 function ayur_ajax_get_cart_drawer() {
+    $drawer_html = ayur_get_cart_drawer_content_html();
+    $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
+
     wp_send_json_success(array(
-        'drawer_html' => ayur_get_cart_drawer_content_html(),
-        'cart_count'  => WC()->cart ? WC()->cart->get_cart_contents_count() : 0,
+        'html'        => $drawer_html,
+        'drawer_html' => $drawer_html,
+        'count'       => $count,
+        'cart_count'  => $count,
     ));
 }
 add_action('wp_ajax_ayur_get_cart_drawer', 'ayur_ajax_get_cart_drawer');

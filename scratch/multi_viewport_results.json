@@ -1,0 +1,250 @@
+{
+  "results": {
+    "360x800": {
+      "vw": 360,
+      "vh": 800,
+      "docScrollWidth": 360,
+      "bodyScrollWidth": 360,
+      "overflowCount": 0,
+      "overflows": [],
+      "header": {
+        "width": 360,
+        "left": 0,
+        "right": 360,
+        "height": 63
+      },
+      "hero": {
+        "width": 360,
+        "left": 0,
+        "right": 360,
+        "height": 817
+      },
+      "productGrid": {
+        "width": 328,
+        "left": 16,
+        "right": 344,
+        "height": 1591
+      },
+      "footer": {
+        "width": 360,
+        "left": 0,
+        "right": 360,
+        "height": 1320
+      },
+      "bottomNav": {
+        "width": 360,
+        "left": 0,
+        "right": 360,
+        "height": 64
+      }
+    },
+    "375x812": {
+      "vw": 375,
+      "vh": 812,
+      "docScrollWidth": 375,
+      "bodyScrollWidth": 375,
+      "overflowCount": 0,
+      "overflows": [],
+      "header": {
+        "width": 375,
+        "left": 0,
+        "right": 375,
+        "height": 63
+      },
+      "hero": {
+        "width": 375,
+        "left": 0,
+        "right": 375,
+        "height": 805
+      },
+      "productGrid": {
+        "width": 343,
+        "left": 16,
+        "right": 359,
+        "height": 1589
+      },
+      "footer": {
+        "width": 375,
+        "left": 0,
+        "right": 375,
+        "height": 1303
+      },
+      "bottomNav": {
+        "width": 375,
+        "left": 0,
+        "right": 375,
+        "height": 64
+      }
+    },
+    "390x844": {
+      "vw": 390,
+      "vh": 844,
+      "docScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "overflowCount": 0,
+      "overflows": [],
+      "header": {
+        "width": 390,
+        "left": 0,
+        "right": 390,
+        "height": 63
+      },
+      "hero": {
+        "width": 390,
+        "left": 0,
+        "right": 390,
+        "height": 817
+      },
+      "productGrid": {
+        "width": 358,
+        "left": 16,
+        "right": 374,
+        "height": 1603
+      },
+      "footer": {
+        "width": 390,
+        "left": 0,
+        "right": 390,
+        "height": 1303
+      },
+      "bottomNav": {
+        "width": 390,
+        "left": 0,
+        "right": 390,
+        "height": 64
+      }
+    },
+    "393x852": {
+      "vw": 393,
+      "vh": 852,
+      "docScrollWidth": 393,
+      "bodyScrollWidth": 393,
+      "overflowCount": 0,
+      "overflows": [],
+      "header": {
+        "width": 393,
+        "left": 0,
+        "right": 393,
+        "height": 63
+      },
+      "hero": {
+        "width": 393,
+        "left": 0,
+        "right": 393,
+        "height": 819
+      },
+      "productGrid": {
+        "width": 361,
+        "left": 16,
+        "right": 377,
+        "height": 1609
+      },
+      "footer": {
+        "width": 393,
+        "left": 0,
+        "right": 393,
+        "height": 1303
+      },
+      "bottomNav": {
+        "width": 393,
+        "left": 0,
+        "right": 393,
+        "height": 64
+      }
+    },
+    "412x915": {
+      "vw": 412,
+      "vh": 915,
+      "docScrollWidth": 412,
+      "bodyScrollWidth": 412,
+      "overflowCount": 0,
+      "overflows": [],
+      "header": {
+        "width": 412,
+        "left": 0,
+        "right": 412,
+        "height": 63
+      },
+      "hero": {
+        "width": 412,
+        "left": 0,
+        "right": 412,
+        "height": 837
+      },
+      "productGrid": {
+        "width": 380,
+        "left": 16,
+        "right": 396,
+        "height": 1631
+      },
+      "footer": {
+        "width": 412,
+        "left": 0,
+        "right": 412,
+        "height": 1280
+      },
+      "bottomNav": {
+        "width": 412,
+        "left": 0,
+        "right": 412,
+        "height": 64
+      }
+    },
+    "desktop_1280x800": {
+      "vw": 1280,
+      "vh": 800,
+      "docScrollWidth": 1265,
+      "bodyScrollWidth": 1265,
+      "overflowCount": 0,
+      "overflows": [],
+      "header": {
+        "width": 1265,
+        "left": 0,
+        "right": 1265,
+        "height": 73
+      },
+      "hero": {
+        "width": 1265,
+        "left": 0,
+        "right": 1265,
+        "height": 690
+      },
+      "productGrid": {
+        "width": 1168,
+        "left": 49,
+        "right": 1217,
+        "height": 1028
+      },
+      "footer": {
+        "width": 1265,
+        "left": 0,
+        "right": 1265,
+        "height": 530
+      },
+      "bottomNav": {
+        "width": 0,
+        "left": 0,
+        "right": 0,
+        "height": 0
+      }
+    }
+  },
+  "drawerCheck": {
+    "open": true,
+    "width": 335,
+    "left": 0,
+    "right": 335,
+    "bodyScrollLocked": true
+  },
+  "searchCheck": {
+    "open": true,
+    "width": 390,
+    "height": 844
+  },
+  "cartCheck": {
+    "open": true,
+    "width": 359,
+    "left": 31,
+    "right": 390
+  }
+}

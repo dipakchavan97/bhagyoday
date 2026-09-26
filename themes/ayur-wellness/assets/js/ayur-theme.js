@@ -94,7 +94,7 @@
         });
 
         // Close triggers
-        $(document).on('click', '#ayurCloseCartDrawer, #ayurCartDrawerBackdrop', function(e) {
+        $(document).on('click', '#ayurCloseCartDrawer, #ayurCartDrawerBackdrop, #ayurContinueShopping', function(e) {
             e.preventDefault();
             closeCart();
         });
@@ -105,8 +105,18 @@
             }
         });
 
+        // Quick add feedback
+        $(document).on('click', '.ajax_add_to_cart', function() {
+            var $btn = $(this);
+            $btn.addClass('is-adding');
+        });
+
         // Auto open cart drawer when a product is added via AJAX
         $(document.body).on('added_to_cart', function(event, fragments, cart_hash) {
+            $('.ajax_add_to_cart.is-adding').removeClass('is-adding').addClass('is-added');
+            setTimeout(function() {
+                $('.ajax_add_to_cart.is-added').removeClass('is-added');
+            }, 2500);
             openCart();
             refreshCartDrawer();
         });
@@ -148,8 +158,10 @@
                 },
                 success: function(res) {
                     if (res.success && res.data) {
-                        $('#ayurCartDrawer').html(res.data.html);
-                        updateBadges(res.data.count);
+                        var html = res.data.html || res.data.drawer_html;
+                        var count = (typeof res.data.count !== 'undefined') ? res.data.count : res.data.cart_count;
+                        $('#ayurCartDrawer').html(html);
+                        updateBadges(count);
                     }
                 },
                 complete: function() {
@@ -169,8 +181,10 @@
                 },
                 success: function(res) {
                     if (res.success && res.data) {
-                        $('#ayurCartDrawer').html(res.data.html);
-                        updateBadges(res.data.count);
+                        var html = res.data.html || res.data.drawer_html;
+                        var count = (typeof res.data.count !== 'undefined') ? res.data.count : res.data.cart_count;
+                        $('#ayurCartDrawer').html(html);
+                        updateBadges(count);
                     }
                 },
                 complete: function() {
@@ -184,14 +198,14 @@
                 url: ayurThemeParams.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ayur_update_cart_drawer_qty',
-                    cart_item_key: '',
-                    quantity: 0
+                    action: 'ayur_get_cart_drawer'
                 },
                 success: function(res) {
                     if (res.success && res.data) {
-                        $('#ayurCartDrawer').html(res.data.html);
-                        updateBadges(res.data.count);
+                        var html = res.data.html || res.data.drawer_html;
+                        var count = (typeof res.data.count !== 'undefined') ? res.data.count : res.data.cart_count;
+                        $('#ayurCartDrawer').html(html);
+                        updateBadges(count);
                     }
                 }
             });

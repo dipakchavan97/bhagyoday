@@ -16,7 +16,7 @@
 <div class="ayur-announcement-bar">
     <div class="ayur-container">
         <p class="ayur-announcement-text">
-            <?php _e('Authentic Ayurvedic Wellness &bull; Pan-India Delivery &bull; Cash on Delivery Available', 'ayur-wellness'); ?>
+            <?php _e('Free Pan-India Delivery on orders above ₹999 &bull; Cash on Delivery Available', 'ayur-wellness'); ?>
         </p>
     </div>
 </div>
