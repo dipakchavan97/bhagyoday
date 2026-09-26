@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '2.4.0');
+define('AYUR_THEME_VERSION', '2.5.0');
 
 /**
  * Theme Setup
@@ -497,3 +497,704 @@ function ayur_wc_cart_fragments($fragments) {
     return $fragments;
 }
 add_filter('woocommerce_add_to_cart_fragments', 'ayur_wc_cart_fragments', 20);
+
+/**
+ * Configure default WooCommerce related products query parameters
+ */
+function ayur_related_products_args($args) {
+    $args['posts_per_page'] = 4;
+    $args['columns'] = 4;
+    return $args;
+}
+add_filter('woocommerce_output_related_products_args', 'ayur_related_products_args');
+
+/**
+ * Phase 5: Structured Product Information System
+ * Provides authentic, verified, non-duplicated product data for editorial single product pages.
+ */
+function ayur_get_product_extended_data($product_id) {
+    $product = wc_get_product($product_id);
+    if (!$product) {
+        return false;
+    }
+
+    $net_qty = get_post_meta($product_id, '_ayur_net_quantity', true);
+    $batch   = get_post_meta($product_id, '_ayur_batch', true);
+    $expiry  = get_post_meta($product_id, '_ayur_expiry', true);
+
+    // Standardized repository of verified product information
+    $data_map = array(
+        // Product 30: Ashwagandha Shilajit
+        30 => array(
+            'positioning' => 'Traditional Ayurvedic Rasayana combining purified Himalayan Shilajit with standardized Ashwagandha root extract for physical endurance, natural vitality, and nervous resilience.',
+            'benefits' => array(
+                'Combines pure purified Shilajit with standardized Ashwagandha root extract',
+                'Traditionally used in classical Ayurveda to support daily stamina and cellular energy reserves',
+                'Formulated with Safed Musli and Gokshura to aid muscle vigor and post-exertion recovery',
+                '100% plant cellulose vegetarian capsule format with zero synthetic stimulants'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Ashwagandha Root Extract',
+                    'latin' => 'Withania somnifera (300 mg)',
+                    'role'  => 'Standardized classical root extract traditionally utilized to foster Ojas, support vitality, and build resilience against daily mental and physical stress.'
+                ),
+                array(
+                    'name'  => 'Shuddha Himalayan Shilajit',
+                    'latin' => 'Asphaltum punjabianum (350 mg)',
+                    'role'  => 'Triphala-purified classical mineral pitch rich in natural fulvic acid and trace minerals to sustain cellular ATP.'
+                ),
+                array(
+                    'name'  => 'Safed Musli Extract',
+                    'latin' => 'Chlorophytum borivilianum (100 mg)',
+                    'role'  => 'Venerated Ayurvedic Vajikarana botanical traditionally valued for restorative physical strength and connective vigor.'
+                ),
+                array(
+                    'name'  => 'Gokshura Fruit Extract',
+                    'latin' => 'Tribulus terrestris (50 mg)',
+                    'role'  => 'Classical Rasayana herb supportive of urinary tract wellness, reproductive tissue vigor, and natural fluid balance.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'Crafted in accordance with classical Ayurvedic Vajikarana texts, this formulation combines mineral-rich Shilajit purified through the traditional Shodhana process with whole-root Withania somnifera extract.',
+                'traditional' => 'Classical Ayurvedic texts emphasize purifying Himalayan Shilajit using Triphala decoctions to remove insoluble compounds and enhance bio-availability. Paired with Ashwagandha root, it delivers foundational physiological nourishment.',
+                'why'         => 'Unlike synthetic stamina pills that spike blood pressure and crash energy, this classical combination builds foundational vitality from within over time. 100% vegetarian plant cellulose capsules with zero synthetic fillers.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 Capsule per serving.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily with warm milk or lukewarm water, ideally after breakfast and dinner.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent intake for 60 to 90 days recommended for balanced, enduring results.')
+            ),
+            'specs' => array(
+                'Form'              => 'Vegetarian Capsules (100% HPMC Plant Cellulose)',
+                'Net Quantity'      => $net_qty ? $net_qty : '30 Capsules (800 mg each)',
+                'Key Botanicals'    => 'Shuddha Shilajit, Ashwagandha Root, Safed Musli, Gokshura',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'Sealed amber bottle with moisture-proof barrier',
+                'Shelf Life'        => $expiry ? $expiry : '24 Months from Manufacturing Date',
+                'Storage'           => 'Store in a cool, dry place away from direct sunlight. Keep bottle tightly closed.'
+            ),
+            'storage' => 'Store in a cool, dry place away from direct sunlight. Keep bottle tightly closed.',
+            'important_note' => 'Classical Ayurvedic proprietary wellness formulation. Dietary supplement; not intended to diagnose, treat, cure, or prevent any acute or chronic disease. Consult your physician prior to use if you are on blood pressure or cardiac medications. Keep out of reach of children.'
+        ),
+
+        // Product 31: Slim Care Weight Management Juice
+        31 => array(
+            'positioning' => 'Classical botanical metabolic elixir blending Garcinia Cambogia, Triphala, and Guggal formulated to awaken digestive fire (Agni) and support natural weight balance.',
+            'benefits' => array(
+                'Vrikshamla (Garcinia Cambogia) provides natural Hydroxycitric Acid (HCA) to support healthy lipid metabolism',
+                'Classical Triphala promotes natural digestive cleansing and healthy morning bowel regularity',
+                'Shuddha Guggulu supports optimal metabolic rate and cellular toxin clearance',
+                'Pure Aloe Vera inner-leaf juice soothes the gut lining without synthetic stimulants'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Garcinia Cambogia Extract',
+                    'latin' => 'Garcinia gummi-gutta (Vrikshamla)',
+                    'role'  => 'Traditional Ayurvedic fruit rich in natural Hydroxycitric Acid (HCA) that assists in natural satiety and lipid metabolism.'
+                ),
+                array(
+                    'name'  => 'Classical Triphala',
+                    'latin' => 'Emblica officinalis, Terminalia bellirica, Terminalia chebula',
+                    'role'  => 'Three foundational rejuvenating fruits (Amalaki, Bibhitaki, Haritaki) for balanced gut motility and gentle elimination.'
+                ),
+                array(
+                    'name'  => 'Shuddha Guggulu Extract',
+                    'latin' => 'Commiphora mukul',
+                    'role'  => 'Purified classical gum resin celebrated in Ayurveda for supporting balanced metabolic rate and clearing metabolic waste (Ama).'
+                ),
+                array(
+                    'name'  => 'Pure Aloe Vera Juice',
+                    'latin' => 'Aloe barbadensis (Kumari)',
+                    'role'  => 'Cold-extracted inner-leaf gel that hydrates the digestive mucosal lining and supports optimal nutrient absorption.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'Developed on the classical principle of Deepana-Pachana (igniting digestive fire and clearing metabolic residue), Slim Care Juice harmonizes the body\'s natural metabolic balance.',
+                'traditional' => 'Classical Ayurvedic formulations pair astringent and bitter botanicals like Triphala and Guggulu to counterbalance heavy Kapha accumulation while soothing Pitta with cooling Aloe Vera.',
+                'why'         => 'Zero added sugar, zero artificial colors, zero synthetic stimulants. A clean, herbal elixir designed for sustainable everyday wellness.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Recommended Measure', 'desc' => 'Measure 20 to 30 ml using the included measuring cup.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Dilute in a glass (150–200 ml) of lukewarm water; drink on an empty stomach in the morning.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Maintain regular daily hydration and wholesome nutrition for best results.')
+            ),
+            'specs' => array(
+                'Form'              => 'Liquid Herbal Extract Juice',
+                'Net Quantity'      => $net_qty ? $net_qty : '500 ml',
+                'Key Botanicals'    => 'Garcinia Cambogia, Triphala, Guggulu, Aloe Vera',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'BPA-free food-grade bottle with precision measuring cap',
+                'Shelf Life'        => $expiry ? $expiry : '18 Months from Manufacturing Date',
+                'Storage'           => 'Store in a cool, dry place. Refrigerate after opening and consume within 30 days.'
+            ),
+            'storage' => 'Store in a cool, dry place. Refrigerate after opening and consume within 30 days.',
+            'important_note' => 'Ayurvedic wellness formulation. Not intended to replace a balanced diet or medical care. Shake well before use. If you are pregnant, nursing, or undergoing medical supervision, consult your healthcare practitioner prior to use.'
+        ),
+
+        // Product 32: Aloe Vera Triphala Piles Care Capsules
+        32 => array(
+            'positioning' => 'Soothing classical Arshoghna botanical formulation designed to support comfortable bowel evacuation, reduce anorectal inflammation, and soothe digestive heat.',
+            'benefits' => array(
+                'Encourages gentle, strain-free bowel movements without harsh laxative dependency',
+                'Soothes inflamed, irritated rectal veins and alleviates burning sensations',
+                'Classical Haritaki and Triphala restore normal colon tone and stool consistency',
+                'Enriched with cooling Nagkesar and Neem for localized vascular tissue comfort'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Classical Triphala',
+                    'latin' => 'Terminalia chebula, Terminalia bellirica, Emblica officinalis',
+                    'role'  => 'Time-honored blend that regulates Apana Vayu to ensure smooth downward elimination and natural stool softness.'
+                ),
+                array(
+                    'name'  => 'Pure Aloe Vera Extract',
+                    'latin' => 'Aloe barbadensis (Kumari)',
+                    'role'  => 'Cooling botanical that pacifies localized Pitta heat, soothes rectal tissue irritation, and supports mucosal recovery.'
+                ),
+                array(
+                    'name'  => 'Nagkesar Extract',
+                    'latin' => 'Mesua ferrea',
+                    'role'  => 'Revered classical astringent herb traditionally used to tone venous walls and minimize anorectal swelling.'
+                ),
+                array(
+                    'name'  => 'Neem Leaf Extract',
+                    'latin' => 'Azadirachta indica',
+                    'role'  => 'Purifying bitter botanical providing natural microbial defense and relief from localized itching.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'Rooted in ancient Arshoghna formulations, these capsules address the root physiological causes of anorectal discomfort: sluggish digestion, dry stool, and irritated pelvic veins.',
+                'traditional' => 'Classical Ayurveda emphasizes that anorectal ease begins with balancing the Apana Vayu and cooling excess Pitta fire in the lower digestive tract.',
+                'why'         => 'Formulated without habit-forming synthetic purgatives. Provides gentle, non-irritating digestive relief in convenient plant cellulose capsules.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 to 2 Capsules per serving.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily after meals with lukewarm water, especially after dinner before sleep.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Drink 2.5–3 liters of water daily and include high-fiber foods in your routine.')
+            ),
+            'specs' => array(
+                'Form'              => 'Vegetarian Capsules (100% Plant Cellulose)',
+                'Net Quantity'      => $net_qty ? $net_qty : '60 Capsules (500 mg each)',
+                'Key Botanicals'    => 'Triphala, Aloe Vera, Nagkesar, Neem',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'Sealed amber bottle with tamper-evident cap',
+                'Shelf Life'        => $expiry ? $expiry : '24 Months from Manufacturing Date',
+                'Storage'           => 'Store in a cool, dry place away from heat and moisture.'
+            ),
+            'storage' => 'Store in a cool, dry place away from heat and moisture.',
+            'important_note' => 'Ayurvedic proprietary formulation. Not intended to diagnose, treat, or cure severe medical conditions. If you experience persistent bleeding or severe anorectal pain, consult a qualified physician promptly.'
+        ),
+
+        // Product 33: Amrit Heart Health Immunity Juice
+        33 => array(
+            'positioning' => 'Classical 5-in-1 Hridaya Rasayana featuring Terminalia Arjuna bark decoction, fresh wild Amla, crushed Garlic, raw Apple Cider Vinegar with Mother, and forest honey for cardiovascular resilience.',
+            'benefits' => array(
+                'Wild Arjuna bark decoction nourishes cardiac muscle tone and supports healthy blood circulation',
+                'Raw crushed Garlic and raw Apple Cider Vinegar support clean blood lipid and cholesterol balance',
+                'Fresh wild Amla provides potent natural bioflavonoids and Vitamin C for arterial elasticity',
+                'Raw forest honey balances botanical astringency and aids gentle assimilation'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Terminalia Arjuna Bark Decoction',
+                    'latin' => 'Terminalia arjuna (40%)',
+                    'role'  => 'Venerated cardiovascular Rasayana rich in bioflavonoids to support cardiac muscular integrity and blood flow.'
+                ),
+                array(
+                    'name'  => 'Fresh Wild Amla Juice',
+                    'latin' => 'Emblica officinalis (30%)',
+                    'role'  => 'Cold-extracted Indian gooseberry providing potent bioavailable Vitamin C to protect vascular endothelium.'
+                ),
+                array(
+                    'name'  => 'Raw Garlic Bulb Extract',
+                    'latin' => 'Allium sativum (10%)',
+                    'role'  => 'Standardized allicin botanical source traditionally utilized to maintain clean, unobstructed arterial pathways.'
+                ),
+                array(
+                    'name'  => 'Raw Apple Cider Vinegar',
+                    'latin' => 'Raw Fermented Vinegar with Mother (10%)',
+                    'role'  => 'Unpasteurized raw apple cider vinegar to support natural enzymatic digestion and healthy lipid metabolism.'
+                ),
+                array(
+                    'name'  => 'Pure Forest Honey',
+                    'latin' => 'Madhu (10%)',
+                    'role'  => 'Natural Ayurvedic Yogavahi (carrier) that enhances botanical cellular penetration and balances astringency.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'A faithful preparation of the classical 5-in-1 Hridaya Rasayana, combining five venerated cardiovascular superfoods into a bio-available daily tonic.',
+                'traditional' => 'Ancient texts describe Arjuna as the preeminent herb for the heart (Hridya), which when paired with Amla, Garlic, and fermented fruit acids, acts synergistically on vascular flexibility.',
+                'why'         => 'Prepared without boiling, synthetic thickening gums, or artificial preservatives, retaining active enzymes and volatile phytonutrients.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Recommended Measure', 'desc' => 'Dilute 15 to 20 ml in half a glass (100–150 ml) of normal or lukewarm water.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Drink once daily in the morning, 30 minutes before breakfast on an empty stomach.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Incorporate into an active, heart-conscious lifestyle for enduring cardiovascular vitality.')
+            ),
+            'specs' => array(
+                'Form'              => 'Liquid Herbal Tonic Juice',
+                'Net Quantity'      => $net_qty ? $net_qty : '500 ml',
+                'Key Botanicals'    => 'Arjuna Bark, Wild Amla, Raw Garlic, Apple Cider Vinegar, Forest Honey',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'Food-grade bottle with calibrated dosing cap',
+                'Shelf Life'        => $expiry ? $expiry : '18 Months from Manufacturing Date',
+                'Storage'           => 'Store in a cool, dry place. Refrigerate after opening and consume within 30 days.'
+            ),
+            'storage' => 'Store in a cool, dry place. Refrigerate after opening and consume within 30 days.',
+            'important_note' => 'Supportive Ayurvedic botanical tonic. Not intended as a substitute for prescribed cardiovascular medication. If taking anti-coagulants or blood thinners, consult your cardiologist before introducing any garlic-rich tonic.'
+        ),
+
+        // Product 34: Karela Jamun Blood Sugar Control Capsules
+        34 => array(
+            'positioning' => 'Potent 5-herb botanical synergy with Bitter Gourd, Jamun Seed, and Gymnema (The Sugar Destroyer) to support healthy glucose metabolism and curb sugar snacking.',
+            'benefits' => array(
+                'Gurmar (Gymnema sylvestre) suppresses sweet taste receptors to reduce sugar cravings',
+                'Jamun seed (Jambu) aids healthy postprandial glucose stability and pancreatic wellness',
+                'Karela provides natural charantin to support cellular glucose uptake',
+                'Fenugreek and Vijayasar support healthy digestive enzyme secretion and steady energy'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Karela (Bitter Gourd) Extract',
+                    'latin' => 'Momordica charantia (150 mg)',
+                    'role'  => 'Standardized extract containing charantin and vicine to support natural cellular glucose uptake.'
+                ),
+                array(
+                    'name'  => 'Jamun Seed Extract',
+                    'latin' => 'Syzygium cumini (150 mg)',
+                    'role'  => 'Contains natural jamboline glycosides to assist in slowing down the conversion of dietary starch into sugar.'
+                ),
+                array(
+                    'name'  => 'Gurmar Leaf Extract',
+                    'latin' => 'Gymnema sylvestre (100 mg)',
+                    'role'  => 'The classical \'sugar destroyer\' that blocks sweet receptors on the tongue and supports healthy beta cell function.'
+                ),
+                array(
+                    'name'  => 'Methi (Fenugreek) & Vijayasar',
+                    'latin' => 'Trigonella foenum-graecum & Pterocarpus marsupium (100 mg)',
+                    'role'  => 'Traditional botanicals rich in soluble galactomannan and flavonoids that support digestive glucose absorption.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'Classical Ayurveda categorizes blood sugar imbalances under Madhumeha, recommending bitter (Tikta) and astringent (Kashaya) herbs to pacify Kapha and regulate carbohydrate digestion.',
+                'traditional' => 'Unlike single-herb products, this 5-herb synergy targets both the oral taste receptors, digestive transit, and peripheral tissue cellular utilization.',
+                'why'         => 'Utilizes concentrated botanical extracts rather than unstandardized raw powders, providing reliable consistency in vegetarian plant cellulose capsules.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 Capsule per serving.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily, approximately 30 minutes before your morning and evening meals with lukewarm water.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent daily intake alongside a balanced glycemic diet recommended.')
+            ),
+            'specs' => array(
+                'Form'              => 'Vegetarian Capsules (100% Plant Cellulose)',
+                'Net Quantity'      => $net_qty ? $net_qty : '60 Capsules (500 mg each)',
+                'Key Botanicals'    => 'Karela, Jamun, Gurmar, Fenugreek, Vijayasar',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'Sealed amber container with freshness seal',
+                'Shelf Life'        => $expiry ? $expiry : '24 Months from Manufacturing Date',
+                'Storage'           => 'Store in a cool dry place away from heat and direct moisture.'
+            ),
+            'storage' => 'Store in a cool dry place away from heat and direct moisture.',
+            'important_note' => 'Dietary Ayurvedic wellness supplement for carbohydrate metabolism. Not intended to diagnose, treat, or replace diabetes medication. Regularly monitor your blood glucose levels when taking alongside conventional medication.'
+        ),
+
+        // Product 35: Shallaki Joint Bone Care Capsules
+        35 => array(
+            'positioning' => 'Standardized Boswellia Serrata (65% Boswellic Acids) combined with Hadjod and Nirgundi for joint comfort, cartilage lubrication, and morning flexibility.',
+            'benefits' => array(
+                'Standardized Boswellia serrata inhibits inflammatory 5-LOX enzymes to soothe joint stiffness',
+                'Hadjod (Cissus quadrangularis) accelerates bone mineral deposition and connective tissue strength',
+                'Nirgundi alleviates joint tenderness and enhances morning range of motion',
+                'Gentle on the stomach lining compared to synthetic joint formulations'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Shallaki Gum Resin Extract',
+                    'latin' => 'Boswellia serrata (65% Boswellic Acids)',
+                    'role'  => 'Standardized resin extract that inhibits the 5-LOX inflammatory pathway, helping preserve cartilage matrix and ease stiffness.'
+                ),
+                array(
+                    'name'  => 'Hadjod Stem Extract',
+                    'latin' => 'Cissus quadrangularis (Asthisamharaka)',
+                    'role'  => 'Ancient bone-setting botanical that supports calcium assimilation and strengthens connective ligaments.'
+                ),
+                array(
+                    'name'  => 'Nirgundi Leaf Extract',
+                    'latin' => 'Vitex negundo',
+                    'role'  => 'Revered anti-inflammatory leaf traditionally used to pacify Vata, relieve muscular tenderness, and support joint mobility.'
+                ),
+                array(
+                    'name'  => 'Shuddha Guggulu',
+                    'latin' => 'Commiphora mukul',
+                    'role'  => 'Purified gum resin that clears deep Ama from joint pockets and enhances synovial fluid ease.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'Joint discomfort and morning stiffness are classically attributed to Sandhigata Vata, where dryness and Ama accumulate in joint capsules.',
+                'traditional' => 'Classical Ayurvedic formulation balances the penetrating properties of Shallaki with the restorative bone-nourishing properties of Hadjod and Nirgundi.',
+                'why'         => 'Standardized active markers ensure consistent botanical potency without gastrointestinal irritation.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 Capsule per serving.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily after meals with lukewarm water or warm milk.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Follow a 60 to 90 day regimen for comprehensive connective tissue and cartilage support.')
+            ),
+            'specs' => array(
+                'Form'              => 'Vegetarian Capsules (100% Plant Cellulose)',
+                'Net Quantity'      => $net_qty ? $net_qty : '60 Capsules (500 mg each)',
+                'Key Botanicals'    => 'Shallaki (Boswellia), Hadjod, Nirgundi, Shuddha Guggulu',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'Sealed amber bottle with safety seal',
+                'Shelf Life'        => $expiry ? $expiry : '24 Months from Manufacturing Date',
+                'Storage'           => 'Store in a cool dry place away from heat and direct sunlight.'
+            ),
+            'storage' => 'Store in a cool dry place away from heat and direct sunlight.',
+            'important_note' => 'Ayurvedic wellness formulation for joint and bone support. Not intended to treat severe arthritic conditions or replace orthopedic consultation. Consult your doctor if pregnant or lactating.'
+        ),
+
+        // Product 36: Shatavari Ashoka Women Wellness Juice
+        36 => array(
+            'positioning' => 'Nurturing Nari Rasayana with Pure Shatavari Root, Classical Ashoka Bark, Lodhra, and Dashmula for hormonal rhythm, cycle comfort, and radiant vitality.',
+            'benefits' => array(
+                'Pure Shatavari root provides natural plant phytoestrogens to nurture female hormonal balance',
+                'Classical Ashoka bark tones uterine muscles and eases monthly cramping and discomfort',
+                'Lodhra supports pelvic tissue resilience and promotes clear, radiant skin',
+                'Dashmula roots soothe pelvic nervous fatigue and restore calm energy reserves'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Pure Shatavari Root Extract',
+                    'latin' => 'Asparagus racemosus',
+                    'role'  => 'The supreme Ayurvedic female rejuvenator (Nari Rasayana) that nourishes Shukra and Rasa Dhatus for hormonal balance and emotional calm.'
+                ),
+                array(
+                    'name'  => 'Classical Ashoka Bark Decoction',
+                    'latin' => 'Saraca asoca',
+                    'role'  => 'Time-honored uterine tonic celebrated for regulating menstrual flow and alleviating cyclic abdominal discomfort.'
+                ),
+                array(
+                    'name'  => 'Lodhra Bark Extract',
+                    'latin' => 'Symplocos racemosa',
+                    'role'  => 'Astringent Pitta-pacifying botanical that helps tone pelvic tissues and support clear skin complexion.'
+                ),
+                array(
+                    'name'  => 'Dashmula Ten Roots Synergy',
+                    'latin' => 'Classical Dashmula Group',
+                    'role'  => 'Traditional ten-root formulation that calms lower abdominal Vata, relieves nervous tension, and restores natural energy.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'A dedicated classical Nari Rasayana created to accompany women through every phase of life, supporting cycle regularity, hormonal harmony, and deep vitality.',
+                'traditional' => 'Ancient classical texts regard Ashoka and Shatavari as an essential botanical pair: Ashoka tones and purifies the reproductive seat, while Shatavari deeply hydrates and restores vital Ojas.',
+                'why'         => 'Crafted from classical decoctions without synthetic hormones, artificial sweeteners, or added sugar.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Recommended Measure', 'desc' => 'Dilute 20 to 25 ml in half a glass (100–150 ml) of normal or lukewarm water.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Drink twice daily, 30 minutes after your morning and evening meals.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent intake across consecutive menstrual cycles recommended for balanced vitality.')
+            ),
+            'specs' => array(
+                'Form'              => 'Liquid Herbal Tonic Juice',
+                'Net Quantity'      => $net_qty ? $net_qty : '500 ml',
+                'Key Botanicals'    => 'Shatavari Root, Ashoka Bark, Lodhra, Dashmula',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'BPA-free food-grade bottle with calibrated dosing cap',
+                'Shelf Life'        => $expiry ? $expiry : '18 Months from Manufacturing Date',
+                'Storage'           => 'Store in a cool dry place. Refrigerate after opening and consume within 30 days.'
+            ),
+            'storage' => 'Store in a cool dry place. Refrigerate after opening and consume within 30 days.',
+            'important_note' => 'Ayurvedic wellness formulation for women. Not intended to diagnose, treat, or cure gynecological disorders. Discontinue use during pregnancy unless recommended by your healthcare practitioner.'
+        ),
+
+        // Product 58: Daily Energy & Vitality Duo
+        58 => array(
+            'positioning' => 'Complete synergistic morning-to-night wellness regimen pairing Ashwagandha Shilajit Capsules with Amrit Heart Health Juice for endurance, cardiovascular tone, and cellular stamina.',
+            'benefits' => array(
+                'Ashwagandha Shilajit Capsules (800mg) provide purified Shilajit and standardized root extract for endurance',
+                'Amrit Heart Health Juice (500ml) supplies Arjuna, wild Amla, and raw Garlic for arterial elasticity',
+                'Dual-action Ayurvedic Rasayana protocol supporting both physical and cardiovascular energy reserves',
+                'Exclusive bundle pricing: Save over 55% with complimentary pan-India express shipping'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Shilajit & Ashwagandha Root',
+                    'latin' => 'Asphaltum punjabianum & Withania somnifera',
+                    'role'  => 'Foundational adaptogenic duo that builds Ojas, supports ATP synthesis, and modulates stress.'
+                ),
+                array(
+                    'name'  => 'Terminalia Arjuna Bark Decoction',
+                    'latin' => 'Terminalia arjuna (40%)',
+                    'role'  => 'Cardiovascular tonic nourishing cardiac muscle and supporting healthy blood circulation.'
+                ),
+                array(
+                    'name'  => 'Fresh Wild Amla & Raw Garlic',
+                    'latin' => 'Emblica officinalis & Allium sativum',
+                    'role'  => 'Rich bioavailable Vitamin C and allicin to maintain clear vascular pathways and arterial tone.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'Pairing Bhagyoday Ayurveda Ashwagandha Shilajit Capsules with Amrit Heart Health Juice creates an all-encompassing morning-to-night wellness regimen.',
+                'traditional' => 'Classical Ayurveda emphasizes that enduring vitality requires both strong Prana (circulatory vitality) and deep Ojas (cellular endurance). This pair addresses both systemic pathways simultaneously.',
+                'why'         => 'A comprehensive two-part protocol combining vegetarian capsules for daily stamina and liquid Rasayana for deep vascular nourishment.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Morning Routine', 'desc' => 'Take 15–20 ml Amrit Heart Juice in lukewarm water 30 minutes before breakfast.'),
+                array('num' => '02', 'title' => 'Post-Meal Routine', 'desc' => 'Take 1 Ashwagandha Shilajit Capsule twice daily after meals with water or warm milk.'),
+                array('num' => '03', 'title' => 'Recommended Duration', 'desc' => 'Continue the complete duo for 60 to 90 days for deep, holistic rejuvenation.')
+            ),
+            'specs' => array(
+                'Form'              => 'Combo Pack (1x 30 Veg Capsules + 1x 500ml Herbal Juice)',
+                'Net Quantity'      => $net_qty ? $net_qty : '30 Capsules + 500 ml Juice',
+                'Key Botanicals'    => 'Shilajit, Ashwagandha, Arjuna, Wild Amla, Raw Garlic',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'Sealed bottle and amber jar in tamper-evident bundle packaging',
+                'Shelf Life'        => $expiry ? $expiry : '18–24 Months from Manufacturing Date',
+                'Storage'           => 'Store capsules in a dry place; refrigerate juice after opening.'
+            ),
+            'storage' => 'Store capsules in a dry place away from heat. Refrigerate juice bottle after opening and consume within 30 days.',
+            'important_note' => 'Supportive Ayurvedic wellness combo. Not intended to replace prescribed cardiovascular or medical therapies. Consult your doctor if on blood pressure or cardiac medication.'
+        ),
+
+        // Product 59: Metabolic Detox & Sugar Balance Duo
+        59 => array(
+            'positioning' => 'Powerful Ayurvedic regimen pairing Karela Jamun Gurmar Blood Sugar Capsules with Slim Care Weight Management Juice for enhanced metabolism, digestive Agni, and natural glucose balance.',
+            'benefits' => array(
+                'Karela Jamun Gurmar Capsules (500mg) curb sweet cravings and support healthy glucose metabolism',
+                'Slim Care Juice (500ml) pairs Garcinia, Triphala, and Guggulu to awaken sluggish digestive fire',
+                'Encourages healthy fat metabolism and gentle daily detoxification without harsh stimulants',
+                'Exclusive bundle pricing: Save over 55% with complimentary pan-India express delivery'
+            ),
+            'botanicals' => array(
+                array(
+                    'name'  => 'Gurmar & Karela Extract',
+                    'latin' => 'Gymnema sylvestre & Momordica charantia',
+                    'role'  => 'Botanical sugar-regulators that block sweet taste perception and support cellular carbohydrate uptake.'
+                ),
+                array(
+                    'name'  => 'Garcinia Cambogia & Guggulu',
+                    'latin' => 'Garcinia gummi-gutta & Commiphora mukul',
+                    'role'  => 'Natural HCA and purified classical resin supporting healthy lipid metabolism and digestive Agni.'
+                ),
+                array(
+                    'name'  => 'Classical Triphala & Aloe Vera',
+                    'latin' => 'Three Rejuvenating Fruits & Kumari',
+                    'role'  => 'Promotes daily colon motility, clears intestinal Ama, and hydrates the digestive tract.'
+                ),
+            ),
+            'formulation_story' => array(
+                'intro'       => 'Combining classical Deepana-Pachana digestive juice with potent glucose-modulating capsules for complete metabolic harmony.',
+                'traditional' => 'According to classical Ayurveda, healthy carbohydrate utilization depends upon robust digestive fire (Jatharagni) and unobstructed metabolic channels (Srotas). This duo purifies the gut while supporting pancreatic vitality.',
+                'why'         => 'A dual-action botanical regimen targeting both the digestive absorption phase and peripheral cellular utilization.'
+            ),
+            'usage_steps' => array(
+                array('num' => '01', 'title' => 'Morning Routine', 'desc' => 'Take 20–30 ml Slim Care Juice in lukewarm water on an empty stomach in the morning.'),
+                array('num' => '02', 'title' => 'Pre-Meal Routine', 'desc' => 'Take 1 Karela Jamun Capsule twice daily, 30 minutes before lunch and dinner.'),
+                array('num' => '03', 'title' => 'Recommended Duration', 'desc' => 'Follow consistently for 60 to 90 days alongside a balanced, fiber-rich diet.')
+            ),
+            'specs' => array(
+                'Form'              => 'Combo Pack (1x 60 Veg Capsules + 1x 500ml Herbal Juice)',
+                'Net Quantity'      => $net_qty ? $net_qty : '60 Capsules + 500 ml Juice',
+                'Key Botanicals'    => 'Karela, Jamun, Gurmar, Garcinia, Triphala, Guggulu',
+                'Country of Origin' => 'India (Jalna, Maharashtra)',
+                'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+                'Packaging'         => 'Sealed bottle and amber jar in tamper-evident bundle packaging',
+                'Shelf Life'        => $expiry ? $expiry : '18–24 Months from Manufacturing Date',
+                'Storage'           => 'Store capsules in a dry place; refrigerate juice after opening.'
+            ),
+            'storage' => 'Store capsules in a cool, dry place. Refrigerate juice bottle after opening and consume within 30 days.',
+            'important_note' => 'Ayurvedic metabolic wellness combo. Not intended to diagnose, treat, or replace prescription diabetes medication. Regularly monitor your blood glucose levels when using alongside conventional medication.'
+        ),
+    );
+
+    if (isset($data_map[$product_id])) {
+        return $data_map[$product_id];
+    }
+
+    // Dynamic fallback for any other product created in WooCommerce
+    $fallback_benefits = get_post_meta($product_id, '_ayur_benefits', true);
+    $benefits_arr = array();
+    if ($fallback_benefits) {
+        foreach (explode("\n", $fallback_benefits) as $line) {
+            $c = trim(ltrim($line, "•- "));
+            if (!empty($c)) $benefits_arr[] = $c;
+        }
+    }
+    if (empty($benefits_arr)) {
+        $benefits_arr = array(
+            'Formulated with authentic, standardized classical Ayurvedic botanicals',
+            'Prepared in GMP and AYUSH compliant certified manufacturing facilities',
+            'Clean formulation with zero synthetic fillers, harmful binders, or artificial colors',
+            'Convenient everyday wellness format designed for sustained results'
+        );
+    }
+
+    $fallback_ingredients = get_post_meta($product_id, '_ayur_ingredients', true);
+    $botanicals_arr = array();
+    if ($fallback_ingredients) {
+        $lines = explode("\n", $fallback_ingredients);
+        foreach ($lines as $line) {
+            $clean = trim($line);
+            if (empty($clean)) continue;
+            if (preg_match('/^([^(]+)(?:\(([^)]+)\))?\s*(.*)$/i', $clean, $m)) {
+                $botanicals_arr[] = array(
+                    'name'  => trim($m[1]),
+                    'latin' => isset($m[2]) ? trim($m[2]) : '',
+                    'role'  => isset($m[3]) && !empty($m[3]) ? trim($m[3]) : 'Classical Ayurvedic botanical traditionally used for foundational wellness.'
+                );
+            } else {
+                $botanicals_arr[] = array(
+                    'name'  => $clean,
+                    'latin' => '',
+                    'role'  => 'Classical Ayurvedic botanical traditionally used for foundational wellness.'
+                );
+            }
+        }
+    }
+
+    return array(
+        'positioning' => $product->get_short_description() ? strip_tags($product->get_short_description()) : 'Authentic Ayurvedic formulation prepared in accordance with classical botanical principles.',
+        'benefits'    => $benefits_arr,
+        'botanicals'  => $botanicals_arr,
+        'formulation_story' => array(
+            'intro'       => 'Crafted in accordance with authentic Ayurvedic texts, honoring classical preparations and balancing time-tested botanicals.',
+            'traditional' => 'Our formulations rely on classical decoction and extraction methods to preserve the natural vitality and bio-active essence of the herbs.',
+            'why'         => '100% vegetarian, ethical small-batch production with zero synthetic fillers or harmful binders.'
+        ),
+        'usage_steps' => array(
+            array('num' => '01', 'title' => 'Recommended Dose', 'desc' => get_post_meta($product_id, '_ayur_dosage', true) ?: '1 serving as indicated on packaging.'),
+            array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take with lukewarm water or warm milk after meals.'),
+            array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent daily use for 60 to 90 days recommended.')
+        ),
+        'specs' => array(
+            'Form'              => (stripos($product->get_name(), 'Juice') !== false) ? 'Liquid Herbal Extract Juice' : 'Vegetarian Capsules (100% Plant Cellulose)',
+            'Net Quantity'      => $net_qty ?: 'Standard Pack',
+            'Country of Origin' => 'India (Jalna, Maharashtra)',
+            'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
+            'Packaging'         => 'Food-grade sealed container',
+            'Shelf Life'        => $expiry ?: '24 Months from Manufacturing Date',
+            'Storage'           => 'Store in a cool, dry place away from direct sunlight.'
+        ),
+        'storage'        => 'Store in a cool, dry place away from direct sunlight.',
+        'important_note' => 'Classical Ayurvedic proprietary wellness formulation. Dietary supplement; not intended to diagnose, treat, cure, or prevent any acute or chronic disease. Consult your physician prior to use if pregnant or nursing. Keep out of reach of children.'
+    );
+}
+
+/**
+ * Phase 5: Smart Related Formulations Query
+ * Returns 4 complementary products based on category affinity, never stretching a single card.
+ */
+function ayur_get_smart_related_products($product_id, $limit = 4) {
+    $related_ids = array();
+
+    // 1. Get current product category
+    $terms = get_the_terms($product_id, 'product_cat');
+    $current_slug = '';
+    if (!empty($terms) && !is_wp_error($terms)) {
+        foreach ($terms as $t) {
+            if ($t->slug !== 'uncategorized') {
+                $current_slug = $t->slug;
+                break;
+            }
+        }
+    }
+
+    // 2. Fetch products from the SAME category first (excluding current product)
+    if ($current_slug) {
+        $same_cat_products = wc_get_products(array(
+            'status'   => 'publish',
+            'limit'    => $limit,
+            'exclude'  => array($product_id),
+            'category' => array($current_slug),
+            'orderby'  => 'menu_order title',
+            'order'    => 'ASC',
+        ));
+        foreach ($same_cat_products as $p) {
+            $related_ids[] = $p->get_id();
+        }
+    }
+
+    // 3. Category affinity map for complementary recommendations
+    $affinity_map = array(
+        'mens-vitality-stamina' => array('heart-health-immunity', 'metabolism-daily-detox', 'joint-bone-care', 'combos', 'value-combos-packs'),
+        'digestive-piles-care'  => array('metabolism-daily-detox', 'heart-health-immunity', 'joint-bone-care'),
+        'joint-bone-care'       => array('mens-vitality-stamina', 'heart-health-immunity', 'metabolism-daily-detox'),
+        'heart-health-immunity' => array('mens-vitality-stamina', 'metabolism-daily-detox', 'womens-wellness-vitality'),
+        'metabolism-daily-detox'=> array('digestive-piles-care', 'heart-health-immunity', 'combos', 'value-combos-packs'),
+        'womens-wellness-vitality' => array('heart-health-immunity', 'joint-bone-care', 'metabolism-daily-detox'),
+        'combos'                => array('mens-vitality-stamina', 'metabolism-daily-detox', 'heart-health-immunity'),
+        'value-combos-packs'    => array('mens-vitality-stamina', 'metabolism-daily-detox', 'heart-health-immunity'),
+    );
+
+    // 4. Fill up to $limit from complementary categories
+    if (count($related_ids) < $limit && isset($affinity_map[$current_slug])) {
+        foreach ($affinity_map[$current_slug] as $comp_cat) {
+            if (count($related_ids) >= $limit) break;
+            $comp_products = wc_get_products(array(
+                'status'   => 'publish',
+                'limit'    => $limit - count($related_ids),
+                'exclude'  => array_merge(array($product_id), $related_ids),
+                'category' => array($comp_cat),
+                'orderby'  => 'menu_order title',
+                'order'    => 'ASC',
+            ));
+            foreach ($comp_products as $p) {
+                $related_ids[] = $p->get_id();
+                if (count($related_ids) >= $limit) break 2;
+            }
+        }
+    }
+
+    // 5. Fill remaining from general published products if still needed
+    if (count($related_ids) < $limit) {
+        $extra_products = wc_get_products(array(
+            'status'  => 'publish',
+            'limit'   => $limit - count($related_ids),
+            'exclude' => array_merge(array($product_id), $related_ids),
+            'orderby' => 'menu_order title',
+            'order'   => 'ASC',
+        ));
+        foreach ($extra_products as $p) {
+            $related_ids[] = $p->get_id();
+            if (count($related_ids) >= $limit) break;
+        }
+    }
+
+    // Convert IDs to product objects
+    $products = array();
+    foreach ($related_ids as $id) {
+        $prod = wc_get_product($id);
+        if ($prod && $prod->is_visible()) {
+            $products[] = $prod;
+        }
+    }
+
+    return $products;
+}
+
+/**
+ * Phase 4 & 5 Quality & Claims Sanitizer
+ * Ensures no unverified trademarks or medical claims slip through dynamic content.
+ */
+function ayur_sanitize_unverified_claims($content) {
+    if (!is_string($content) || empty($content)) {
+        return $content;
+    }
+    return str_ireplace(
+        array('KSM-66®', 'KSM-66', 'KSM 66'),
+        'Ashwagandha Root Extract (Withania somnifera)',
+        $content
+    );
+}
+add_filter('the_excerpt', 'ayur_sanitize_unverified_claims', 99);
+add_filter('the_content', 'ayur_sanitize_unverified_claims', 99);
+add_filter('woocommerce_short_description', 'ayur_sanitize_unverified_claims', 99);
+add_filter('the_title', 'ayur_sanitize_unverified_claims', 99);

@@ -14,6 +14,7 @@
         initProductGallery();
         initQtySteppers();
         initMobileStickyBar();
+        initProductAccordions();
     });
 
     /**
@@ -394,4 +395,38 @@
         });
     }
 
+    /**
+     * Phase 5: Product Page Responsive Accordions
+     * Automatically keeps all accordions open on desktop (>768px).
+     * On mobile, respects default-open state (Why choose, Botanicals, Usage open; Specs, Shipping, Caution collapsed).
+     */
+    function initProductAccordions() {
+        var $accordions = $('.ayur-product-accordion');
+        if (!$accordions.length) return;
+
+        function syncAccordions() {
+            var isDesktop = window.innerWidth >= 769;
+            $accordions.each(function() {
+                var $acc = $(this);
+                if (isDesktop) {
+                    $acc.attr('open', 'open');
+                } else {
+                    if (!$acc.hasClass('is-default-open')) {
+                        $acc.removeAttr('open');
+                    } else {
+                        $acc.attr('open', 'open');
+                    }
+                }
+            });
+        }
+
+        syncAccordions();
+        var resizeTimer;
+        $(window).on('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(syncAccordions, 150);
+        });
+    }
+
 })(jQuery);
+

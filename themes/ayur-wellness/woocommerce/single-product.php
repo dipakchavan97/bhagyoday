@@ -111,7 +111,13 @@ while (have_posts()) :
                     <div class="ayur-single-excerpt">
                         <?php
                         if (has_excerpt()) {
-                            the_excerpt();
+                            $raw_excerpt = get_the_excerpt();
+                            $clean_excerpt = str_ireplace(
+                                ['KSM-66®', 'KSM-66', 'KSM 66'],
+                                'standardized Ashwagandha Root Extract (Withania somnifera)',
+                                $raw_excerpt
+                            );
+                            echo wp_kses_post(wpautop($clean_excerpt));
                         } else {
                             echo '<p>' . esc_html(wp_trim_words(get_the_content(), 28)) . '</p>';
                         }
@@ -205,111 +211,207 @@ while (have_posts()) :
                 </div>
             </div>
 
-            <!-- Product Information Hierarchy (Conversion-Driven Details) -->
+            <?php
+            $ext_data = ayur_get_product_extended_data($product_id);
+            ?>
+
+            <!-- Product Information Hierarchy (Phase 5 Structured Presentation) -->
             <div class="ayur-product-details-wrap">
                 <div class="ayur-details-grid">
-                    <!-- Left Column: Benefits, Ingredients & Formulation Story -->
+                    <!-- Main Content Group (Left Column on Desktop, Ordered on Mobile) -->
                     <div class="ayur-details-main">
-                        <?php if (!empty($benefits)) : ?>
-                            <section class="ayur-detail-block">
+                        <!-- 1. Why You May Choose This Formulation -->
+                        <details class="ayur-product-accordion ayur-section-why is-default-open" open>
+                            <summary class="ayur-accordion-summary">
                                 <h3 class="ayur-detail-heading"><?php _e('Why You May Choose This Formulation', 'ayur-wellness'); ?></h3>
+                                <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                            </summary>
+                            <div class="ayur-accordion-content">
+                                <p class="ayur-section-lead-text"><?php echo esc_html($ext_data['positioning']); ?></p>
                                 <ul class="ayur-benefits-checklist">
-                                    <?php
-                                    $benefit_lines = explode("\n", $benefits);
-                                    foreach ($benefit_lines as $line) {
-                                        $clean = trim(ltrim($line, "•- "));
-                                        if (!empty($clean)) {
-                                            echo '<li><span class="ayur-check-bullet">' . ayur_svg_icon('check', '', 14) . '</span><span>' . esc_html($clean) . '</span></li>';
-                                        }
-                                    }
-                                    ?>
+                                    <?php foreach ($ext_data['benefits'] as $benefit) : ?>
+                                        <li>
+                                            <span class="ayur-check-bullet"><?php echo ayur_svg_icon('check', '', 14); ?></span>
+                                            <span><?php echo esc_html($benefit); ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
                                 </ul>
-                            </section>
-                        <?php endif; ?>
-
-                        <?php if (!empty($ingredients)) : ?>
-                            <section class="ayur-detail-block">
-                                <h3 class="ayur-detail-heading"><?php _e('Botanical & Formulation Details', 'ayur-wellness'); ?></h3>
-                                <div class="ayur-ingredients-content">
-                                    <p><?php echo nl2br(esc_html($ingredients)); ?></p>
-                                </div>
-                            </section>
-                        <?php endif; ?>
-
-                        <section class="ayur-detail-block">
-                            <h3 class="ayur-detail-heading"><?php _e('Formulation Story & Ayurvedic Context', 'ayur-wellness'); ?></h3>
-                            <div class="ayur-description-content">
-                                <?php the_content(); ?>
                             </div>
-                        </section>
+                        </details>
+
+                        <!-- 2. Key Botanicals -->
+                        <?php if (!empty($ext_data['botanicals'])) : ?>
+                            <details class="ayur-product-accordion ayur-section-botanicals is-default-open" open>
+                                <summary class="ayur-accordion-summary">
+                                    <h3 class="ayur-detail-heading"><?php _e('Key Botanicals & Classical Ingredients', 'ayur-wellness'); ?></h3>
+                                    <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                                </summary>
+                                <div class="ayur-accordion-content">
+                                    <div class="ayur-botanicals-list">
+                                        <?php foreach ($ext_data['botanicals'] as $botanical) : ?>
+                                            <div class="ayur-botanical-card">
+                                                <div class="ayur-botanical-header">
+                                                    <span class="ayur-botanical-name"><?php echo esc_html($botanical['name']); ?></span>
+                                                    <?php if (!empty($botanical['latin'])) : ?>
+                                                        <span class="ayur-botanical-latin"><?php echo esc_html($botanical['latin']); ?></span>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <p class="ayur-botanical-role"><?php echo esc_html($botanical['role']); ?></p>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </details>
+                        <?php endif; ?>
+
+                        <!-- 3. Formulation Story -->
+                        <?php if (!empty($ext_data['formulation_story'])) : ?>
+                            <details class="ayur-product-accordion ayur-section-story is-default-open" open>
+                                <summary class="ayur-accordion-summary">
+                                    <h3 class="ayur-detail-heading"><?php _e('Formulation Story & Ayurvedic Context', 'ayur-wellness'); ?></h3>
+                                    <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                                </summary>
+                                <div class="ayur-accordion-content">
+                                    <div class="ayur-story-block">
+                                        <p class="ayur-story-intro"><?php echo esc_html($ext_data['formulation_story']['intro']); ?></p>
+                                        <div class="ayur-story-sub">
+                                            <h5 class="ayur-story-subtitle"><?php _e('Traditional Formulation', 'ayur-wellness'); ?></h5>
+                                            <p><?php echo esc_html($ext_data['formulation_story']['traditional']); ?></p>
+                                        </div>
+                                        <div class="ayur-story-sub">
+                                            <h5 class="ayur-story-subtitle"><?php _e('Why This Formulation', 'ayur-wellness'); ?></h5>
+                                            <p><?php echo esc_html($ext_data['formulation_story']['why']); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        <?php endif; ?>
+
+                        <!-- 4. How to Use & Routine -->
+                        <?php if (!empty($ext_data['usage_steps'])) : ?>
+                            <details class="ayur-product-accordion ayur-section-usage is-default-open" open>
+                                <summary class="ayur-accordion-summary">
+                                    <h3 class="ayur-detail-heading"><?php _e('How to Use & Suggested Routine', 'ayur-wellness'); ?></h3>
+                                    <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                                </summary>
+                                <div class="ayur-accordion-content">
+                                    <div class="ayur-usage-steps">
+                                        <?php foreach ($ext_data['usage_steps'] as $step) : ?>
+                                            <div class="ayur-usage-step">
+                                                <span class="ayur-usage-num"><?php echo esc_html($step['num']); ?></span>
+                                                <div class="ayur-usage-body">
+                                                    <h5 class="ayur-usage-step-title"><?php echo esc_html($step['title']); ?></h5>
+                                                    <p class="ayur-usage-step-desc"><?php echo esc_html($step['desc']); ?></p>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </details>
+                        <?php endif; ?>
                     </div>
 
-                    <!-- Right Column: How to Use, Specs & Statutory Info -->
+                    <!-- Supporting Side Column (Right on Desktop, Ordered on Mobile) -->
                     <div class="ayur-details-side">
-                        <?php if (!empty($dosage)) : ?>
-                            <div class="ayur-spec-card">
-                                <div class="ayur-spec-header">
-                                    <?php echo ayur_svg_icon('clock', '', 18); ?>
-                                    <h4><?php _e('How to Use & Suggested Routine', 'ayur-wellness'); ?></h4>
+                        <!-- 5. Product Details & Specifications -->
+                        <details class="ayur-product-accordion ayur-section-specs">
+                            <summary class="ayur-accordion-summary">
+                                <h4 class="ayur-side-heading">
+                                    <?php echo ayur_svg_icon('badge-check', '', 18); ?>
+                                    <span><?php _e('Product Information & Specifications', 'ayur-wellness'); ?></span>
+                                </h4>
+                                <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                            </summary>
+                            <div class="ayur-accordion-content">
+                                <div class="ayur-spec-card">
+                                    <table class="ayur-spec-table">
+                                        <tbody>
+                                            <?php foreach ($ext_data['specs'] as $label => $val) : ?>
+                                                <tr>
+                                                    <th scope="row"><?php echo esc_html($label); ?></th>
+                                                    <td><?php echo esc_html($val); ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <p><?php echo esc_html($dosage); ?></p>
                             </div>
-                        <?php endif; ?>
+                        </details>
 
-                        <div class="ayur-spec-card ayur-statutory-card">
-                            <div class="ayur-spec-header">
-                                <?php echo ayur_svg_icon('badge-check', '', 18); ?>
-                                <h4><?php _e('Product Information & Specifications', 'ayur-wellness'); ?></h4>
+                        <!-- 6. Shipping & Delivery Policy -->
+                        <details class="ayur-product-accordion ayur-section-shipping">
+                            <summary class="ayur-accordion-summary">
+                                <h4 class="ayur-side-heading">
+                                    <?php echo ayur_svg_icon('truck', '', 18); ?>
+                                    <span><?php _e('Shipping & Delivery Policy', 'ayur-wellness'); ?></span>
+                                </h4>
+                                <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                            </summary>
+                            <div class="ayur-accordion-content">
+                                <div class="ayur-spec-card ayur-shipping-card">
+                                    <div class="ayur-shipping-rows">
+                                        <div class="ayur-shipping-row">
+                                            <span class="ayur-ship-label"><?php _e('DISPATCH', 'ayur-wellness'); ?></span>
+                                            <span class="ayur-ship-val"><?php _e('24–48 hours from Maharashtra Hub', 'ayur-wellness'); ?></span>
+                                        </div>
+                                        <div class="ayur-shipping-row">
+                                            <span class="ayur-ship-label"><?php _e('METRO DELIVERY', 'ayur-wellness'); ?></span>
+                                            <span class="ayur-ship-val"><?php _e('2–4 business days via Delhivery, BlueDart, DTDC', 'ayur-wellness'); ?></span>
+                                        </div>
+                                        <div class="ayur-shipping-row">
+                                            <span class="ayur-ship-label"><?php _e('SHIPPING FEE', 'ayur-wellness'); ?></span>
+                                            <span class="ayur-ship-val"><?php _e('Free Pan-India on orders above ₹999 (₹70 below ₹999)', 'ayur-wellness'); ?></span>
+                                        </div>
+                                        <div class="ayur-shipping-row">
+                                            <span class="ayur-ship-label"><?php _e('PAYMENTS & COD', 'ayur-wellness'); ?></span>
+                                            <span class="ayur-ship-val"><?php _e('Cash on Delivery & Secure UPI / Card Checkout', 'ayur-wellness'); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <dl class="ayur-spec-list">
-                                <?php if ($net_qty) : ?>
-                                    <dt><?php _e('Net Quantity:', 'ayur-wellness'); ?></dt>
-                                    <dd><?php echo esc_html($net_qty); ?></dd>
-                                <?php endif; ?>
-                                <dt><?php _e('Form:', 'ayur-wellness'); ?></dt>
-                                <dd><?php echo (stripos($product->get_name(), 'Juice') !== false) ? __('Herbal Extract Juice', 'ayur-wellness') : __('100% Plant Cellulose Vegetarian Capsules (HPMC)', 'ayur-wellness'); ?></dd>
-                                <?php if ($precautions) : ?>
-                                    <dt><?php _e('Storage:', 'ayur-wellness'); ?></dt>
-                                    <dd><?php echo esc_html($precautions); ?></dd>
-                                <?php else : ?>
-                                    <dt><?php _e('Storage:', 'ayur-wellness'); ?></dt>
-                                    <dd><?php _e('Store in a cool, dry place away from direct sunlight.', 'ayur-wellness'); ?></dd>
-                                <?php endif; ?>
-                                <?php if ($batch) : ?>
-                                    <dt><?php _e('Batch / Lot:', 'ayur-wellness'); ?></dt>
-                                    <dd><?php echo esc_html($batch); ?></dd>
-                                <?php endif; ?>
-                                <?php if ($expiry) : ?>
-                                    <dt><?php _e('Shelf Life:', 'ayur-wellness'); ?></dt>
-                                    <dd><?php echo esc_html($expiry); ?></dd>
-                                <?php endif; ?>
-                                <dt><?php _e('Country of Origin:', 'ayur-wellness'); ?></dt>
-                                <dd><?php _e('India (Jalna, Maharashtra)', 'ayur-wellness'); ?></dd>
-                                <dt><?php _e('Manufacturer:', 'ayur-wellness'); ?></dt>
-                                <dd><?php _e('Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504', 'ayur-wellness'); ?></dd>
-                            </dl>
-                        </div>
+                        </details>
 
-                        <!-- Shipping & Delivery Policy Card -->
-                        <div class="ayur-spec-card ayur-shipping-card">
-                            <div class="ayur-spec-header">
-                                <?php echo ayur_svg_icon('truck', '', 18); ?>
-                                <h4><?php _e('Shipping & Delivery', 'ayur-wellness'); ?></h4>
+                        <!-- 7. Important Information -->
+                        <details class="ayur-product-accordion ayur-section-caution">
+                            <summary class="ayur-accordion-summary">
+                                <h4 class="ayur-side-heading">
+                                    <?php echo ayur_svg_icon('shield-check', '', 18); ?>
+                                    <span><?php _e('Important Product Information', 'ayur-wellness'); ?></span>
+                                </h4>
+                                <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                            </summary>
+                            <div class="ayur-accordion-content">
+                                <div class="ayur-spec-card ayur-caution-card">
+                                    <p class="ayur-caution-text"><?php echo esc_html($ext_data['important_note']); ?></p>
+                                </div>
                             </div>
-                            <p><?php _e('Dispatched within 24–48 hours via Delhivery, BlueDart, or DTDC. Metro deliveries arrive in 2–4 business days. Cash on Delivery is available at checkout.', 'ayur-wellness'); ?></p>
-                        </div>
+                        </details>
                     </div>
                 </div>
             </div>
 
-            <!-- Related Formulations -->
-            <div class="ayur-related-wrap">
-                <div class="ayur-section-header">
-                    <span class="ayur-section-eyebrow"><?php _e('COMPLEMENTARY CARE', 'ayur-wellness'); ?></span>
-                    <h2 class="ayur-section-title"><?php _e('Related Formulations', 'ayur-wellness'); ?></h2>
+            <!-- Smart Complementary Related Formulations -->
+            <?php
+            $related_products = ayur_get_smart_related_products($product_id, 4);
+            if (!empty($related_products)) :
+            ?>
+                <div class="ayur-related-wrap">
+                    <div class="ayur-related-header">
+                        <span class="ayur-section-eyebrow"><?php _e('COMPLEMENTARY CARE', 'ayur-wellness'); ?></span>
+                        <h2 class="ayur-section-title"><?php _e('Related Formulations', 'ayur-wellness'); ?></h2>
+                    </div>
+                    <div class="ayur-related-grid products columns-4">
+                        <?php
+                        foreach ($related_products as $rel_prod) {
+                            $post_object = get_post($rel_prod->get_id());
+                            setup_postdata($GLOBALS['post'] =& $post_object);
+                            wc_get_template_part('content', 'product');
+                        }
+                        wp_reset_postdata();
+                        ?>
+                    </div>
                 </div>
-                <?php woocommerce_output_related_products(); ?>
-            </div>
+            <?php endif; ?>
         </div>
     </article>
 

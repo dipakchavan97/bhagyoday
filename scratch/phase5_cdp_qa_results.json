@@ -1,0 +1,455 @@
+{
+  "shop": {
+    "360x800": {
+      "bannerHeight": 213,
+      "bannerPadding": "16px 0px 12px",
+      "h1FontSize": "31.2px",
+      "pillsHeight": 47,
+      "pillsWrap": "nowrap",
+      "pillsCount": 12,
+      "controlsTop": 318.84375,
+      "firstCardTop": 392.84375,
+      "hasOverflow": false,
+      "scrollWidth": 360,
+      "innerWidth": 360
+    },
+    "390x844": {
+      "bannerHeight": 213,
+      "bannerPadding": "16px 0px 12px",
+      "h1FontSize": "31.2px",
+      "pillsHeight": 47,
+      "pillsWrap": "nowrap",
+      "pillsCount": 12,
+      "controlsTop": 318.84375,
+      "firstCardTop": 392.84375,
+      "hasOverflow": false,
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    "412x915": {
+      "bannerHeight": 213,
+      "bannerPadding": "16px 0px 12px",
+      "h1FontSize": "31.2px",
+      "pillsHeight": 47,
+      "pillsWrap": "nowrap",
+      "pillsCount": 12,
+      "controlsTop": 318.84375,
+      "firstCardTop": 392.84375,
+      "hasOverflow": false,
+      "scrollWidth": 412,
+      "innerWidth": 412
+    },
+    "1280x800": {
+      "bannerHeight": 263,
+      "bannerPadding": "24px 0px 16px",
+      "h1FontSize": "41.6px",
+      "pillsHeight": 78,
+      "pillsWrap": "wrap",
+      "pillsCount": 12,
+      "controlsTop": 390.453125,
+      "firstCardTop": 469.453125,
+      "hasOverflow": false,
+      "scrollWidth": 1265,
+      "innerWidth": 1280
+    }
+  },
+  "product": {
+    "360x800": {
+      "wrapWidth": 328,
+      "whyChooseOpen": true,
+      "botanicalsCount": 4,
+      "botanicals": [
+        {
+          "name": "ASHWAGANDHA ROOT EXTRACT",
+          "latin": "Withania somnifera (300 mg)"
+        },
+        {
+          "name": "SHUDDHA HIMALAYAN SHILAJIT",
+          "latin": "Asphaltum punjabianum (350 mg)"
+        },
+        {
+          "name": "SAFED MUSLI EXTRACT",
+          "latin": "Chlorophytum borivilianum (100 mg)"
+        },
+        {
+          "name": "GOKSHURA FRUIT EXTRACT",
+          "latin": "Tribulus terrestris (50 mg)"
+        }
+      ],
+      "usageStepsCount": 3,
+      "specRowsCount": 8,
+      "specRows": [
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        }
+      ],
+      "hasShippingCard": true,
+      "hasCautionCard": true,
+      "cautionText": "",
+      "relCardsCount": 4,
+      "relGridWidth": 328,
+      "relCards": [
+        {
+          "title": "Aloe Vera Triphala Piles Care Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 158,
+          "height": 455.53125
+        },
+        {
+          "title": "Amrit Heart Health Immunity Juice 500ml",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 158,
+          "height": 455.53125
+        },
+        {
+          "title": "Daily Energy & Vitality Duo (Shilajit Capsules 30s + Amrit Heart Juice 500ml)",
+          "price": "₹1,690",
+          "hasBtn": true,
+          "width": 158,
+          "height": 474.71875
+        },
+        {
+          "title": "Karela Jamun Blood Sugar Control Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 158,
+          "height": 474.71875
+        }
+      ],
+      "ksmFound": false,
+      "hasOverflow": false
+    },
+    "390x844": {
+      "wrapWidth": 358,
+      "whyChooseOpen": true,
+      "botanicalsCount": 4,
+      "botanicals": [
+        {
+          "name": "ASHWAGANDHA ROOT EXTRACT",
+          "latin": "Withania somnifera (300 mg)"
+        },
+        {
+          "name": "SHUDDHA HIMALAYAN SHILAJIT",
+          "latin": "Asphaltum punjabianum (350 mg)"
+        },
+        {
+          "name": "SAFED MUSLI EXTRACT",
+          "latin": "Chlorophytum borivilianum (100 mg)"
+        },
+        {
+          "name": "GOKSHURA FRUIT EXTRACT",
+          "latin": "Tribulus terrestris (50 mg)"
+        }
+      ],
+      "usageStepsCount": 3,
+      "specRowsCount": 8,
+      "specRows": [
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        }
+      ],
+      "hasShippingCard": true,
+      "hasCautionCard": true,
+      "cautionText": "",
+      "relCardsCount": 4,
+      "relGridWidth": 358,
+      "relCards": [
+        {
+          "title": "Aloe Vera Triphala Piles Care Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 173,
+          "height": 443.34375
+        },
+        {
+          "title": "Amrit Heart Health Immunity Juice 500ml",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 173,
+          "height": 443.34375
+        },
+        {
+          "title": "Daily Energy & Vitality Duo (Shilajit Capsules 30s + Amrit Heart Juice 500ml)",
+          "price": "₹1,690",
+          "hasBtn": true,
+          "width": 173,
+          "height": 462.53125
+        },
+        {
+          "title": "Karela Jamun Blood Sugar Control Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 173,
+          "height": 462.53125
+        }
+      ],
+      "ksmFound": false,
+      "hasOverflow": false
+    },
+    "412x915": {
+      "wrapWidth": 380,
+      "whyChooseOpen": true,
+      "botanicalsCount": 4,
+      "botanicals": [
+        {
+          "name": "ASHWAGANDHA ROOT EXTRACT",
+          "latin": "Withania somnifera (300 mg)"
+        },
+        {
+          "name": "SHUDDHA HIMALAYAN SHILAJIT",
+          "latin": "Asphaltum punjabianum (350 mg)"
+        },
+        {
+          "name": "SAFED MUSLI EXTRACT",
+          "latin": "Chlorophytum borivilianum (100 mg)"
+        },
+        {
+          "name": "GOKSHURA FRUIT EXTRACT",
+          "latin": "Tribulus terrestris (50 mg)"
+        }
+      ],
+      "usageStepsCount": 3,
+      "specRowsCount": 8,
+      "specRows": [
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        },
+        {
+          "th": "",
+          "td": ""
+        }
+      ],
+      "hasShippingCard": true,
+      "hasCautionCard": true,
+      "cautionText": "",
+      "relCardsCount": 4,
+      "relGridWidth": 380,
+      "relCards": [
+        {
+          "title": "Aloe Vera Triphala Piles Care Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 184,
+          "height": 454.34375
+        },
+        {
+          "title": "Amrit Heart Health Immunity Juice 500ml",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 184,
+          "height": 454.34375
+        },
+        {
+          "title": "Daily Energy & Vitality Duo (Shilajit Capsules 30s + Amrit Heart Juice 500ml)",
+          "price": "₹1,690",
+          "hasBtn": true,
+          "width": 184,
+          "height": 454.34375
+        },
+        {
+          "title": "Karela Jamun Blood Sugar Control Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 184,
+          "height": 454.34375
+        }
+      ],
+      "ksmFound": false,
+      "hasOverflow": false
+    },
+    "1280x800": {
+      "wrapWidth": 1168,
+      "whyChooseOpen": true,
+      "botanicalsCount": 4,
+      "botanicals": [
+        {
+          "name": "ASHWAGANDHA ROOT EXTRACT",
+          "latin": "Withania somnifera (300 mg)"
+        },
+        {
+          "name": "SHUDDHA HIMALAYAN SHILAJIT",
+          "latin": "Asphaltum punjabianum (350 mg)"
+        },
+        {
+          "name": "SAFED MUSLI EXTRACT",
+          "latin": "Chlorophytum borivilianum (100 mg)"
+        },
+        {
+          "name": "GOKSHURA FRUIT EXTRACT",
+          "latin": "Tribulus terrestris (50 mg)"
+        }
+      ],
+      "usageStepsCount": 3,
+      "specRowsCount": 8,
+      "specRows": [
+        {
+          "th": "Form",
+          "td": "Vegetarian Capsules (100% HPMC Plant Cellulose)"
+        },
+        {
+          "th": "Net Quantity",
+          "td": "30 Vegetarian Capsules (800 mg)"
+        },
+        {
+          "th": "Key Botanicals",
+          "td": "Shuddha Shilajit, Ashwagandha Root, Safed Musli, Gokshura"
+        },
+        {
+          "th": "Country of Origin",
+          "td": "India (Jalna, Maharashtra)"
+        },
+        {
+          "th": "Manufacturer",
+          "td": "Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504"
+        },
+        {
+          "th": "Packaging",
+          "td": "Sealed amber bottle with moisture-proof barrier"
+        },
+        {
+          "th": "Shelf Life",
+          "td": "24 Months from Mfd."
+        },
+        {
+          "th": "Storage",
+          "td": "Store in a cool, dry place away from direct sunlight. Keep bottle tightly closed."
+        }
+      ],
+      "hasShippingCard": true,
+      "hasCautionCard": true,
+      "cautionText": "Classical Ayurvedic proprietary wellness formulation. Dietary supplement; not intended to diagnose, treat, cure, or prevent any acute or chronic disease. Consult your physician prior to use if you are on blood pressure or cardiac medications. Keep out of reach of children.",
+      "relCardsCount": 4,
+      "relGridWidth": 1168,
+      "relCards": [
+        {
+          "title": "Aloe Vera Triphala Piles Care Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 277,
+          "height": 568.90625
+        },
+        {
+          "title": "Amrit Heart Health Immunity Juice 500ml",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 277,
+          "height": 568.90625
+        },
+        {
+          "title": "Daily Energy & Vitality Duo (Shilajit Capsules 30s + Amrit Heart Juice 500ml)",
+          "price": "₹1,690",
+          "hasBtn": true,
+          "width": 277,
+          "height": 568.90625
+        },
+        {
+          "title": "Karela Jamun Blood Sugar Control Capsules 500mg (60 Capsules)",
+          "price": "₹890",
+          "hasBtn": true,
+          "width": 277,
+          "height": 568.90625
+        }
+      ],
+      "ksmFound": false,
+      "hasOverflow": false
+    }
+  },
+  "conversion": {
+    "drawerOpen": true,
+    "itemsCount": 1,
+    "items": [
+      {
+        "title": "",
+        "price": "₹890"
+      }
+    ],
+    "total": "₹890",
+    "hasCheckoutBtn": true
+  },
+  "ksmCheck": false
+}
