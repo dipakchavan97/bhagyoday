@@ -13,6 +13,7 @@ class Ayur_Config {
         add_action('init', array(__CLASS__, 'ensure_wc_settings'));
         add_filter('woocommerce_currency_symbols', array(__CLASS__, 'add_inr_symbol'));
         add_filter('woocommerce_currencies', array(__CLASS__, 'add_inr_currency'));
+        add_filter('woocommerce_package_rates', array(__CLASS__, 'hide_shipping_when_free_is_available'), 100, 2);
 
         // Production Security Hardening
         add_filter('xmlrpc_enabled', '__return_false');
@@ -71,6 +72,14 @@ class Ayur_Config {
     }
 
     public static function ensure_wc_settings() {
+        if (class_exists('WC_Shipping_Zones')) {
+            $zones = WC_Shipping_Zones::get_zones();
+            if (empty($zones)) {
+                self::setup_shipping_zones();
+            }
+        }
+        self::ensure_payment_gateways();
+
         if (get_option('woocommerce_coming_soon') === 'yes' || get_option('woocommerce_currency') !== 'INR' || get_option('woocommerce_email_from_name') !== 'Bhagyoday Ayurveda') {
             self::setup_defaults();
         }
@@ -111,7 +120,7 @@ class Ayur_Config {
             $flat_rate_instance_id = $zone->add_shipping_method('flat_rate');
             $flat_rate = new WC_Shipping_Flat_Rate($flat_rate_instance_id);
             $flat_rate->init_instance_settings();
-            $flat_rate->instance_settings['title'] = 'Standard Delivery (2-5 Business Days)';
+            $flat_rate->instance_settings['title'] = 'Standard Delivery (₹70)';
             $flat_rate->instance_settings['cost'] = '70';
             update_option($flat_rate->get_instance_option_key(), $flat_rate->instance_settings);
         }
@@ -124,8 +133,23 @@ class Ayur_Config {
         $cod_settings['title'] = 'Cash on Delivery (COD)';
         $cod_settings['description'] = 'Pay with cash upon delivery. Verified by automated phone confirmation.';
         $cod_settings['instructions'] = 'Please keep exact cash ready upon delivery. Our delivery partner will verify your order.';
-        $cod_settings['enable_for_virtual'] = 'no';
+        $cod_settings['enable_for_virtual'] = 'yes';
+        $cod_settings['enable_for_methods'] = array();
         update_option('woocommerce_cod_settings', $cod_settings);
+    }
+
+    /**
+     * Hide Standard Delivery when Free Express Delivery is unlocked (> ₹999)
+     */
+    public static function hide_shipping_when_free_is_available($rates, $package) {
+        $free = array();
+        foreach ($rates as $rate_id => $rate) {
+            if ('free_shipping' === $rate->method_id) {
+                $free[$rate_id] = $rate;
+                break;
+            }
+        }
+        return !empty($free) ? $free : $rates;
     }
 
     public static function add_inr_symbol($symbols) {

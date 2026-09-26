@@ -6227,12 +6227,17 @@ select:focus {
     font-weight: 700;
 }
 
-/* 8. Checkout Polish & WhatsApp Suppression (Phase 7 Section 27-29, 31) */
-body.woocommerce-checkout .ayur-wa-float-container {
+/* 8. Checkout Polish & WhatsApp Suppression */
+body.woocommerce-checkout .ayur-wa-float-container,
+body[class*="checkout"] .ayur-wa-float-container,
+body:has(.wc-block-checkout) .ayur-wa-float-container,
+.wc-block-checkout ~ .ayur-wa-float-container {
     display: none !important;
 }
 
-body.woocommerce-checkout .ayur-mobile-bottom-nav {
+body.woocommerce-checkout .ayur-mobile-bottom-nav,
+body[class*="checkout"] .ayur-mobile-bottom-nav,
+body:has(.wc-block-checkout) .ayur-mobile-bottom-nav {
     display: none !important;
 }
 
@@ -6272,43 +6277,53 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     pointer-events: none !important;
 }
 
-/* Checkout Form Cleanups */
-.woocommerce-checkout #customer_details {
+/* Checkout Form & Blocks Cleanups */
+.woocommerce-checkout #customer_details,
+.wc-block-checkout {
     margin-bottom: 24px;
 }
 
 .woocommerce-checkout .woocommerce-billing-fields h3,
 .woocommerce-checkout .woocommerce-shipping-fields h3,
-.woocommerce-checkout #order_review_heading {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #173B2F;
-    margin-bottom: 18px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #E9DDC8;
+.woocommerce-checkout #order_review_heading,
+.wc-block-components-title,
+.wp-block-woocommerce-checkout h2,
+.wp-block-woocommerce-checkout h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-size: 1.6rem !important;
+    font-weight: 600 !important;
+    color: #173B2F !important;
+    margin-bottom: 18px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid #E9DDC8 !important;
 }
 
 .woocommerce-checkout input[type="text"],
 .woocommerce-checkout input[type="tel"],
 .woocommerce-checkout input[type="email"],
-.woocommerce-checkout select {
-    min-height: 48px;
-    font-size: 15px;
-    border-radius: 8px;
-    border: 1px solid #D5C8B4;
-    padding: 10px 14px;
-    background-color: #FFFFFF;
-    color: #222522;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
+.woocommerce-checkout select,
+.wc-block-components-text-input input,
+.wc-blocks-components-select__select,
+.wc-block-components-textarea {
+    min-height: 48px !important;
+    font-size: 15px !important;
+    border-radius: 8px !important;
+    border: 1px solid #D5C8B4 !important;
+    padding: 10px 14px !important;
+    background-color: #FFFFFF !important;
+    color: #222522 !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+    box-sizing: border-box !important;
 }
 
 .woocommerce-checkout input:focus,
-.woocommerce-checkout select:focus {
-    border-color: #173B2F;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(23, 59, 47, 0.1);
+.woocommerce-checkout select:focus,
+.wc-block-components-text-input input:focus,
+.wc-blocks-components-select__select:focus,
+.wc-block-components-textarea:focus {
+    border-color: #173B2F !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(23, 59, 47, 0.1) !important;
 }
 
 .woocommerce-checkout .form-row {
@@ -6323,6 +6338,7 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     display: block;
 }
 
+.wc-block-components-checkout-place-order-button,
 .woocommerce-checkout #place_order {
     background-color: #173B2F !important;
     color: #FFFFFF !important;
@@ -6336,8 +6352,14 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     transition: background-color 0.2s ease !important;
 }
 
+.wc-block-components-checkout-place-order-button:hover,
 .woocommerce-checkout #place_order:hover {
     background-color: #315C45 !important;
+}
+
+.wc-block-components-radio-control__input:checked {
+    background-color: #173B2F !important;
+    border-color: #173B2F !important;
 }
 
 /* Mobile Responsive Breakpoints for Phase 7 */

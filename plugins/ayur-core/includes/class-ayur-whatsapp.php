@@ -39,8 +39,10 @@ class Ayur_WhatsApp {
         $enabled = get_option('ayur_whatsapp_enabled', 'yes');
         if ($enabled !== 'yes') return;
 
-        // Phase 7 Section 31: Suppress floating WhatsApp button on checkout to prevent covering purchase CTAs
-        if (function_exists('is_checkout') && is_checkout()) return;
+        // Suppress floating WhatsApp button on checkout to prevent covering purchase CTAs
+        if ((function_exists('is_checkout') && is_checkout()) || is_page('checkout') || (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/checkout') !== false)) {
+            return;
+        }
 
         $phone = get_option('ayur_whatsapp_phone', '918888686858');
         $raw_phone = preg_replace('/[^0-9]/', '', $phone);

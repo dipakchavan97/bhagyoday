@@ -70,5 +70,71 @@ add_action('init', function() {
                 wp_send_json_success(array('deleted' => $order_id));
             }
         }
+
+        // 3. Clear WC Cart
+        if ($action === 'empty_cart' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            if (function_exists('WC') && WC()->cart) {
+                WC()->cart->empty_cart();
+                wp_send_json_success(array('cleared' => true));
+            } else {
+                wp_send_json_error(array('message' => 'WC Cart unavailable'));
+            }
+        }
+
+        // 4. Diagnose Checkout, Gateways & Shipping
+        if ($action === 'diagnose_checkout' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+
+            $prod = wc_get_product(30);
+            $zones_data = array();
+            if (class_exists('WC_Shipping_Zones')) {
+                foreach (WC_Shipping_Zones::get_zones() as $z) {
+                    $methods = array();
+                    foreach ($z['shipping_methods'] as $m) {
+                        $methods[] = array(
+                            'id' => $m->id,
+                            'instance_id' => $m->instance_id,
+                            'title' => $m->title,
+                            'enabled' => $m->enabled,
+                            'settings' => $m->instance_settings
+                        );
+                    }
+                    $zones_data[] = array(
+                        'name' => $z['zone_name'],
+                        'methods' => $methods
+                    );
+                }
+            }
+
+            $gateways_data = array();
+            if (WC()->payment_gateways()) {
+                foreach (WC()->payment_gateways()->payment_gateways() as $id => $gateway) {
+                    $gateways_data[$id] = array(
+                        'id' => $id,
+                        'title' => $gateway->title,
+                        'enabled' => $gateway->enabled,
+                        'is_available' => $gateway->is_available(),
+                        'settings' => isset($gateway->settings) ? $gateway->settings : array()
+                    );
+                }
+            }
+
+            $checkout_page = get_post(wc_get_page_id('checkout'));
+            $cart_page = get_post(wc_get_page_id('cart'));
+
+            wp_send_json_success(array(
+                'setup_debug' => $setup_debug,
+                'shipping_enabled' => wc_shipping_enabled(),
+                'product_30' => array(
+                    'needs_shipping' => $prod ? $prod->needs_shipping() : false,
+                    'is_virtual' => $prod ? $prod->is_virtual() : false,
+                    'price' => $prod ? $prod->get_price() : 0,
+                    'regular_price' => $prod ? $prod->get_regular_price() : 0,
+                ),
+                'shipping_zones' => $zones_data,
+                'gateways' => $gateways_data,
+                'checkout_page_content' => $checkout_page ? $checkout_page->post_content : '',
+                'cart_page_content' => $cart_page ? $cart_page->post_content : '',
+            ));
+        }
     }
 });

@@ -102,7 +102,7 @@ if (!defined('ABSPATH')) {
 // On single product pages, sticky purchase bar is active. On checkout, user is completing order.
 // Exclude bottom nav on single-product and checkout pages to ensure clean, distraction-free UX.
 $is_single_prod = function_exists('is_product') && is_product();
-$is_checkout = function_exists('is_checkout') && is_checkout();
+$is_checkout = (function_exists('is_checkout') && is_checkout()) || (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/checkout') !== false);
 if (!$is_single_prod && !$is_checkout) :
 ?>
 <!-- Mobile Native App Bottom Navigation Bar (Phase 10: Home, Shop, Search, Account, Cart) -->

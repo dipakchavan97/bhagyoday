@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '2.7.4');
+define('AYUR_THEME_VERSION', '2.7.5');
 
 /**
  * Theme Setup
@@ -1361,4 +1361,22 @@ function ayur_ajax_search_products() {
 }
 add_action('wp_ajax_ayur_search_products', 'ayur_ajax_search_products');
 add_action('wp_ajax_nopriv_ayur_search_products', 'ayur_ajax_search_products');
+
+/**
+ * Ensure body classes for Checkout and Cart
+ */
+function ayur_theme_body_classes($classes) {
+    if (is_checkout() || is_page('checkout') || (function_exists('is_checkout_pay_page') && is_checkout_pay_page())) {
+        if (!in_array('woocommerce-checkout', $classes)) {
+            $classes[] = 'woocommerce-checkout';
+        }
+    }
+    if (is_cart() || is_page('cart')) {
+        if (!in_array('woocommerce-cart', $classes)) {
+            $classes[] = 'woocommerce-cart';
+        }
+    }
+    return $classes;
+}
+add_filter('body_class', 'ayur_theme_body_classes', 99);
 
