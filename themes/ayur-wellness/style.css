@@ -4,7 +4,7 @@ Theme URI: https://lightgreen-heron-113083.hostingersite.com/
 Author: Antigravity Lead Architect
 Author URI: https://lightgreen-heron-113083.hostingersite.com/
 Description: Premium, authentic, trustworthy Ayurvedic & Herbal D2C eCommerce Theme for WooCommerce in India. Features editorial aesthetics, unified SVG vector icon system, slide-in cart drawer, and native-app mobile UX.
-Version: 2.7.2
+Version: 2.7.3
 License: GNU General Public License v2 or later
 Text Domain: ayur-wellness
 Tested up to: 7.1.2
@@ -2235,16 +2235,36 @@ p:last-child {
 
 @media (max-width: 768px) {
     .ayur-related-wrap {
-        padding-top: 28px;
-        padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 24px) !important;
+        border-top: 1px solid var(--color-border);
+        margin-top: 36px !important;
+        padding-top: 36px !important;
+        padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 96px + env(safe-area-inset-bottom, 0px)) !important;
+        scroll-margin-top: 76px !important;
+        scroll-margin-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 96px + env(safe-area-inset-bottom, 0px)) !important;
     }
 
     .ayur-related-header {
-        margin-bottom: 16px;
+        text-align: center;
+        margin-bottom: 20px !important;
+        scroll-margin-top: 76px !important;
+    }
+
+    .ayur-related-header .ayur-section-eyebrow {
+        display: block !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.12em !important;
+        color: var(--color-herbal) !important;
+        margin-bottom: 6px !important;
+        text-transform: uppercase !important;
     }
 
     .ayur-related-header .ayur-section-title {
-        font-size: 1.6rem;
+        display: block !important;
+        font-size: 1.55rem !important;
+        line-height: 1.25 !important;
+        color: var(--color-forest) !important;
+        margin: 0 !important;
     }
 
     .ayur-related-grid {
@@ -4393,7 +4413,7 @@ select:focus {
 
     .ayur-product-details-wrap {
         padding-top: 24px;
-        margin-bottom: 32px;
+        margin-bottom: 0 !important;
     }
 
     .ayur-details-grid {
@@ -4643,15 +4663,16 @@ select:focus {
         padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 20px) !important;
     }
 
-    /* Scroll padding and scroll margin to prevent sticky bar overlaying content on scroll */
+    /* Scroll padding and scroll margin to prevent sticky bar and WhatsApp overlaying content on scroll */
     html {
-        scroll-padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 24px);
+        scroll-padding-top: 76px;
+        scroll-padding-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 96px + env(safe-area-inset-bottom, 0px));
     }
 
     .ayur-product-accordion,
     .ayur-related-wrap,
     .ayur-related-wrap .ayur-product-card {
-        scroll-margin-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 24px);
+        scroll-margin-bottom: calc(var(--mobile-purchase-bar-height, 76px) + 96px + env(safe-area-inset-bottom, 0px));
     }
 
     .ayur-story-block {
@@ -4673,25 +4694,29 @@ select:focus {
         width: min(92vw, 400px);
     }
 
-    /* Mobile WhatsApp Floating Widget Positioning (Prompt 14) */
+    /* Mobile WhatsApp Floating Widget Positioning */
     .ayur-wa-float-container {
-        bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+        bottom: calc(76px + 16px + env(safe-area-inset-bottom, 0px)) !important;
         right: 16px !important;
         z-index: 990 !important;
     }
 
     body.single-product .ayur-wa-float-container {
-        bottom: calc(var(--mobile-purchase-bar-height, 76px) + 12px) !important;
+        bottom: calc(var(--mobile-purchase-bar-height, 76px) + 16px + env(safe-area-inset-bottom, 0px)) !important;
+        right: 16px !important;
+        z-index: 990 !important;
     }
 
     .ayur-wa-btn {
-        width: 48px !important;
-        height: 48px !important;
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 52px !important;
+        min-height: 52px !important;
     }
 
     .ayur-wa-btn svg {
-        width: 24px !important;
-        height: 24px !important;
+        width: 26px !important;
+        height: 26px !important;
     }
 
     .ayur-wa-tooltip {
