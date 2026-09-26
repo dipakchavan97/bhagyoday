@@ -9,10 +9,8 @@ https.get('https://lightgreen-heron-113083.hostingersite.com/wp-json/wc/store/v1
             console.log(JSON.stringify(products.map(p => ({
                 id: p.id,
                 name: p.name,
-                price: p.prices.price,
-                regular_price: p.prices.regular_price,
-                categories: p.categories.map(c => c.name),
-                short_description: p.short_description ? p.short_description.replace(/<[^>]+>/g, '').trim() : ''
+                permalink: p.permalink,
+                categories: p.categories.map(c => c.name)
             })), null, 2));
         } catch (e) {
             console.error('Parse error:', e.message, data.substring(0, 300));

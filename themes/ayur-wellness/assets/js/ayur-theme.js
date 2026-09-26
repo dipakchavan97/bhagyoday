@@ -107,14 +107,28 @@
             }
         });
 
-        // Quick add feedback & tracking
-        $(document).on('click', '.ajax_add_to_cart', function() {
+        // Quick add feedback & tracking (Phase 7 Section 10: State transition, duplicate click prevention)
+        $(document).on('click', '.ajax_add_to_cart', function(e) {
             var $btn = $(this);
+            if ($btn.hasClass('is-adding')) {
+                e.preventDefault();
+                return false;
+            }
+            if ($btn.hasClass('is-added')) {
+                e.preventDefault();
+                openCart();
+                return false;
+            }
+
             $btn.addClass('is-adding');
+            var $textSpan = $btn.find('span:not(.ayur-icon)');
+            if ($textSpan.length && !$btn.data('orig-text')) {
+                $btn.data('orig-text', $textSpan.text());
+            }
 
             var prodId = $btn.data('product_id') || $btn.attr('data-product_id');
             var prodSku = $btn.data('product_sku') || prodId;
-            var prodName = $btn.closest('.ayur-product-card, .ayur-hero-sales-module, .ayur-bundle-card, .ayur-drawer-rec-card').find('.ayur-product-title, .ayur-hero-sales-title, .ayur-bundle-title, .ayur-drawer-rec-name').first().text().trim() || 'Ayurvedic Formulation';
+            var prodName = $btn.closest('.ayur-product-card, .ayur-hero-spotlight-card, .ayur-featured-block, .ayur-bundle-card, .ayur-drawer-rec-card, .ayur-drawer-cross-item').find('.ayur-product-title, .ayur-hero-spotlight-title, .ayur-featured-title, .ayur-bundle-title, .ayur-drawer-rec-name, .ayur-drawer-cross-name').first().text().trim() || 'Ayurvedic Formulation';
             var eventId = 'atc_' + prodId + '_' + Date.now();
 
             if (window.dataLayer) {
@@ -173,12 +187,39 @@
             }
         });
 
-        // Auto open cart drawer when a product is added via AJAX
+        // Auto open cart drawer when a product is added via AJAX + Button State Updates
         $(document.body).on('added_to_cart', function(event, fragments, cart_hash) {
-            $('.ajax_add_to_cart.is-adding').removeClass('is-adding').addClass('is-added');
+            $('.ajax_add_to_cart.is-adding').each(function() {
+                var $btn = $(this);
+                $btn.removeClass('is-adding').addClass('is-added');
+                var $textSpan = $btn.find('span:not(.ayur-icon)');
+                if ($textSpan.length) {
+                    $textSpan.text('✓ ADDED');
+                }
+            });
+
             setTimeout(function() {
-                $('.ajax_add_to_cart.is-added').removeClass('is-added');
-            }, 2500);
+                $('.ajax_add_to_cart.is-added').each(function() {
+                    var $btn = $(this);
+                    var $textSpan = $btn.find('span:not(.ayur-icon)');
+                    if ($textSpan.length) {
+                        $textSpan.text('VIEW CART →');
+                    }
+                });
+            }, 1200);
+
+            setTimeout(function() {
+                $('.ajax_add_to_cart.is-added').each(function() {
+                    var $btn = $(this);
+                    var origText = $btn.data('orig-text');
+                    var $textSpan = $btn.find('span:not(.ayur-icon)');
+                    if ($textSpan.length && origText) {
+                        $textSpan.text(origText);
+                    }
+                    $btn.removeClass('is-added');
+                });
+            }, 4500);
+
             openCart();
             refreshCartDrawer();
         });
@@ -280,7 +321,7 @@
     }
 
     /**
-     * Search Overlay (Slide-Down / Fade)
+     * Search Overlay with Fast Live Search (Phase 7 Section 32)
      */
     function initSearchOverlay() {
         var $searchModal = $('#ayurSearchModal');
@@ -314,6 +355,70 @@
             if (e.key === 'Escape' && $searchModal.hasClass('is-open')) {
                 closeSearch();
             }
+        });
+
+        // Live AJAX Instant Search Suggestions
+        var searchTimer = null;
+        $('#ayurSearchInput').on('input', function() {
+            var term = $(this).val().trim();
+            clearTimeout(searchTimer);
+            var $results = $('#ayurSearchLiveResults');
+            var $pills = $('#ayurSearchQuickLinks');
+
+            if (term.length < 2) {
+                $results.hide().empty();
+                $pills.show();
+                return;
+            }
+
+            searchTimer = setTimeout(function() {
+                $results.html('<div class="ayur-search-loading"><span class="ayur-search-spinner"></span> Searching formulations...</div>').show();
+                $pills.hide();
+
+                $.ajax({
+                    url: ayurThemeParams.ajax_url,
+                    type: 'POST',
+                    data: {
+                        action: 'ayur_search_products',
+                        term: term
+                    },
+                    success: function(res) {
+                        if (res.success && res.data && res.data.results) {
+                            var items = res.data.results;
+                            if (items.length === 0) {
+                                $results.html('<div class="ayur-search-no-results">No formulations found for "<strong>' + $('<div>').text(term).html() + '</strong>". Try searching for Shilajit, Arjuna, or Joint.</div>');
+                            } else {
+                                var html = '<div class="ayur-search-results-grid">';
+                                items.forEach(function(item) {
+                                    html += '<a href="' + item.url + '" class="ayur-search-result-item">';
+                                    if (item.thumb) {
+                                        html += '<div class="ayur-search-result-thumb"><img src="' + item.thumb + '" alt="' + item.name + '" /></div>';
+                                    } else {
+                                        html += '<div class="ayur-search-result-thumb ayur-thumb-fallback"></div>';
+                                    }
+                                    html += '<div class="ayur-search-result-info">';
+                                    html += '<h4 class="ayur-search-result-title">' + item.name + '</h4>';
+                                    if (item.net_qty) {
+                                        html += '<span class="ayur-search-result-qty">' + item.net_qty + '</span>';
+                                    }
+                                    html += '<div class="ayur-search-result-pricing"><span class="ayur-search-result-price">' + item.price + '</span>';
+                                    if (item.mrp) {
+                                        html += '<span class="ayur-search-result-mrp">' + item.mrp + '</span>';
+                                    }
+                                    html += '</div></div>';
+                                    html += '<span class="ayur-search-result-arrow">→</span>';
+                                    html += '</a>';
+                                });
+                                html += '</div>';
+                                $results.html(html);
+                            }
+                        }
+                    },
+                    error: function() {
+                        $results.html('<div class="ayur-search-no-results">Unable to load search results. Please press enter to search catalog.</div>');
+                    }
+                });
+            }, 220);
         });
     }
 

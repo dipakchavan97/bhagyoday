@@ -232,7 +232,10 @@
                     <?php echo ayur_svg_icon('x', '', 18, 1.75); ?>
                 </button>
             </div>
-            <div class="ayur-search-quick-links">
+            <!-- Live Search Suggestions Container (Phase 7 Section 32) -->
+            <div class="ayur-search-live-results" id="ayurSearchLiveResults" style="display:none;" aria-live="polite"></div>
+
+            <div class="ayur-search-quick-links" id="ayurSearchQuickLinks">
                 <span class="ayur-search-quick-title"><?php _e('Popular Formulations:', 'ayur-wellness'); ?></span>
                 <div class="ayur-search-pills">
                     <a href="<?php echo esc_url(ayur_get_cat_url('mens-wellness')); ?>"><?php _e("Men's Vitality", 'ayur-wellness'); ?></a>

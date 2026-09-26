@@ -39,6 +39,9 @@ class Ayur_WhatsApp {
         $enabled = get_option('ayur_whatsapp_enabled', 'yes');
         if ($enabled !== 'yes') return;
 
+        // Phase 7 Section 31: Suppress floating WhatsApp button on checkout to prevent covering purchase CTAs
+        if (function_exists('is_checkout') && is_checkout()) return;
+
         $phone = get_option('ayur_whatsapp_phone', '918888686858');
         $raw_phone = preg_replace('/[^0-9]/', '', $phone);
         $message = get_option('ayur_whatsapp_message', 'Namaste Bhagyoday Ayurveda! I would like some guidance on choosing the right Ayurvedic wellness formulation.');

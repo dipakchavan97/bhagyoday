@@ -5577,6 +5577,713 @@ select:focus {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px 14px;
     }
+/* ==========================================================================
+   Phase 7: Full Store Conversion System & Polish
+   ========================================================================== */
+
+/* 1. Hero Spotlight Card (Phase 7 Section 3) */
+.ayur-hero-spotlight-card {
+    background: #FFFFFF;
+    border: 1px solid #E9DDC8;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(23, 59, 47, 0.05);
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ayur-hero-spotlight-badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.ayur-hero-spotlight-img-wrap {
+    width: 100%;
+    background: #FAF7F0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+.ayur-hero-spotlight-img-wrap img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.ayur-hero-spotlight-img-wrap a:hover img {
+    transform: scale(1.03);
+}
+
+.ayur-hero-spotlight-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #173B2F;
+    line-height: 1.3;
+    margin: 0 0 6px 0;
+}
+
+.ayur-hero-spotlight-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ayur-hero-spotlight-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.ayur-hero-spotlight-cta .ayur-hero-link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+    background: #173B2F;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.ayur-hero-spotlight-cta .ayur-hero-link-btn:hover {
+    background: #315C45;
+}
+
+/* 2. Featured Formulation Block (Phase 7 Section 5) */
+.ayur-featured-formulation-section {
+    padding: 40px 0;
+    background: #FAF7F0;
+    border-bottom: 1px solid #E9DDC8;
+}
+
+.ayur-featured-block {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #E9DDC8;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(23, 59, 47, 0.04);
+}
+
+.ayur-featured-img-col {
+    background: #FAF7F0;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+}
+
+.ayur-featured-img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.ayur-featured-img-col a:hover .ayur-featured-img {
+    transform: scale(1.03);
+}
+
+.ayur-featured-content-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.ayur-featured-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #315C45;
+    margin-bottom: 4px;
+}
+
+.ayur-featured-category {
+    font-size: 12px;
+    font-weight: 600;
+    color: #7C8B7D;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.ayur-featured-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: #173B2F;
+    line-height: 1.25;
+    margin: 0 0 10px 0;
+}
+
+.ayur-featured-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ayur-featured-pack-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #5A665A;
+    margin-bottom: 16px;
+}
+
+.ayur-featured-pricing-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.ayur-featured-selling-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #173B2F;
+}
+
+.ayur-featured-mrp {
+    font-size: 1.1rem;
+    color: #7C8B7D;
+    text-decoration: line-through;
+}
+
+.ayur-featured-save-badge {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #315C45;
+    background: #FAF7F0;
+    border: 1px solid #E9DDC8;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.ayur-featured-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.ayur-featured-actions .ayur-btn-primary,
+.ayur-featured-actions .ayur-btn-secondary {
+    min-height: 48px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 3. Formulation Story Philosophy Columns (Phase 7 Section 17) */
+.ayur-story-section {
+    background: #FFFFFF;
+}
+
+.ayur-story-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-bottom: 32px;
+}
+
+.ayur-story-col {
+    background: #FAF7F0;
+    border: 1px solid #E9DDC8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ayur-story-number {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #B79552;
+    margin-bottom: 12px;
+}
+
+.ayur-story-heading {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #173B2F;
+    margin: 0 0 10px 0;
+}
+
+.ayur-story-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #5A665A;
+    margin: 0;
+}
+
+.ayur-story-action {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* 4. How to Choose & Guided Shopping (Phase 7 Section 19) */
+.ayur-choose-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.ayur-choose-item {
+    background: #FFFFFF;
+    border: 1px solid #E9DDC8;
+    border-radius: 10px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.ayur-choose-item:hover {
+    border-color: #315C45;
+    transform: translateY(-2px);
+}
+
+.ayur-choose-name {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #173B2F;
+}
+
+.ayur-choose-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #315C45;
+}
+
+/* 5. Product Card Touch Targets & Quick Add States (Phase 7 Section 9-11) */
+.ayur-card-btn {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.ayur-card-btn.is-adding,
+.ayur-btn-quick-add.is-adding {
+    pointer-events: none !important;
+    opacity: 0.75 !important;
+}
+
+.ayur-card-btn.is-added,
+.ayur-btn-quick-add.is-added {
+    background-color: #173B2F !important;
+    color: #FFFFFF !important;
+    border-color: #173B2F !important;
+}
+
+/* 6. Cart Drawer Cross-Sell & Polish (Phase 7 Section 22-26) */
+.ayur-drawer-cross-sell {
+    padding: 14px 16px;
+    background: #FAF7F0;
+    border-top: 1px solid #E9DDC8;
+    border-bottom: 1px solid #E9DDC8;
+}
+
+.ayur-drawer-cross-title {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #173B2F;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.ayur-drawer-cross-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ayur-drawer-cross-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFFFF;
+    border: 1px solid #E9DDC8;
+    border-radius: 8px;
+    padding: 8px 10px;
+}
+
+.ayur-drawer-cross-thumb {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: #FAF7F0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ayur-drawer-cross-thumb img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+.ayur-drawer-cross-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ayur-drawer-cross-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #173B2F;
+    margin: 0 0 2px 0;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ayur-drawer-cross-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ayur-drawer-cross-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.ayur-drawer-cross-pricing .cross-price {
+    font-weight: 700;
+    color: #173B2F;
+}
+
+.ayur-drawer-cross-pricing .cross-mrp {
+    font-size: 11px;
+    color: #7C8B7D;
+    text-decoration: line-through;
+}
+
+.ayur-drawer-cross-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 12px;
+    background: #173B2F;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.ayur-drawer-cross-add-btn:hover {
+    background: #315C45;
+}
+
+/* 7. Live Search Results in Search Modal (Phase 7 Section 32) */
+.ayur-search-live-results {
+    margin-top: 16px;
+    max-height: 360px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ayur-search-loading,
+.ayur-search-no-results {
+    padding: 16px;
+    font-size: 14px;
+    color: #5A665A;
+    background: #FAF7F0;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.ayur-search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.ayur-search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #FFFFFF;
+    border: 1px solid #E9DDC8;
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: #222522;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.ayur-search-result-item:hover {
+    border-color: #315C45;
+    background: #FAF7F0;
+}
+
+.ayur-search-result-thumb {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    background: #FAF7F0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ayur-search-result-thumb img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+.ayur-search-result-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ayur-search-result-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #173B2F;
+    margin: 0 0 2px 0;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ayur-search-result-qty {
+    font-size: 11px;
+    color: #7C8B7D;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ayur-search-result-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.ayur-search-result-price {
+    font-weight: 700;
+    color: #173B2F;
+}
+
+.ayur-search-result-mrp {
+    font-size: 11px;
+    color: #7C8B7D;
+    text-decoration: line-through;
+}
+
+.ayur-search-result-arrow {
+    color: #315C45;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* 8. Checkout Polish & WhatsApp Suppression (Phase 7 Section 27-29, 31) */
+body.woocommerce-checkout .ayur-wa-float-container {
+    display: none !important;
+}
+
+body.woocommerce-checkout .ayur-mobile-bottom-nav {
+    display: none !important;
+}
+
+/* WhatsApp float button subtle dominance */
+.ayur-wa-float-container {
+    position: fixed;
+    bottom: 84px;
+    right: 20px;
+    z-index: 998;
+}
+
+.ayur-wa-btn {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    background-color: #25D366 !important;
+    color: #FFFFFF !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.ayur-wa-btn:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45) !important;
+}
+
+.ayur-wa-pulse {
+    display: none !important;
+}
+
+/* Ensure cart drawer backdrop conceals WhatsApp button if open */
+body.ayur-scroll-locked .ayur-wa-float-container {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Checkout Form Cleanups */
+.woocommerce-checkout #customer_details {
+    margin-bottom: 24px;
+}
+
+.woocommerce-checkout .woocommerce-billing-fields h3,
+.woocommerce-checkout .woocommerce-shipping-fields h3,
+.woocommerce-checkout #order_review_heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #173B2F;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #E9DDC8;
+}
+
+.woocommerce-checkout input[type="text"],
+.woocommerce-checkout input[type="tel"],
+.woocommerce-checkout input[type="email"],
+.woocommerce-checkout select {
+    min-height: 48px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #D5C8B4;
+    padding: 10px 14px;
+    background-color: #FFFFFF;
+    color: #222522;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.woocommerce-checkout input:focus,
+.woocommerce-checkout select:focus {
+    border-color: #173B2F;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(23, 59, 47, 0.1);
+}
+
+.woocommerce-checkout .form-row {
+    margin-bottom: 16px;
+}
+
+.woocommerce-checkout .form-row label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #173B2F;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.woocommerce-checkout #place_order {
+    background-color: #173B2F !important;
+    color: #FFFFFF !important;
+    min-height: 52px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.woocommerce-checkout #place_order:hover {
+    background-color: #315C45 !important;
+}
+
+/* Mobile Responsive Breakpoints for Phase 7 */
+@media (max-width: 768px) {
+    .ayur-featured-block {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .ayur-featured-img-col {
+        max-height: 280px;
+        padding: 12px;
+    }
+
+    .ayur-featured-title {
+        font-size: 1.45rem;
+    }
+
+    .ayur-featured-selling-price {
+        font-size: 1.5rem;
+    }
+
+    .ayur-choose-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .ayur-search-results-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ayur-story-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
 }
 
 /* Reduced Motion Support */
@@ -5588,3 +6295,4 @@ select:focus {
         scroll-behavior: auto !important;
     }
 }
+

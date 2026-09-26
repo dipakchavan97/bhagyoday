@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '2.6.0');
+define('AYUR_THEME_VERSION', '2.7.0');
 
 /**
  * Theme Setup
@@ -367,6 +367,65 @@ function ayur_get_cart_drawer_content_html() {
                 }
             }
             ?>
+            <?php
+            // Phase 7 Section 24: Cart Cross-Sell (1-2 non-duplicate relevant recommendations)
+            $in_cart_ids = array();
+            foreach ($cart->get_cart() as $ci) {
+                if (!empty($ci['product_id'])) {
+                    $in_cart_ids[] = (int) $ci['product_id'];
+                }
+            }
+            $cross_query = new WP_Query(array(
+                'post_type'      => 'product',
+                'post_status'    => 'publish',
+                'post__not_in'   => $in_cart_ids,
+                'posts_per_page' => 2,
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+            ));
+            if ($cross_query->have_posts()) :
+            ?>
+                <div class="ayur-drawer-cross-sell">
+                    <span class="ayur-drawer-cross-title"><?php _e('COMPLETE YOUR WELLNESS ROUTINE', 'ayur-wellness'); ?></span>
+                    <div class="ayur-drawer-cross-grid">
+                        <?php while ($cross_query->have_posts()) : $cross_query->the_post();
+                            $c_prod = wc_get_product(get_the_ID());
+                            $c_id = $c_prod->get_id();
+                            $c_price = (float) $c_prod->get_price();
+                            $c_mrp = (float) get_post_meta($c_id, '_ayur_mrp', true);
+                        ?>
+                            <div class="ayur-drawer-cross-item">
+                                <div class="ayur-drawer-cross-thumb">
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?php if (has_post_thumbnail()) : ?>
+                                            <?php the_post_thumbnail(array(56, 56), array('alt' => get_the_title())); ?>
+                                        <?php else : ?>
+                                            <?php echo ayur_svg_icon('leaf', '', 20); ?>
+                                        <?php endif; ?>
+                                    </a>
+                                </div>
+                                <div class="ayur-drawer-cross-info">
+                                    <h5 class="ayur-drawer-cross-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
+                                    <div class="ayur-drawer-cross-pricing">
+                                        <span class="cross-price">₹<?php echo number_format($c_price); ?></span>
+                                        <?php if ($c_mrp > $c_price) : ?>
+                                            <span class="cross-mrp">MRP ₹<?php echo number_format($c_mrp); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <a href="<?php echo esc_url($c_prod->add_to_cart_url()); ?>"
+                                   class="ayur-drawer-cross-add-btn ajax_add_to_cart add_to_cart_button"
+                                   data-product_id="<?php echo esc_attr($c_id); ?>"
+                                   data-quantity="1"
+                                   aria-label="<?php echo esc_attr($c_prod->add_to_cart_description()); ?>">
+                                    <?php echo ayur_svg_icon('plus', '', 12); ?>
+                                    <span><?php _e('Add', 'ayur-wellness'); ?></span>
+                                </a>
+                            </div>
+                        <?php endwhile; wp_reset_postdata(); ?>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="ayur-drawer-footer">
@@ -1211,3 +1270,95 @@ add_filter('the_excerpt', 'ayur_sanitize_unverified_claims', 99);
 add_filter('the_content', 'ayur_sanitize_unverified_claims', 99);
 add_filter('woocommerce_short_description', 'ayur_sanitize_unverified_claims', 99);
 add_filter('the_title', 'ayur_sanitize_unverified_claims', 99);
+
+/**
+ * Phase 7 Section 32: Native Fast Live Product Search
+ */
+function ayur_ajax_search_products() {
+    $term = isset($_POST['term']) ? sanitize_text_field($_POST['term']) : '';
+    if (strlen($term) < 2) {
+        wp_send_json_success(array('results' => array()));
+    }
+
+    $args = array(
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => 6,
+        's'              => $term,
+    );
+
+    $query = new WP_Query($args);
+    $results = array();
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $prod = wc_get_product(get_the_ID());
+            if (!$prod || !$prod->is_visible()) continue;
+
+            $p_id = $prod->get_id();
+            $thumb = has_post_thumbnail($p_id) ? get_the_post_thumbnail_url($p_id, 'thumbnail') : '';
+            $net_qty = get_post_meta($p_id, '_ayur_net_quantity', true);
+            $price = (float) $prod->get_price();
+            $mrp = (float) get_post_meta($p_id, '_ayur_mrp', true);
+
+            $results[] = array(
+                'id'        => $p_id,
+                'name'      => html_entity_decode(get_the_title(), ENT_QUOTES, 'UTF-8'),
+                'url'       => get_permalink($p_id),
+                'thumb'     => $thumb,
+                'price'     => '₹' . number_format($price),
+                'mrp'       => ($mrp > $price) ? 'MRP ₹' . number_format($mrp) : '',
+                'net_qty'   => $net_qty ? esc_html($net_qty) : '',
+            );
+        }
+        wp_reset_postdata();
+    }
+
+    // Fallback: If no direct text match on title, search in product categories
+    if (empty($results)) {
+        $tax_args = array(
+            'post_type'      => 'product',
+            'post_status'    => 'publish',
+            'posts_per_page' => 6,
+            'tax_query'      => array(
+                array(
+                    'taxonomy' => 'product_cat',
+                    'field'    => 'name',
+                    'terms'    => $term,
+                    'operator' => 'LIKE',
+                ),
+            ),
+        );
+        $tax_query = new WP_Query($tax_args);
+        if ($tax_query->have_posts()) {
+            while ($tax_query->have_posts()) {
+                $tax_query->the_post();
+                $prod = wc_get_product(get_the_ID());
+                if (!$prod || !$prod->is_visible()) continue;
+
+                $p_id = $prod->get_id();
+                $thumb = has_post_thumbnail($p_id) ? get_the_post_thumbnail_url($p_id, 'thumbnail') : '';
+                $net_qty = get_post_meta($p_id, '_ayur_net_quantity', true);
+                $price = (float) $prod->get_price();
+                $mrp = (float) get_post_meta($p_id, '_ayur_mrp', true);
+
+                $results[] = array(
+                    'id'        => $p_id,
+                    'name'      => html_entity_decode(get_the_title(), ENT_QUOTES, 'UTF-8'),
+                    'url'       => get_permalink($p_id),
+                    'thumb'     => $thumb,
+                    'price'     => '₹' . number_format($price),
+                    'mrp'       => ($mrp > $price) ? 'MRP ₹' . number_format($mrp) : '',
+                    'net_qty'   => $net_qty ? esc_html($net_qty) : '',
+                );
+            }
+            wp_reset_postdata();
+        }
+    }
+
+    wp_send_json_success(array('results' => $results));
+}
+add_action('wp_ajax_ayur_search_products', 'ayur_ajax_search_products');
+add_action('wp_ajax_nopriv_ayur_search_products', 'ayur_ajax_search_products');
+

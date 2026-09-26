@@ -99,9 +99,11 @@ if (!defined('ABSPATH')) {
 </div>
 
 <?php
-// On single product pages, the sticky purchase bar is active. We only display bottom nav on non-single-product pages to prevent overlap.
+// On single product pages, sticky purchase bar is active. On checkout, user is completing order.
+// Exclude bottom nav on single-product and checkout pages to ensure clean, distraction-free UX.
 $is_single_prod = function_exists('is_product') && is_product();
-if (!$is_single_prod) :
+$is_checkout = function_exists('is_checkout') && is_checkout();
+if (!$is_single_prod && !$is_checkout) :
 ?>
 <!-- Mobile Native App Bottom Navigation Bar (Phase 10: Home, Shop, Search, Account, Cart) -->
 <nav class="ayur-mobile-bottom-nav" aria-label="<?php esc_attr_e('Mobile Navigation', 'ayur-wellness'); ?>">
