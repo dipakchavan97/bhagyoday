@@ -12,12 +12,39 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<!-- Subtle Announcement Bar -->
-<div class="ayur-announcement-bar">
-    <div class="ayur-container">
-        <p class="ayur-announcement-text">
-            <?php _e('Free Pan-India Delivery on orders above ₹999 &bull; Cash on Delivery Available', 'ayur-wellness'); ?>
-        </p>
+<!-- Subtle Announcement Bar / Auto-Scrolling Ticker -->
+<div class="ayur-announcement-bar notification-bar" role="region" aria-label="<?php esc_attr_e('Announcement', 'ayur-wellness'); ?>">
+    <div class="ayur-announcement-viewport notification-viewport">
+        <div class="ayur-announcement-track notification-track">
+            <div class="ayur-announcement-item notification-item">
+                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+            </div>
+            <div class="ayur-announcement-item notification-item" aria-hidden="true">
+                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
+                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
+            </div>
+        </div>
     </div>
 </div>
 

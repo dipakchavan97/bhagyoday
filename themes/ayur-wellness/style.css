@@ -317,16 +317,81 @@ p:last-child {
 }
 
 /* ==========================================================================
-   5. Subtle Announcement Bar & Header (Section 21)
+   5. Subtle Announcement Bar & Notification Ticker (Auto-Scrolling)
    ========================================================================== */
-.ayur-announcement-bar {
-    background-color: var(--color-forest);
-    color: var(--color-ivory);
+.ayur-announcement-bar,
+.notification-bar {
+    background-color: var(--color-forest, #173B2F);
+    color: var(--color-ivory, #FAF7F0);
     font-size: 12px;
     letter-spacing: 0.04em;
-    padding: 8px 0;
-    text-align: center;
+    padding: 7px 0;
+    line-height: 1.4;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    z-index: 1001;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.ayur-announcement-viewport,
+.notification-viewport {
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    position: relative;
+    contain: paint;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+}
+
+.ayur-announcement-track,
+.notification-track {
+    display: flex;
+    width: max-content;
+    white-space: nowrap;
+    will-change: transform;
+    animation: ayur-notification-ticker 24s linear infinite;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .ayur-announcement-track:hover,
+    .notification-track:hover {
+        animation-play-state: paused;
+    }
+}
+
+.ayur-announcement-item,
+.notification-item {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0 4px;
+}
+
+.ayur-announcement-segment {
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 500;
+}
+
+.ayur-ticker-sep {
+    display: inline-block;
+    padding: 0 16px;
+    opacity: 0.55;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+@keyframes ayur-notification-ticker {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
 }
 
 .ayur-announcement-text {
@@ -1473,6 +1538,113 @@ p:last-child {
     color: var(--color-white) !important;
 }
 
+/* ==========================================================================
+   Purchase CTA Micro-Animation (Add to Cart / Buy Now / Mobile Sticky)
+   ========================================================================== */
+
+/* Target buttons only - clipped bounding box for shine */
+.woocommerce button.button.alt.ayur-btn-add-cart,
+.woocommerce a.button.alt.ayur-btn-add-cart,
+.ayur-btn-add-cart,
+.ayur-btn-buy-now,
+.ayur-sticky-btn {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Diagonal translucent highlight pseudo-element */
+.woocommerce button.button.alt.ayur-btn-add-cart::after,
+.woocommerce a.button.alt.ayur-btn-add-cart::after,
+.ayur-btn-add-cart::after,
+.ayur-btn-buy-now::after,
+.ayur-sticky-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 0;
+    width: 60%;
+    height: 200%;
+    background: linear-gradient(
+        115deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.04) 35%,
+        rgba(255, 255, 255, 0.26) 50%,
+        rgba(255, 255, 255, 0.04) 65%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: translate3d(-180%, 0, 0) rotate(25deg);
+    pointer-events: none;
+    z-index: 2;
+    animation: ayur-cta-shine-sweep 3.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+    will-change: transform, opacity;
+}
+
+/* Sheen variant for lighter button surfaces */
+.ayur-sticky-add-cart::after {
+    background: linear-gradient(
+        115deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.2) 35%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0.2) 65%,
+        rgba(255, 255, 255, 0) 100%
+    );
+}
+
+/* Subtle offset so side-by-side buttons don't sweep identically */
+.ayur-btn-buy-now::after,
+.ayur-sticky-buy-now::after {
+    animation-delay: 0.75s;
+}
+
+/* Periodic shine animation:
+   0%–65%: resting / waiting
+   66%–92%: smooth diagonal sweep
+   93%–100%: brief resting pause before repeat
+*/
+@keyframes ayur-cta-shine-sweep {
+    0%, 65% {
+        transform: translate3d(-180%, 0, 0) rotate(25deg);
+        opacity: 0;
+    }
+    66% {
+        opacity: 1;
+    }
+    92% {
+        transform: translate3d(320%, 0, 0) rotate(25deg);
+        opacity: 1;
+    }
+    93%, 100% {
+        transform: translate3d(320%, 0, 0) rotate(25deg);
+        opacity: 0;
+    }
+}
+
+/* Desktop subtle hover interaction (180–220ms transition, translateY(-1px), enhanced shadow) */
+@media (hover: hover) and (pointer: fine) {
+    .woocommerce button.button.alt.ayur-btn-add-cart,
+    .woocommerce a.button.alt.ayur-btn-add-cart,
+    .ayur-btn-add-cart {
+        transition: transform 200ms ease, box-shadow 200ms ease, background-color var(--transition-fast, 0.2s ease) !important;
+    }
+
+    .ayur-btn-buy-now {
+        transition: transform 200ms ease, box-shadow 200ms ease, background-color var(--transition-fast, 0.2s ease) !important;
+    }
+
+    .woocommerce button.button.alt.ayur-btn-add-cart:hover,
+    .woocommerce a.button.alt.ayur-btn-add-cart:hover,
+    .ayur-btn-add-cart:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(23, 59, 47, 0.22);
+    }
+
+    .ayur-btn-buy-now:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(47, 93, 76, 0.25);
+    }
+}
+
 .ayur-cta-micro-trust {
     display: flex;
     align-items: center;
@@ -2477,6 +2649,7 @@ p:last-child {
     height: 100%;
     z-index: 2000;
     visibility: hidden;
+    overflow: hidden;
     transition: visibility var(--transition-base);
 }
 
@@ -3535,10 +3708,23 @@ select:focus {
     }
 
     /* Mobile Header (Section 21 & Prompt 3) */
-    .ayur-announcement-bar {
-        padding: 6px 12px;
+    .ayur-announcement-bar,
+    .notification-bar {
+        padding: 6px 0;
         font-size: 11px;
         letter-spacing: 0.03em;
+        line-height: 1.35;
+    }
+
+    .ayur-announcement-viewport,
+    .notification-viewport {
+        -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+    }
+
+    .ayur-ticker-sep {
+        padding: 0 12px;
+        font-size: 11px;
     }
 
     .ayur-announcement-text {
@@ -4081,6 +4267,15 @@ select:focus {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .ayur-breadcrumb-current {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
     }
 
     .ayur-product-layout {
@@ -4341,8 +4536,9 @@ select:focus {
     .ayur-cta-micro-trust {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 6px;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 4px 8px;
         margin-bottom: 16px;
         font-size: 11px;
         font-weight: 600;
@@ -6398,7 +6594,9 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     }
 }
 
-/* Reduced Motion Support */
+/* ==========================================================================
+   Reduced Motion Accessibility (Requirement 3)
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -6406,5 +6604,44 @@ body.ayur-scroll-locked .ayur-wa-float-container {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+
+    .ayur-announcement-track,
+    .notification-track {
+        animation: none !important;
+        transform: none !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+
+    .ayur-announcement-item[aria-hidden="true"],
+    .notification-item[aria-hidden="true"] {
+        display: none !important;
+    }
+
+    .ayur-announcement-viewport,
+    .notification-viewport {
+        mask-image: none !important;
+        -webkit-mask-image: none !important;
+        overflow: hidden;
+    }
+
+    .woocommerce button.button.alt.ayur-btn-add-cart::after,
+    .woocommerce a.button.alt.ayur-btn-add-cart::after,
+    .ayur-btn-add-cart::after,
+    .ayur-btn-buy-now::after,
+    .ayur-sticky-btn::after {
+        display: none !important;
+        animation: none !important;
+    }
+
+    .woocommerce button.button.alt.ayur-btn-add-cart,
+    .woocommerce a.button.alt.ayur-btn-add-cart,
+    .ayur-btn-add-cart,
+    .ayur-btn-buy-now,
+    .ayur-sticky-btn {
+        transition: none !important;
+        transform: none !important;
+    }
 }
+
 
