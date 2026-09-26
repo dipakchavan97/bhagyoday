@@ -27,6 +27,13 @@ while (have_posts()) :
     $diff          = ($mrp > $price) ? ($mrp - $price) : 0;
     $discount_pct  = ($mrp > 0 && $diff > 0) ? round(($diff / $mrp) * 100) : 0;
 
+    // Explicitly isolate the single product context for the sticky purchase bar
+    $sticky_product_id = $product_id;
+    $sticky_price      = $price;
+    $sticky_mrp        = $mrp;
+    $sticky_save_pct   = $discount_pct;
+    $sticky_quick_buy  = add_query_arg(array('ayur_quick_buy' => $product_id), home_url('/'));
+
     // Get Primary Category
     $categories = get_the_terms($product_id, 'product_cat');
     $cat_name = '';
@@ -441,6 +448,7 @@ while (have_posts()) :
                             wc_get_template_part('content', 'product');
                         }
                         wp_reset_postdata();
+                        $GLOBALS['product'] = wc_get_product($sticky_product_id);
                         ?>
                     </div>
                 </div>
@@ -454,7 +462,7 @@ while (have_posts()) :
                     <?php echo ayur_svg_icon('x', '', 18); ?>
                 </button>
                 <div class="ayur-lightbox-stage">
-                    <img id="ayurLightboxImg" src="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" />
+                    <img id="ayurLightboxImg" src="<?php echo esc_url(get_the_post_thumbnail_url($sticky_product_id, 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" />
                 </div>
                 <div class="ayur-lightbox-footer">
                     <span class="ayur-lightbox-title"><?php the_title(); ?></span>
@@ -468,24 +476,19 @@ while (have_posts()) :
     <div class="ayur-mobile-sticky-bar" id="ayurMobileStickyBar" role="region" aria-label="<?php esc_attr_e('Mobile Purchase Bar', 'ayur-wellness'); ?>">
         <div class="ayur-sticky-inner">
             <div class="sticky-purchase-price ayur-sticky-info">
-                <span class="ayur-sticky-price">₹<?php echo number_format($price); ?></span>
-                <?php if ($mrp > $price) : ?>
-                    <span class="ayur-sticky-mrp">MRP ₹<?php echo number_format($mrp); ?></span>
+                <span class="ayur-sticky-price">₹<?php echo number_format($sticky_price); ?></span>
+                <?php if ($sticky_mrp > $sticky_price) : ?>
+                    <span class="ayur-sticky-mrp">MRP ₹<?php echo number_format($sticky_mrp); ?></span>
                 <?php endif; ?>
-                <?php
-                if ($mrp > $price) :
-                    $save_pct = round((($mrp - $price) / $mrp) * 100);
-                    if ($save_pct >= 5) : ?>
-                        <span class="ayur-sticky-save"><?php echo sprintf(__('Save %d%%', 'ayur-wellness'), $save_pct); ?></span>
-                    <?php endif;
-                endif;
-                ?>
+                <?php if ($sticky_mrp > $sticky_price && $sticky_save_pct >= 5) : ?>
+                    <span class="ayur-sticky-save"><?php echo sprintf(__('Save %d%%', 'ayur-wellness'), $sticky_save_pct); ?></span>
+                <?php endif; ?>
             </div>
             <div class="ayur-sticky-actions">
-                <button type="button" class="ayur-sticky-btn ayur-sticky-add-cart" data-product-id="<?php echo esc_attr($product_id); ?>" aria-label="<?php esc_attr_e('Add to cart', 'ayur-wellness'); ?>">
+                <button type="button" class="ayur-sticky-btn ayur-sticky-add-cart" data-product-id="<?php echo esc_attr($sticky_product_id); ?>" aria-label="<?php esc_attr_e('Add to cart', 'ayur-wellness'); ?>">
                     <span><?php _e('ADD', 'ayur-wellness'); ?></span>
                 </button>
-                <a href="<?php echo esc_url(add_query_arg(array('ayur_quick_buy' => $product_id), home_url('/'))); ?>" class="ayur-sticky-btn ayur-sticky-buy-now" aria-label="<?php esc_attr_e('Buy now', 'ayur-wellness'); ?>">
+                <a href="<?php echo esc_url($sticky_quick_buy); ?>" class="ayur-sticky-btn ayur-sticky-buy-now" aria-label="<?php esc_attr_e('Buy now', 'ayur-wellness'); ?>">
                     <span><?php _e('BUY NOW', 'ayur-wellness'); ?></span>
                 </a>
             </div>
