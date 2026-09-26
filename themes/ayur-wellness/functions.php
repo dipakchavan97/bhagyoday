@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '2.5.0');
+define('AYUR_THEME_VERSION', '2.6.0');
 
 /**
  * Theme Setup
@@ -1181,18 +1181,31 @@ function ayur_get_smart_related_products($product_id, $limit = 4) {
 }
 
 /**
- * Phase 4 & 5 Quality & Claims Sanitizer
+ * Phase 4, 5 & 6 Quality & Claims Sanitizer
  * Ensures no unverified trademarks or medical claims slip through dynamic content.
  */
 function ayur_sanitize_unverified_claims($content) {
     if (!is_string($content) || empty($content)) {
         return $content;
     }
-    return str_ireplace(
+    // Replace unverified trademarks with authentic classical naming
+    $cleaned = str_ireplace(
         array('KSM-66®', 'KSM-66', 'KSM 66'),
         'Ashwagandha Root Extract (Withania somnifera)',
         $content
     );
+    // Clean potential accidental phrase doubling
+    $cleaned = str_replace(
+        'Ashwagandha Root Extract (Withania somnifera) Ashwagandha root extract',
+        'Ashwagandha Root Extract (Withania somnifera)',
+        $cleaned
+    );
+    $cleaned = str_replace(
+        'Ashwagandha Root Extract (Withania somnifera) ashwagandha root extract',
+        'Ashwagandha Root Extract (Withania somnifera)',
+        $cleaned
+    );
+    return $cleaned;
 }
 add_filter('the_excerpt', 'ayur_sanitize_unverified_claims', 99);
 add_filter('the_content', 'ayur_sanitize_unverified_claims', 99);

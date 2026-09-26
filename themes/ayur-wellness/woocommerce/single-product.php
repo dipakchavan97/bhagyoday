@@ -46,6 +46,7 @@ while (have_posts()) :
         array_unshift($gallery_ids, get_post_thumbnail_id($product_id));
     }
     $gallery_ids = array_unique(array_filter($gallery_ids));
+    $ext_data = ayur_get_product_extended_data($product_id);
     ?>
 
     <article id="product-<?php the_ID(); ?>" <?php wc_product_class('ayur-single-product-wrap', $product); ?>>
@@ -64,9 +65,9 @@ while (have_posts()) :
             </nav>
 
             <div class="ayur-product-layout">
-                <!-- 2. Product Gallery -->
+                <!-- 2. Product Gallery with Label Inspection Zoom -->
                 <div class="ayur-gallery-col">
-                    <div class="ayur-gallery-stage" id="ayurGalleryStage">
+                    <div class="ayur-gallery-stage" id="ayurGalleryStage" role="button" tabindex="0" aria-label="<?php esc_attr_e('Click to enlarge and inspect packaging label', 'ayur-wellness'); ?>">
                         <?php if (has_post_thumbnail()) : ?>
                             <?php the_post_thumbnail('large', array(
                                 'class'         => 'ayur-main-img',
@@ -74,6 +75,10 @@ while (have_posts()) :
                                 'fetchpriority' => 'high',
                                 'alt'           => esc_attr(get_the_title())
                             )); ?>
+                            <span class="ayur-gallery-zoom-badge">
+                                <?php echo ayur_svg_icon('search', '', 13); ?>
+                                <span><?php _e('Inspect Label', 'ayur-wellness'); ?></span>
+                            </span>
                         <?php else : ?>
                             <div class="ayur-gallery-placeholder">
                                 <?php echo ayur_svg_icon('leaf', '', 48); ?>
@@ -99,7 +104,7 @@ while (have_posts()) :
                     <?php endif; ?>
                 </div>
 
-                <!-- 3. Purchase Information Column (Conversion-First) -->
+                <!-- 3. Purchase Information Column (Phase 6 High-Conversion Architecture) -->
                 <div class="ayur-product-summary">
                     <?php if ($cat_name) : ?>
                         <span class="ayur-product-eyebrow"><?php echo esc_html(strtoupper(html_entity_decode($cat_name, ENT_QUOTES, 'UTF-8'))); ?></span>
@@ -107,52 +112,51 @@ while (have_posts()) :
 
                     <h1 class="ayur-single-title"><?php the_title(); ?></h1>
 
-                    <!-- Short Product Positioning Statement -->
-                    <div class="ayur-single-excerpt">
-                        <?php
-                        if (has_excerpt()) {
-                            $raw_excerpt = get_the_excerpt();
-                            $clean_excerpt = str_ireplace(
-                                ['KSM-66®', 'KSM-66', 'KSM 66'],
-                                'standardized Ashwagandha Root Extract (Withania somnifera)',
-                                $raw_excerpt
-                            );
-                            echo wp_kses_post(wpautop($clean_excerpt));
-                        } else {
-                            echo '<p>' . esc_html(wp_trim_words(get_the_content(), 28)) . '</p>';
-                        }
-                        ?>
+                    <!-- Short Concise Product Positioning (Factual & Compliant) -->
+                    <div class="ayur-single-positioning">
+                        <p><?php echo esc_html(!empty($ext_data['positioning']) ? $ext_data['positioning'] : wp_trim_words(get_the_content(), 25)); ?></p>
                     </div>
 
-                    <!-- Clean Price, MRP & Savings -->
+                    <!-- Clean Price, MRP & Savings Box -->
                     <div class="ayur-single-pricing-box">
                         <div class="ayur-price-row">
                             <span class="ayur-single-price">₹<?php echo number_format($price); ?></span>
                             <?php if ($mrp > $price) : ?>
                                 <span class="ayur-single-mrp">MRP ₹<?php echo number_format($mrp); ?></span>
-                                <span class="ayur-single-savings"><?php printf(__('Save ₹%s (%d%% OFF)', 'ayur-wellness'), number_format($diff), $discount_pct); ?></span>
+                                <span class="ayur-single-savings"><?php printf(__('SAVE ₹%s (%d%% OFF)', 'ayur-wellness'), number_format($diff), $discount_pct); ?></span>
                             <?php endif; ?>
                         </div>
-                        <span class="ayur-price-tax-note"><?php _e('Inclusive of all taxes &bull; Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
-                    </div>
-
-                    <!-- Availability & Dispatch Badge -->
-                    <div class="ayur-stock-badge-row">
-                        <span class="ayur-stock-badge in-stock">
-                            <?php echo ayur_svg_icon('check', '', 14); ?>
-                            <span><?php _e('In Stock &bull; Dispatched within 24 Hours from Maharashtra Hub', 'ayur-wellness'); ?></span>
-                        </span>
-                        <?php if ($net_qty) : ?>
-                            <span class="ayur-net-qty-chip">
-                                <?php echo ayur_svg_icon('package', '', 14); ?>
-                                <span><?php echo esc_html($net_qty); ?></span>
+                        <div class="ayur-price-perks">
+                            <span class="ayur-perk-item">
+                                <?php echo ayur_svg_icon('check', '', 12); ?>
+                                <span><?php _e('Inclusive of all taxes', 'ayur-wellness'); ?></span>
                             </span>
-                        <?php endif; ?>
+                            <span class="ayur-perk-sep">&bull;</span>
+                            <span class="ayur-perk-item">
+                                <?php echo ayur_svg_icon('truck', '', 12); ?>
+                                <span><?php _e('Free delivery on orders above ₹999', 'ayur-wellness'); ?></span>
+                            </span>
+                        </div>
                     </div>
 
-                    <!-- Purchase Actions Form -->
+                    <!-- Clear Pack Size & Stock Status Specification Row -->
+                    <div class="ayur-pack-spec-row">
+                        <div class="ayur-pack-chip-wrap">
+                            <span class="ayur-pack-label"><?php _e('Pack Size:', 'ayur-wellness'); ?></span>
+                            <div class="ayur-pack-chip">
+                                <?php echo ayur_svg_icon('package', '', 14); ?>
+                                <span class="ayur-pack-val"><?php echo esc_html($net_qty ? $net_qty : 'Standard Formulation Pack'); ?></span>
+                            </div>
+                        </div>
+                        <span class="ayur-stock-badge in-stock">
+                            <?php echo ayur_svg_icon('check', '', 12); ?>
+                            <span><?php _e('In Stock &bull; Dispatched within 24h', 'ayur-wellness'); ?></span>
+                        </span>
+                    </div>
+
+                    <!-- Purchase Actions Form (Quantity Stepper + ADD TO CART + BUY NOW) -->
                     <form class="cart ayur-cart-form" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
-                        <div class="ayur-purchase-row">
+                        <div class="ayur-purchase-actions-grid">
                             <?php if (!$product->is_type('variable')) : ?>
                                 <div class="ayur-qty-wrapper">
                                     <label for="ayurQtyInput" class="screen-reader-text"><?php esc_html_e('Quantity', 'woocommerce'); ?></label>
@@ -183,37 +187,66 @@ while (have_posts()) :
                         </div>
                     </form>
 
-                    <!-- Trust Microcopy (Directly Below Actions) -->
-                    <p class="ayur-product-trust-microcopy">
-                        <?php echo ayur_svg_icon('shield-check', '', 14); ?>
-                        <span><?php _e('Secure checkout &bull; Cash on Delivery available &bull; Pan-India express delivery', 'ayur-wellness'); ?></span>
-                    </p>
+                    <!-- CTA Micro-Trust (Compact Factual Signals, No Emojis) -->
+                    <div class="ayur-cta-micro-trust">
+                        <span class="ayur-micro-trust-pill">
+                            <?php echo ayur_svg_icon('shield-check', '', 13); ?>
+                            <span><?php _e('Secure Payments', 'ayur-wellness'); ?></span>
+                        </span>
+                        <span class="ayur-micro-trust-sep">&bull;</span>
+                        <span class="ayur-micro-trust-pill">
+                            <?php echo ayur_svg_icon('credit-card', '', 13); ?>
+                            <span><?php _e('Cash on Delivery', 'ayur-wellness'); ?></span>
+                        </span>
+                        <span class="ayur-micro-trust-sep">&bull;</span>
+                        <span class="ayur-micro-trust-pill">
+                            <?php echo ayur_svg_icon('truck', '', 13); ?>
+                            <span><?php _e('Pan-India Delivery', 'ayur-wellness'); ?></span>
+                        </span>
+                    </div>
 
-                    <!-- Refined 2x2 Trust Rail -->
-                    <div class="ayur-trust-2x2">
-                        <div class="ayur-trust-cell">
-                            <span class="ayur-cell-icon"><?php echo ayur_svg_icon('shield-check', '', 18); ?></span>
-                            <span class="ayur-cell-text"><?php _e('Secure Payments', 'ayur-wellness'); ?></span>
+                    <!-- Compact Delivery Information Panel -->
+                    <div class="ayur-delivery-info-panel">
+                        <div class="ayur-delivery-panel-title">
+                            <?php echo ayur_svg_icon('truck', '', 15); ?>
+                            <span><?php _e('DELIVERY & SERVICE DETAILS', 'ayur-wellness'); ?></span>
                         </div>
-                        <div class="ayur-trust-cell">
-                            <span class="ayur-cell-icon"><?php echo ayur_svg_icon('credit-card', '', 18); ?></span>
-                            <span class="ayur-cell-text"><?php _e('COD Available', 'ayur-wellness'); ?></span>
-                        </div>
-                        <div class="ayur-trust-cell">
-                            <span class="ayur-cell-icon"><?php echo ayur_svg_icon('truck', '', 18); ?></span>
-                            <span class="ayur-cell-text"><?php _e('Pan-India Delivery', 'ayur-wellness'); ?></span>
-                        </div>
-                        <div class="ayur-trust-cell">
-                            <span class="ayur-cell-icon"><?php echo ayur_svg_icon('headphones', '', 18); ?></span>
-                            <span class="ayur-cell-text"><?php _e('Customer Support', 'ayur-wellness'); ?></span>
+                        <div class="ayur-delivery-grid">
+                            <div class="ayur-delivery-cell">
+                                <span class="cell-k"><?php _e('DISPATCH', 'ayur-wellness'); ?></span>
+                                <span class="cell-v"><?php _e('Within 24–48 hours from Maharashtra Hub', 'ayur-wellness'); ?></span>
+                            </div>
+                            <div class="ayur-delivery-cell">
+                                <span class="cell-k"><?php _e('METRO DELIVERY', 'ayur-wellness'); ?></span>
+                                <span class="cell-v"><?php _e('2–4 business days via Delhivery, BlueDart, DTDC', 'ayur-wellness'); ?></span>
+                            </div>
+                            <div class="ayur-delivery-cell">
+                                <span class="cell-k"><?php _e('FREE DELIVERY', 'ayur-wellness'); ?></span>
+                                <span class="cell-v"><?php _e('Orders above ₹999 (₹70 below ₹999)', 'ayur-wellness'); ?></span>
+                            </div>
+                            <div class="ayur-delivery-cell">
+                                <span class="cell-k"><?php _e('COD AVAILABLE', 'ayur-wellness'); ?></span>
+                                <span class="cell-v"><?php _e('Pay on arrival across serviceable pincodes', 'ayur-wellness'); ?></span>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Compact Above-The-Fold Formulation Highlights (Max 4 Points) -->
+                    <?php if (!empty($ext_data['benefits'])) : ?>
+                        <div class="ayur-panel-benefits">
+                            <h4 class="ayur-panel-benefits-heading"><?php _e('Why You May Choose This Formulation', 'ayur-wellness'); ?></h4>
+                            <ul class="ayur-panel-benefits-list">
+                                <?php foreach (array_slice($ext_data['benefits'], 0, 4) as $benefit) : ?>
+                                    <li>
+                                        <span class="ayur-benefit-check"><?php echo ayur_svg_icon('check', '', 13); ?></span>
+                                        <span><?php echo esc_html($benefit); ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
-
-            <?php
-            $ext_data = ayur_get_product_extended_data($product_id);
-            ?>
 
             <!-- Product Information Hierarchy (Phase 5 Structured Presentation) -->
             <div class="ayur-product-details-wrap">
@@ -413,6 +446,22 @@ while (have_posts()) :
                 </div>
             <?php endif; ?>
         </div>
+        <!-- Native Label Inspection Lightbox (Phase 6) -->
+        <div id="ayurImageLightbox" class="ayur-image-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Product Label Inspection', 'ayur-wellness'); ?>">
+            <div class="ayur-lightbox-backdrop" id="ayurLightboxBackdrop"></div>
+            <div class="ayur-lightbox-dialog">
+                <button type="button" class="ayur-lightbox-close" id="ayurLightboxClose" aria-label="<?php esc_attr_e('Close inspection modal', 'ayur-wellness'); ?>">
+                    <?php echo ayur_svg_icon('x', '', 18); ?>
+                </button>
+                <div class="ayur-lightbox-stage">
+                    <img id="ayurLightboxImg" src="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" />
+                </div>
+                <div class="ayur-lightbox-footer">
+                    <span class="ayur-lightbox-title"><?php the_title(); ?></span>
+                    <span class="ayur-lightbox-hint"><?php _e('Authentic Ayurvedic formulation &bull; Inspected classical packaging', 'ayur-wellness'); ?></span>
+                </div>
+            </div>
+        </div>
     </article>
 
     <!-- Native Mobile Sticky Bottom Bar -->
@@ -422,14 +471,17 @@ while (have_posts()) :
             <?php if ($mrp > $price) : ?>
                 <span class="ayur-sticky-mrp">MRP ₹<?php echo number_format($mrp); ?></span>
             <?php endif; ?>
+            <?php if ($net_qty) : ?>
+                <span class="ayur-sticky-pack-sub"><?php echo esc_html($net_qty); ?></span>
+            <?php endif; ?>
         </div>
         <div class="ayur-sticky-actions">
             <button type="button" class="ayur-sticky-btn ayur-sticky-add-cart" data-product-id="<?php echo esc_attr($product_id); ?>">
                 <?php echo ayur_svg_icon('shopping-bag', '', 15); ?>
-                <span><?php _e('Add', 'ayur-wellness'); ?></span>
+                <span><?php _e('ADD', 'ayur-wellness'); ?></span>
             </button>
             <a href="<?php echo esc_url(add_query_arg(array('ayur_quick_buy' => $product_id), home_url('/'))); ?>" class="ayur-sticky-btn ayur-sticky-buy-now">
-                <span><?php _e('Buy Now', 'ayur-wellness'); ?></span>
+                <span><?php _e('BUY NOW', 'ayur-wellness'); ?></span>
             </a>
         </div>
     </div>

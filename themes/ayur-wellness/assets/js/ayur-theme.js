@@ -12,6 +12,7 @@
         initCartDrawer();
         initSearchOverlay();
         initProductGallery();
+        initProductLightbox();
         initQtySteppers();
         initMobileStickyBar();
         initProductAccordions();
@@ -333,6 +334,56 @@
 
                 $('.ayur-gallery-thumb-btn').removeClass('active');
                 $(this).addClass('active');
+            }
+        });
+    }
+
+    /**
+     * Phase 6: Product Gallery Zoom & Lightbox Inspection
+     */
+    function initProductLightbox() {
+        var $stage = $('#ayurGalleryStage');
+        var $lightbox = $('#ayurImageLightbox');
+        var $lightboxImg = $('#ayurLightboxImg');
+        if (!$stage.length || !$lightbox.length) return;
+
+        function openLightbox(imgSrc) {
+            var srcToUse = imgSrc || $('#ayurMainProductImg').attr('src');
+            if (srcToUse) {
+                $lightboxImg.attr('src', srcToUse);
+            }
+            $lightbox.addClass('is-open').attr('aria-hidden', 'false');
+            $('body').addClass('ayur-scroll-locked');
+            $('#ayurLightboxClose').focus();
+        }
+
+        function closeLightbox() {
+            $lightbox.removeClass('is-open').attr('aria-hidden', 'true');
+            $('body').removeClass('ayur-scroll-locked');
+        }
+
+        $stage.on('click', function(e) {
+            e.preventDefault();
+            var currentSrc = $('#ayurMainProductImg').attr('src');
+            openLightbox(currentSrc);
+        });
+
+        $stage.on('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                var currentSrc = $('#ayurMainProductImg').attr('src');
+                openLightbox(currentSrc);
+            }
+        });
+
+        $('#ayurLightboxClose, #ayurLightboxBackdrop').on('click', function(e) {
+            e.preventDefault();
+            closeLightbox();
+        });
+
+        $(document).on('keyup', function(e) {
+            if (e.key === 'Escape' && $lightbox.hasClass('is-open')) {
+                closeLightbox();
             }
         });
     }
