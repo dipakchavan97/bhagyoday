@@ -21,7 +21,10 @@ class Ayur_Fields {
         // General Pricing Tab: Add MRP & COGS
         add_action('woocommerce_product_options_pricing', array(__CLASS__, 'add_mrp_cogs_pricing_fields'));
 
-        // SEO Schema (Product, FAQPage, Organization, Breadcrumbs)
+        // SEO Meta & Social OpenGraph Tags
+        add_action('wp_head', array(__CLASS__, 'output_seo_meta_tags'), 1);
+
+        // SEO Schema (Product, FAQPage, Organization, Breadcrumbs, WebSite)
         add_action('wp_head', array(__CLASS__, 'output_seo_json_ld'), 20);
 
         // Phase 3 Review Verification: Purge unverified / mock seeded product reviews
@@ -257,6 +260,94 @@ class Ayur_Fields {
         <?php
     }
 
+    /**
+     * Output standard SEO meta description, Open Graph, and Twitter tags
+     */
+    public static function output_seo_meta_tags() {
+        $meta_desc = '';
+        $canonical = '';
+        $og_type = 'website';
+        $og_title = wp_get_document_title();
+        $og_image = home_url('/wp-content/uploads/2026/09/bhagyoday-ashwagandha-shilajit-capsules-featured.webp');
+
+        if (is_front_page() || is_home()) {
+            $meta_desc = 'Discover authentic, classical Ayurvedic formulations by Bhagyoday Ayurveda. AYUSH-certified herbal supplements handcrafted in Maharashtra for holistic vitality, immunity, and balance.';
+            $canonical = home_url('/');
+        } elseif (is_product()) {
+            global $post;
+            $product = wc_get_product($post->ID);
+            if ($product) {
+                $og_type = 'product';
+                $raw_desc = $product->get_short_description() ?: $product->get_description();
+                $meta_desc = wp_strip_all_tags(strip_shortcodes($raw_desc));
+                if (strlen($meta_desc) > 160) {
+                    $meta_desc = substr($meta_desc, 0, 157) . '...';
+                }
+                $canonical = get_permalink($product->get_id());
+                $image_id = $product->get_image_id();
+                if ($image_id) {
+                    $og_image = wp_get_attachment_url($image_id);
+                }
+            }
+        } elseif (function_exists('is_shop') && is_shop()) {
+            $meta_desc = 'Explore all handcrafted Ayurvedic formulations by Bhagyoday Ayurveda. Certified herbal supplements for vitality, digestion, joints, and holistic health.';
+            $canonical = wc_get_page_permalink('shop');
+        } elseif (function_exists('is_product_category') && is_product_category()) {
+            $current_cat = get_queried_object();
+            if ($current_cat && !empty($current_cat->description)) {
+                $meta_desc = wp_strip_all_tags(strip_shortcodes($current_cat->description));
+            } else {
+                $cat_name = $current_cat ? $current_cat->name : 'Ayurvedic Formulations';
+                $meta_desc = 'Shop authentic ' . esc_attr($cat_name) . ' by Bhagyoday Ayurveda. Handcrafted with standardized herbs for natural wellness.';
+            }
+            if (strlen($meta_desc) > 160) {
+                $meta_desc = substr($meta_desc, 0, 157) . '...';
+            }
+            $canonical = get_term_link($current_cat);
+        } elseif (is_page()) {
+            global $post;
+            $meta_desc = wp_strip_all_tags(strip_shortcodes($post->post_excerpt ?: $post->post_content));
+            if (strlen($meta_desc) > 160) {
+                $meta_desc = substr($meta_desc, 0, 157) . '...';
+            }
+            $canonical = get_permalink($post->ID);
+        }
+
+        // Meta Description
+        if (!empty($meta_desc)) {
+            echo '<meta name="description" content="' . esc_attr(trim($meta_desc)) . '">' . "\n";
+        }
+
+        // Canonical for Shop and Category archives where WP doesn't output by default
+        if (!empty($canonical) && ( (function_exists('is_shop') && is_shop()) || (function_exists('is_product_category') && is_product_category()) )) {
+            echo '<link rel="canonical" href="' . esc_url($canonical) . '">' . "\n";
+        }
+
+        // Open Graph Meta
+        echo '<meta property="og:site_name" content="Bhagyoday Ayurveda">' . "\n";
+        echo '<meta property="og:type" content="' . esc_attr($og_type) . '">' . "\n";
+        echo '<meta property="og:title" content="' . esc_attr($og_title) . '">' . "\n";
+        if (!empty($meta_desc)) {
+            echo '<meta property="og:description" content="' . esc_attr(trim($meta_desc)) . '">' . "\n";
+        }
+        if (!empty($canonical)) {
+            echo '<meta property="og:url" content="' . esc_url($canonical) . '">' . "\n";
+        }
+        if (!empty($og_image)) {
+            echo '<meta property="og:image" content="' . esc_url($og_image) . '">' . "\n";
+        }
+
+        // Twitter Card Meta
+        echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+        echo '<meta name="twitter:title" content="' . esc_attr($og_title) . '">' . "\n";
+        if (!empty($meta_desc)) {
+            echo '<meta name="twitter:description" content="' . esc_attr(trim($meta_desc)) . '">' . "\n";
+        }
+        if (!empty($og_image)) {
+            echo '<meta name="twitter:image" content="' . esc_url($og_image) . '">' . "\n";
+        }
+    }
+
     public static function output_seo_json_ld() {
         // Output Organization Schema on all pages
         $org_schema = array(
@@ -279,7 +370,24 @@ class Ayur_Fields {
         echo "\n<!-- Bhagyoday Ayurveda Organization Schema -->\n";
         echo '<script type="application/ld+json">' . wp_json_encode($org_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
 
-        // If Single Product Page, output Product and FAQPage schemas
+        // WebSite Schema on Homepage
+        if (is_front_page() || is_home()) {
+            $website_schema = array(
+                '@context'        => 'https://schema.org',
+                '@type'           => 'WebSite',
+                'name'            => 'Bhagyoday Ayurveda',
+                'url'             => home_url('/'),
+                'potentialAction' => array(
+                    '@type'       => 'SearchAction',
+                    'target'      => home_url('/?s={search_term_string}'),
+                    'query-input' => 'required name=search_term_string',
+                ),
+            );
+            echo "\n<!-- Bhagyoday Ayurveda WebSite Schema -->\n";
+            echo '<script type="application/ld+json">' . wp_json_encode($website_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
+        }
+
+        // If Single Product Page, output Product, FAQPage, and BreadcrumbList schemas
         if (is_product()) {
             global $post;
             $product = wc_get_product($post->ID);
@@ -361,6 +469,66 @@ class Ayur_Fields {
                 );
                 echo "\n<!-- Bhagyoday Ayurveda FAQ Schema -->\n";
                 echo '<script type="application/ld+json">' . wp_json_encode($faq_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
+
+                // BreadcrumbList Schema
+                $crumbs = array(
+                    array(
+                        '@type'    => 'ListItem',
+                        'position' => 1,
+                        'name'     => 'Home',
+                        'item'     => home_url('/'),
+                    ),
+                    array(
+                        '@type'    => 'ListItem',
+                        'position' => 2,
+                        'name'     => 'Shop',
+                        'item'     => wc_get_page_permalink('shop'),
+                    ),
+                    array(
+                        '@type'    => 'ListItem',
+                        'position' => 3,
+                        'name'     => $product->get_name(),
+                        'item'     => get_permalink($product->get_id()),
+                    ),
+                );
+                $breadcrumb_schema = array(
+                    '@context'        => 'https://schema.org',
+                    '@type'           => 'BreadcrumbList',
+                    'itemListElement' => $crumbs,
+                );
+                echo "\n<!-- Bhagyoday Ayurveda Breadcrumb Schema -->\n";
+                echo '<script type="application/ld+json">' . wp_json_encode($breadcrumb_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
+            }
+        } elseif (function_exists('is_product_category') && is_product_category()) {
+            $current_cat = get_queried_object();
+            if ($current_cat) {
+                $crumbs = array(
+                    array(
+                        '@type'    => 'ListItem',
+                        'position' => 1,
+                        'name'     => 'Home',
+                        'item'     => home_url('/'),
+                    ),
+                    array(
+                        '@type'    => 'ListItem',
+                        'position' => 2,
+                        'name'     => 'Shop',
+                        'item'     => wc_get_page_permalink('shop'),
+                    ),
+                    array(
+                        '@type'    => 'ListItem',
+                        'position' => 3,
+                        'name'     => $current_cat->name,
+                        'item'     => get_term_link($current_cat),
+                    ),
+                );
+                $breadcrumb_schema = array(
+                    '@context'        => 'https://schema.org',
+                    '@type'           => 'BreadcrumbList',
+                    'itemListElement' => $crumbs,
+                );
+                echo "\n<!-- Bhagyoday Ayurveda Breadcrumb Schema -->\n";
+                echo '<script type="application/ld+json">' . wp_json_encode($breadcrumb_schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "</script>\n";
             }
         }
     }

@@ -13,6 +13,11 @@ class Ayur_Config {
         add_action('init', array(__CLASS__, 'ensure_wc_settings'));
         add_filter('woocommerce_currency_symbols', array(__CLASS__, 'add_inr_symbol'));
         add_filter('woocommerce_currencies', array(__CLASS__, 'add_inr_currency'));
+
+        // Production Security Hardening
+        add_filter('xmlrpc_enabled', '__return_false');
+        remove_action('wp_head', 'wp_generator');
+        add_filter('rest_endpoints', array(__CLASS__, 'protect_rest_user_endpoints'));
     }
 
     public static function setup_defaults() {
@@ -58,10 +63,15 @@ class Ayur_Config {
         
         // Enable Cash on Delivery
         self::ensure_payment_gateways();
+
+        // Transactional Email Branding
+        update_option('woocommerce_email_from_name', 'Bhagyoday Ayurveda');
+        update_option('woocommerce_email_from_address', 'vijaykulal8833@gmail.com');
+        update_option('woocommerce_email_footer_text', 'Bhagyoday Ayurveda &bull; Infront of Nagar Panchayat Civil Hospital, Mantha, Maharashtra 431504');
     }
 
     public static function ensure_wc_settings() {
-        if (get_option('woocommerce_coming_soon') === 'yes' || get_option('woocommerce_currency') !== 'INR') {
+        if (get_option('woocommerce_coming_soon') === 'yes' || get_option('woocommerce_currency') !== 'INR' || get_option('woocommerce_email_from_name') !== 'Bhagyoday Ayurveda') {
             self::setup_defaults();
         }
     }
@@ -126,5 +136,22 @@ class Ayur_Config {
     public static function add_inr_currency($currencies) {
         $currencies['INR'] = __('Indian Rupee (₹)', 'ayur-core');
         return $currencies;
+    }
+
+    /**
+     * Prevent unauthenticated REST API user enumeration
+     */
+    public static function protect_rest_user_endpoints($endpoints) {
+        if (isset($endpoints['/wp/v2/users'])) {
+            $endpoints['/wp/v2/users'][0]['permission_callback'] = function() {
+                return current_user_can('list_users');
+            };
+        }
+        if (isset($endpoints['/wp/v2/users/(?P<id>[\d]+)'])) {
+            $endpoints['/wp/v2/users/(?P<id>[\d]+)'][0]['permission_callback'] = function() {
+                return current_user_can('list_users');
+            };
+        }
+        return $endpoints;
     }
 }

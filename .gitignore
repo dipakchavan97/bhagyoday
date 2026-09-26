@@ -1,5 +1,6 @@
 scratch/chrome-user-data*/
 scratch/chrome_user*/
 scratch/*.png
+scratch/
 node_modules/
 .DS_Store

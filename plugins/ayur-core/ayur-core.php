@@ -3,7 +3,7 @@
  * Plugin Name: Ayur Core Engine
  * Plugin URI: https://lightgreen-heron-113083.hostingersite.com/
  * Description: Core eCommerce, Indian Localization, Meta CAPI, GA4, Shiprocket, Razorpay, and Ayurvedic Product Architecture.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Antigravity Lead Architect
  * Text Domain: ayur-core
  */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_CORE_VERSION', '1.0.0');
+define('AYUR_CORE_VERSION', '1.0.1');
 define('AYUR_CORE_PATH', plugin_dir_path(__FILE__));
 define('AYUR_CORE_URL', plugin_dir_url(__FILE__));
 
