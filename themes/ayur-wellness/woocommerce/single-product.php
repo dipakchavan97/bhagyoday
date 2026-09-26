@@ -99,7 +99,7 @@ while (have_posts()) :
                 <!-- Right: Purchase Information Column -->
                 <div class="ayur-product-summary">
                     <?php if ($cat_name) : ?>
-                        <span class="ayur-product-eyebrow"><?php echo esc_html(strtoupper($cat_name)); ?></span>
+                        <span class="ayur-product-eyebrow"><?php echo esc_html(strtoupper(html_entity_decode($cat_name, ENT_QUOTES, 'UTF-8'))); ?></span>
                     <?php endif; ?>
 
                     <h1 class="ayur-single-title"><?php the_title(); ?></h1>
