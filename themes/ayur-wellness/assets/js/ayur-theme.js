@@ -105,10 +105,70 @@
             }
         });
 
-        // Quick add feedback
+        // Quick add feedback & tracking
         $(document).on('click', '.ajax_add_to_cart', function() {
             var $btn = $(this);
             $btn.addClass('is-adding');
+
+            var prodId = $btn.data('product_id') || $btn.attr('data-product_id');
+            var prodSku = $btn.data('product_sku') || prodId;
+            var prodName = $btn.closest('.ayur-product-card, .ayur-hero-sales-module, .ayur-bundle-card, .ayur-drawer-rec-card').find('.ayur-product-title, .ayur-hero-sales-title, .ayur-bundle-title, .ayur-drawer-rec-name').first().text().trim() || 'Ayurvedic Formulation';
+            var eventId = 'atc_' + prodId + '_' + Date.now();
+
+            if (window.dataLayer) {
+                window.dataLayer.push({
+                    'event': 'add_to_cart',
+                    'ecommerce': {
+                        'currency': 'INR',
+                        'items': [{
+                            'item_id': String(prodSku),
+                            'item_name': prodName,
+                            'quantity': 1
+                        }]
+                    }
+                });
+            }
+
+            if (typeof fbq === 'function') {
+                fbq('track', 'AddToCart', {
+                    content_name: prodName,
+                    content_ids: [String(prodSku)],
+                    content_type: 'product',
+                    currency: 'INR'
+                }, { eventID: eventId });
+            }
+        });
+
+        // Single Product Page Form Add to Cart Tracking
+        $('form.cart.ayur-cart-form').on('submit', function() {
+            var $form = $(this);
+            var prodId = $form.find('button[name="add-to-cart"]').val();
+            var qty = parseInt($form.find('input[name="quantity"]').val(), 10) || 1;
+            var prodName = $('.ayur-product-title').first().text().trim() || 'Ayurvedic Formulation';
+            var eventId = 'atc_' + prodId + '_' + Date.now();
+
+            if (window.dataLayer) {
+                window.dataLayer.push({
+                    'event': 'add_to_cart',
+                    'ecommerce': {
+                        'currency': 'INR',
+                        'items': [{
+                            'item_id': String(prodId),
+                            'item_name': prodName,
+                            'quantity': qty
+                        }]
+                    }
+                });
+            }
+
+            if (typeof fbq === 'function') {
+                fbq('track', 'AddToCart', {
+                    content_name: prodName,
+                    content_ids: [String(prodId)],
+                    content_type: 'product',
+                    currency: 'INR'
+                }, { eventID: eventId });
+            }
         });
 
         // Auto open cart drawer when a product is added via AJAX

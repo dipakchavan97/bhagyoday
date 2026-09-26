@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '2.3.0');
+define('AYUR_THEME_VERSION', '2.4.0');
 
 /**
  * Theme Setup

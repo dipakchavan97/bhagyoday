@@ -1,0 +1,36 @@
+{
+  "homeAudit": {
+    "primaryCtaText": "SHOP BESTSELLERS",
+    "primaryCtaHref": "#ayurBestsellers",
+    "secCtaText": "EXPLORE WELLNESS",
+    "hasHeroSalesModule": true,
+    "trustPills": [],
+    "whyPillars": [],
+    "hasKsm66": false,
+    "hasCleanroom": false,
+    "hasFakeRatings": false
+  },
+  "productAudit": {
+    "hasStickyBar": false,
+    "hasViewItemEvent": false
+  },
+  "cartAfterAdd": {
+    "isOpen": false,
+    "title": "Your Cart",
+    "items": [],
+    "hasAtcEvent": false
+  },
+  "checkoutAudit": {
+    "hasForm": false,
+    "hasBeginCheckout": false
+  },
+  "buyNowRedirect": "https://lightgreen-heron-113083.hostingersite.com/checkout/",
+  "seoAudit": {
+    "title": "Page not found – Bhagyoday Ayurveda",
+    "hasProductSchema": false,
+    "hasFakeRating": false
+  },
+  "desktopAudit": {
+    "moduleInView": true
+  }
+}

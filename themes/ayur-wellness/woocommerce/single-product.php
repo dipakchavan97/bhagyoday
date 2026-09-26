@@ -296,7 +296,7 @@ while (have_posts()) :
                                 <?php echo ayur_svg_icon('truck', '', 18); ?>
                                 <h4><?php _e('Shipping & Delivery', 'ayur-wellness'); ?></h4>
                             </div>
-                            <p><?php _e('Dispatched within 24 hours via Delhivery, BlueDart, or DTDC. Metro deliveries arrive in 2–3 business days. Cash on Delivery is available at checkout.', 'ayur-wellness'); ?></p>
+                            <p><?php _e('Dispatched within 24–48 hours via Delhivery, BlueDart, or DTDC. Metro deliveries arrive in 2–4 business days. Cash on Delivery is available at checkout.', 'ayur-wellness'); ?></p>
                         </div>
                     </div>
                 </div>

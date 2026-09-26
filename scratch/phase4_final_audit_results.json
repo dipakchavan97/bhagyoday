@@ -1,0 +1,107 @@
+{
+  "homepage": {
+    "primaryCta": {
+      "text": "SHOP BESTSELLERS",
+      "href": "#ayurBestsellers"
+    },
+    "secCta": {
+      "text": "EXPLORE WELLNESS",
+      "href": "#ayurCategories"
+    },
+    "heroSalesModule": {
+      "heroTitle": "Ashwagandha Shilajit Men Wellness Capsules 800mg (30 Capsules)",
+      "heroPrice": "₹890",
+      "heroMrp": "MRP ₹1,990",
+      "heroSave": "Save ₹1,100"
+    },
+    "trustPills": [],
+    "whyPillars": [],
+    "botanicalIngredients": [
+      "Purified Shilajit",
+      "Ashwagandha Root Extract",
+      "Arjuna Bark Extract",
+      "Triphala & Aloe Vera"
+    ],
+    "bundles": [
+      {
+        "title": "Daily Energy & Vitality Duo (Shilajit Capsules 30s + Amrit Heart Juice 500ml)",
+        "price": "₹1,690",
+        "mrp": "MRP ₹3,980",
+        "save": "Save ₹2,290 (58% OFF)"
+      },
+      {
+        "title": "Metabolic Detox & Sugar Balance Duo (Karela Jamun 60s + Slim Care Juice 500ml)",
+        "price": "₹1,690",
+        "mrp": "MRP ₹3,980",
+        "save": "Save ₹2,290 (58% OFF)"
+      }
+    ],
+    "hasKsm66": false,
+    "hasCleanroom": false,
+    "hasFakeReviews": false
+  },
+  "product": {
+    "stockBadge": "In Stock • Dispatched within 24 Hours from Maharashtra Hub",
+    "atcBtn": "ADD TO CART",
+    "buyNowBtn": "BUY NOW",
+    "hasStickyBar": true,
+    "stickyPrice": "₹890",
+    "specs": [
+      "Net Quantity:",
+      "30 Vegetarian Capsules (800 mg)",
+      "Form:",
+      "100% Plant Cellulose Vegetarian Capsules (HPMC)",
+      "Storage:",
+      "Store in a cool dry place away from direct sunlight. Not recommended for children under 18 years. Consult physician if you suffer from high uric acid.",
+      "Batch / Lot:",
+      "BA-2026-09",
+      "Shelf Life:",
+      "24 Months from Mfd."
+    ],
+    "viewItemData": {
+      "event": "view_item",
+      "ecommerce": {
+        "currency": "INR",
+        "value": 890,
+        "items": [
+          {
+            "item_id": "AYUR-SHIL-30",
+            "item_name": "Ashwagandha Shilajit Men Wellness Capsules 800mg (30 Capsules)",
+            "price": 890,
+            "item_category": "Ayurvedic Wellness"
+          }
+        ]
+      }
+    }
+  },
+  "cartState1": {
+    "isOpen": false
+  },
+  "cartState2": {},
+  "checkout": {
+    "hasForm": false,
+    "beginCheckout": {
+      "event": "begin_checkout",
+      "ecommerce": {
+        "currency": "INR",
+        "value": 1780
+      }
+    },
+    "hasRazorpay": true,
+    "hasCOD": true
+  },
+  "buyNowRoute": {
+    "targetProduct": 33,
+    "finalUrl": "https://lightgreen-heron-113083.hostingersite.com/checkout/"
+  },
+  "seo": {
+    "title": "Ashwagandha Shilajit Men Wellness Capsules 800mg (30 Capsules) – Bhagyoday Ayurveda",
+    "canonical": "https://lightgreen-heron-113083.hostingersite.com/product/ashwagandha-shilajit-men-wellness-capsules/",
+    "hasProductSchema": true,
+    "hasFakeRating": false
+  },
+  "desktop": {
+    "moduleInView": true,
+    "ctaInView": true
+  }
+}

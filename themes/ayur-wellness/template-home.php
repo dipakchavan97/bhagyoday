@@ -392,9 +392,9 @@ $bundles_query = new WP_Query(array(
 
                 <div class="ayur-ingredient-card">
                     <span class="ayur-ingredient-origin"><?php _e('Western Ghats', 'ayur-wellness'); ?></span>
-                    <h3 class="ayur-ingredient-name"><?php _e('KSM-66 Ashwagandha', 'ayur-wellness'); ?></h3>
+                    <h3 class="ayur-ingredient-name"><?php _e('Ashwagandha Root Extract', 'ayur-wellness'); ?></h3>
                     <span class="ayur-ingredient-type"><?php _e('Traditional Adaptogenic Botanical', 'ayur-wellness'); ?></span>
-                    <p class="ayur-ingredient-desc"><?php _e('Standardized withanolides extracted from mature root stock. Reassures bodily equilibrium during stressful daily routines.', 'ayur-wellness'); ?></p>
+                    <p class="ayur-ingredient-desc"><?php _e('Traditional Withania somnifera root extract rich in natural withanolides. Supports daily vitality, stamina, and nervous resilience.', 'ayur-wellness'); ?></p>
                 </div>
 
                 <div class="ayur-ingredient-card">
@@ -430,6 +430,9 @@ $bundles_query = new WP_Query(array(
                         $b_id = $bundle_product->get_id();
                         $b_price = (float) $bundle_product->get_price();
                         $b_mrp = (float) get_post_meta($b_id, '_ayur_mrp', true);
+                        if (!$b_mrp) {
+                            $b_mrp = (float) $bundle_product->get_regular_price();
+                        }
                         $b_save = ($b_mrp > $b_price) ? ($b_mrp - $b_price) : 0;
                         $b_pct = ($b_mrp > 0 && $b_save > 0) ? round(($b_save / $b_mrp) * 100) : 0;
                     ?>
@@ -598,8 +601,8 @@ $bundles_query = new WP_Query(array(
                         <div class="ayur-quality-feature">
                             <span class="ayur-qf-icon"><?php echo ayur_svg_icon('check', '', 16); ?></span>
                             <div>
-                                <strong><?php _e('Small-Batch Cleanroom Decocting:', 'ayur-wellness'); ?></strong>
-                                <span><?php _e('Prepared with care at our facility in Mantha, Jalna, Maharashtra.', 'ayur-wellness'); ?></span>
+                                <strong><?php _e('Standardized Classical Extraction:', 'ayur-wellness'); ?></strong>
+                                <span><?php _e('Prepared in GMP & AYUSH compliant facilities using authentic classical Ayurvedic protocols.', 'ayur-wellness'); ?></span>
                             </div>
                         </div>
 
