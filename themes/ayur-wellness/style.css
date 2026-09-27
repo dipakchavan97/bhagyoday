@@ -7053,8 +7053,8 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     font-weight: 700;
 }
 
-/* --- Right: 3D Product Scene (60%) --- */
-.ayur-cinematic-hero-stage {
+/* --- Right: Photorealistic Commercial Product Scene (58%) --- */
+.ayur-commercial-hero-stage {
     position: relative;
     width: 100%;
     display: flex;
@@ -7063,128 +7063,83 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     z-index: 1;
 }
 
-.ayur-hero-3d-wrapper {
+.ayur-commercial-stage-card {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    max-height: 640px;
-    min-height: 480px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 680px;
+    border-radius: 16px;
+    background: #FAF7F0;
+    box-shadow: 
+        0 24px 60px -12px rgba(23, 59, 47, 0.16),
+        0 12px 30px -8px rgba(183, 149, 82, 0.14),
+        0 0 0 1px rgba(23, 59, 47, 0.06);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    animation: ayurCommercialSettle 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Ambient Glow */
-.ayur-hero-glow-aura {
-    position: absolute;
-    width: 80%;
-    height: 80%;
-    top: 10%;
-    left: 10%;
-    background: radial-gradient(circle at 60% 50%, rgba(183, 149, 82, 0.16) 0%, rgba(49, 92, 69, 0.08) 45%, transparent 70%);
-    filter: blur(40px);
-    pointer-events: none;
-    z-index: 1;
+.ayur-commercial-stage-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 30px 70px -12px rgba(23, 59, 47, 0.20),
+        0 16px 36px -8px rgba(183, 149, 82, 0.18),
+        0 0 0 1px rgba(183, 149, 82, 0.25);
 }
 
-/* Zero-CLS Fallback Poster */
-.ayur-hero-3d-poster {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    z-index: 2;
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
+@keyframes ayurCommercialSettle {
+    0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-.ayur-hero-3d-poster.ayur-poster-faded {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.ayur-hero-3d-poster.ayur-poster-active {
-    opacity: 1 !important;
-}
-
-/* 3D WebGL Canvas */
-.ayur-hero-3d-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100% !important;
-    height: 100% !important;
+.ayur-commercial-picture {
     display: block;
-    z-index: 3;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    cursor: grab;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    line-height: 0;
 }
 
-.ayur-hero-3d-canvas.ayur-canvas-ready {
-    opacity: 1;
+.ayur-commercial-hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 16px;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ayur-hero-3d-canvas:active {
-    cursor: grabbing;
+.ayur-commercial-stage-card:hover .ayur-commercial-hero-img {
+    transform: scale(1.015);
 }
 
-/* Floating Indicator Overlays */
-.ayur-hero-floating-indicators {
+/* Ambient Warm Studio Lighting Aura */
+.ayur-commercial-glow-ambient {
     position: absolute;
-    inset: 0;
+    inset: -20px;
+    border-radius: 32px;
+    background: radial-gradient(circle at 65% 45%, rgba(183, 149, 82, 0.18) 0%, rgba(49, 92, 69, 0.08) 45%, transparent 72%);
+    filter: blur(32px);
+    z-index: -1;
     pointer-events: none;
-    z-index: 4;
 }
 
-.ayur-float-pill {
+/* Grounded Contact Shadow */
+.ayur-commercial-stage-shadow {
     position: absolute;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.82);
-    border: 1px solid rgba(23, 59, 47, 0.08);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 9999px;
-    padding: 5px 12px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--color-forest, #173B2F);
-    box-shadow: 0 4px 14px rgba(23, 59, 47, 0.08);
-    animation: ayurFloatBadge 4s ease-in-out infinite alternate;
-}
-
-.ayur-float-pill .pill-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-}
-.ayur-float-pill .pill-dot.gold { background-color: var(--color-gold, #B79552); }
-.ayur-float-pill .pill-dot.herbal { background-color: var(--color-herbal, #315C45); }
-.ayur-float-pill .pill-dot.amla { background-color: #65A30D; }
-
-.pill-top-left {
-    top: 14%;
-    left: 36%;
-    animation-delay: 0s;
-}
-
-.pill-top-right {
-    top: 18%;
-    right: 6%;
-    animation-delay: 1.2s;
-}
-
-.pill-bottom-right {
-    bottom: 22%;
-    right: 4%;
-    animation-delay: 2.4s;
-}
-
-@keyframes ayurFloatBadge {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-8px); }
+    bottom: -16px;
+    left: 8%;
+    right: 8%;
+    height: 32px;
+    background: radial-gradient(ellipse at 50% 50%, rgba(23, 59, 47, 0.24) 0%, rgba(23, 59, 47, 0.06) 55%, transparent 78%);
+    filter: blur(14px);
+    z-index: -1;
+    pointer-events: none;
 }
 
 /* --- Mobile Responsiveness & Dedicated Layout --- */
@@ -7192,7 +7147,7 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     .ayur-cinematic-hero-grid {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 22px;
         min-height: auto;
     }
 
@@ -7208,10 +7163,25 @@ body.ayur-scroll-locked .ayur-wa-float-container {
         text-align: center;
     }
 
-    .ayur-cinematic-hero-stage {
+    .ayur-commercial-hero-stage {
         order: 2;
         width: 100%;
-        margin: 4px 0 10px 0;
+        margin: 6px 0 12px 0;
+    }
+
+    .ayur-commercial-stage-card {
+        max-width: 520px;
+        margin: 0 auto;
+        border-radius: 14px;
+    }
+
+    .ayur-commercial-picture {
+        border-radius: 14px;
+    }
+
+    .ayur-commercial-hero-img {
+        aspect-ratio: 16 / 11;
+        border-radius: 14px;
     }
 
     .ayur-hero-cta-block {
@@ -7241,70 +7211,79 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     .ayur-cinematic-hero-trust {
         justify-content: center;
     }
-
-    .ayur-hero-3d-wrapper {
-        aspect-ratio: 16 / 11;
-        min-height: 280px;
-        max-height: 380px;
-    }
-
-    .ayur-float-pill {
-        display: none; /* Hide floating tags on mobile to keep visual clean */
-    }
 }
 
 @media (max-width: 575px) {
     .ayur-cinematic-hero {
-        padding: 24px 0 36px;
+        padding: 20px 0 44px;
     }
 
     .ayur-cinematic-hero-title {
-        font-size: 29px;
+        font-size: 28px;
         line-height: 1.15;
+        margin: 0 0 10px 0;
     }
 
     .ayur-cinematic-hero-desc {
-        font-size: 14px;
-        line-height: 1.55;
+        font-size: 13.5px;
+        line-height: 1.5;
+        margin: 0 0 14px 0;
     }
 
-    .ayur-hero-3d-wrapper {
+    .ayur-commercial-stage-card {
+        max-width: 100%;
+    }
+
+    .ayur-commercial-hero-img {
         aspect-ratio: 4 / 3;
-        min-height: 320px;
-        max-height: 380px;
+    }
+
+    .ayur-hero-formulation-pills {
+        gap: 6px;
+        margin-bottom: 14px;
+        max-width: 320px;
+    }
+
+    .ayur-hero-formulation-pills .ayur-pill {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+
+    .ayur-cinematic-hero-pricing {
+        margin-bottom: 16px;
     }
 
     .ayur-cinematic-hero-actions {
         flex-direction: column;
         width: 100%;
         gap: 10px;
+        margin-bottom: 18px;
     }
 
     .ayur-hero-primary-cta,
     .ayur-hero-secondary-cta {
         width: 100%;
         justify-content: center;
+        padding: 12px 20px;
     }
 
     .ayur-cinematic-hero-trust {
-        font-size: 12px;
+        font-size: 11.5px;
         gap: 6px;
     }
 }
 
 /* Reduced Motion Mode Support */
 @media (prefers-reduced-motion: reduce) {
-    .ayur-hero-3d-canvas {
-        display: none !important;
-    }
-
-    .ayur-hero-3d-poster {
-        opacity: 1 !important;
-        transition: none !important;
-    }
-
-    .ayur-float-pill {
+    .ayur-commercial-stage-card {
         animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+
+    .ayur-commercial-hero-img {
+        transition: none !important;
+        transform: none !important;
     }
 
     .ayur-hero-primary-cta {

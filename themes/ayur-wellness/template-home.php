@@ -59,38 +59,38 @@ $bundles_query = new WP_Query(array(
 
 <main id="primary" class="site-main ayur-homepage">
 
-    <!-- 1. Premium Cinematic 3D Product Hero Section (Arjuna Amrit Elixir Scene) -->
+    <!-- 1. Photorealistic Commercial Product Hero (Amrit Heart Health Immunity Juice 500ml) -->
     <section class="ayur-cinematic-hero" id="ayurCinematicHero">
         <div class="ayur-container">
             <div class="ayur-cinematic-hero-grid">
-                <!-- LEFT: 40% Editorial Product Content & CTAs -->
+                <!-- LEFT: 42% Editorial Product Content & CTAs -->
                 <div class="ayur-cinematic-hero-content">
                     <div class="ayur-hero-header-block">
                         <div class="ayur-hero-eyebrow-wrap">
                             <span class="ayur-hero-eyebrow-badge">
                                 <?php echo ayur_svg_icon('sparkles', '', 14); ?>
-                                <span><?php _e('ARJUNA AMRIT', 'ayur-wellness'); ?></span>
+                                <span><?php _e('AMRIT AYURVEDA', 'ayur-wellness'); ?></span>
                             </span>
-                            <span class="ayur-hero-volume-badge"><?php echo esc_html($h_net_qty ? $h_net_qty : '500ml Liquid Tonic'); ?></span>
+                            <span class="ayur-hero-volume-badge"><?php echo esc_html($h_net_qty ? $h_net_qty : '500ml Bottle'); ?></span>
                         </div>
 
                         <h1 class="ayur-cinematic-hero-title">
-                            Ancient Ayurvedic wisdom.<br>
-                            <span>Crafted for modern living.</span>
+                            Amrit Heart Health<br>
+                            <span>Immunity Juice</span>
                         </h1>
 
                         <p class="ayur-cinematic-hero-desc">
-                            <?php _e('A thoughtfully formulated Ayurvedic herbal juice crafted with traditional wellness principles and standardized classical extraction.', 'ayur-wellness'); ?>
+                            <?php _e('A classical 5-in-1 Ayurvedic formulation crafted with Wild Arjuna Bark, Fresh Amla, Raw Garlic, Apple Cider Vinegar, and Forest Honey.', 'ayur-wellness'); ?>
                         </p>
                     </div>
 
                     <div class="ayur-hero-cta-block">
-                        <!-- Product Formulation Quick Proof -->
-                        <div class="ayur-hero-formulation-pills" aria-label="Key Herbal Ingredients">
-                            <span class="ayur-pill"><span class="pill-dot"></span> Arjuna Bark (40%)</span>
-                            <span class="ayur-pill"><span class="pill-dot"></span> Wild Amla (30%)</span>
+                        <!-- Verified Documented Formulation Ingredients -->
+                        <div class="ayur-hero-formulation-pills" aria-label="<?php esc_attr_e('Documented Herbal Ingredients', 'ayur-wellness'); ?>">
+                            <span class="ayur-pill"><span class="pill-dot"></span> Wild Arjuna Bark (40%)</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Fresh Amla (30%)</span>
                             <span class="ayur-pill"><span class="pill-dot"></span> Raw Garlic (10%)</span>
-                            <span class="ayur-pill"><span class="pill-dot"></span> ACV (10%)</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Apple Cider Vinegar (10%)</span>
                             <span class="ayur-pill"><span class="pill-dot"></span> Forest Honey (10%)</span>
                         </div>
 
@@ -105,11 +105,11 @@ $bundles_query = new WP_Query(array(
 
                         <div class="ayur-cinematic-hero-actions">
                             <a href="<?php echo esc_url($h_permalink); ?>" class="ayur-btn-primary ayur-hero-primary-cta">
-                                <span><?php _e('EXPLORE ARJUNA AMRIT', 'ayur-wellness'); ?></span>
+                                <span><?php _e('Explore Amrit Juice', 'ayur-wellness'); ?></span>
                                 <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
                             </a>
                             <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="ayur-btn-secondary ayur-hero-secondary-cta">
-                                <span><?php _e('SHOP ALL AYURVEDA', 'ayur-wellness'); ?></span>
+                                <span><?php _e('Shop All Ayurveda', 'ayur-wellness'); ?></span>
                             </a>
                         </div>
 
@@ -133,38 +133,25 @@ $bundles_query = new WP_Query(array(
                     </div>
                 </div>
 
-                <!-- RIGHT: 60% Cinematic 3D / WebGL Product Elixir Scene -->
-                <div class="ayur-cinematic-hero-stage">
-                    <div class="ayur-hero-3d-wrapper" id="ayurHero3DContainer" data-asset-base="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/'); ?>">
-                        <!-- Soft Atmospheric Glow -->
-                        <div class="ayur-hero-glow-aura" aria-hidden="true"></div>
-
-                        <!-- Fallback / Immediate Poster (Zero Layout Shift) -->
-                        <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/hero-poster-3d.webp'); ?>"
-                             alt="<?php echo esc_attr($hero_product ? $hero_product->get_name() : 'Arjuna Amrit Heart Vitality Juice'); ?>"
-                             class="ayur-hero-3d-poster"
-                             fetchpriority="high"
-                             width="1280"
-                             height="920">
-
-                        <!-- Progressive 3D WebGL Canvas -->
-                        <canvas id="ayurHero3DCanvas" class="ayur-hero-3d-canvas" aria-label="Interactive 3D Product Presentation"></canvas>
-
-                        <!-- Subtle Botanical Floating Indicator Pill Overlays -->
-                        <div class="ayur-hero-floating-indicators" aria-hidden="true">
-                            <span class="ayur-float-pill pill-top-left">
-                                <span class="pill-dot gold"></span> Pure Forest Honey 10%
-                            </span>
-                            <span class="ayur-float-pill pill-top-right">
-                                <span class="pill-dot herbal"></span> Terminalia Arjuna 40%
-                            </span>
-                            <span class="ayur-float-pill pill-bottom-right">
-                                <span class="pill-dot amla"></span> Wild Amla 30%
-                            </span>
-                        </div>
+                <!-- RIGHT: 58% Photorealistic Commercial Product Scene -->
+                <div class="ayur-commercial-hero-stage">
+                    <div class="ayur-commercial-stage-card">
+                        <div class="ayur-commercial-glow-ambient" aria-hidden="true"></div>
+                        <picture class="ayur-commercial-picture">
+                            <source media="(max-width: 767px)" srcset="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/amrit-commercial-hero-mobile.webp'); ?>" type="image/webp">
+                            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/amrit-commercial-hero.webp'); ?>"
+                                 alt="<?php echo esc_attr($hero_product ? $hero_product->get_name() : 'Amrit Heart Health Immunity Juice 500ml'); ?>"
+                                 class="ayur-commercial-hero-img"
+                                 fetchpriority="high"
+                                 width="1440"
+                                 height="1080">
+                        </picture>
+                        <!-- Grounded Soft Contact Shadow -->
+                        <div class="ayur-commercial-stage-shadow" aria-hidden="true"></div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
     <!-- 2. Featured Formulation Merchandising Block (Immediately After Hero) -->
