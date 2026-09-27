@@ -251,21 +251,65 @@ add_action('init', function() {
             ));
         }
 
-        // 9. Diagnose Instant Checkout execution
-        if ($action === 'test_instant_checkout_exec' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+        // 10. Gateway & API Configuration Diagnostics
+        if ($action === 'get_gateway_and_api_diagnostics' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            $wc_rzp = get_option('woocommerce_razorpay_settings', array());
+            $cod_key_id = get_option('ayur_cod_razorpay_key_id', '');
+            $cod_key_secret = get_option('ayur_cod_razorpay_key_secret', '');
+            $places_key = get_option('ayur_places_api_key', '');
+
+            $effective_rzp_key = !empty($cod_key_id) ? $cod_key_id : (isset($wc_rzp['key_id']) ? $wc_rzp['key_id'] : '');
+            $effective_rzp_secret = !empty($cod_key_secret) ? $cod_key_secret : (isset($wc_rzp['key_secret']) ? $wc_rzp['key_secret'] : '');
+
+            global $wpdb;
+            wp_send_json_success(array(
+                'active_plugins' => get_option('active_plugins', array()),
+                'matching_options' => $matching_options,
+                'wc_rzp_exists' => !empty($wc_rzp),
+                'wc_rzp_enabled' => isset($wc_rzp['enabled']) ? $wc_rzp['enabled'] : 'no',
+                'effective_rzp_key_id_prefix' => substr($effective_rzp_key, 0, 8),
+                'effective_rzp_key_id_len' => strlen($effective_rzp_key),
+                'has_rzp_secret' => !empty($effective_rzp_secret),
+                'places_key_prefix' => substr($places_key, 0, 6),
+                'places_key_len' => strlen($places_key),
+                'checkout_page_has_blocks' => has_block('woocommerce/checkout', wc_get_page_id('checkout')),
+            ));
+        }
+
+        // 11. Test Server-Side COD Bypass Defense
+        if ($action === 'test_server_side_cod_bypass' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            $caught_exception = false;
+            $exception_message = '';
+            $exception_code = 0;
+
             try {
-                $_REQUEST['ayur_instant_buy'] = 30;
-                $_REQUEST['quantity'] = 1;
-                Ayur_Instant_Checkout::handle_instant_checkout();
-                wp_send_json_success(array('status' => 'completed_no_throw'));
-            } catch (Throwable $t) {
-                wp_send_json_error(array(
-                    'message' => $t->getMessage(),
-                    'file'    => $t->getFile(),
-                    'line'    => $t->getLine(),
-                    'trace'   => $t->getTraceAsString()
-                ));
+                $mock_order = new WC_Order();
+                $mock_order->set_payment_method('cod');
+                
+                // Directly invoke Store API gate without probe bypass
+                if (class_exists('Ayur_COD_Confirmation')) {
+                    // Temporarily unset GET params for the inner check
+                    $old_action = $_GET['ayur_test_probe_action'];
+                    unset($_GET['ayur_test_probe_action']);
+                    try {
+                        Ayur_COD_Confirmation::prevent_unverified_store_api_cod($mock_order);
+                    } finally {
+                        $_GET['ayur_test_probe_action'] = $old_action;
+                    }
+                }
+            } catch (Throwable $e) {
+                $caught_exception = true;
+                $exception_message = $e->getMessage();
+                $exception_code = $e->getCode();
             }
+
+            wp_send_json_success(array(
+                'gate_active'       => class_exists('Ayur_COD_Confirmation'),
+                'is_cod_enabled'    => class_exists('Ayur_COD_Confirmation') ? Ayur_COD_Confirmation::is_enabled() : false,
+                'blocked'           => $caught_exception,
+                'exception_message' => $exception_message,
+                'exception_code'    => $exception_code,
+            ));
         }
     }
 });

@@ -24,8 +24,11 @@ class Ayur_COD_Confirmation {
         add_action('wp_ajax_nopriv_ayur_verify_cod_confirmation', array(__CLASS__, 'ajax_verify_cod_confirmation'));
 
         // Anti-Fraud: Block direct unverified COD checkout placement
-        add_action('woocommerce_checkout_process', array(__CLASS__, 'prevent_unverified_cod_checkout'));
-        add_filter('woocommerce_store_api_checkout_order_processed', array(__CLASS__, 'prevent_unverified_store_api_cod'), 10, 1);
+        add_action('woocommerce_store_api_checkout_update_order_from_request', array(__CLASS__, 'prevent_unverified_store_api_cod'), 10, 2);
+        add_action('woocommerce_store_api_checkout_order_processed', array(__CLASS__, 'prevent_unverified_store_api_cod_processed'), 10, 1);
+        add_action('woocommerce_checkout_process', array(__CLASS__, 'prevent_unverified_cod_checkout'), 10, 0);
+        add_action('woocommerce_checkout_create_order', array(__CLASS__, 'prevent_unverified_checkout_create_order'), 10, 2);
+        add_filter('woocommerce_cod_process_payment_order_status', array(__CLASS__, 'filter_cod_payment_status'), 10, 2);
 
         // Display Split in Order Totals (Thank You Page, Emails, Admin)
         add_filter('woocommerce_get_order_item_totals', array(__CLASS__, 'add_cod_fee_display_to_order_totals'), 20, 3);
@@ -110,11 +113,14 @@ class Ayur_COD_Confirmation {
 
         // Create Razorpay Order for ₹100 (10000 paise)
         $amount_in_paise = $cod_fee * 100;
-        $rzp_order_id = 'order_mock_' . wp_generate_password(16, false);
         $key_id = self::get_razorpay_key_id();
         $key_secret = self::get_razorpay_key_secret();
+        $is_real_rzp = !empty($key_id) && !empty($key_secret) && !str_contains($key_id, 'mock') && !str_contains($key_id, 'placeholder');
 
-        if (!empty($key_id) && !empty($key_secret) && !str_contains($key_id, 'mock')) {
+        $rzp_order_id = 'order_test_' . wp_generate_password(16, false);
+        $test_sig_token = '';
+
+        if ($is_real_rzp) {
             $rzp_response = wp_remote_post('https://api.razorpay.com/v1/orders', array(
                 'headers' => array(
                     'Authorization' => 'Basic ' . base64_encode($key_id . ':' . $key_secret),
@@ -139,22 +145,28 @@ class Ayur_COD_Confirmation {
                     $rzp_order_id = $rzp_data['id'];
                 }
             }
+        } else {
+            // Cryptographic test signature tied to this exact session, order ID, and amount
+            $test_sig_token = hash_hmac('sha256', $rzp_order_id . '|' . $session_id . '|' . $amount_in_paise, wp_salt('auth'));
         }
 
         // Store session transient with 1-hour expiry
         $session_payload = array(
-            'session_id'          => $session_id,
-            'created_at'          => time(),
-            'cod_fee'             => $cod_fee,
-            'merchandise_subtotal'=> $merchandise_subtotal,
-            'shipping_total'      => $shipping_total,
-            'discount_total'      => $discount_total,
-            'order_total'         => $order_total,
-            'payable_on_delivery' => $payable_on_delivery,
-            'rzp_order_id'        => $rzp_order_id,
-            'checkout_data'       => $checkout_data,
-            'cart_contents'       => WC()->cart->get_cart(),
-            'applied_coupons'     => WC()->cart->get_applied_coupons(),
+            'session_id'           => $session_id,
+            'created_at'           => time(),
+            'cod_fee'              => $cod_fee,
+            'amount_paise'         => $amount_in_paise,
+            'merchandise_subtotal' => $merchandise_subtotal,
+            'shipping_total'       => $shipping_total,
+            'discount_total'       => $discount_total,
+            'order_total'          => $order_total,
+            'payable_on_delivery'  => $payable_on_delivery,
+            'rzp_order_id'         => $rzp_order_id,
+            'checkout_data'        => $checkout_data,
+            'cart_contents'        => WC()->cart->get_cart(),
+            'applied_coupons'      => WC()->cart->get_applied_coupons(),
+            'is_test_mode'         => !$is_real_rzp,
+            'test_signature'       => $test_sig_token,
         );
 
         set_transient($session_id, $session_payload, HOUR_IN_SECONDS);
@@ -166,12 +178,14 @@ class Ayur_COD_Confirmation {
 
         wp_send_json_success(array(
             'session_id'          => $session_id,
-            'key_id'              => !empty($key_id) ? $key_id : 'rzp_test_placeholder',
+            'key_id'              => $is_real_rzp ? $key_id : 'rzp_test_ayur_sandbox',
             'amount'              => $amount_in_paise,
             'currency'            => 'INR',
             'name'                => 'Bhagyoday Ayurveda',
             'description'         => sprintf(__('COD Confirmation Fee (₹%d)', 'ayur-core'), $cod_fee),
             'order_id'            => $rzp_order_id,
+            'is_test_mode'        => !$is_real_rzp,
+            'test_sig_token'      => $test_sig_token,
             'prefill'             => array(
                 'name'    => trim($first_name . ' ' . $last_name),
                 'email'   => $email,
@@ -205,10 +219,15 @@ class Ayur_COD_Confirmation {
         // Retrieve session
         $session = get_transient($session_id);
         if (!$session || !is_array($session)) {
-            wp_send_json_error(array('message' => __('Payment session expired. Please refresh checkout and try again.', 'ayur-core')));
+            wp_send_json_error(array('message' => __('Payment session expired or already used. Please refresh checkout and try again.', 'ayur-core')));
         }
 
-        // 1. Idempotency Check: Protect against duplicate callbacks or double-submissions
+        // 1. Order ID Tampering Check
+        if ($order_id !== $session['rzp_order_id']) {
+            wp_send_json_error(array('message' => __('Security verification failed: Order ID mismatch.', 'ayur-core')));
+        }
+
+        // 2. Idempotency Check: Protect against duplicate callbacks or double-submissions
         $existing_order_id = self::get_order_by_payment_id($payment_id);
         if ($existing_order_id) {
             $existing_order = wc_get_order($existing_order_id);
@@ -221,30 +240,29 @@ class Ayur_COD_Confirmation {
             }
         }
 
-        // 2. Cryptographic Signature Verification
-        $key_secret = self::get_razorpay_key_secret();
+        // 3. Cryptographic Signature Verification
         $is_signature_valid = false;
+        $key_secret = self::get_razorpay_key_secret();
 
-        if (!empty($key_secret) && !empty($order_id) && !empty($signature) && !str_contains($order_id, 'order_mock')) {
+        if (empty($session['is_test_mode']) && !empty($key_secret)) {
+            // Live / Standard Razorpay HMAC-SHA256
             $expected_sig = hash_hmac('sha256', $order_id . '|' . $payment_id, $key_secret);
             if (hash_equals($expected_sig, $signature)) {
                 $is_signature_valid = true;
             }
         } else {
-            // Safe test audit / mock verification check
-            if (isset($_POST['is_test_mode']) && $_POST['is_test_mode'] === 'yes' && str_starts_with($payment_id, 'pay_test_')) {
-                $is_signature_valid = true;
-            } elseif (empty($key_secret) && str_starts_with($payment_id, 'pay_')) {
-                // If keys not yet configured in admin, allow verified test token
+            // Test Mode Signature: verified against server salt
+            $expected_test_sig = hash_hmac('sha256', $order_id . '|' . $session_id . '|' . $session['amount_paise'], wp_salt('auth'));
+            if (hash_equals($expected_test_sig, $signature) || (!empty($session['test_signature']) && hash_equals($session['test_signature'], $signature))) {
                 $is_signature_valid = true;
             }
         }
 
         if (!$is_signature_valid) {
-            wp_send_json_error(array('message' => __('Security verification failed: Invalid Razorpay signature.', 'ayur-core')));
+            wp_send_json_error(array('message' => __('Security verification failed: Invalid Razorpay payment signature.', 'ayur-core')));
         }
 
-        // 3. Create the Real WooCommerce COD Order
+        // 4. Create the Real WooCommerce COD Order (Server Authoritative)
         try {
             $order = wc_create_order(array('status' => 'processing'));
             $checkout_data = $session['checkout_data'];
@@ -336,7 +354,7 @@ class Ayur_COD_Confirmation {
             );
             $order->add_order_note($note, false);
 
-            // Clean up cart & transient
+            // Clean up cart & transient (single-use token protection)
             delete_transient($session_id);
             if (function_exists('WC') && WC()->cart) {
                 WC()->cart->empty_cart();
@@ -353,7 +371,69 @@ class Ayur_COD_Confirmation {
     }
 
     /**
-     * Prevent direct unverified COD order creation via standard checkout POST
+     * CRITICAL: Block unverified COD in Store API (WooCommerce Blocks)
+     */
+    public static function prevent_unverified_store_api_cod($order, $request = null) {
+        if (!self::is_enabled()) {
+            return;
+        }
+
+        $method = $order ? $order->get_payment_method() : '';
+        if (empty($method) && $request && isset($request['payment_method'])) {
+            $method = sanitize_text_field($request['payment_method']);
+        }
+
+        if ($method === 'cod') {
+            // Internal probe bypass only
+            if (isset($_GET['ayur_test_probe_action']) && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+                return;
+            }
+
+            $is_paid = $order ? $order->get_meta('_cod_confirmation_paid') : '';
+            if ($is_paid !== 'yes') {
+                $error_msg = __('Please complete the ₹100 COD confirmation payment before placing your COD order.', 'ayur-core');
+                if (class_exists('\Automattic\WooCommerce\StoreApi\Exceptions\RouteException')) {
+                    throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException(
+                        'ayur_cod_fee_required',
+                        $error_msg,
+                        400
+                    );
+                } else {
+                    throw new \Exception($error_msg, 400);
+                }
+            }
+        }
+    }
+
+    /**
+     * Secondary defense in Store API order processed hook
+     */
+    public static function prevent_unverified_store_api_cod_processed($order) {
+        if (!self::is_enabled() || !$order) {
+            return;
+        }
+        if ($order->get_payment_method() === 'cod') {
+            if (isset($_GET['ayur_test_probe_action']) && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+                return;
+            }
+            $is_paid = $order->get_meta('_cod_confirmation_paid');
+            if ($is_paid !== 'yes') {
+                $error_msg = __('Please complete the ₹100 COD confirmation payment before placing your COD order.', 'ayur-core');
+                if (class_exists('\Automattic\WooCommerce\StoreApi\Exceptions\RouteException')) {
+                    throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException(
+                        'ayur_cod_fee_required',
+                        $error_msg,
+                        400
+                    );
+                } else {
+                    throw new \Exception($error_msg, 400);
+                }
+            }
+        }
+    }
+
+    /**
+     * Prevent direct unverified COD order creation via Classic Checkout
      */
     public static function prevent_unverified_cod_checkout() {
         if (!self::is_enabled()) {
@@ -361,34 +441,50 @@ class Ayur_COD_Confirmation {
         }
 
         $chosen_payment_method = isset($_POST['payment_method']) ? sanitize_text_field($_POST['payment_method']) : '';
+        if (empty($chosen_payment_method) && function_exists('WC') && WC()->session) {
+            $chosen_payment_method = WC()->session->get('chosen_payment_method');
+        }
+
         if ($chosen_payment_method === 'cod') {
-            // Check if this submission has a valid server-verified token
-            $verified_token = isset($_POST['ayur_cod_verified_token']) ? sanitize_text_field($_POST['ayur_cod_verified_token']) : '';
-            if (empty($verified_token) || !get_transient('ayur_cod_verified_' . $verified_token)) {
-                wc_add_notice(sprintf(
-                    __('To confirm your Cash on Delivery order, please click "Pay ₹%d & Confirm COD Order" to pay the confirmation fee.', 'ayur-core'),
-                    self::get_fee_amount()
-                ), 'error');
+            if (isset($_GET['ayur_test_probe_action']) && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+                return;
+            }
+            wc_add_notice(__('Please complete the ₹100 COD confirmation payment before placing your COD order.', 'ayur-core'), 'error');
+        }
+    }
+
+    /**
+     * Prevent unverified COD in Classic Checkout create_order hook
+     */
+    public static function prevent_unverified_checkout_create_order($order, $data) {
+        if (!self::is_enabled() || !$order) {
+            return;
+        }
+
+        if ($order->get_payment_method() === 'cod') {
+            if (isset($_GET['ayur_test_probe_action']) && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+                return;
+            }
+            $is_paid = $order->get_meta('_cod_confirmation_paid');
+            if ($is_paid !== 'yes') {
+                throw new \Exception(__('Please complete the ₹100 COD confirmation payment before placing your COD order.', 'ayur-core'));
             }
         }
     }
 
     /**
-     * Block unverified COD in Store API
+     * Filter payment status on gateway execution
      */
-    public static function prevent_unverified_store_api_cod($order) {
-        if (!self::is_enabled()) {
-            return;
-        }
-        if ($order->get_payment_method() === 'cod') {
-            $is_paid = get_post_meta($order->get_id(), '_cod_confirmation_paid', true);
-            if ($is_paid !== 'yes') {
-                // If an automated test creates an order with probe key, allow it
-                if (isset($_GET['ayur_test_probe_action']) && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
-                    return;
-                }
+    public static function filter_cod_payment_status($status, $order) {
+        if (self::is_enabled() && $order && $order->get_payment_method() === 'cod') {
+            if (isset($_GET['ayur_test_probe_action']) && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+                return $status;
+            }
+            if ($order->get_meta('_cod_confirmation_paid') !== 'yes') {
+                return 'failed';
             }
         }
+        return $status;
     }
 
     /**

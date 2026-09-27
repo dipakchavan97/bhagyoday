@@ -400,4 +400,243 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ==========================================================================
+   Razorpay Interactive Test & Payment Modal
+   ========================================================================== */
+.ayur-rzp-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 25, 20, 0.72);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+    animation: ayurFadeIn 0.25s ease-out;
+}
+
+.ayur-rzp-modal-box {
+    background: #FFFFFF;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1F2937;
+    animation: ayurSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ayurSlideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ayur-rzp-modal-header {
+    background: linear-gradient(135deg, #173B2F 0%, #24523F 100%);
+    color: #FFFFFF;
+    padding: 20px 22px;
+    position: relative;
+}
+
+.ayur-rzp-brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.ayur-rzp-brand-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.ayur-rzp-test-badge {
+    background: #F59E0B;
+    color: #78350F;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ayur-rzp-modal-close {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #FFFFFF;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.ayur-rzp-modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.ayur-rzp-amount-display {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.ayur-rzp-amount-main {
+    font-size: 28px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.ayur-rzp-amount-label {
+    font-size: 12px;
+    color: #D1FAE5;
+    font-weight: 500;
+}
+
+.ayur-rzp-modal-body {
+    padding: 20px 22px;
+}
+
+.ayur-rzp-summary-card {
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.ayur-rzp-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    color: #4B5563;
+}
+
+.ayur-rzp-summary-row.bold {
+    font-weight: 700;
+    color: #111827;
+    border-top: 1px dashed #D1D5DB;
+    padding-top: 6px;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+.ayur-rzp-methods-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.ayur-rzp-method-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 8px;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ayur-rzp-method-item.selected,
+.ayur-rzp-method-item:hover {
+    border-color: #315C45;
+    background: #F0FDF4;
+}
+
+.ayur-rzp-method-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.ayur-rzp-method-info {
+    flex: 1;
+}
+
+.ayur-rzp-method-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.ayur-rzp-method-subtitle {
+    font-size: 11.5px;
+    color: #6B7280;
+}
+
+.ayur-rzp-btn-pay-success {
+    width: 100%;
+    padding: 14px;
+    background: #173B2F;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(23, 59, 47, 0.25);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.ayur-rzp-btn-pay-success:hover {
+    background: #24523F;
+    transform: translateY(-1px);
+}
+
+.ayur-rzp-btn-pay-fail {
+    width: 100%;
+    margin-top: 10px;
+    padding: 9px;
+    background: transparent;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.ayur-rzp-btn-pay-fail:hover {
+    background: #FEF2F2;
+}
+
+.ayur-rzp-modal-footer {
+    padding: 12px 22px;
+    background: #F9FAFB;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #9CA3AF;
+}
+
 
