@@ -28,13 +28,18 @@ class Ayur_Commerce_Settings {
     }
 
     public static function register_settings() {
+        // Tab-specific groups for isolated tab saves
         // Instant Checkout
         register_setting('ayur_commerce_group', 'ayur_instant_checkout_enabled');
+        register_setting('ayur_commerce_group_instant', 'ayur_instant_checkout_enabled');
 
         // Address Autocomplete
         register_setting('ayur_commerce_group', 'ayur_address_autocomplete_enabled');
         register_setting('ayur_commerce_group', 'ayur_places_api_key');
         register_setting('ayur_commerce_group', 'ayur_address_country_restriction');
+        register_setting('ayur_commerce_group_address', 'ayur_address_autocomplete_enabled');
+        register_setting('ayur_commerce_group_address', 'ayur_places_api_key');
+        register_setting('ayur_commerce_group_address', 'ayur_address_country_restriction');
 
         // COD Confirmation
         register_setting('ayur_commerce_group', 'ayur_cod_confirmation_enabled');
@@ -42,10 +47,19 @@ class Ayur_Commerce_Settings {
         register_setting('ayur_commerce_group', 'ayur_cod_fee_label');
         register_setting('ayur_commerce_group', 'ayur_cod_razorpay_key_id');
         register_setting('ayur_commerce_group', 'ayur_cod_razorpay_key_secret');
+        register_setting('ayur_commerce_group_cod', 'ayur_cod_confirmation_enabled');
+        register_setting('ayur_commerce_group_cod', 'ayur_cod_confirmation_fee');
+        register_setting('ayur_commerce_group_cod', 'ayur_cod_fee_label');
+        register_setting('ayur_commerce_group_cod', 'ayur_cod_razorpay_key_id');
+        register_setting('ayur_commerce_group_cod', 'ayur_cod_razorpay_key_secret');
 
         // Quantity Offers
         register_setting('ayur_commerce_group', 'ayur_quantity_offers_enabled');
         register_setting('ayur_commerce_group', 'ayur_quantity_offer_tiers', array(
+            'sanitize_callback' => array(__CLASS__, 'sanitize_tiers')
+        ));
+        register_setting('ayur_commerce_group_offers', 'ayur_quantity_offers_enabled');
+        register_setting('ayur_commerce_group_offers', 'ayur_quantity_offer_tiers', array(
             'sanitize_callback' => array(__CLASS__, 'sanitize_tiers')
         ));
     }
@@ -69,6 +83,13 @@ class Ayur_Commerce_Settings {
     public static function render_admin_page() {
         $active_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'instant_checkout';
         $tiers = Ayur_Quantity_Offers::get_offer_tiers();
+        $tab_group_map = array(
+            'instant_checkout'  => 'ayur_commerce_group_instant',
+            'address_autofill'  => 'ayur_commerce_group_address',
+            'cod_confirmation'  => 'ayur_commerce_group_cod',
+            'quantity_offers'   => 'ayur_commerce_group_offers'
+        );
+        $current_group = isset($tab_group_map[$active_tab]) ? $tab_group_map[$active_tab] : 'ayur_commerce_group';
         ?>
         <div class="wrap" style="max-width:960px;">
             <h1 style="color:#173B2F; display:flex; align-items:center; gap:8px;">
@@ -84,7 +105,7 @@ class Ayur_Commerce_Settings {
             </nav>
 
             <form method="post" action="options.php" style="background:#fff; padding:24px 28px; border-radius:8px; border:1px solid #ccd0d4; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
-                <?php settings_fields('ayur_commerce_group'); ?>
+                <?php settings_fields($current_group); ?>
 
                 <!-- Tab 1: Instant Checkout -->
                 <?php if ($active_tab === 'instant_checkout') : ?>

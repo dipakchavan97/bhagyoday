@@ -250,6 +250,28 @@ class Ayur_COD_Confirmation {
             if (hash_equals($expected_sig, $signature)) {
                 $is_signature_valid = true;
             }
+
+            // Independent Server Verification via Razorpay Payments API
+            $key_id = self::get_razorpay_key_id();
+            $rzp_check = wp_remote_get('https://api.razorpay.com/v1/payments/' . $payment_id, array(
+                'headers' => array(
+                    'Authorization' => 'Basic ' . base64_encode($key_id . ':' . $key_secret)
+                ),
+                'timeout' => 10
+            ));
+
+            if (!is_wp_error($rzp_check) && wp_remote_retrieve_response_code($rzp_check) === 200) {
+                $pay_data = json_decode(wp_remote_retrieve_body($rzp_check), true);
+                if (!empty($pay_data['order_id']) && $pay_data['order_id'] !== $order_id) {
+                    wp_send_json_error(array('message' => __('Security verification failed: Payment does not match expected Razorpay order.', 'ayur-core')));
+                }
+                if (!empty($pay_data['amount']) && (int) $pay_data['amount'] !== (int) $session['amount_paise']) {
+                    wp_send_json_error(array('message' => __('Security verification failed: Payment amount does not match expected ₹100 fee.', 'ayur-core')));
+                }
+                if (!empty($pay_data['status']) && !in_array($pay_data['status'], array('authorized', 'captured'))) {
+                    wp_send_json_error(array('message' => __('Payment status is not confirmed by Razorpay.', 'ayur-core')));
+                }
+            }
         } else {
             // Test Mode Signature: verified against server salt
             $expected_test_sig = hash_hmac('sha256', $order_id . '|' . $session_id . '|' . $session['amount_paise'], wp_salt('auth'));

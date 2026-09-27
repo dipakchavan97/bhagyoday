@@ -236,6 +236,24 @@ add_action('init', function() {
             ));
         }
 
+        // 7b. Restore Ayur Suite Defaults (Ensure no options were cleared when saving cod tab)
+        if ($action === 'restore_ayur_suite_defaults' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            update_option('ayur_instant_checkout_enabled', 'yes');
+            update_option('ayur_address_autocomplete_enabled', 'yes');
+            update_option('ayur_quantity_offers_enabled', 'yes');
+            update_option('ayur_quantity_offer_tiers', array(
+                array('min_qty' => 2, 'discount_pct' => 10),
+                array('min_qty' => 4, 'discount_pct' => 20)
+            ));
+            wp_send_json_success(array(
+                'status' => 'restored',
+                'instant_checkout' => get_option('ayur_instant_checkout_enabled'),
+                'address_autofill' => get_option('ayur_address_autocomplete_enabled'),
+                'quantity_offers'  => get_option('ayur_quantity_offers_enabled'),
+                'offer_tiers'      => get_option('ayur_quantity_offer_tiers')
+            ));
+        }
+
         // 8. Get PHP Debug Log
         if ($action === 'get_debug_log' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
             $log_path = WP_CONTENT_DIR . '/debug.log';
@@ -262,6 +280,7 @@ add_action('init', function() {
             $effective_rzp_secret = !empty($cod_key_secret) ? $cod_key_secret : (isset($wc_rzp['key_secret']) ? $wc_rzp['key_secret'] : '');
 
             global $wpdb;
+            $matching_options = $wpdb->get_results("SELECT option_name, SUBSTRING(option_value, 1, 40) as val_preview FROM {$wpdb->options} WHERE option_name LIKE '%razorpay%' OR option_name LIKE '%rzp%' OR option_name LIKE '%ayur%'");
             wp_send_json_success(array(
                 'active_plugins' => get_option('active_plugins', array()),
                 'matching_options' => $matching_options,
@@ -273,6 +292,13 @@ add_action('init', function() {
                 'places_key_prefix' => substr($places_key, 0, 6),
                 'places_key_len' => strlen($places_key),
                 'checkout_page_has_blocks' => has_block('woocommerce/checkout', wc_get_page_id('checkout')),
+                'wc_gateway_keys' => function_exists('WC') && WC()->payment_gateways ? array_keys(WC()->payment_gateways->payment_gateways()) : array(),
+                'gateway_settings_options' => $wpdb->get_results("SELECT option_name, SUBSTRING(option_value, 1, 60) as val_preview FROM {$wpdb->options} WHERE option_name LIKE 'woocommerce_%_settings'"),
+                'constants_check' => array(
+                    'RAZORPAY_KEY_ID' => defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : null,
+                    'RAZORPAY_KEY_SECRET' => defined('RAZORPAY_KEY_SECRET') ? 'SET' : null,
+                    'RZP_KEY' => defined('RZP_KEY') ? RZP_KEY : null,
+                )
             ));
         }
 
