@@ -161,6 +161,53 @@ while (have_posts()) :
                         </span>
                     </div>
 
+                    <!-- Phase 5: Buy More, Save More Offer Selector -->
+                    <?php
+                    $offers_enabled = class_exists('Ayur_Quantity_Offers') && Ayur_Quantity_Offers::is_enabled();
+                    $offer_tiers = $offers_enabled ? Ayur_Quantity_Offers::get_offer_tiers() : array();
+                    if ($offers_enabled && !empty($offer_tiers)) :
+                    ?>
+                    <div class="ayur-offer-selector-box" id="ayurOfferSelectorBox" data-unit-price="<?php echo esc_attr($price); ?>">
+                        <div class="ayur-offer-selector-header">
+                            <span class="ayur-offer-header-title">
+                                <?php echo ayur_svg_icon('sparkles', '', 14); ?>
+                                <strong><?php _e('BUY MORE, SAVE MORE', 'ayur-wellness'); ?></strong>
+                            </span>
+                            <span class="ayur-offer-live-badge" id="ayurOfferLiveBadge" style="display:none;"></span>
+                        </div>
+                        <div class="ayur-offer-chips-grid">
+                            <!-- Tier: Buy 1 -->
+                            <div class="ayur-offer-chip is-selected" data-qty="1" data-discount="0" role="button" tabindex="0">
+                                <div class="ayur-offer-chip-radio">
+                                    <span class="radio-circle"></span>
+                                    <span class="chip-qty-title"><?php _e('Buy 1', 'ayur-wellness'); ?></span>
+                                </div>
+                                <div class="ayur-offer-chip-pricing">
+                                    <span class="chip-total">₹<?php echo number_format($price); ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Configured Tiers -->
+                            <?php foreach ($offer_tiers as $t) :
+                                $t_qty = (int) $t['min_qty'];
+                                $t_pct = (float) $t['discount_pct'];
+                                $t_calc = Ayur_Quantity_Offers::calculate_pricing($price, $t_qty);
+                            ?>
+                                <div class="ayur-offer-chip" data-qty="<?php echo esc_attr($t_qty); ?>" data-discount="<?php echo esc_attr($t_pct); ?>" role="button" tabindex="0">
+                                    <div class="ayur-offer-chip-radio">
+                                        <span class="radio-circle"></span>
+                                        <span class="chip-qty-title"><?php printf(__('Buy %d', 'ayur-wellness'), $t_qty); ?></span>
+                                        <span class="chip-save-pill"><?php printf(__('%d%% OFF', 'ayur-wellness'), $t_pct); ?></span>
+                                    </div>
+                                    <div class="ayur-offer-chip-pricing">
+                                        <span class="chip-total">₹<?php echo number_format($t_calc['discounted_subtotal']); ?> <?php _e('total', 'ayur-wellness'); ?></span>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
                     <!-- Purchase Actions Form (Quantity Stepper + ADD TO CART + BUY NOW) -->
                     <form class="cart ayur-cart-form" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
                         <div class="ayur-purchase-actions-grid">
@@ -187,7 +234,7 @@ while (have_posts()) :
                                 <span><?php _e('ADD TO CART', 'ayur-wellness'); ?></span>
                             </button>
 
-                            <a href="<?php echo esc_url(add_query_arg(array('ayur_quick_buy' => $product_id), home_url('/'))); ?>" class="ayur-btn-buy-now">
+                            <a href="<?php echo esc_url(add_query_arg(array('ayur_instant_buy' => $product_id, 'quantity' => 1), home_url('/'))); ?>" class="ayur-btn-buy-now" id="ayurBtnBuyNow" data-product-id="<?php echo esc_attr($product_id); ?>">
                                 <span><?php _e('BUY NOW', 'ayur-wellness'); ?></span>
                                 <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
                             </a>
@@ -488,7 +535,7 @@ while (have_posts()) :
                 <button type="button" class="ayur-sticky-btn ayur-sticky-add-cart" data-product-id="<?php echo esc_attr($sticky_product_id); ?>" aria-label="<?php esc_attr_e('Add to cart', 'ayur-wellness'); ?>">
                     <span><?php _e('ADD', 'ayur-wellness'); ?></span>
                 </button>
-                <a href="<?php echo esc_url($sticky_quick_buy); ?>" class="ayur-sticky-btn ayur-sticky-buy-now" aria-label="<?php esc_attr_e('Buy now', 'ayur-wellness'); ?>">
+                <a href="<?php echo esc_url($sticky_quick_buy); ?>" class="ayur-sticky-btn ayur-sticky-buy-now" id="ayurStickyBuyNow" data-product-id="<?php echo esc_attr($sticky_product_id); ?>" aria-label="<?php esc_attr_e('Buy now', 'ayur-wellness'); ?>">
                     <span><?php _e('BUY NOW', 'ayur-wellness'); ?></span>
                 </a>
             </div>

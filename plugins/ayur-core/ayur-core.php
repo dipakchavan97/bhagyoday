@@ -26,6 +26,11 @@ require_once AYUR_CORE_PATH . 'includes/class-ayur-cart-checkout.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-profitability.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-seeder.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-migrator.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-instant-checkout.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-quantity-offers.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-address-autofill.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-cod-confirmation.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-commerce-settings.php';
 
 /**
  * Main Plugin Initialization
@@ -56,17 +61,39 @@ class Ayur_Core {
         Ayur_Profitability::init();
         Ayur_Seeder::init();
         Ayur_Migrator::init();
+        Ayur_Instant_Checkout::init();
+        Ayur_Quantity_Offers::init();
+        Ayur_Address_Autofill::init();
+        Ayur_COD_Confirmation::init();
+        Ayur_Commerce_Settings::init();
     }
 
     public function enqueue_assets() {
         wp_enqueue_style('ayur-core-style', AYUR_CORE_URL . 'assets/css/ayur-core.css', array(), AYUR_CORE_VERSION);
         wp_enqueue_script('ayur-core-script', AYUR_CORE_URL . 'assets/js/ayur-core.js', array('jquery'), AYUR_CORE_VERSION, true);
 
+        // Load Razorpay Checkout JS on checkout page for COD confirmation fee modal
+        if (function_exists('is_checkout') && is_checkout()) {
+            wp_enqueue_script('razorpay-checkout', 'https://checkout.razorpay.com/v1/checkout.js', array(), null, true);
+        }
+
         wp_localize_script('ayur-core-script', 'ayurCoreParams', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ayur_core_nonce'),
-            'currency_symbol' => '₹',
+            'ajax_url'                => admin_url('admin-ajax.php'),
+            'nonce'                   => wp_create_nonce('ayur_core_nonce'),
+            'currency_symbol'         => '₹',
             'free_shipping_threshold' => 999,
+            'instant_checkout'        => array(
+                'enabled' => Ayur_Instant_Checkout::is_enabled(),
+            ),
+            'quantity_offers'         => array(
+                'enabled' => Ayur_Quantity_Offers::is_enabled(),
+                'tiers'   => Ayur_Quantity_Offers::get_offer_tiers(),
+            ),
+            'cod_confirmation'        => array(
+                'enabled'    => Ayur_COD_Confirmation::is_enabled(),
+                'fee_amount' => Ayur_COD_Confirmation::get_fee_amount(),
+                'fee_label'  => Ayur_COD_Confirmation::get_fee_label(),
+            ),
         ));
     }
 

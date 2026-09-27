@@ -103,17 +103,8 @@ class Ayur_Cart_Checkout {
      * Quick Buy Now (Single Click Direct to Checkout)
      */
     public static function handle_quick_buy() {
-        if (isset($_REQUEST['ayur_quick_buy']) && !empty($_REQUEST['ayur_quick_buy'])) {
-            $product_id = absint($_REQUEST['ayur_quick_buy']);
-            $quantity = isset($_REQUEST['quantity']) ? absint($_REQUEST['quantity']) : 1;
-            $variation_id = isset($_REQUEST['variation_id']) ? absint($_REQUEST['variation_id']) : 0;
-
-            if (WC()->cart) {
-                WC()->cart->empty_cart();
-                WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
-                wp_safe_redirect(wc_get_checkout_url());
-                exit;
-            }
+        if (class_exists('Ayur_Instant_Checkout')) {
+            Ayur_Instant_Checkout::handle_instant_checkout();
         }
     }
 

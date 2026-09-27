@@ -134,3 +134,270 @@
     }
 }
 
+/* ==========================================================================
+   Phase 5: Buy-More-Save Quantity Offer Selector
+   ========================================================================== */
+.ayur-offer-selector-box {
+    margin: 18px 0 16px 0;
+    padding: 14px 16px;
+    background: #FAF7F0;
+    border: 1px solid #E9DDC8;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(23, 59, 47, 0.04);
+}
+.ayur-offer-selector-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.ayur-offer-header-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: #173B2F;
+}
+.ayur-offer-live-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #E8F5E9;
+    color: #2E7D32;
+    border: 1px solid #C8E6C9;
+    animation: ayurFadeIn 0.3s ease;
+}
+.ayur-offer-chips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+}
+.ayur-offer-chip {
+    background: #FFFFFF;
+    border: 1.5px solid #D5DEC7;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    user-select: none;
+}
+.ayur-offer-chip:hover {
+    border-color: #315C45;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(23, 59, 47, 0.08);
+}
+.ayur-offer-chip.is-selected {
+    border-color: #173B2F;
+    background: #F4F7F2;
+    box-shadow: 0 2px 8px rgba(23, 59, 47, 0.12);
+}
+.ayur-offer-chip-radio {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.ayur-offer-chip-radio .radio-circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid #A0AFA6;
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+}
+.ayur-offer-chip.is-selected .radio-circle {
+    border-color: #173B2F;
+    background: #173B2F;
+}
+.ayur-offer-chip.is-selected .radio-circle::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #FFFFFF;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.chip-qty-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #173B2F;
+}
+.chip-save-pill {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 800;
+    background: #2E7D32;
+    color: #FFFFFF;
+    padding: 2px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+}
+.ayur-offer-chip-pricing {
+    font-size: 12px;
+    color: #5C6A64;
+    padding-left: 20px;
+}
+.ayur-offer-chip-pricing .chip-total {
+    font-weight: 600;
+    color: #222522;
+}
+
+/* ==========================================================================
+   Phase 2: Address Search & PIN Code Feedback
+   ========================================================================== */
+.ayur-address-search-wrapper {
+    margin: 10px 0 16px 0;
+    padding: 12px 14px;
+    background: #FAF7F0;
+    border: 1px solid #E9DDC8;
+    border-radius: 8px;
+}
+.ayur-address-search-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #173B2F;
+    margin-bottom: 6px;
+}
+.ayur-address-search-input {
+    width: 100% !important;
+    padding: 10px 12px !important;
+    border: 1.5px solid #D5DEC7 !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    box-sizing: border-box !important;
+    background: #FFFFFF !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+.ayur-address-search-input:focus {
+    border-color: #173B2F !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(23, 59, 47, 0.1) !important;
+}
+.ayur-pin-feedback {
+    margin-top: 6px;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.ayur-pin-feedback .pin-success {
+    color: #2E7D32;
+    font-weight: 600;
+}
+.ayur-pin-feedback .pin-loading {
+    color: #854D0E;
+}
+
+/* ==========================================================================
+   Phase 3 & 4: COD ₹100 Confirmation Fee Breakdown Box
+   ========================================================================== */
+.ayur-cod-fee-breakdown-box {
+    margin: 12px 0 16px 0;
+    padding: 14px 16px;
+    background: #FAF7F0;
+    border: 1.5px solid #315C45;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(23, 59, 47, 0.06);
+    font-size: 13px;
+    color: #222522;
+}
+.ayur-cod-fee-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(23, 59, 47, 0.1);
+}
+.ayur-cod-fee-header .badge-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+.ayur-cod-fee-header strong {
+    color: #173B2F;
+    font-size: 14px;
+}
+.ayur-cod-fee-header .subtext {
+    font-size: 12px;
+    color: #5C6A64;
+    margin-top: 2px;
+    line-height: 1.4;
+}
+.ayur-cod-fee-table {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.ayur-cod-fee-table .split-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #333835;
+}
+.ayur-cod-fee-table .split-row.highlight {
+    padding: 4px 6px;
+    background: rgba(212, 175, 55, 0.12);
+    border-radius: 4px;
+    color: #854D0E;
+}
+.ayur-cod-fee-table .split-row.pay-now-row {
+    padding: 6px 8px;
+    background: #E8F5E9;
+    border-radius: 6px;
+    border-left: 3px solid #2E7D32;
+    margin-top: 4px;
+}
+.ayur-cod-fee-table .split-row.pay-now-row .pay-now-val {
+    font-size: 15px;
+    color: #2E7D32;
+    font-weight: 800;
+}
+.ayur-cod-fee-table .split-row.pay-cod-row {
+    padding: 6px 8px;
+    background: #FFFFFF;
+    border: 1px solid #D5DEC7;
+    border-radius: 6px;
+}
+.ayur-cod-fee-table .split-row.pay-cod-row .pay-cod-val {
+    font-size: 14px;
+    color: #173B2F;
+    font-weight: 800;
+}
+.ayur-cod-fee-footer-note {
+    font-size: 11.5px;
+    color: #6B7280;
+    line-height: 1.4;
+    margin-top: 6px;
+}
+
+/* Cart Drawer Offer Tag */
+.ayur-drawer-item-offer-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2E7D32;
+    background: #E8F5E9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 3px;
+    margin-bottom: 4px;
+}
+
+@keyframes ayurFadeIn {
+    from { opacity: 0; transform: translateY(-2px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+

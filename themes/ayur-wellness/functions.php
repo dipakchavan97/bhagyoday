@@ -218,9 +218,11 @@ function ayur_get_cart_drawer_content_html() {
     $cart = WC()->cart;
     $count = $cart->get_cart_contents_count();
     $subtotal = (float) $cart->get_displayed_subtotal();
+    $qty_discount = class_exists('Ayur_Quantity_Offers') ? Ayur_Quantity_Offers::calculate_cart_discount($cart) : 0;
+    $eligible_subtotal = max(0, $subtotal - $qty_discount);
     $threshold = 999;
-    $remaining = $threshold - $subtotal;
-    $percent = min(100, max(0, round(($subtotal / $threshold) * 100)));
+    $remaining = $threshold - $eligible_subtotal;
+    $percent = min(100, max(0, round(($eligible_subtotal / $threshold) * 100)));
 
     ob_start();
     ?>
@@ -346,6 +348,13 @@ function ayur_get_cart_drawer_content_html() {
                                 <div class="ayur-drawer-item-qty-tag"><?php echo esc_html($net_qty); ?></div>
                             <?php endif; ?>
                             <div class="ayur-drawer-item-price"><?php echo $price; ?></div>
+                            <?php
+                            $item_tier = class_exists('Ayur_Quantity_Offers') ? Ayur_Quantity_Offers::get_applicable_tier($cart_item['quantity']) : null;
+                            if ($item_tier) : ?>
+                                <div class="ayur-drawer-item-offer-tag">
+                                    <?php printf(__('Buy %d+ and save %d%%', 'ayur-wellness'), $item_tier['min_qty'], $item_tier['discount_pct']); ?>
+                                </div>
+                            <?php endif; ?>
 
                             <div class="ayur-drawer-item-actions">
                                 <div class="ayur-drawer-qty-stepper">
@@ -434,6 +443,15 @@ function ayur_get_cart_drawer_content_html() {
                     <span class="label"><?php _e('Subtotal', 'ayur-wellness'); ?></span>
                     <span class="val"><?php echo WC()->cart->get_cart_subtotal(); ?></span>
                 </div>
+                <?php
+                $qty_discount = class_exists('Ayur_Quantity_Offers') ? Ayur_Quantity_Offers::calculate_cart_discount() : 0;
+                if ($qty_discount > 0) :
+                ?>
+                <div class="ayur-drawer-breakdown-row ayur-drawer-discount-row">
+                    <span class="label"><?php _e('Quantity Discount', 'ayur-wellness'); ?></span>
+                    <span class="val" style="color: #2e7d32; font-weight: 600;">-₹<?php echo number_format($qty_discount); ?></span>
+                </div>
+                <?php endif; ?>
                 <div class="ayur-drawer-breakdown-row">
                     <span class="label"><?php _e('Shipping', 'ayur-wellness'); ?></span>
                     <span class="val">

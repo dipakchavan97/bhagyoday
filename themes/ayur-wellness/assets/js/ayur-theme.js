@@ -16,6 +16,8 @@
         initQtySteppers();
         initMobileStickyBar();
         initProductAccordions();
+        initOfferSelector();
+        initInstantCheckout();
     });
 
     /**
@@ -499,7 +501,7 @@
     function initQtySteppers() {
         $(document).on('click', '.ayur-qty-inc', function(e) {
             e.preventDefault();
-            var $input = $(this).siblings('.qty');
+            var $input = $(this).closest('.ayur-qty-stepper').find('input.qty');
             var val = parseInt($input.val(), 10) || 1;
             var max = parseInt($input.attr('max'), 10) || 999;
             if (val < max) {
@@ -509,7 +511,7 @@
 
         $(document).on('click', '.ayur-qty-dec', function(e) {
             e.preventDefault();
-            var $input = $(this).siblings('.qty');
+            var $input = $(this).closest('.ayur-qty-stepper').find('input.qty');
             var val = parseInt($input.val(), 10) || 1;
             var min = parseInt($input.attr('min'), 10) || 1;
             if (val > min) {
@@ -601,6 +603,148 @@
         $(window).on('resize', function() {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(syncAccordions, 150);
+        });
+    }
+
+    /**
+     * Buy More Save More Offer Selector (Phase 5)
+     */
+    function initOfferSelector() {
+        var $box = $('#ayurOfferSelectorBox');
+        if (!$box.length) return;
+
+        var $qtyInput = $('form.cart input[name="quantity"]');
+        var $badge = $('#ayurOfferLiveBadge');
+
+        // Handle Chip Click
+        $(document).on('click', '.ayur-offer-chip', function(e) {
+            e.preventDefault();
+            var $chip = $(this);
+            var targetQty = parseInt($chip.data('qty'), 10) || 1;
+
+            $('.ayur-offer-chip').removeClass('is-selected');
+            $chip.addClass('is-selected');
+
+            if ($qtyInput.length) {
+                $qtyInput.val(targetQty).trigger('change');
+            }
+            updateOfferBadge(targetQty);
+            syncBuyNowButtons(targetQty);
+        });
+
+        // Sync when quantity input changes (steppers or typing)
+        $qtyInput.on('input change', function() {
+            var currentQty = parseInt($(this).val(), 10) || 1;
+            syncChipsToQty(currentQty);
+            updateOfferBadge(currentQty);
+            syncBuyNowButtons(currentQty);
+        });
+
+        function syncChipsToQty(qty) {
+            var $chips = $('.ayur-offer-chip');
+            var matchedChip = null;
+
+            $chips.each(function() {
+                var chipQty = parseInt($(this).data('qty'), 10) || 1;
+                if (qty >= chipQty) {
+                    matchedChip = $(this);
+                }
+            });
+
+            $chips.removeClass('is-selected');
+            if (matchedChip) {
+                matchedChip.addClass('is-selected');
+            } else {
+                $chips.first().addClass('is-selected');
+            }
+        }
+
+        function updateOfferBadge(qty) {
+            if (!$badge.length) return;
+            var appliedDiscount = 0;
+
+            $('.ayur-offer-chip').each(function() {
+                var chipQty = parseInt($(this).data('qty'), 10) || 1;
+                var disc = parseFloat($(this).data('discount')) || 0;
+                if (qty >= chipQty && disc > appliedDiscount) {
+                    appliedDiscount = disc;
+                }
+            });
+
+            if (appliedDiscount > 0) {
+                $badge.html('✓ ' + appliedDiscount + '% OFF applied').show();
+            } else {
+                $badge.hide();
+            }
+        }
+
+        function syncBuyNowButtons(qty) {
+            $('#ayurBtnBuyNow, #ayurStickyBuyNow').each(function() {
+                var prodId = $(this).data('product-id');
+                if (prodId) {
+                    var newUrl = (ayurThemeParams.checkout_url || '/checkout/') + '?ayur_instant_buy=' + prodId + '&quantity=' + qty;
+                    $(this).attr('href', newUrl);
+                }
+            });
+        }
+
+        // Initialize state
+        var initialQty = parseInt($qtyInput.val(), 10) || 1;
+        syncChipsToQty(initialQty);
+        updateOfferBadge(initialQty);
+        syncBuyNowButtons(initialQty);
+    }
+
+    /**
+     * Instant Checkout Entry Point for BUY NOW buttons (Phase 1)
+     */
+    function initInstantCheckout() {
+        $(document).on('click', '#ayurBtnBuyNow, #ayurStickyBuyNow, .ayur-btn-buy-now, .ayur-sticky-buy-now', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var prodId = $btn.data('product-id') || $('form.cart button[name="add-to-cart"]').val();
+            var qty = parseInt($('form.cart input[name="quantity"]').val(), 10) || 1;
+
+            if (!prodId) {
+                window.location.href = $btn.attr('href');
+                return;
+            }
+
+            // Track begin_checkout in GA4 & Meta Pixel
+            var prodName = $('.ayur-single-title, .ayur-product-title, h1.product_title').first().text().trim() || 'Ayurvedic Formulation';
+            var price = parseFloat($('#ayurOfferSelectorBox').data('unit-price')) || 890;
+            var value = price * qty;
+
+            if (window.dataLayer) {
+                window.dataLayer.push({
+                    'event': 'begin_checkout',
+                    'ecommerce': {
+                        'currency': 'INR',
+                        'value': value,
+                        'items': [{
+                            'item_id': String(prodId),
+                            'item_name': prodName,
+                            'quantity': qty,
+                            'price': price
+                        }]
+                    }
+                });
+            }
+
+            if (typeof fbq === 'function') {
+                fbq('track', 'InitiateCheckout', {
+                    content_name: prodName,
+                    content_ids: [String(prodId)],
+                    content_type: 'product',
+                    value: value,
+                    currency: 'INR',
+                    num_items: qty
+                });
+            }
+
+            // Direct instant checkout navigation
+            var instantUrl = (ayurThemeParams.checkout_url || '/checkout/') + '?ayur_instant_buy=' + prodId + '&quantity=' + qty;
+            window.location.href = instantUrl;
         });
     }
 
