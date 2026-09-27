@@ -541,6 +541,13 @@ while (have_posts()) :
                 </div>
             </div>
 
+            <!-- Amazon-Style Authentic Customer Reviews System -->
+            <?php
+            if (class_exists('Ayur_Reviews')) {
+                Ayur_Reviews::render_product_reviews($product_id);
+            }
+            ?>
+
             <!-- Smart Complementary Related Formulations -->
             <?php
             $related_products = ayur_get_smart_related_products($product_id, 4);

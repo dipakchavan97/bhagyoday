@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_CORE_VERSION', '1.0.2');
+define('AYUR_CORE_VERSION', '1.0.3');
 define('AYUR_CORE_PATH', plugin_dir_path(__FILE__));
 define('AYUR_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -31,6 +31,7 @@ require_once AYUR_CORE_PATH . 'includes/class-ayur-quantity-offers.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-address-autofill.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-cod-confirmation.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-commerce-settings.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-reviews.php';
 
 /**
  * Main Plugin Initialization
@@ -66,11 +67,22 @@ class Ayur_Core {
         Ayur_Address_Autofill::init();
         Ayur_COD_Confirmation::init();
         Ayur_Commerce_Settings::init();
+        Ayur_Reviews::init();
     }
 
     public function enqueue_assets() {
         wp_enqueue_style('ayur-core-style', AYUR_CORE_URL . 'assets/css/ayur-core.css', array(), AYUR_CORE_VERSION);
         wp_enqueue_script('ayur-core-script', AYUR_CORE_URL . 'assets/js/ayur-core.js', array('jquery'), AYUR_CORE_VERSION, true);
+
+        // Amazon-Style Customer Reviews Assets
+        if (function_exists('is_product') && is_product()) {
+            wp_enqueue_style('ayur-reviews-style', AYUR_CORE_URL . 'assets/css/ayur-reviews.css', array(), AYUR_CORE_VERSION);
+            wp_enqueue_script('ayur-reviews-script', AYUR_CORE_URL . 'assets/js/ayur-reviews.js', array('jquery'), AYUR_CORE_VERSION, true);
+            wp_localize_script('ayur-reviews-script', 'ayurReviewsParams', array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce'    => wp_create_nonce('ayur_review_nonce'),
+            ));
+        }
 
         // Load Razorpay Checkout JS on checkout page for COD confirmation fee modal
         if (function_exists('is_checkout') && is_checkout()) {

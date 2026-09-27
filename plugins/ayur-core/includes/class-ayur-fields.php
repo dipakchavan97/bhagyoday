@@ -27,9 +27,6 @@ class Ayur_Fields {
         // SEO Schema (Product, FAQPage, Organization, Breadcrumbs, WebSite)
         add_action('wp_head', array(__CLASS__, 'output_seo_json_ld'), 20);
 
-        // Phase 3 Review Verification: Purge unverified / mock seeded product reviews
-        add_action('init', array(__CLASS__, 'purge_unverified_product_reviews'), 99);
-
         // Sanitize legacy database emojis
         add_action('init', array(__CLASS__, 'strip_database_emojis'), 90);
     }
@@ -537,25 +534,7 @@ class Ayur_Fields {
      * Purge unverified / mock reviews from database to comply with Phase 3 Truth-in-Advertising
      */
     public static function purge_unverified_product_reviews() {
-        if (!function_exists('wc_get_products')) {
-            return;
-        }
-        $count = get_comments(array('post_type' => 'product', 'count' => true));
-        if ($count > 0) {
-            $comments = get_comments(array('post_type' => 'product'));
-            foreach ($comments as $c) {
-                wp_delete_comment($c->comment_ID, true);
-            }
-            $products = wc_get_products(array('limit' => -1));
-            foreach ($products as $p) {
-                if (class_exists('WC_Comments')) {
-                    WC_Comments::clear_transients($p->get_id());
-                }
-                update_post_meta($p->get_id(), '_wc_review_count', 0);
-                update_post_meta($p->get_id(), '_wc_average_rating', '0.00');
-                update_post_meta($p->get_id(), '_wc_rating_count', array());
-            }
-        }
+        return; // Deprecated: Customer Reviews Engine now manages legitimate reviews
     }
 
     /**
