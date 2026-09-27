@@ -4,7 +4,7 @@ Theme URI: https://lightgreen-heron-113083.hostingersite.com/
 Author: Antigravity Lead Architect
 Author URI: https://lightgreen-heron-113083.hostingersite.com/
 Description: Premium, authentic, trustworthy Ayurvedic & Herbal D2C eCommerce Theme for WooCommerce in India. Features editorial aesthetics, unified SVG vector icon system, slide-in cart drawer, and native-app mobile UX.
-Version: 3.2.1
+Version: 3.2.2
 License: GNU General Public License v2 or later
 Text Domain: ayur-wellness
 Tested up to: 7.1.2
@@ -2877,7 +2877,7 @@ p:last-child {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2000;
+    z-index: 99999;
     visibility: hidden;
     overflow: hidden;
     transition: visibility var(--transition-base);
@@ -6003,39 +6003,138 @@ select:focus {
 .ayur-drawer-breakdown {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #E9DDC8;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .ayur-drawer-breakdown-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
-    color: #5A665A;
+    width: 100%;
 }
 
-.ayur-drawer-breakdown-row .val {
+/* Subtotal Row - Clean two-column */
+.ayur-drawer-subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.ayur-drawer-subtotal-row .label {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--color-charcoal);
+}
+
+.ayur-drawer-subtotal-row .val {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--color-forest);
+    text-align: right;
+}
+
+/* Quantity Discount Row if applicable */
+.ayur-drawer-discount-row {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #2e7d32;
+}
+
+/* Shipping Block - Stacked layout on Mobile with 18px top spacing */
+.cart-summary-shipping,
+.ayur-drawer-shipping-block {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.cart-summary-label,
+.ayur-drawer-shipping-label {
+    font-family: var(--font-display);
+    font-size: 19px;
     font-weight: 600;
-    color: #173B2F;
+    color: var(--color-forest);
+    line-height: 1.3;
 }
 
-.ayur-drawer-breakdown-row .free-shipping-tag {
-    font-size: 11px;
+.cart-summary-shipping-note,
+.ayur-drawer-shipping-note {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    line-height: 1.35;
+}
+
+.cart-summary-shipping-note .shipping-calc-text,
+.ayur-drawer-shipping-note .shipping-calc-text {
+    font-size: 16px;
+    font-weight: 400;
+    color: #4A564A;
+}
+
+.cart-summary-shipping-note .shipping-threshold-text,
+.ayur-drawer-shipping-note .shipping-threshold-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-herbal);
+}
+
+.cart-summary-shipping-note .free-shipping-tag,
+.ayur-drawer-shipping-note .free-shipping-tag {
+    display: inline-block;
+    font-size: 13px;
     font-weight: 700;
-    color: #315C45;
-    background: #FAF7F0;
-    padding: 2px 6px;
+    color: var(--color-forest);
+    background: #E8F2EC;
+    padding: 3px 8px;
     border-radius: 6px;
+    align-self: flex-start;
 }
 
+/* Estimated Total Row - Clean two-column with 26px top spacing */
 .ayur-drawer-total-row {
-    font-size: 15px;
+    margin-top: 26px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.ayur-drawer-total-row .label {
+    font-family: var(--font-display);
+    font-size: 18px;
     font-weight: 700;
-    color: #173B2F;
-    margin-top: 4px;
+    color: var(--color-forest);
+}
+
+.ayur-drawer-total-row .val {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-forest);
+    text-align: right;
+}
+
+/* Desktop: Can arrange horizontally if width fits */
+@media (min-width: 768px) {
+    .cart-summary-shipping,
+    .ayur-drawer-shipping-block {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .cart-summary-shipping-note,
+    .ayur-drawer-shipping-note {
+        text-align: right;
+        align-items: flex-end;
+    }
 }
 
 .ayur-drawer-continue-btn {

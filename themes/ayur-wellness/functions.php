@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '3.2.1');
+define('AYUR_THEME_VERSION', '3.2.2');
 
 /**
  * Theme Setup
@@ -439,7 +439,7 @@ function ayur_get_cart_drawer_content_html() {
 
         <div class="ayur-drawer-footer">
             <div class="ayur-drawer-breakdown">
-                <div class="ayur-drawer-breakdown-row">
+                <div class="ayur-drawer-breakdown-row ayur-drawer-subtotal-row">
                     <span class="label"><?php _e('Subtotal', 'ayur-wellness'); ?></span>
                     <span class="val"><?php echo WC()->cart->get_cart_subtotal(); ?></span>
                 </div>
@@ -452,15 +452,18 @@ function ayur_get_cart_drawer_content_html() {
                     <span class="val" style="color: #2e7d32; font-weight: 600;">-₹<?php echo number_format($qty_discount); ?></span>
                 </div>
                 <?php endif; ?>
-                <div class="ayur-drawer-breakdown-row">
-                    <span class="label"><?php _e('Shipping', 'ayur-wellness'); ?></span>
-                    <span class="val">
+                <div class="cart-summary-shipping ayur-drawer-shipping-block">
+                    <div class="cart-summary-label ayur-drawer-shipping-label">
+                        <?php _e('Shipping', 'ayur-wellness'); ?>
+                    </div>
+                    <div class="cart-summary-shipping-note ayur-drawer-shipping-note">
                         <?php if ($remaining <= 0) : ?>
-                            <span class="free-shipping-tag"><?php _e('FREE Pan-India', 'ayur-wellness'); ?></span>
+                            <span class="free-shipping-tag"><?php _e('FREE Pan-India Delivery', 'ayur-wellness'); ?></span>
                         <?php else : ?>
-                            <span><?php _e('Calculated at checkout &bull; Free over ₹999', 'ayur-wellness'); ?></span>
+                            <span class="shipping-calc-text"><?php _e('Calculated at checkout', 'ayur-wellness'); ?></span>
+                            <span class="shipping-threshold-text"><?php _e('Free over ₹999', 'ayur-wellness'); ?></span>
                         <?php endif; ?>
-                    </span>
+                    </div>
                 </div>
                 <div class="ayur-drawer-breakdown-row ayur-drawer-total-row">
                     <span class="label"><?php _e('Estimated Total', 'ayur-wellness'); ?></span>
