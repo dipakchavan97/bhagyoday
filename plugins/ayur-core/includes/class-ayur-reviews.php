@@ -984,7 +984,7 @@ class Ayur_Reviews {
                             }
                         }
                     ?>
-                        <button type="button" class="ayur-gallery-thumb-btn" data-full-img="<?php echo esc_url($full_url); ?>" data-caption="<?php echo esc_attr($formatted_name . ' - ' . $title); ?>" aria-label="<?php esc_attr_e('View full review photo', 'ayur-core'); ?>">
+                        <button type="button" class="ayur-review-photo-thumb-btn" data-full-img="<?php echo esc_url($full_url); ?>" data-caption="<?php echo esc_attr($formatted_name . ' - ' . $title); ?>" aria-label="<?php esc_attr_e('View full review photo', 'ayur-core'); ?>">
                             <img src="<?php echo esc_url($thumb_url); ?>" alt="<?php esc_attr_e('Customer review photo', 'ayur-core'); ?>" loading="lazy">
                         </button>
                     <?php endforeach; ?>

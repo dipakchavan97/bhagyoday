@@ -425,74 +425,168 @@
     }
 
     /**
-     * Product Gallery Switcher
+    /**
+     * Product Gallery & Unified Lightbox Suite
      */
     function initProductGallery() {
-        $(document).on('click', '.ayur-gallery-thumb-btn', function(e) {
-            e.preventDefault();
-            var fullUrl = $(this).data('full');
-            if (fullUrl) {
-                var $mainImg = $('#ayurMainProductImg');
-                $mainImg.css('opacity', '0.4');
-                $mainImg.attr('src', fullUrl).attr('srcset', '');
-                setTimeout(function() {
-                    $mainImg.css('opacity', '1');
-                }, 120);
-
-                $('.ayur-gallery-thumb-btn').removeClass('active');
-                $(this).addClass('active');
-            }
-        });
-    }
-
-    /**
-     * Phase 6: Product Gallery Zoom & Lightbox Inspection
-     */
-    function initProductLightbox() {
         var $stage = $('#ayurGalleryStage');
+        var $mainImg = $('#ayurMainProductImg');
         var $lightbox = $('#ayurImageLightbox');
         var $lightboxImg = $('#ayurLightboxImg');
-        if (!$stage.length || !$lightbox.length) return;
+        var $counter = $('#ayurLightboxCounter');
 
-        function openLightbox(imgSrc) {
-            var srcToUse = imgSrc || $('#ayurMainProductImg').attr('src');
-            if (srcToUse) {
-                $lightboxImg.attr('src', srcToUse);
+        if (!$stage.length || !$mainImg.length) return;
+
+        // Collect all gallery items
+        var galleryItems = [];
+        var $thumbBtns = $('.ayur-gallery-thumb-btn');
+
+        if ($thumbBtns.length > 0) {
+            $thumbBtns.each(function(i) {
+                var $btn = $(this);
+                var largeUrl = $btn.data('large') || $btn.data('full') || $btn.find('img').attr('src');
+                var fullUrl = $btn.data('full') || largeUrl;
+                var alt = $btn.data('alt') || $mainImg.attr('alt') || '';
+                galleryItems.push({
+                    index: i,
+                    large: largeUrl,
+                    full: fullUrl,
+                    alt: alt
+                });
+            });
+        } else {
+            var initialSrc = $mainImg.attr('src');
+            var initialFull = $mainImg.data('full') || $stage.data('zoom-url') || initialSrc;
+            galleryItems.push({
+                index: 0,
+                large: initialSrc,
+                full: initialFull,
+                alt: $mainImg.attr('alt') || ''
+            });
+        }
+
+        var currentIndex = 0;
+
+        function updateCounter(idx) {
+            if ($counter.length && galleryItems.length > 0) {
+                $counter.text((idx + 1) + ' / ' + galleryItems.length);
             }
+        }
+
+        function setMainImage(idx) {
+            if (!galleryItems[idx]) return;
+            var item = galleryItems[idx];
+            currentIndex = idx;
+
+            // Smooth image transition on main stage
+            $mainImg.css('opacity', '0.35');
+            $mainImg.attr('src', item.large).removeAttr('srcset').attr('data-full', item.full).attr('data-index', idx);
+            if (item.alt) $mainImg.attr('alt', item.alt);
+
+            setTimeout(function() {
+                $mainImg.css('opacity', '1');
+            }, 100);
+
+            // Update active thumbnail border
+            $('.ayur-gallery-thumb-btn').removeClass('active');
+            $('.ayur-gallery-thumb-btn[data-index="' + idx + '"]').addClass('active');
+        }
+
+        function openLightbox(idx, fullUrlOverride) {
+            if (!$lightbox.length) return;
+            var item = galleryItems[idx] || galleryItems[0] || {};
+            var srcToUse = fullUrlOverride || item.full || item.large || $mainImg.attr('src');
+            if (!srcToUse) return;
+
+            currentIndex = idx;
+            updateCounter(currentIndex);
+
+            // Blank image failure protection: fallback to main image if full fails
+            $lightboxImg.off('error').on('error', function() {
+                var fallbackSrc = item.large || $mainImg.attr('src');
+                if (fallbackSrc && $(this).attr('src') !== fallbackSrc) {
+                    $(this).attr('src', fallbackSrc);
+                } else {
+                    closeLightbox();
+                }
+            });
+
+            $lightboxImg.attr('src', srcToUse);
+            if (item.alt) $lightboxImg.attr('alt', item.alt);
+
             $lightbox.addClass('is-open').attr('aria-hidden', 'false');
             $('body').addClass('ayur-scroll-locked');
             $('#ayurLightboxClose').focus();
         }
 
         function closeLightbox() {
+            if (!$lightbox.length) return;
             $lightbox.removeClass('is-open').attr('aria-hidden', 'true');
             $('body').removeClass('ayur-scroll-locked');
         }
 
+        // Thumbnail Click: update main image AND open lightbox
+        $(document).on('click', '.ayur-gallery-thumb-btn', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var idx = parseInt($(this).data('index'), 10) || 0;
+            var fullUrl = $(this).data('full');
+            setMainImage(idx);
+            openLightbox(idx, fullUrl);
+        });
+
+        // Stage click or zoom badge click
         $stage.on('click', function(e) {
             e.preventDefault();
-            var currentSrc = $('#ayurMainProductImg').attr('src');
-            openLightbox(currentSrc);
+            e.stopPropagation();
+            var activeIdx = parseInt($mainImg.attr('data-index'), 10) || currentIndex;
+            var fullUrl = $mainImg.attr('data-full');
+            openLightbox(activeIdx, fullUrl);
         });
 
         $stage.on('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                var currentSrc = $('#ayurMainProductImg').attr('src');
-                openLightbox(currentSrc);
+                openLightbox(currentIndex);
             }
         });
 
+        // Prev & Next Buttons in Lightbox
+        $('#ayurLightboxPrev').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (galleryItems.length < 2) return;
+            currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+            setMainImage(currentIndex);
+            openLightbox(currentIndex);
+        });
+
+        $('#ayurLightboxNext').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (galleryItems.length < 2) return;
+            currentIndex = (currentIndex + 1) % galleryItems.length;
+            setMainImage(currentIndex);
+            openLightbox(currentIndex);
+        });
+
+        // Close handlers
         $('#ayurLightboxClose, #ayurLightboxBackdrop').on('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             closeLightbox();
         });
 
         $(document).on('keyup', function(e) {
-            if (e.key === 'Escape' && $lightbox.hasClass('is-open')) {
-                closeLightbox();
-            }
+            if (!$lightbox.hasClass('is-open')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') $('#ayurLightboxPrev').trigger('click');
+            if (e.key === 'ArrowRight') $('#ayurLightboxNext').trigger('click');
         });
+    }
+
+    function initProductLightbox() {
+        // Lifecycle managed in initProductGallery
     }
 
     /**

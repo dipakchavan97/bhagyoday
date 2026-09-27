@@ -74,13 +74,15 @@ while (have_posts()) :
             <div class="ayur-product-layout">
                 <!-- 2. Product Gallery with Label Inspection Zoom -->
                 <div class="ayur-gallery-col">
-                    <div class="ayur-gallery-stage" id="ayurGalleryStage" role="button" tabindex="0" aria-label="<?php esc_attr_e('Click to enlarge and inspect packaging label', 'ayur-wellness'); ?>">
+                    <div class="ayur-gallery-stage" id="ayurGalleryStage" role="button" tabindex="0" aria-label="<?php esc_attr_e('Click to enlarge and inspect packaging label', 'ayur-wellness'); ?>" data-zoom-url="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>">
                         <?php if (has_post_thumbnail()) : ?>
                             <?php the_post_thumbnail('large', array(
                                 'class'         => 'ayur-main-img',
                                 'id'            => 'ayurMainProductImg',
                                 'fetchpriority' => 'high',
-                                'alt'           => esc_attr(get_the_title())
+                                'alt'           => esc_attr(get_the_title()),
+                                'data-full'     => esc_url(get_the_post_thumbnail_url($product_id, 'full')),
+                                'data-index'    => '0'
                             )); ?>
                             <span class="ayur-gallery-zoom-badge">
                                 <?php echo ayur_svg_icon('search', '', 13); ?>
@@ -98,11 +100,17 @@ while (have_posts()) :
                             <?php foreach ($gallery_ids as $index => $att_id) :
                                 $thumb_url = wp_get_attachment_image_url($att_id, 'woocommerce_gallery_thumbnail');
                                 $large_url = wp_get_attachment_image_url($att_id, 'large');
+                                $full_url  = wp_get_attachment_image_url($att_id, 'full');
                                 if (!$thumb_url) continue;
+                                if (!$large_url) $large_url = $thumb_url;
+                                if (!$full_url)  $full_url  = $large_url;
                             ?>
                                 <button type="button"
                                         class="ayur-gallery-thumb-btn <?php echo $index === 0 ? 'active' : ''; ?>"
-                                        data-full="<?php echo esc_url($large_url); ?>"
+                                        data-index="<?php echo esc_attr($index); ?>"
+                                        data-large="<?php echo esc_url($large_url); ?>"
+                                        data-full="<?php echo esc_url($full_url); ?>"
+                                        data-alt="<?php echo esc_attr(sprintf(__('%s - View %d', 'ayur-wellness'), get_the_title(), $index + 1)); ?>"
                                         aria-label="<?php echo esc_attr(sprintf(__('View image %d', 'ayur-wellness'), $index + 1)); ?>">
                                     <img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?> thumbnail <?php echo $index + 1; ?>" loading="lazy" />
                                 </button>
@@ -577,13 +585,24 @@ while (have_posts()) :
             <div class="ayur-lightbox-backdrop" id="ayurLightboxBackdrop"></div>
             <div class="ayur-lightbox-dialog">
                 <button type="button" class="ayur-lightbox-close" id="ayurLightboxClose" aria-label="<?php esc_attr_e('Close inspection modal', 'ayur-wellness'); ?>">
-                    <?php echo ayur_svg_icon('x', '', 18); ?>
+                    <?php echo ayur_svg_icon('x', '', 20); ?>
                 </button>
+                <?php if (count($gallery_ids) > 1) : ?>
+                    <button type="button" class="ayur-lightbox-nav ayur-lightbox-prev" id="ayurLightboxPrev" aria-label="<?php esc_attr_e('Previous image', 'ayur-wellness'); ?>">
+                        <?php echo ayur_svg_icon('chevron-left', '', 22); ?>
+                    </button>
+                    <button type="button" class="ayur-lightbox-nav ayur-lightbox-next" id="ayurLightboxNext" aria-label="<?php esc_attr_e('Next image', 'ayur-wellness'); ?>">
+                        <?php echo ayur_svg_icon('chevron-right', '', 22); ?>
+                    </button>
+                <?php endif; ?>
                 <div class="ayur-lightbox-stage">
-                    <img id="ayurLightboxImg" src="<?php echo esc_url(get_the_post_thumbnail_url($sticky_product_id, 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" />
+                    <img id="ayurLightboxImg" src="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" />
                 </div>
                 <div class="ayur-lightbox-footer">
                     <span class="ayur-lightbox-title"><?php the_title(); ?></span>
+                    <?php if (count($gallery_ids) > 1) : ?>
+                        <span class="ayur-lightbox-counter" id="ayurLightboxCounter">1 / <?php echo count($gallery_ids); ?></span>
+                    <?php endif; ?>
                     <span class="ayur-lightbox-hint"><?php _e('Authentic Ayurvedic formulation &bull; Inspected classical packaging', 'ayur-wellness'); ?></span>
                 </div>
             </div>

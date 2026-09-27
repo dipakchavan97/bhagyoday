@@ -461,18 +461,26 @@
         const caption = $('#ayurLightboxCaption');
         if (!lightbox.length || !img.length) return;
 
-        $(document).on('click', '.ayur-gallery-thumb-btn', function(e) {
+        $(document).on('click', '.ayur-review-photo-thumb-btn', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const fullUrl = $(this).data('full-img');
             const capText = $(this).data('caption') || '';
 
-            img.attr('src', fullUrl);
-            caption.text(capText);
-            lightbox.addClass('is-open').attr('aria-hidden', 'false');
-            $('body').css('overflow', 'hidden');
+            if (fullUrl) {
+                img.off('error').on('error', function() {
+                    closeLightbox();
+                });
+                img.attr('src', fullUrl);
+                caption.text(capText);
+                lightbox.addClass('is-open').attr('aria-hidden', 'false');
+                $('body').css('overflow', 'hidden');
+            }
         });
 
-        $(document).on('click', '#ayurPhotoLightboxClose, #ayurPhotoLightboxBackdrop', function() {
+        $(document).on('click', '#ayurPhotoLightboxClose, #ayurPhotoLightboxBackdrop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             closeLightbox();
         });
 
