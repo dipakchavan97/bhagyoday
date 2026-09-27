@@ -9,17 +9,21 @@ defined('ABSPATH') || exit;
 
 get_header();
 
-// Fetch hero spotlight product (Ashwagandha Shilajit or first published product)
+// Fetch hero spotlight product: Arjuna Amrit Heart Vitality Juice (Product ID 33)
 $hero_product = null;
-$hero_query = new WP_Query(array(
-    'post_type'      => 'product',
-    'name'           => 'ashwagandha-shilajit-men-wellness-capsules',
-    'posts_per_page' => 1,
-));
-if ($hero_query->have_posts()) {
-    $hero_query->the_post();
-    $hero_product = wc_get_product(get_the_ID());
-    wp_reset_postdata();
+$hero_product_id = apply_filters('ayur_hero_product_id', 33);
+$hero_product = wc_get_product($hero_product_id);
+if (!$hero_product) {
+    $hero_query = new WP_Query(array(
+        'post_type'      => 'product',
+        'name'           => 'arjuna-amrit-heart-vitality-juice',
+        'posts_per_page' => 1,
+    ));
+    if ($hero_query->have_posts()) {
+        $hero_query->the_post();
+        $hero_product = wc_get_product(get_the_ID());
+        wp_reset_postdata();
+    }
 }
 if (!$hero_product) {
     $fallback_query = new WP_Query(array('post_type' => 'product', 'posts_per_page' => 1));
@@ -29,6 +33,15 @@ if (!$hero_product) {
         wp_reset_postdata();
     }
 }
+
+$h_id = $hero_product ? $hero_product->get_id() : 33;
+$h_price = $hero_product ? (float) $hero_product->get_price() : 890;
+$h_mrp = $hero_product ? (float) get_post_meta($h_id, '_ayur_mrp', true) : 1990;
+if (!$h_mrp || $h_mrp <= $h_price) $h_mrp = 1990;
+$h_net_qty = $hero_product ? get_post_meta($h_id, '_ayur_net_quantity', true) : '500ml';
+$h_save = ($h_mrp > $h_price) ? ($h_mrp - $h_price) : 0;
+$h_discount = ($h_mrp > 0 && $h_save > 0) ? round(($h_save / $h_mrp) * 100) : 55;
+$h_permalink = $hero_product ? $hero_product->get_permalink() : home_url('/product/arjuna-amrit-heart-vitality-juice/');
 
 // Fetch Bundle products for Value Bundles section
 $bundles_query = new WP_Query(array(
@@ -46,94 +59,112 @@ $bundles_query = new WP_Query(array(
 
 <main id="primary" class="site-main ayur-homepage">
 
-    <!-- 1. Hero Section (Editorial Typography + Commercial CTAs + Authentic Product Spotlight) -->
-    <section class="ayur-hero">
+    <!-- 1. Premium Cinematic 3D Product Hero Section (Arjuna Amrit Elixir Scene) -->
+    <section class="ayur-cinematic-hero" id="ayurCinematicHero">
         <div class="ayur-container">
-            <div class="ayur-hero-grid">
-                <!-- Left: Headline, Value Proposition & Primary CTAs -->
-                <div class="ayur-hero-text">
-                    <span class="ayur-hero-eyebrow"><?php _e('BHAGYODAY AYURVEDA', 'ayur-wellness'); ?></span>
-                    <h1 class="ayur-hero-title">
-                        Ancient Wisdom.<br>
-                        <span>Made for Modern Wellness.</span>
-                    </h1>
-                    <p class="ayur-hero-desc">
-                        <?php _e('Thoughtfully crafted Ayurvedic wellness products inspired by traditional Indian knowledge.', 'ayur-wellness'); ?>
-                    </p>
-                    <div class="ayur-hero-actions">
-                        <a href="#ayurFormulations" class="ayur-btn-primary">
-                            <span><?php _e('SHOP BESTSELLERS', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
-                        </a>
-                        <a href="#ayurWellness" class="ayur-btn-secondary">
-                            <span><?php _e('EXPLORE WELLNESS', 'ayur-wellness'); ?></span>
-                        </a>
+            <div class="ayur-cinematic-hero-grid">
+                <!-- LEFT: 40% Editorial Product Content & CTAs -->
+                <div class="ayur-cinematic-hero-content">
+                    <div class="ayur-hero-header-block">
+                        <div class="ayur-hero-eyebrow-wrap">
+                            <span class="ayur-hero-eyebrow-badge">
+                                <?php echo ayur_svg_icon('sparkles', '', 14); ?>
+                                <span><?php _e('ARJUNA AMRIT', 'ayur-wellness'); ?></span>
+                            </span>
+                            <span class="ayur-hero-volume-badge"><?php echo esc_html($h_net_qty ? $h_net_qty : '500ml Liquid Tonic'); ?></span>
+                        </div>
+
+                        <h1 class="ayur-cinematic-hero-title">
+                            Ancient Ayurvedic wisdom.<br>
+                            <span>Crafted for modern living.</span>
+                        </h1>
+
+                        <p class="ayur-cinematic-hero-desc">
+                            <?php _e('A thoughtfully formulated Ayurvedic herbal juice crafted with traditional wellness principles and standardized classical extraction.', 'ayur-wellness'); ?>
+                        </p>
+                    </div>
+
+                    <div class="ayur-hero-cta-block">
+                        <!-- Product Formulation Quick Proof -->
+                        <div class="ayur-hero-formulation-pills" aria-label="Key Herbal Ingredients">
+                            <span class="ayur-pill"><span class="pill-dot"></span> Arjuna Bark (40%)</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Wild Amla (30%)</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Raw Garlic (10%)</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> ACV (10%)</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Forest Honey (10%)</span>
+                        </div>
+
+                        <!-- Commercial Pricing & Action CTAs -->
+                        <div class="ayur-cinematic-hero-pricing">
+                            <span class="ayur-hero-price-val">₹<?php echo number_format($h_price); ?></span>
+                            <?php if ($h_mrp > $h_price) : ?>
+                                <span class="ayur-hero-mrp-val">MRP ₹<?php echo number_format($h_mrp); ?></span>
+                                <span class="ayur-hero-discount-tag"><?php printf(__('%d%% OFF', 'ayur-wellness'), $h_discount); ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="ayur-cinematic-hero-actions">
+                            <a href="<?php echo esc_url($h_permalink); ?>" class="ayur-btn-primary ayur-hero-primary-cta">
+                                <span><?php _e('EXPLORE ARJUNA AMRIT', 'ayur-wellness'); ?></span>
+                                <?php echo ayur_svg_icon('arrow-right', '', 15); ?>
+                            </a>
+                            <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="ayur-btn-secondary ayur-hero-secondary-cta">
+                                <span><?php _e('SHOP ALL AYURVEDA', 'ayur-wellness'); ?></span>
+                            </a>
+                        </div>
+
+                        <!-- Authentic Trust Guarantee Line -->
+                        <div class="ayur-cinematic-hero-trust">
+                            <div class="ayur-trust-item">
+                                <?php echo ayur_svg_icon('shield-check', '', 16); ?>
+                                <span>Authentic Ayurveda</span>
+                            </div>
+                            <span class="ayur-trust-sep">·</span>
+                            <div class="ayur-trust-item">
+                                <?php echo ayur_svg_icon('leaf', '', 16); ?>
+                                <span>Carefully Formulated</span>
+                            </div>
+                            <span class="ayur-trust-sep">·</span>
+                            <div class="ayur-trust-item">
+                                <?php echo ayur_svg_icon('truck', '', 16); ?>
+                                <span>Pan-India Delivery</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right: Featured Authentic Product Image & Direct Link -->
-                <div class="ayur-hero-visual">
-                    <div class="ayur-hero-stage">
-                        <?php if ($hero_product) : 
-                            $h_id = $hero_product->get_id();
-                            $h_price = (float) $hero_product->get_price();
-                            $h_mrp = (float) get_post_meta($h_id, '_ayur_mrp', true);
-                            $h_net_qty = get_post_meta($h_id, '_ayur_net_quantity', true);
-                            $h_save = ($h_mrp > $h_price) ? ($h_mrp - $h_price) : 0;
-                            $h_discount = ($h_mrp > 0 && $h_save > 0) ? round(($h_save / $h_mrp) * 100) : 0;
-                        ?>
-                            <div class="ayur-hero-spotlight-card">
-                                <div class="ayur-hero-spotlight-badge-row">
-                                    <span class="ayur-hero-badge"><?php _e('SPOTLIGHT FORMULATION', 'ayur-wellness'); ?></span>
-                                    <?php if ($h_discount > 0) : ?>
-                                        <span class="ayur-hero-save-badge"><?php printf(__('%d%% OFF', 'ayur-wellness'), $h_discount); ?></span>
-                                    <?php endif; ?>
-                                </div>
+                <!-- RIGHT: 60% Cinematic 3D / WebGL Product Elixir Scene -->
+                <div class="ayur-cinematic-hero-stage">
+                    <div class="ayur-hero-3d-wrapper" id="ayurHero3DContainer" data-asset-base="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/'); ?>">
+                        <!-- Soft Atmospheric Glow -->
+                        <div class="ayur-hero-glow-aura" aria-hidden="true"></div>
 
-                                <div class="ayur-hero-spotlight-img-wrap">
-                                    <a href="<?php echo esc_url($hero_product->get_permalink()); ?>" aria-label="<?php echo esc_attr($hero_product->get_name()); ?>">
-                                        <?php if (has_post_thumbnail($h_id)) : ?>
-                                            <?php echo get_the_post_thumbnail($h_id, 'large', array(
-                                                'class' => 'ayur-hero-img',
-                                                'fetchpriority' => 'high',
-                                                'alt' => esc_attr($hero_product->get_name())
-                                            )); ?>
-                                        <?php else : ?>
-                                            <div class="ayur-hero-placeholder">
-                                                <?php echo ayur_svg_icon('leaf', '', 48); ?>
-                                            </div>
-                                        <?php endif; ?>
-                                    </a>
-                                </div>
+                        <!-- Fallback / Immediate Poster (Zero Layout Shift) -->
+                        <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/hero-poster-3d.webp'); ?>"
+                             alt="<?php echo esc_attr($hero_product ? $hero_product->get_name() : 'Arjuna Amrit Heart Vitality Juice'); ?>"
+                             class="ayur-hero-3d-poster"
+                             fetchpriority="high"
+                             width="1280"
+                             height="920">
 
-                                <div class="ayur-hero-spotlight-meta">
-                                    <h3 class="ayur-hero-spotlight-title">
-                                        <a href="<?php echo esc_url($hero_product->get_permalink()); ?>">
-                                            <?php echo esc_html($hero_product->get_name()); ?>
-                                        </a>
-                                    </h3>
+                        <!-- Progressive 3D WebGL Canvas -->
+                        <canvas id="ayurHero3DCanvas" class="ayur-hero-3d-canvas" aria-label="Interactive 3D Product Presentation"></canvas>
 
-                                    <div class="ayur-hero-spotlight-pricing">
-                                        <span class="ayur-hero-price">₹<?php echo number_format($h_price); ?></span>
-                                        <?php if ($h_mrp > $h_price) : ?>
-                                            <span class="ayur-hero-mrp">MRP ₹<?php echo number_format($h_mrp); ?></span>
-                                            <span class="ayur-hero-save-tag"><?php printf(__('Save ₹%s', 'ayur-wellness'), number_format($h_save)); ?></span>
-                                        <?php endif; ?>
-                                    </div>
-
-                                    <div class="ayur-hero-spotlight-cta">
-                                        <a href="<?php echo esc_url($hero_product->get_permalink()); ?>" class="ayur-hero-link-btn">
-                                            <span><?php _e('VIEW FORMULATION', 'ayur-wellness'); ?></span>
-                                            <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+                        <!-- Subtle Botanical Floating Indicator Pill Overlays -->
+                        <div class="ayur-hero-floating-indicators" aria-hidden="true">
+                            <span class="ayur-float-pill pill-top-left">
+                                <span class="pill-dot gold"></span> Pure Forest Honey 10%
+                            </span>
+                            <span class="ayur-float-pill pill-top-right">
+                                <span class="pill-dot herbal"></span> Terminalia Arjuna 40%
+                            </span>
+                            <span class="ayur-float-pill pill-bottom-right">
+                                <span class="pill-dot amla"></span> Wild Amla 30%
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- 2. Featured Formulation Merchandising Block (Immediately After Hero) -->

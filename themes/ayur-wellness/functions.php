@@ -61,6 +61,12 @@ function ayur_wellness_scripts() {
     // Main Theme JS
     wp_enqueue_script('ayur-theme-script', get_template_directory_uri() . '/assets/js/ayur-theme.js', array('jquery'), AYUR_THEME_VERSION, true);
 
+    // Cinematic 3D Product Hero (Front Page only)
+    if (is_front_page() || is_home()) {
+        wp_enqueue_script('three-js', get_template_directory_uri() . '/assets/js/three.min.js', array(), '0.128.0', true);
+        wp_enqueue_script('ayur-hero-3d', get_template_directory_uri() . '/assets/js/ayur-hero-3d.js', array('three-js'), AYUR_THEME_VERSION, true);
+    }
+
     wp_localize_script('ayur-theme-script', 'ayurThemeParams', array(
         'ajax_url'     => admin_url('admin-ajax.php'),
         'nonce'        => wp_create_nonce('ayur_theme_nonce'),
