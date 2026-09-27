@@ -241,22 +241,86 @@ while (have_posts()) :
                         </div>
                     </form>
 
-                    <!-- CTA Micro-Trust (Compact Factual Signals, No Emojis) -->
-                    <div class="ayur-cta-micro-trust">
-                        <span class="ayur-micro-trust-pill">
-                            <?php echo ayur_svg_icon('shield-check', '', 13); ?>
-                            <span><?php _e('Secure Payments', 'ayur-wellness'); ?></span>
-                        </span>
-                        <span class="ayur-micro-trust-sep">&bull;</span>
-                        <span class="ayur-micro-trust-pill">
-                            <?php echo ayur_svg_icon('credit-card', '', 13); ?>
-                            <span><?php _e('Cash on Delivery', 'ayur-wellness'); ?></span>
-                        </span>
-                        <span class="ayur-micro-trust-sep">&bull;</span>
-                        <span class="ayur-micro-trust-pill">
-                            <?php echo ayur_svg_icon('truck', '', 13); ?>
-                            <span><?php _e('Pan-India Delivery', 'ayur-wellness'); ?></span>
-                        </span>
+                    <!-- Premium Trust Badges System (Factual, Focussed, Authentic Ayurveda) -->
+                    <div class="ayur-product-trust-system" aria-label="<?php esc_attr_e('Product Trust & Authenticity Badges', 'ayur-wellness'); ?>">
+                        <div class="ayur-trust-badges-grid">
+                            <!-- Badge 1: Secure Payments -->
+                            <div class="ayur-trust-badge-card">
+                                <div class="ayur-trust-badge-icon" aria-hidden="true">
+                                    <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                        <rect x="9" y="11" width="6" height="5" rx="1"/>
+                                        <path d="M10 11V9a2 2 0 1 1 4 0v2"/>
+                                    </svg>
+                                </div>
+                                <div class="ayur-trust-badge-content">
+                                    <span class="ayur-trust-badge-title"><?php _e('Secure Payments', 'ayur-wellness'); ?></span>
+                                    <span class="ayur-trust-badge-sub"><?php _e('Razorpay Protected', 'ayur-wellness'); ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Badge 2: Pan-India Delivery -->
+                            <div class="ayur-trust-badge-card">
+                                <div class="ayur-trust-badge-icon" aria-hidden="true">
+                                    <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                        <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
+                                        <path d="M15 18H9"/>
+                                        <path d="M19 18h2a1 1 0 0 0 1-1v-5.28a2 2 0 0 0-.59-1.42L18.41 7.3A2 2 0 0 0 17 6.72H14"/>
+                                        <circle cx="7" cy="18" r="2"/>
+                                        <circle cx="17" cy="18" r="2"/>
+                                    </svg>
+                                </div>
+                                <div class="ayur-trust-badge-content">
+                                    <span class="ayur-trust-badge-title"><?php _e('Pan-India Delivery', 'ayur-wellness'); ?></span>
+                                    <span class="ayur-trust-badge-sub"><?php _e('Reliable Shipping', 'ayur-wellness'); ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Badge 3: Authentic Ayurveda -->
+                            <div class="ayur-trust-badge-card">
+                                <div class="ayur-trust-badge-icon" aria-hidden="true">
+                                    <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                                    </svg>
+                                </div>
+                                <div class="ayur-trust-badge-content">
+                                    <span class="ayur-trust-badge-title"><?php _e('Authentic Ayurveda', 'ayur-wellness'); ?></span>
+                                    <span class="ayur-trust-badge-sub"><?php _e('Genuine Formulations', 'ayur-wellness'); ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Badge 4: Quality Assured -->
+                            <div class="ayur-trust-badge-card">
+                                <div class="ayur-trust-badge-icon" aria-hidden="true">
+                                    <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="m9 12 2 2 4-4"/>
+                                    </svg>
+                                </div>
+                                <div class="ayur-trust-badge-content">
+                                    <span class="ayur-trust-badge-title"><?php _e('Quality Assured', 'ayur-wellness'); ?></span>
+                                    <span class="ayur-trust-badge-sub"><?php _e('Carefully Sourced', 'ayur-wellness'); ?></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Verified Business Trust Signals Strip -->
+                        <div class="ayur-trust-compliance-strip">
+                            <div class="ayur-compliance-pill">
+                                <svg class="ayur-compliance-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span><?php _e('GMP & AYUSH Compliant Facility', 'ayur-wellness'); ?></span>
+                            </div>
+                            <span class="ayur-compliance-sep" aria-hidden="true">•</span>
+                            <div class="ayur-compliance-pill">
+                                <svg class="ayur-compliance-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span><?php _e('Standardized Classical Extraction', 'ayur-wellness'); ?></span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Compact Delivery Information Panel -->

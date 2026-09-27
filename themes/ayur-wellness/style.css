@@ -4,7 +4,7 @@ Theme URI: https://lightgreen-heron-113083.hostingersite.com/
 Author: Antigravity Lead Architect
 Author URI: https://lightgreen-heron-113083.hostingersite.com/
 Description: Premium, authentic, trustworthy Ayurvedic & Herbal D2C eCommerce Theme for WooCommerce in India. Features editorial aesthetics, unified SVG vector icon system, slide-in cart drawer, and native-app mobile UX.
-Version: 2.7.4
+Version: 2.7.8
 License: GNU General Public License v2 or later
 Text Domain: ayur-wellness
 Tested up to: 7.1.2
@@ -1536,6 +1536,173 @@ p:last-child {
 .ayur-btn-buy-now:hover {
     background-color: #244634 !important;
     color: var(--color-white) !important;
+}
+
+/* ==========================================================================
+   Product Page Premium Trust Badges System (Authentic, Factual, High-Trust)
+   ========================================================================== */
+.ayur-product-trust-system {
+    margin: 16px 0 18px 0;
+    padding: 14px 16px 12px;
+    background: #FAF7F0; /* Warm Ivory */
+    border: 1px solid #E9DDC8; /* Soft Sand border */
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(23, 59, 47, 0.03);
+}
+
+.ayur-trust-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(233, 221, 200, 0.7);
+}
+
+.ayur-trust-badge-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.ayur-trust-badge-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    border: 1px solid rgba(233, 221, 200, 0.85);
+    border-radius: 6px;
+    color: var(--color-forest, #173B2F);
+}
+
+.ayur-trust-badge-icon svg {
+    width: 19px;
+    height: 19px;
+    display: block;
+    stroke: #173B2F;
+}
+
+.ayur-trust-badge-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.ayur-trust-badge-title {
+    font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+    font-size: 13px;
+    font-weight: 700;
+    color: #222522; /* Charcoal */
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ayur-trust-badge-sub {
+    font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    color: #5C645C; /* Muted secondary */
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Secondary Verified Business Trust Signals Strip */
+.ayur-trust-compliance-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding-top: 10px;
+    font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 600;
+    color: #315C45; /* Herbal */
+    letter-spacing: 0.01em;
+}
+
+.ayur-compliance-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ayur-compliance-check {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    color: #173B2F;
+}
+
+.ayur-compliance-sep {
+    color: #B79552; /* Muted Gold */
+    font-size: 10px;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .ayur-product-trust-system {
+        margin: 14px 0 16px 0;
+        padding: 12px 12px 10px;
+    }
+
+    .ayur-trust-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px 10px;
+        padding-bottom: 10px;
+    }
+
+    .ayur-trust-badge-card {
+        gap: 8px;
+    }
+
+    .ayur-trust-badge-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .ayur-trust-badge-icon svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .ayur-trust-badge-title {
+        font-size: 12px;
+    }
+
+    .ayur-trust-badge-sub {
+        font-size: 10px;
+    }
+
+    .ayur-trust-compliance-strip {
+        font-size: 10.5px;
+        gap: 6px 8px;
+        padding-top: 8px;
+    }
+}
+
+@media (max-width: 380px) {
+    .ayur-trust-badge-title {
+        font-size: 11px;
+    }
+
+    .ayur-trust-badge-sub {
+        font-size: 9.5px;
+    }
+
+    .ayur-trust-compliance-strip {
+        font-size: 10px;
+        gap: 4px 6px;
+    }
 }
 
 /* ==========================================================================
