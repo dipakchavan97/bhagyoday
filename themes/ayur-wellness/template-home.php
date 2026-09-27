@@ -135,8 +135,8 @@ $bundles_query = new WP_Query(array(
 
                 <!-- RIGHT: 58% Photorealistic Commercial Product Scene -->
                 <div class="ayur-commercial-hero-stage">
-                    <div class="ayur-commercial-stage-card" id="ayurCommercialStageCard">
-                        <div class="ayur-commercial-glow-ambient" id="ayurCommercialGlow" aria-hidden="true"></div>
+                    <div class="ayur-commercial-stage-card">
+                        <div class="ayur-commercial-glow-ambient" aria-hidden="true"></div>
                         <picture class="ayur-commercial-picture">
                             <source media="(max-width: 767px)" srcset="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/amrit-commercial-hero-mobile.webp'); ?>" type="image/webp">
                             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero/amrit-commercial-hero.webp'); ?>"
@@ -146,8 +146,6 @@ $bundles_query = new WP_Query(array(
                                  width="1440"
                                  height="1080">
                         </picture>
-                        <!-- Cinematic Real-Time Animation Layer (Liquid Flow, Ripples, Droplets, Studio Highlight) -->
-                        <canvas class="ayur-commercial-canvas" id="ayurCommercialCanvas" aria-hidden="true"></canvas>
                         <!-- Grounded Soft Contact Shadow -->
                         <div class="ayur-commercial-stage-shadow" aria-hidden="true"></div>
                     </div>

@@ -4,7 +4,7 @@ Theme URI: https://lightgreen-heron-113083.hostingersite.com/
 Author: Antigravity Lead Architect
 Author URI: https://lightgreen-heron-113083.hostingersite.com/
 Description: Premium, authentic, trustworthy Ayurvedic & Herbal D2C eCommerce Theme for WooCommerce in India. Features editorial aesthetics, unified SVG vector icon system, slide-in cart drawer, and native-app mobile UX.
-Version: 2.7.9
+Version: 3.2.0
 License: GNU General Public License v2 or later
 Text Domain: ayur-wellness
 Tested up to: 7.1.2
@@ -7111,32 +7111,14 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: 16px;
-    animation: ayurCameraPush 16s ease-in-out infinite alternate;
-    transform-origin: 75% 45%;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes ayurCameraPush {
-    0% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(1.015);
-    }
+.ayur-commercial-stage-card:hover .ayur-commercial-hero-img {
+    transform: scale(1.015);
 }
 
-/* Cinematic Canvas Animation Overlay (Liquid Stream, Ripples, Droplets, Light Sweep) */
-.ayur-commercial-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100% !important;
-    height: 100% !important;
-    display: block;
-    border-radius: 16px;
-    pointer-events: none;
-    z-index: 2;
-}
-
-/* Ambient Warm Studio Lighting Aura (Subtle 20s depth drift) */
+/* Ambient Warm Studio Lighting Aura */
 .ayur-commercial-glow-ambient {
     position: absolute;
     inset: -20px;
@@ -7145,19 +7127,6 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     filter: blur(32px);
     z-index: -1;
     pointer-events: none;
-    animation: ayurAmbientDrift 20s ease-in-out infinite alternate;
-}
-
-@keyframes ayurAmbientDrift {
-    0% {
-        transform: translate3d(0, 0, 0);
-    }
-    50% {
-        transform: translate3d(2px, -2px, 0);
-    }
-    100% {
-        transform: translate3d(-1.5px, 1.5px, 0);
-    }
 }
 
 /* Grounded Contact Shadow */
@@ -7313,17 +7282,7 @@ body.ayur-scroll-locked .ayur-wa-float-container {
     }
 
     .ayur-commercial-hero-img {
-        animation: none !important;
         transition: none !important;
-        transform: none !important;
-    }
-
-    .ayur-commercial-canvas {
-        display: none !important;
-    }
-
-    .ayur-commercial-glow-ambient {
-        animation: none !important;
         transform: none !important;
     }
 
