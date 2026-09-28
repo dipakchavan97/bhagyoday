@@ -80,18 +80,18 @@ $bundles_query = new WP_Query(array(
                         </h1>
 
                         <p class="ayur-cinematic-hero-desc">
-                            <?php _e('A classical 5-in-1 Ayurvedic formulation crafted with Wild Arjuna Bark, Fresh Amla, Raw Garlic, Apple Cider Vinegar, and Forest Honey.', 'ayur-wellness'); ?>
+                            <?php _e('An Ayurvedic proprietary formulation featuring a curated blend of 60 herbs, fruits, and botanical extracts.', 'ayur-wellness'); ?>
                         </p>
                     </div>
 
                     <div class="ayur-hero-cta-block">
                         <!-- Verified Documented Formulation Ingredients -->
-                        <div class="ayur-hero-formulation-pills" aria-label="<?php esc_attr_e('Documented Herbal Ingredients', 'ayur-wellness'); ?>">
-                            <span class="ayur-pill"><span class="pill-dot"></span> Wild Arjuna Bark (40%)</span>
-                            <span class="ayur-pill"><span class="pill-dot"></span> Fresh Amla (30%)</span>
-                            <span class="ayur-pill"><span class="pill-dot"></span> Raw Garlic (10%)</span>
-                            <span class="ayur-pill"><span class="pill-dot"></span> Apple Cider Vinegar (10%)</span>
-                            <span class="ayur-pill"><span class="pill-dot"></span> Forest Honey (10%)</span>
+                        <div class="ayur-hero-formulation-pills" aria-label="<?php esc_attr_e('Documented Botanical Formulation', 'ayur-wellness'); ?>">
+                            <span class="ayur-pill"><span class="pill-dot"></span> 60 Herbs, Fruits &amp; Extracts</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Moringa &amp; Noni</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Amla &amp; Ashwagandha</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> Shilajit &amp; Giloy</span>
+                            <span class="ayur-pill"><span class="pill-dot"></span> 100% Natural</span>
                         </div>
 
                         <!-- Commercial Pricing & Action CTAs -->

@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '3.2.2');
+define('AYUR_THEME_VERSION', '3.3.0');
 
 /**
  * Theme Setup
@@ -769,56 +769,63 @@ function ayur_get_product_extended_data($product_id) {
             'important_note' => 'Ayurvedic proprietary formulation. Not intended to diagnose, treat, or cure severe medical conditions. If you experience persistent bleeding or severe anorectal pain, consult a qualified physician promptly.'
         ),
 
-        // Product 33: Amrit Heart Health Immunity Juice
+        // Product 33: Amrit Heart Health Immunity Juice (500ml) - Authoritative 60-Ingredient Composition
         33 => array(
-            'positioning' => 'Classical 5-in-1 Hridaya Rasayana featuring Terminalia Arjuna bark decoction, fresh wild Amla, crushed Garlic, raw Apple Cider Vinegar with Mother, and forest honey for cardiovascular resilience.',
+            'has_60_composition' => true,
+            'positioning' => 'An Ayurvedic proprietary formulation featuring a curated blend of 60 herbs, fruits, and botanical extracts.',
             'benefits' => array(
-                'Wild Arjuna bark decoction nourishes cardiac muscle tone and supports healthy blood circulation',
-                'Raw crushed Garlic and raw Apple Cider Vinegar support clean blood lipid and cholesterol balance',
-                'Fresh wild Amla provides potent natural bioflavonoids and Vitamin C for arterial elasticity',
-                'Raw forest honey balances botanical astringency and aids gentle assimilation'
+                'Supports natural immunity and vitality through a broad spectrum of 60 botanical ingredients',
+                'Each 10ml contains specified quantities of traditional herbs including Noni, Amla, Moringa, and Ashwagandha',
+                'Formulated with zero added sugar, no artificial colors, and no artificial flavours',
+                'Prepared in accordance with authentic Ayurvedic proprietary medicine standards'
             ),
             'botanicals' => array(
                 array(
-                    'name'  => 'Terminalia Arjuna Bark Decoction',
-                    'latin' => 'Terminalia arjuna (40%)',
-                    'role'  => 'Venerated cardiovascular Rasayana rich in bioflavonoids to support cardiac muscular integrity and blood flow.'
+                    'name'  => 'Moringa Oleifera',
+                    'latin' => 'Moringa oleifera (500 mg per 10ml)',
+                    'role'  => 'Classical nutrient-dense botanical providing natural minerals and phytonutrients for cellular vigor.'
                 ),
                 array(
-                    'name'  => 'Fresh Wild Amla Juice',
-                    'latin' => 'Emblica officinalis (30%)',
-                    'role'  => 'Cold-extracted Indian gooseberry providing potent bioavailable Vitamin C to protect vascular endothelium.'
+                    'name'  => 'Noni Fruit',
+                    'latin' => 'Morinda citrifolia (400 mg per 10ml)',
+                    'role'  => 'Revered tropical botanical traditionally valued for vitality and supporting overall physiological balance.'
                 ),
                 array(
-                    'name'  => 'Raw Garlic Bulb Extract',
-                    'latin' => 'Allium sativum (10%)',
-                    'role'  => 'Standardized allicin botanical source traditionally utilized to maintain clean, unobstructed arterial pathways.'
+                    'name'  => 'Indian Amla & Amla Extract',
+                    'latin' => 'Emblica officinalis (500 mg combined per 10ml)',
+                    'role'  => 'Foundational Ayurvedic Rasayana fruit celebrated as a natural source of antioxidants and cellular defense.'
                 ),
                 array(
-                    'name'  => 'Raw Apple Cider Vinegar',
-                    'latin' => 'Raw Fermented Vinegar with Mother (10%)',
-                    'role'  => 'Unpasteurized raw apple cider vinegar to support natural enzymatic digestion and healthy lipid metabolism.'
+                    'name'  => 'Ashwagandha Root & Extract',
+                    'latin' => 'Withania somnifera (400 mg combined per 10ml)',
+                    'role'  => 'Classical adaptogenic root traditionally utilized to promote resilience, stamina, and nervous harmony.'
                 ),
                 array(
-                    'name'  => 'Pure Forest Honey',
-                    'latin' => 'Madhu (10%)',
-                    'role'  => 'Natural Ayurvedic Yogavahi (carrier) that enhances botanical cellular penetration and balances astringency.'
+                    'name'  => 'Purified Shilajit',
+                    'latin' => 'Asphaltum punjabianum (300 mg per 10ml)',
+                    'role'  => 'Venerated mineral pitch traditionally recognized for supporting natural endurance and metabolic balance.'
+                ),
+                array(
+                    'name'  => 'Giloy & Shatavari',
+                    'latin' => 'Tinospora cordifolia & Asparagus racemosus (300 mg each)',
+                    'role'  => 'Classical Ayurvedic Rasayana herbs traditionally used to support immune defense and tissue nourishment.'
                 ),
             ),
             'formulation_story' => array(
-                'intro'       => 'A faithful preparation of the classical 5-in-1 Hridaya Rasayana, combining five venerated cardiovascular superfoods into a bio-available daily tonic.',
-                'traditional' => 'Ancient texts describe Arjuna as the preeminent herb for the heart (Hridya), which when paired with Amla, Garlic, and fermented fruit acids, acts synergistically on vascular flexibility.',
-                'why'         => 'Prepared without boiling, synthetic thickening gums, or artificial preservatives, retaining active enzymes and volatile phytonutrients.'
+                'intro'       => 'Amrit Juice brings together a comprehensive blend of 60 herbs, fruits, and botanical extracts into a unified Ayurvedic proprietary formulation.',
+                'traditional' => 'Classical Ayurvedic philosophy values multi-herb Rasayana formulations where diverse botanical extracts work together to support balance across body tissues (Dhatus).',
+                'why'         => 'Every 10ml provides a precisely measured composition of 60 botanicals with zero added sugar, artificial colours, or synthetic flavours.'
             ),
             'usage_steps' => array(
-                array('num' => '01', 'title' => 'Recommended Measure', 'desc' => 'Dilute 15 to 20 ml in half a glass (100–150 ml) of normal or lukewarm water.'),
-                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Drink once daily in the morning, 30 minutes before breakfast on an empty stomach.'),
-                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Incorporate into an active, heart-conscious lifestyle for enduring cardiovascular vitality.')
+                array('num' => '01', 'title' => 'Recommended Measure', 'desc' => 'Shake well before use. Measure 15 to 25 ml using the included measuring cup.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Mix in a glass (150–200 ml) of normal or lukewarm water. Drink once daily on an empty stomach in the morning.'),
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Maintain consistent daily intake alongside balanced nutrition and wholesome hydration for enduring vitality.')
             ),
             'specs' => array(
-                'Form'              => 'Liquid Herbal Tonic Juice',
-                'Net Quantity'      => $net_qty ? $net_qty : '500 ml',
-                'Key Botanicals'    => 'Arjuna Bark, Wild Amla, Raw Garlic, Apple Cider Vinegar, Forest Honey',
+                'Form'              => 'Liquid Herbal Tonic Juice (Ayurvedic Proprietary Medicine)',
+                'Net Quantity'      => $net_qty ? $net_qty : '500 ml Bottle',
+                'Key Botanicals'    => '60 Herbs, Fruits & Extracts (Moringa, Noni, Amla, Ashwagandha, Shilajit, Giloy, etc.)',
+                'Dosage'            => '15 to 25 ml daily in lukewarm water on an empty stomach',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'Food-grade bottle with calibrated dosing cap',
@@ -826,7 +833,7 @@ function ayur_get_product_extended_data($product_id) {
                 'Storage'           => 'Store in a cool, dry place. Refrigerate after opening and consume within 30 days.'
             ),
             'storage' => 'Store in a cool, dry place. Refrigerate after opening and consume within 30 days.',
-            'important_note' => 'Supportive Ayurvedic botanical tonic. Not intended as a substitute for prescribed cardiovascular medication. If taking anti-coagulants or blood thinners, consult your cardiologist before introducing any garlic-rich tonic.'
+            'important_note' => 'Ayurvedic proprietary formulation. Not intended to diagnose, treat, cure, or prevent any disease. Consult a physician before use if pregnant, lactating, or undergoing medical treatment.'
         ),
 
         // Product 34: Karela Jamun Blood Sugar Control Capsules
@@ -996,11 +1003,11 @@ function ayur_get_product_extended_data($product_id) {
 
         // Product 58: Daily Energy & Vitality Duo
         58 => array(
-            'positioning' => 'Complete synergistic morning-to-night wellness regimen pairing Ashwagandha Shilajit Capsules with Amrit Heart Health Juice for endurance, cardiovascular tone, and cellular stamina.',
+            'positioning' => 'Complete synergistic morning-to-night wellness regimen pairing Ashwagandha Shilajit Capsules with Amrit Heart Health Juice for endurance, vitality, and cellular stamina.',
             'benefits' => array(
                 'Ashwagandha Shilajit Capsules (800mg) provide purified Shilajit and standardized root extract for endurance',
-                'Amrit Heart Health Juice (500ml) supplies Arjuna, wild Amla, and raw Garlic for arterial elasticity',
-                'Dual-action Ayurvedic Rasayana protocol supporting both physical and cardiovascular energy reserves',
+                'Amrit Heart Health Juice (500ml) supplies a multi-botanical blend of 60 herbs, fruits, and botanical extracts',
+                'Dual-action Ayurvedic Rasayana protocol supporting both physical energy and foundational vitality',
                 'Exclusive bundle pricing: Save over 55% with complimentary pan-India express shipping'
             ),
             'botanicals' => array(
@@ -1010,14 +1017,14 @@ function ayur_get_product_extended_data($product_id) {
                     'role'  => 'Foundational adaptogenic duo that builds Ojas, supports ATP synthesis, and modulates stress.'
                 ),
                 array(
-                    'name'  => 'Terminalia Arjuna Bark Decoction',
-                    'latin' => 'Terminalia arjuna (40%)',
-                    'role'  => 'Cardiovascular tonic nourishing cardiac muscle and supporting healthy blood circulation.'
+                    'name'  => 'Amrit 60-Botanical Complex',
+                    'latin' => 'Moringa, Noni, Amla, Giloy, Shatavari & 55 more',
+                    'role'  => 'Curated multi-botanical composition providing broad-spectrum phytonutrients and antioxidants.'
                 ),
                 array(
-                    'name'  => 'Fresh Wild Amla & Raw Garlic',
-                    'latin' => 'Emblica officinalis & Allium sativum',
-                    'role'  => 'Rich bioavailable Vitamin C and allicin to maintain clear vascular pathways and arterial tone.'
+                    'name'  => 'Moringa & Amla Extract',
+                    'latin' => 'Moringa oleifera & Emblica officinalis',
+                    'role'  => 'Rich bioavailable vitamins, minerals, and polyphenols to sustain daily endurance and vitality.'
                 ),
             ),
             'formulation_story' => array(
@@ -1033,7 +1040,7 @@ function ayur_get_product_extended_data($product_id) {
             'specs' => array(
                 'Form'              => 'Combo Pack (1x 30 Veg Capsules + 1x 500ml Herbal Juice)',
                 'Net Quantity'      => $net_qty ? $net_qty : '30 Capsules + 500 ml Juice',
-                'Key Botanicals'    => 'Shilajit, Ashwagandha, Arjuna, Wild Amla, Raw Garlic',
+                'Key Botanicals'    => 'Shilajit, Ashwagandha, Moringa, Noni, Amla, Giloy',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'Sealed bottle and amber jar in tamper-evident bundle packaging',
@@ -1400,4 +1407,74 @@ function ayur_theme_body_classes($classes) {
     return $classes;
 }
 add_filter('body_class', 'ayur_theme_body_classes', 99);
+
+/**
+ * Authoritative 60-Ingredient Composition for Amrit Juice 500ml (Product ID 33)
+ * Source: Official Packaging Formulation Label ("EACH 10ML CONTAINS")
+ * Verified Total: 60 Herbs, Fruits & Botanical Extracts
+ */
+function ayur_get_amrit_juice_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Noni', 'label_name' => 'Noni', 'qty' => '400 mg', 'search' => 'noni morinda citrifolia'),
+        array('num' => '02', 'name' => 'Aloe Vera', 'label_name' => 'Aloevera', 'qty' => '300 mg', 'search' => 'aloe vera aloevera kumari barbadensis'),
+        array('num' => '03', 'name' => 'Acai Berry', 'label_name' => 'Acai Bery', 'qty' => '400 mg', 'search' => 'acai berry acai bery euterpe oleracea'),
+        array('num' => '04', 'name' => 'Sea Buckthorn', 'label_name' => 'Sea Backthrone', 'qty' => '300 mg', 'search' => 'sea buckthorn sea backthrone hippophae rhamnoides'),
+        array('num' => '05', 'name' => 'Beetroot', 'label_name' => 'Beetroot', 'qty' => '300 mg', 'search' => 'beetroot beta vulgaris'),
+        array('num' => '06', 'name' => 'Harad', 'label_name' => 'Harad', 'qty' => '300 mg', 'search' => 'harad haritaki terminalia chebula'),
+        array('num' => '07', 'name' => 'Baheda', 'label_name' => 'Baheda', 'qty' => '300 mg', 'search' => 'baheda bibhitaki terminalia bellirica'),
+        array('num' => '08', 'name' => 'Bhumi Amla', 'label_name' => 'Bhumi Amla', 'qty' => '300 mg', 'search' => 'bhumi amla phyllanthus niruri'),
+        array('num' => '09', 'name' => 'Shilajit', 'label_name' => 'Shilajit', 'qty' => '300 mg', 'search' => 'shilajit asphaltum punjabianum mineral pitch'),
+        array('num' => '10', 'name' => 'Mulethi', 'label_name' => 'Mulethi', 'qty' => '300 mg', 'search' => 'mulethi licorice yashtimadhu glycyrrhiza glabra'),
+        array('num' => '11', 'name' => 'Giloy', 'label_name' => 'Giloy', 'qty' => '300 mg', 'search' => 'giloy guduchi tinospora cordifolia'),
+        array('num' => '12', 'name' => 'Shatavari', 'label_name' => 'Shatavari', 'qty' => '300 mg', 'search' => 'shatavari asparagus racemosus'),
+        array('num' => '13', 'name' => 'Ashwagandha', 'label_name' => 'Ashwagandha', 'qty' => '300 mg', 'search' => 'ashwagandha withania somnifera indian ginseng'),
+        array('num' => '14', 'name' => 'Amla', 'label_name' => 'Amla', 'qty' => '400 mg', 'search' => 'amla indian gooseberry amalaki emblica officinalis'),
+        array('num' => '15', 'name' => 'Moringa Oleifera', 'label_name' => 'Moringa Oleifera', 'qty' => '500 mg', 'search' => 'moringa oleifera drumstick sahjan'),
+        array('num' => '16', 'name' => 'Anjeer', 'label_name' => 'Anjeer', 'qty' => '200 mg', 'search' => 'anjeer fig ficus carica'),
+        array('num' => '17', 'name' => 'Punarnava', 'label_name' => 'Punarnava', 'qty' => '200 mg', 'search' => 'punarnava boerhavia diffusa'),
+        array('num' => '18', 'name' => 'Ginkgo Biloba', 'label_name' => 'Ginkgo Biloba', 'qty' => '200 mg', 'search' => 'ginkgo biloba maidenhair'),
+        array('num' => '19', 'name' => 'Garcinia Cambogia', 'label_name' => 'Garcinia Cambogia', 'qty' => '200 mg', 'search' => 'garcinia cambogia vrikshamla hca'),
+        array('num' => '20', 'name' => 'Mangosteen', 'label_name' => 'Mangosteen', 'qty' => '300 mg', 'search' => 'mangosteen garcinia mangostana'),
+        array('num' => '21', 'name' => 'Spirulina', 'label_name' => 'Spirulina', 'qty' => '300 mg', 'search' => 'spirulina arthrospira platensis blue green algae'),
+        array('num' => '22', 'name' => 'Haridra', 'label_name' => 'Haridra', 'qty' => '300 mg', 'search' => 'haridra turmeric curcuma longa haldi'),
+        array('num' => '23', 'name' => 'Arjuna', 'label_name' => 'Arjuna', 'qty' => '200 mg', 'search' => 'arjuna terminalia arjuna bark'),
+        array('num' => '24', 'name' => 'Brahmi', 'label_name' => 'Brahmi', 'qty' => '200 mg', 'search' => 'brahmi bacopa monnieri'),
+        array('num' => '25', 'name' => 'Draksha Extract', 'label_name' => 'Draksha Extract', 'qty' => '200 mg', 'search' => 'draksha extract grape vitis vinifera'),
+        array('num' => '26', 'name' => 'Manjistha', 'label_name' => 'Manjistha', 'qty' => '200 mg', 'search' => 'manjistha rubia cordifolia indian madder'),
+        array('num' => '27', 'name' => 'Siberian Ginseng', 'label_name' => 'Siberian Ginseng', 'qty' => '200 mg', 'search' => 'siberian ginseng eleutherococcus senticosus eleuthero'),
+        array('num' => '28', 'name' => 'Ganoderma Extract', 'label_name' => 'Ganoderma Extract', 'qty' => '200 mg', 'search' => 'ganoderma extract reishi mushroom lingzhi'),
+        array('num' => '29', 'name' => 'Blueberry', 'label_name' => 'Blue Berry', 'qty' => '200 mg', 'search' => 'blueberry blue berry vaccinium'),
+        array('num' => '30', 'name' => 'Cordyceps Extract', 'label_name' => 'Cordyceps Extract', 'qty' => '100 mg', 'search' => 'cordyceps extract caterpillar fungus'),
+        array('num' => '31', 'name' => 'Chiku', 'label_name' => 'Chiku', 'qty' => '100 mg', 'search' => 'chiku sapodilla manilkara zapota chikoo'),
+        array('num' => '32', 'name' => 'Neem', 'label_name' => 'Neem', 'qty' => '100 mg', 'search' => 'neem azadirachta indica nimba'),
+        array('num' => '33', 'name' => 'Kesar', 'label_name' => 'Kesar', 'qty' => '100 mg', 'search' => 'kesar saffron crocus sativus kumkuma'),
+        array('num' => '34', 'name' => 'Elaichi', 'label_name' => 'Elaichi', 'qty' => '50 mg', 'search' => 'elaichi cardamom elettaria cardamomum sukshma'),
+        array('num' => '35', 'name' => 'Shankhpushpi', 'label_name' => 'Shankapushpi', 'qty' => '100 mg', 'search' => 'shankhpushpi shankapushpi convolvulus pluricaulis'),
+        array('num' => '36', 'name' => 'Sarpagandha', 'label_name' => 'Sarpagandha', 'qty' => '100 mg', 'search' => 'sarpagandha rauwolfia serpentina'),
+        array('num' => '37', 'name' => 'Fennel Seed', 'label_name' => 'Faneel Seed', 'qty' => '100 mg', 'search' => 'fennel seed faneel seed foeniculum vulgare saunf'),
+        array('num' => '38', 'name' => 'Lemongrass', 'label_name' => 'Lemon Gras', 'qty' => '100 mg', 'search' => 'lemongrass lemon gras cymbopogon'),
+        array('num' => '39', 'name' => 'Apple', 'label_name' => 'Apple', 'qty' => '100 mg', 'search' => 'apple malus domestica seb'),
+        array('num' => '40', 'name' => 'Curcumin', 'label_name' => 'Curcumin', 'qty' => '100 mg', 'search' => 'curcumin turmeric extract active'),
+        array('num' => '41', 'name' => 'Goji Berry Extract', 'label_name' => 'Goji Berry Extract', 'qty' => '100 mg', 'search' => 'goji berry extract lycium barbarum wolfberry'),
+        array('num' => '42', 'name' => 'Black Currant Extract', 'label_name' => 'Black Current Extract', 'qty' => '100 mg', 'search' => 'black currant extract black current ribes nigrum'),
+        array('num' => '43', 'name' => 'Strawberry Extract', 'label_name' => 'Straw Berry Extract', 'qty' => '100 mg', 'search' => 'strawberry extract straw berry fragaria'),
+        array('num' => '44', 'name' => 'Elderberry Extract', 'label_name' => 'Elder Berry Extract', 'qty' => '100 mg', 'search' => 'elderberry extract elder berry sambucus nigra'),
+        array('num' => '45', 'name' => 'Wild Berry Extract', 'label_name' => 'Wild Berry Extract', 'qty' => '100 mg', 'search' => 'wild berry extract mixed berries'),
+        array('num' => '46', 'name' => 'Raspberry Extract', 'label_name' => 'Rasp Berry Extract', 'qty' => '100 mg', 'search' => 'raspberry extract rasp berry rubus idaeus'),
+        array('num' => '47', 'name' => 'Sour Cherry Extract', 'label_name' => 'Sour Cherry Extract', 'qty' => '100 mg', 'search' => 'sour cherry extract sour chery prunus cerasus tart cherry'),
+        array('num' => '48', 'name' => 'Maca Root Extract', 'label_name' => 'Maca Root Extract', 'qty' => '100 mg', 'search' => 'maca root extract lepidium meyenii peruvian ginseng'),
+        array('num' => '49', 'name' => 'Cranberry Extract', 'label_name' => 'Cran Berry Extract', 'qty' => '100 mg', 'search' => 'cranberry extract cran berry vaccinium macrocarpon'),
+        array('num' => '50', 'name' => 'Pomegranate Extract', 'label_name' => 'Pomegranate Extract', 'qty' => '100 mg', 'search' => 'pomegranate extract punica granatum dadima'),
+        array('num' => '51', 'name' => 'Basil Extract', 'label_name' => 'Basil Extract', 'qty' => '100 mg', 'search' => 'basil extract ocimum basilicum sweet basil'),
+        array('num' => '52', 'name' => 'Green Tea Extract', 'label_name' => 'Green Tea Extract', 'qty' => '100 mg', 'search' => 'green tea extract camellia sinensis egcg'),
+        array('num' => '53', 'name' => 'Carrot Extract', 'label_name' => 'Carrot Extract', 'qty' => '100 mg', 'search' => 'carrot extract daucus carota gajar beta carotene'),
+        array('num' => '54', 'name' => 'Vasa Extract', 'label_name' => 'Vasa Extract', 'qty' => '100 mg', 'search' => 'vasa extract adhatoda vasica vasaka'),
+        array('num' => '55', 'name' => 'Vitamin B12', 'label_name' => 'Vitamin B12', 'qty' => '100 mg', 'search' => 'vitamin b12 cobalamin b 12'),
+        array('num' => '56', 'name' => 'Vitamin D3', 'label_name' => 'Vitamin D3', 'qty' => '100 mg', 'search' => 'vitamin d3 cholecalciferol d 3'),
+        array('num' => '57', 'name' => 'Amla Extract', 'label_name' => 'Amla Extract', 'qty' => '100 mg', 'search' => 'amla extract emblica officinalis gooseberry extract'),
+        array('num' => '58', 'name' => 'Ashwagandha Extract', 'label_name' => 'Ashwagandha Extract', 'qty' => '100 mg', 'search' => 'ashwagandha extract withania somnifera standardized extract'),
+        array('num' => '59', 'name' => 'Tulsi Extract', 'label_name' => 'Tulsi Extract', 'qty' => '100 mg', 'search' => 'tulsi extract holy basil ocimum sanctum'),
+        array('num' => '60', 'name' => 'Rest of all Berries & Extracts', 'label_name' => 'Rest of all Bery\'s & Extracts', 'qty' => '100 mg', 'search' => 'rest of all berys extracts botanical berries blend')
+    );
+}
 

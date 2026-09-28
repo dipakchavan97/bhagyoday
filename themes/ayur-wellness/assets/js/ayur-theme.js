@@ -18,6 +18,7 @@
         initProductAccordions();
         initOfferSelector();
         initInstantCheckout();
+        initAmritComposition();
     });
 
     /**
@@ -514,6 +515,7 @@
             $lightboxImg.attr('src', srcToUse);
             if (item.alt) $lightboxImg.attr('alt', item.alt);
 
+            resetZoom();
             $lightbox.addClass('is-open').attr('aria-hidden', 'false');
             $('body').addClass('ayur-scroll-locked');
             $('#ayurLightboxClose').focus();
@@ -521,9 +523,121 @@
 
         function closeLightbox() {
             if (!$lightbox.length) return;
+            resetZoom();
             $lightbox.removeClass('is-open').attr('aria-hidden', 'true');
             $('body').removeClass('ayur-scroll-locked');
         }
+
+        // --- High-Resolution Zoom & Pan Controls ---
+        var currentZoom = 1;
+        var panX = 0;
+        var panY = 0;
+        var isDragging = false;
+        var startX = 0;
+        var startY = 0;
+        var $panWrap = $('#ayurLightboxPanWrap');
+        var $zoomLevel = $('#ayurLbZoomLevel');
+
+        function applyZoomPan() {
+            if (!$panWrap.length) return;
+            $panWrap.css('transform', 'scale(' + currentZoom + ') translate(' + panX + 'px, ' + panY + 'px)');
+            if ($zoomLevel.length) {
+                $zoomLevel.text(Math.round(currentZoom * 100) + '%');
+            }
+            if (currentZoom > 1) {
+                $('#ayurLightboxStage').css('cursor', 'grab');
+            } else {
+                $('#ayurLightboxStage').css('cursor', 'default');
+            }
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            panX = 0;
+            panY = 0;
+            applyZoomPan();
+        }
+
+        $(document).on('click', '#ayurLbZoomIn', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (currentZoom < 3) {
+                currentZoom = Math.min(3, +(currentZoom + 0.5).toFixed(1));
+                applyZoomPan();
+            }
+        });
+
+        $(document).on('click', '#ayurLbZoomOut', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (currentZoom > 1) {
+                currentZoom = Math.max(1, +(currentZoom - 0.5).toFixed(1));
+                if (currentZoom === 1) {
+                    panX = 0;
+                    panY = 0;
+                }
+                applyZoomPan();
+            }
+        });
+
+        $(document).on('click', '#ayurLbZoomReset', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            resetZoom();
+        });
+
+        // Double-click to toggle zoom (1x <-> 2x)
+        $('#ayurLightboxStage').on('dblclick', function(e) {
+            e.preventDefault();
+            if (currentZoom === 1) {
+                currentZoom = 2;
+            } else {
+                resetZoom();
+                return;
+            }
+            applyZoomPan();
+        });
+
+        // Mouse Drag to Pan when zoomed
+        $('#ayurLightboxStage').on('mousedown', function(e) {
+            if (currentZoom <= 1) return;
+            isDragging = true;
+            startX = e.clientX - (panX * currentZoom);
+            startY = e.clientY - (panY * currentZoom);
+            $(this).css('cursor', 'grabbing');
+        });
+
+        $(document).on('mousemove', function(e) {
+            if (!isDragging || currentZoom <= 1) return;
+            panX = (e.clientX - startX) / currentZoom;
+            panY = (e.clientY - startY) / currentZoom;
+            applyZoomPan();
+        });
+
+        $(document).on('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                $('#ayurLightboxStage').css('cursor', currentZoom > 1 ? 'grab' : 'default');
+            }
+        });
+
+        // Touch Drag to Pan on Mobile
+        var touchStartX = 0;
+        var touchStartY = 0;
+        $('#ayurLightboxStage').on('touchstart', function(e) {
+            if (currentZoom <= 1) return;
+            var touch = e.originalEvent.touches[0];
+            touchStartX = touch.clientX - (panX * currentZoom);
+            touchStartY = touch.clientY - (panY * currentZoom);
+        });
+
+        $('#ayurLightboxStage').on('touchmove', function(e) {
+            if (currentZoom <= 1 || e.originalEvent.touches.length !== 1) return;
+            var touch = e.originalEvent.touches[0];
+            panX = (touch.clientX - touchStartX) / currentZoom;
+            panY = (touch.clientY - touchStartY) / currentZoom;
+            applyZoomPan();
+        });
 
         // Thumbnail Click: update main image AND open lightbox
         $(document).on('click', '.ayur-gallery-thumb-btn', function(e) {
@@ -839,6 +953,121 @@
             // Direct instant checkout navigation
             var instantUrl = (ayurThemeParams.checkout_url || '/checkout/') + '?ayur_instant_buy=' + prodId + '&quantity=' + qty;
             window.location.href = instantUrl;
+        });
+    }
+
+    /**
+     * Amrit Juice 60-Botanical Composition Suite: Search, Collapsible Mobile View & Inspection
+     */
+    function initAmritComposition() {
+        var $searchInput = $('#ayurIngredientSearchInput');
+        var $clearBtn = $('#ayurIngredientSearchClear');
+        var $counter = $('#ayurCompFilterCounter');
+        var $rows = $('.ayur-comp-row');
+        var $noResults = $('#ayurCompNoResults');
+        var $mobileToggle = $('#ayurCompMobileToggle');
+        var $tableWrap = $('#ayurCompositionTableWrap');
+        var $atfBtn = $('#ayurAtfViewBtn');
+        var $inspectBtn = $('#ayurBtnInspectLabel');
+
+        if (!$rows.length) return;
+
+        var totalCount = $rows.length;
+
+        // 1. Instant Real-time Search Filter
+        $searchInput.on('input', function() {
+            var term = $(this).val().toLowerCase().trim();
+            if (term.length === 0) {
+                $rows.removeClass('is-hidden');
+                $clearBtn.hide();
+                $noResults.hide();
+                $counter.text('Showing all ' + totalCount + ' ingredients');
+                return;
+            }
+
+            $clearBtn.show();
+            var visibleCount = 0;
+
+            $rows.each(function() {
+                var searchData = ($(this).data('search') || '').toString().toLowerCase();
+                var nameData = ($(this).data('name') || '').toString().toLowerCase();
+                if (searchData.indexOf(term) !== -1 || nameData.indexOf(term) !== -1) {
+                    $(this).removeClass('is-hidden');
+                    visibleCount++;
+                } else {
+                    $(this).addClass('is-hidden');
+                }
+            });
+
+            // If searching on mobile and list is collapsed, automatically expand so user sees matches
+            if ($tableWrap.hasClass('is-collapsed-mobile')) {
+                $tableWrap.removeClass('is-collapsed-mobile');
+                $mobileToggle.attr('aria-expanded', 'true');
+                $mobileToggle.find('.btn-text').text('Collapse Composition ↑');
+            }
+
+            if (visibleCount === 0) {
+                $noResults.show();
+                $counter.text('No ingredients matching "' + term + '"');
+            } else {
+                $noResults.hide();
+                $counter.text('Showing ' + visibleCount + ' of ' + totalCount + ' ingredients');
+            }
+        });
+
+        // Clear Search Button
+        $clearBtn.on('click', function(e) {
+            e.preventDefault();
+            $searchInput.val('').trigger('input').focus();
+        });
+
+        // 2. Mobile Expand/Collapse Accordion
+        $mobileToggle.on('click', function(e) {
+            e.preventDefault();
+            var isCollapsed = $tableWrap.hasClass('is-collapsed-mobile');
+            if (isCollapsed) {
+                $tableWrap.removeClass('is-collapsed-mobile');
+                $(this).attr('aria-expanded', 'true');
+                $(this).find('.btn-text').text('Collapse Composition ↑');
+            } else {
+                $tableWrap.addClass('is-collapsed-mobile');
+                $(this).attr('aria-expanded', 'false');
+                $(this).find('.btn-text').text('View Complete Composition (' + totalCount + ' Ingredients) ↓');
+            }
+        });
+
+        // 3. Above-the-fold "VIEW COMPLETE COMPOSITION" smooth scroll & mobile expand
+        $atfBtn.on('click', function(e) {
+            var targetSection = document.getElementById('ayurCompositionSection');
+            if (targetSection) {
+                e.preventDefault();
+                // If on mobile, expand the accordion so it's open when scrolled into view
+                if ($tableWrap.hasClass('is-collapsed-mobile')) {
+                    $tableWrap.removeClass('is-collapsed-mobile');
+                    $mobileToggle.attr('aria-expanded', 'true');
+                    $mobileToggle.find('.btn-text').text('Collapse Composition ↑');
+                }
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        // 4. "Inspect Packaging Label" Button -> Triggers high-resolution lightbox
+        $inspectBtn.on('click', function(e) {
+            e.preventDefault();
+            var compUrl = $(this).data('full');
+            // Try to find matching thumbnail in gallery
+            var $compThumb = $('.ayur-gallery-thumb-btn.ayur-comp-thumb-btn');
+            if ($compThumb.length) {
+                $compThumb.trigger('click');
+            } else {
+                // Trigger open on gallery stage or lightbox with full image
+                var $stage = $('#ayurGalleryStage');
+                if ($stage.length && compUrl) {
+                    var $mainImg = $('#ayurMainProductImg');
+                    $mainImg.attr('src', compUrl).attr('data-full', compUrl);
+                    $stage.trigger('click');
+                }
+            }
         });
     }
 

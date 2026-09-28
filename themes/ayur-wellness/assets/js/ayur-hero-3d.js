@@ -3,7 +3,7 @@
  * 
  * Technology: Three.js (WebGL) + Graceful Progressive Enhancement
  * Feature Product: Amrit Heart Health Immunity Juice 500ml (ID: 33)
- * Verified Ingredients: Arjuna Bark (40%), Wild Amla (30%), Garlic (10%), ACV (10%), Forest Honey (10%)
+ * Verified Formulation: 60-Botanical Complex (Herbs, Fruits & Botanical Extracts)
  */
 
 (function () {
