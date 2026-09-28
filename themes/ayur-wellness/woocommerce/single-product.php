@@ -53,7 +53,7 @@ while (have_posts()) :
     if (has_post_thumbnail()) {
         array_unshift($gallery_ids, get_post_thumbnail_id($product_id));
     }
-    $gallery_ids = array_unique(array_filter($gallery_ids));
+    $gallery_ids = array_values(array_unique(array_filter($gallery_ids)));
     $ext_data = ayur_get_product_extended_data($product_id);
     ?>
 
@@ -94,7 +94,7 @@ while (have_posts()) :
                     </div>
 
                     <?php if (count($gallery_ids) > 1) : ?>
-                        <div class="ayur-gallery-thumbs" role="region" aria-label="<?php esc_attr_e('Product gallery thumbnails', 'ayur-wellness'); ?>">
+                        <div class="ayur-gallery-thumbs" id="ayurGalleryThumbs" role="region" aria-label="<?php esc_attr_e('Product gallery thumbnails', 'ayur-wellness'); ?>">
                             <?php foreach ($gallery_ids as $index => $att_id) :
                                 $thumb_url = wp_get_attachment_image_url($att_id, 'woocommerce_gallery_thumbnail');
                                 $large_url = wp_get_attachment_image_url($att_id, 'large');
@@ -102,15 +102,17 @@ while (have_posts()) :
                                 if (!$thumb_url) continue;
                                 if (!$large_url) $large_url = $thumb_url;
                                 if (!$full_url)  $full_url  = $large_url;
+                                $alt_text   = sprintf(__('%s - View %d', 'ayur-wellness'), get_the_title(), $index + 1);
                             ?>
                                 <button type="button"
-                                        class="ayur-gallery-thumb-btn <?php echo $index === 0 ? 'active' : ''; ?>"
+                                        class="ayur-gallery-thumb ayur-gallery-thumb-btn <?php echo $index === 0 ? 'is-active active' : ''; ?>"
                                         data-index="<?php echo esc_attr($index); ?>"
+                                        data-image="<?php echo esc_url($large_url); ?>"
                                         data-large="<?php echo esc_url($large_url); ?>"
                                         data-full="<?php echo esc_url($full_url); ?>"
-                                        data-alt="<?php echo esc_attr(sprintf(__('%s - View %d', 'ayur-wellness'), get_the_title(), $index + 1)); ?>"
-                                        aria-label="<?php echo esc_attr(sprintf(__('View image %d', 'ayur-wellness'), $index + 1)); ?>">
-                                    <img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?> thumbnail <?php echo $index + 1; ?>" loading="lazy" />
+                                        data-alt="<?php echo esc_attr($alt_text); ?>"
+                                        aria-label="<?php echo esc_attr($alt_text); ?>">
+                                    <img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr($alt_text); ?>" loading="lazy" />
                                 </button>
                             <?php endforeach; ?>
                         </div>

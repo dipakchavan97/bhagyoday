@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '3.4.1');
+define('AYUR_THEME_VERSION', '3.4.2');
 
 /**
  * Theme Setup
@@ -67,6 +67,19 @@ function ayur_wellness_scripts() {
     ));
 }
 add_action('wp_enqueue_scripts', 'ayur_wellness_scripts');
+
+/**
+ * Dequeue Unnecessary WooCommerce Gallery Scripts on Single Product Page
+ */
+function ayur_dequeue_unnecessary_gallery_scripts() {
+    if (is_product()) {
+        wp_dequeue_script('zoom');
+        wp_dequeue_script('flexslider');
+        wp_dequeue_script('photoswipe');
+        wp_dequeue_script('photoswipe-ui-default');
+    }
+}
+add_action('wp_enqueue_scripts', 'ayur_dequeue_unnecessary_gallery_scripts', 99);
 
 /**
  * Unified Premium Vector Icon System (Lucide-Style Stroke SVG)

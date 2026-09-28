@@ -428,58 +428,57 @@
     /**
     /**
     /**
-     * Product Gallery (Compact Thumbnail Switcher, Strictly No Lightbox)
+     * Product Gallery (Direct Thumbnail Switcher, Strictly No Lightbox, No Previews, No Cloning)
      */
     function initProductGallery() {
-        var $stage = $('#ayurGalleryStage');
-        var $mainImg = $('#ayurMainProductImg');
-        var $thumbBtns = $('.ayur-gallery-thumb-btn');
+        var stage = document.getElementById('ayurGalleryStage');
+        var mainImg = document.getElementById('ayurMainProductImg');
+        var thumbsContainer = document.getElementById('ayurGalleryThumbs') || document.querySelector('.ayur-gallery-thumbs');
 
-        if (!$stage.length || !$mainImg.length) return;
+        if (!stage || !mainImg || !thumbsContainer) return;
 
-        // Collect all gallery items
-        var galleryItems = [];
+        // Guard against duplicate listener registration
+        if (thumbsContainer.dataset.initialized === 'true') return;
+        thumbsContainer.dataset.initialized = 'true';
 
-        if ($thumbBtns.length > 0) {
-            $thumbBtns.each(function(i) {
-                var $btn = $(this);
-                var largeUrl = $btn.data('large') || $btn.data('full') || $btn.find('img').attr('src');
-                var alt = $btn.data('alt') || $mainImg.attr('alt') || '';
-                galleryItems.push({
-                    index: i,
-                    large: largeUrl,
-                    alt: alt
+        var thumbBtns = thumbsContainer.querySelectorAll('.ayur-gallery-thumb, .ayur-gallery-thumb-btn');
+        if (!thumbBtns.length) return;
+
+        thumbBtns.forEach(function(thumb) {
+            thumb.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                var newSrc = this.dataset.image || this.dataset.large || this.dataset.full;
+                if (!newSrc) {
+                    var childImg = this.querySelector('img');
+                    if (childImg) newSrc = childImg.getAttribute('src');
+                }
+                if (!newSrc) return;
+
+                var newSrcset = this.dataset.srcset || '';
+                var newAlt = this.dataset.alt || '';
+
+                // Update main stage image ONLY
+                mainImg.src = newSrc;
+                if (newSrcset) {
+                    mainImg.srcset = newSrcset;
+                } else {
+                    mainImg.removeAttribute('srcset');
+                }
+                if (newAlt) {
+                    mainImg.alt = newAlt;
+                }
+
+                // Update active state on thumbnail buttons ONLY
+                thumbBtns.forEach(function(t) {
+                    t.classList.remove('is-active', 'active');
                 });
+                this.classList.add('is-active', 'active');
             });
-        }
-
-        function setMainImage(idx) {
-            if (!galleryItems[idx]) return;
-            var item = galleryItems[idx];
-
-            // Smooth image transition on main stage
-            $mainImg.css('opacity', '0.4');
-            $mainImg.attr('src', item.large).removeAttr('srcset').attr('data-index', idx);
-            if (item.alt) $mainImg.attr('alt', item.alt);
-
-            setTimeout(function() {
-                $mainImg.css('opacity', '1');
-            }, 80);
-
-            // Update active thumbnail border
-            $('.ayur-gallery-thumb-btn').removeClass('active');
-            $('.ayur-gallery-thumb-btn[data-index="' + idx + '"]').addClass('active');
-        }
-
-        // Thumbnail Click: update main image ONLY (No lightbox, no popup)
-        $(document).on('click', '.ayur-gallery-thumb-btn', function(e) {
-            e.preventDefault();
-            var idx = parseInt($(this).data('index'), 10) || 0;
-            setMainImage(idx);
         });
 
-        // Stage click: strictly do nothing special (no modal, no popup, no zoom overlay)
-        $stage.on('click', function(e) {
+        // Stage click: strictly do nothing special
+        stage.addEventListener('click', function(e) {
             // Passive click - strictly do nothing
         });
     }
