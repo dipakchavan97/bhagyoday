@@ -968,7 +968,6 @@
         var $mobileToggle = $('#ayurCompMobileToggle');
         var $tableWrap = $('#ayurCompositionTableWrap');
         var $atfBtn = $('#ayurAtfViewBtn');
-        var $inspectBtn = $('#ayurBtnInspectLabel');
 
         if (!$rows.length) return;
 
@@ -1048,25 +1047,6 @@
                     $mobileToggle.find('.btn-text').text('Collapse Composition ↑');
                 }
                 targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-
-        // 4. "Inspect Packaging Label" Button -> Triggers high-resolution lightbox
-        $inspectBtn.on('click', function(e) {
-            e.preventDefault();
-            var compUrl = $(this).data('full');
-            // Try to find matching thumbnail in gallery
-            var $compThumb = $('.ayur-gallery-thumb-btn.ayur-comp-thumb-btn');
-            if ($compThumb.length) {
-                $compThumb.trigger('click');
-            } else {
-                // Trigger open on gallery stage or lightbox with full image
-                var $stage = $('#ayurGalleryStage');
-                if ($stage.length && compUrl) {
-                    var $mainImg = $('#ayurMainProductImg');
-                    $mainImg.attr('src', compUrl).attr('data-full', compUrl);
-                    $stage.trigger('click');
-                }
             }
         });
     }

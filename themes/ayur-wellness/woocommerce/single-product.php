@@ -72,9 +72,9 @@ while (have_posts()) :
             </nav>
 
             <div class="ayur-product-layout">
-                <!-- 2. Product Gallery with Label Inspection Zoom -->
+                <!-- 2. Product Gallery with Stage Zoom -->
                 <div class="ayur-gallery-col">
-                    <div class="ayur-gallery-stage" id="ayurGalleryStage" role="button" tabindex="0" aria-label="<?php esc_attr_e('Click to enlarge and inspect packaging label', 'ayur-wellness'); ?>" data-zoom-url="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>">
+                    <div class="ayur-gallery-stage" id="ayurGalleryStage" role="button" tabindex="0" aria-label="<?php esc_attr_e('Click to enlarge image', 'ayur-wellness'); ?>" data-zoom-url="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>">
                         <?php if (has_post_thumbnail()) : ?>
                             <?php the_post_thumbnail('large', array(
                                 'class'         => 'ayur-main-img',
@@ -86,7 +86,7 @@ while (have_posts()) :
                             )); ?>
                             <span class="ayur-gallery-zoom-badge">
                                 <?php echo ayur_svg_icon('search', '', 13); ?>
-                                <span><?php _e('Inspect Label', 'ayur-wellness'); ?></span>
+                                <span><?php _e('Zoom', 'ayur-wellness'); ?></span>
                             </span>
                         <?php else : ?>
                             <div class="ayur-gallery-placeholder">
@@ -95,7 +95,7 @@ while (have_posts()) :
                         <?php endif; ?>
                     </div>
 
-                    <?php if (count($gallery_ids) > 1 || $product_id == 33) : ?>
+                    <?php if (count($gallery_ids) > 1) : ?>
                         <div class="ayur-gallery-thumbs" role="region" aria-label="<?php esc_attr_e('Product gallery thumbnails', 'ayur-wellness'); ?>">
                             <?php foreach ($gallery_ids as $index => $att_id) :
                                 $thumb_url = wp_get_attachment_image_url($att_id, 'woocommerce_gallery_thumbnail');
@@ -115,21 +115,6 @@ while (have_posts()) :
                                     <img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?> thumbnail <?php echo $index + 1; ?>" loading="lazy" />
                                 </button>
                             <?php endforeach; ?>
-                            <?php if ($product_id == 33) :
-                                $comp_img_url = get_template_directory_uri() . '/assets/images/amrit-juice-composition-label.webp';
-                                $comp_idx = count($gallery_ids);
-                            ?>
-                                <button type="button"
-                                        class="ayur-gallery-thumb-btn ayur-comp-thumb-btn"
-                                        data-index="<?php echo esc_attr($comp_idx); ?>"
-                                        data-large="<?php echo esc_url($comp_img_url); ?>"
-                                        data-full="<?php echo esc_url($comp_img_url); ?>"
-                                        data-alt="<?php esc_attr_e('Amrit Juice 60 Ingredients Composition Label', 'ayur-wellness'); ?>"
-                                        aria-label="<?php esc_attr_e('View 60 Ingredients Composition Label', 'ayur-wellness'); ?>">
-                                    <img src="<?php echo esc_url($comp_img_url); ?>" alt="<?php esc_attr_e('Composition Label Thumbnail', 'ayur-wellness'); ?>" loading="lazy" />
-                                    <span class="ayur-thumb-comp-tag"><?php _e('60 Herbs', 'ayur-wellness'); ?></span>
-                                </button>
-                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -470,10 +455,6 @@ while (have_posts()) :
                         </div>
                         <div class="ayur-comp-actions">
                             <span id="ayurCompFilterCounter" class="ayur-comp-counter"><?php _e('Showing all 60 ingredients', 'ayur-wellness'); ?></span>
-                            <button type="button" class="ayur-comp-inspect-btn" id="ayurBtnInspectLabel" data-full="<?php echo esc_url(get_template_directory_uri() . '/assets/images/amrit-juice-composition-label.webp'); ?>" aria-label="<?php esc_attr_e('Inspect official packaging label image', 'ayur-wellness'); ?>">
-                                <?php echo ayur_svg_icon('search', '', 13); ?>
-                                <span><?php _e('Inspect Packaging Label', 'ayur-wellness'); ?></span>
-                            </button>
                         </div>
                     </div>
 
@@ -777,8 +758,8 @@ while (have_posts()) :
                 </div>
             <?php endif; ?>
         </div>
-        <!-- Native Label Inspection Lightbox (Phase 6) -->
-        <div id="ayurImageLightbox" class="ayur-image-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Product Label Inspection', 'ayur-wellness'); ?>">
+        <!-- Native Product Image Lightbox -->
+        <div id="ayurImageLightbox" class="ayur-image-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Product Image Gallery Lightbox', 'ayur-wellness'); ?>">
             <div class="ayur-lightbox-backdrop" id="ayurLightboxBackdrop"></div>
             <div class="ayur-lightbox-dialog">
                 <div class="ayur-lightbox-header-bar">
@@ -794,7 +775,7 @@ while (have_posts()) :
                             <span><?php _e('Reset', 'ayur-wellness'); ?></span>
                         </button>
                     </div>
-                    <button type="button" class="ayur-lightbox-close" id="ayurLightboxClose" aria-label="<?php esc_attr_e('Close inspection modal', 'ayur-wellness'); ?>">
+                    <button type="button" class="ayur-lightbox-close" id="ayurLightboxClose" aria-label="<?php esc_attr_e('Close lightbox', 'ayur-wellness'); ?>">
                         <?php echo ayur_svg_icon('x', '', 20); ?>
                     </button>
                 </div>
@@ -816,7 +797,7 @@ while (have_posts()) :
                     <?php if (count($gallery_ids) > 1) : ?>
                         <span class="ayur-lightbox-counter" id="ayurLightboxCounter">1 / <?php echo count($gallery_ids); ?></span>
                     <?php endif; ?>
-                    <span class="ayur-lightbox-hint"><?php _e('High-resolution label inspection &bull; Use buttons or double-tap to zoom', 'ayur-wellness'); ?></span>
+                    <span class="ayur-lightbox-hint"><?php _e('High-resolution product view &bull; Use buttons or double-tap to zoom', 'ayur-wellness'); ?></span>
                 </div>
             </div>
         </div>
