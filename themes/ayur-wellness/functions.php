@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '3.3.1');
+define('AYUR_THEME_VERSION', '3.4.1');
 
 /**
  * Theme Setup
@@ -31,9 +31,7 @@ function ayur_wellness_setup() {
             'max_columns'     => 4,
         ),
     ));
-    add_theme_support('wc-product-gallery-zoom');
-    add_theme_support('wc-product-gallery-lightbox');
-    add_theme_support('wc-product-gallery-slider');
+    // Gallery Lightbox & Zoom disabled per premium UX specifications
 
     // Register Navigation Menus
     register_nav_menus(array(
@@ -774,50 +772,50 @@ function ayur_get_product_extended_data($product_id) {
             'has_60_composition' => true,
             'positioning' => 'An Ayurvedic proprietary formulation featuring a curated blend of 60 herbs, fruits, and botanical extracts.',
             'benefits' => array(
-                'Supports natural immunity and vitality through a broad spectrum of 60 botanical ingredients',
-                'Each 10ml contains specified quantities of traditional herbs including Noni, Amla, Moringa, and Ashwagandha',
+                'Supports natural vitality and immune defense through a broad spectrum of 60 botanical ingredients',
+                'Classical Rasayana formulation featuring revered herbs including Noni, Amla, Moringa, and Ashwagandha',
                 'Formulated with zero added sugar, no artificial colors, and no artificial flavours',
                 'Prepared in accordance with authentic Ayurvedic proprietary medicine standards'
             ),
             'botanicals' => array(
                 array(
                     'name'  => 'Moringa Oleifera',
-                    'latin' => 'Moringa oleifera (500 mg per 10ml)',
+                    'latin' => 'Moringa oleifera',
                     'role'  => 'Classical nutrient-dense botanical providing natural minerals and phytonutrients for cellular vigor.'
                 ),
                 array(
                     'name'  => 'Noni Fruit',
-                    'latin' => 'Morinda citrifolia (400 mg per 10ml)',
+                    'latin' => 'Morinda citrifolia',
                     'role'  => 'Revered tropical botanical traditionally valued for vitality and supporting overall physiological balance.'
                 ),
                 array(
                     'name'  => 'Indian Amla & Amla Extract',
-                    'latin' => 'Emblica officinalis (500 mg combined per 10ml)',
+                    'latin' => 'Emblica officinalis',
                     'role'  => 'Foundational Ayurvedic Rasayana fruit celebrated as a natural source of antioxidants and cellular defense.'
                 ),
                 array(
                     'name'  => 'Ashwagandha Root & Extract',
-                    'latin' => 'Withania somnifera (400 mg combined per 10ml)',
+                    'latin' => 'Withania somnifera',
                     'role'  => 'Classical adaptogenic root traditionally utilized to promote resilience, stamina, and nervous harmony.'
                 ),
                 array(
                     'name'  => 'Purified Shilajit',
-                    'latin' => 'Asphaltum punjabianum (300 mg per 10ml)',
+                    'latin' => 'Asphaltum punjabianum',
                     'role'  => 'Venerated mineral pitch traditionally recognized for supporting natural endurance and metabolic balance.'
                 ),
                 array(
                     'name'  => 'Giloy & Shatavari',
-                    'latin' => 'Tinospora cordifolia & Asparagus racemosus (300 mg each)',
+                    'latin' => 'Tinospora cordifolia & Asparagus racemosus',
                     'role'  => 'Classical Ayurvedic Rasayana herbs traditionally used to support immune defense and tissue nourishment.'
                 ),
             ),
             'formulation_story' => array(
                 'intro'       => 'Amrit Juice brings together a comprehensive blend of 60 herbs, fruits, and botanical extracts into a unified Ayurvedic proprietary formulation.',
                 'traditional' => 'Classical Ayurvedic philosophy values multi-herb Rasayana formulations where diverse botanical extracts work together to support balance across body tissues (Dhatus).',
-                'why'         => 'Every 10ml provides a precisely measured composition of 60 botanicals with zero added sugar, artificial colours, or synthetic flavours.'
+                'why'         => 'Every 10ml provides a carefully formulated composition of 60 botanicals with zero added sugar, artificial colours, or synthetic flavours.'
             ),
             'usage_steps' => array(
-                array('num' => '01', 'title' => 'Recommended Measure', 'desc' => 'Shake well before use. Measure 15 to 25 ml using the included measuring cup.'),
+                array('num' => '01', 'title' => 'Recommended Measure', 'desc' => 'Shake well before use. Measure 10–15 ml using the included measuring cup.'),
                 array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Mix in a glass (150–200 ml) of normal or lukewarm water. Drink once daily on an empty stomach in the morning.'),
                 array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Maintain consistent daily intake alongside balanced nutrition and wholesome hydration for enduring vitality.')
             ),
@@ -825,7 +823,7 @@ function ayur_get_product_extended_data($product_id) {
                 'Form'              => 'Liquid Herbal Tonic Juice (Ayurvedic Proprietary Medicine)',
                 'Net Quantity'      => $net_qty ? $net_qty : '500 ml Bottle',
                 'Key Botanicals'    => '60 Herbs, Fruits & Extracts (Moringa, Noni, Amla, Ashwagandha, Shilajit, Giloy, etc.)',
-                'Dosage'            => '15 to 25 ml daily in lukewarm water on an empty stomach',
+                'Dosage'            => '10 to 15 ml daily in lukewarm water on an empty stomach',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'Food-grade bottle with calibrated dosing cap',

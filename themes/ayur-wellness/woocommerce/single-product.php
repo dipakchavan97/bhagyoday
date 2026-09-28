@@ -2,6 +2,7 @@
 /**
  * Premium D2C Ayurvedic Single Product Template
  * Conversion-First Architecture — Bhagyoday Ayurveda
+ * Version: 3.4.0 — Premium Compact Edition
  */
 
 defined('ABSPATH') || exit;
@@ -71,10 +72,11 @@ while (have_posts()) :
                 <span class="ayur-breadcrumb-current"><?php the_title(); ?></span>
             </nav>
 
+            <!-- 2. Primary Product Layout: Gallery & Purchase Area -->
             <div class="ayur-product-layout">
-                <!-- 2. Product Gallery with Stage Zoom -->
+                <!-- Product Gallery (Clean, Compact, No Lightbox Modal) -->
                 <div class="ayur-gallery-col">
-                    <div class="ayur-gallery-stage" id="ayurGalleryStage" role="button" tabindex="0" aria-label="<?php esc_attr_e('Click to enlarge image', 'ayur-wellness'); ?>" data-zoom-url="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>">
+                    <div class="ayur-gallery-stage" id="ayurGalleryStage">
                         <?php if (has_post_thumbnail()) : ?>
                             <?php the_post_thumbnail('large', array(
                                 'class'         => 'ayur-main-img',
@@ -84,10 +86,6 @@ while (have_posts()) :
                                 'data-full'     => esc_url(get_the_post_thumbnail_url($product_id, 'full')),
                                 'data-index'    => '0'
                             )); ?>
-                            <span class="ayur-gallery-zoom-badge">
-                                <?php echo ayur_svg_icon('search', '', 13); ?>
-                                <span><?php _e('Zoom', 'ayur-wellness'); ?></span>
-                            </span>
                         <?php else : ?>
                             <div class="ayur-gallery-placeholder">
                                 <?php echo ayur_svg_icon('leaf', '', 48); ?>
@@ -119,7 +117,7 @@ while (have_posts()) :
                     <?php endif; ?>
                 </div>
 
-                <!-- 3. Purchase Information Column (Phase 6 High-Conversion Architecture) -->
+                <!-- 3. Purchase Information Column (Target Final Order) -->
                 <div class="ayur-product-summary">
                     <?php if ($cat_name) : ?>
                         <span class="ayur-product-eyebrow"><?php echo esc_html(strtoupper(html_entity_decode($cat_name, ENT_QUOTES, 'UTF-8'))); ?></span>
@@ -127,29 +125,12 @@ while (have_posts()) :
 
                     <h1 class="ayur-single-title"><?php the_title(); ?></h1>
 
-                    <!-- Short Concise Product Positioning (Factual & Compliant) -->
+                    <!-- Short Description (Approved Formulation Content) -->
                     <div class="ayur-single-positioning">
                         <p><?php echo esc_html(!empty($ext_data['positioning']) ? $ext_data['positioning'] : wp_trim_words(get_the_content(), 25)); ?></p>
                     </div>
 
-                    <?php if ($product_id == 33 || !empty($ext_data['has_60_composition'])) : ?>
-                        <!-- Section 4: Compact Above-the-Fold Formulation Summary -->
-                        <div class="ayur-atf-composition-summary" aria-label="<?php esc_attr_e('Formulation Summary', 'ayur-wellness'); ?>">
-                            <div class="ayur-atf-badge-pill">
-                                <span class="ayur-atf-count-badge">60</span>
-                                <div class="ayur-atf-text-col">
-                                    <strong class="ayur-atf-heading"><?php _e('Herbs, Fruits &amp; Extracts', 'ayur-wellness'); ?></strong>
-                                    <span class="ayur-atf-sub"><?php _e('Each 10ml contains a carefully specified blend of botanical ingredients.', 'ayur-wellness'); ?></span>
-                                </div>
-                            </div>
-                            <a href="#ayurCompositionSection" class="ayur-atf-view-btn" id="ayurAtfViewBtn">
-                                <span><?php _e('VIEW COMPLETE COMPOSITION', 'ayur-wellness'); ?></span>
-                                <?php echo ayur_svg_icon('chevron-down', '', 13); ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Clean Price, MRP & Savings Box -->
+                    <!-- Price, MRP & Savings Box -->
                     <div class="ayur-single-pricing-box">
                         <div class="ayur-price-row">
                             <span class="ayur-single-price">₹<?php echo number_format($price); ?></span>
@@ -171,13 +152,13 @@ while (have_posts()) :
                         </div>
                     </div>
 
-                    <!-- Clear Pack Size & Stock Status Specification Row -->
+                    <!-- Pack Size Specification Row -->
                     <div class="ayur-pack-spec-row">
                         <div class="ayur-pack-chip-wrap">
                             <span class="ayur-pack-label"><?php _e('Pack Size:', 'ayur-wellness'); ?></span>
                             <div class="ayur-pack-chip">
                                 <?php echo ayur_svg_icon('package', '', 14); ?>
-                                <span class="ayur-pack-val"><?php echo esc_html($net_qty ? $net_qty : 'Standard Formulation Pack'); ?></span>
+                                <span class="ayur-pack-val"><?php echo esc_html($net_qty ? $net_qty : '500 ml Bottle'); ?></span>
                             </div>
                         </div>
                         <span class="ayur-stock-badge in-stock">
@@ -186,7 +167,7 @@ while (have_posts()) :
                         </span>
                     </div>
 
-                    <!-- Phase 5: Buy More, Save More Offer Selector -->
+                    <!-- Quantity Offers (Buy More, Save More) -->
                     <?php
                     $offers_enabled = class_exists('Ayur_Quantity_Offers') && Ayur_Quantity_Offers::is_enabled();
                     $offer_tiers = $offers_enabled ? Ayur_Quantity_Offers::get_offer_tiers() : array();
@@ -266,10 +247,9 @@ while (have_posts()) :
                         </div>
                     </form>
 
-                    <!-- Premium Trust Badges System (Factual, Focussed, Authentic Ayurveda) -->
-                    <div class="ayur-product-trust-system" aria-label="<?php esc_attr_e('Product Trust & Authenticity Badges', 'ayur-wellness'); ?>">
+                    <!-- Trust Badges (Factual & Authentic) -->
+                    <div class="ayur-product-trust-system" aria-label="<?php esc_attr_e('Product Trust Badges', 'ayur-wellness'); ?>">
                         <div class="ayur-trust-badges-grid">
-                            <!-- Badge 1: Secure Payments -->
                             <div class="ayur-trust-badge-card">
                                 <div class="ayur-trust-badge-icon" aria-hidden="true">
                                     <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
@@ -284,7 +264,6 @@ while (have_posts()) :
                                 </div>
                             </div>
 
-                            <!-- Badge 2: Pan-India Delivery -->
                             <div class="ayur-trust-badge-card">
                                 <div class="ayur-trust-badge-icon" aria-hidden="true">
                                     <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
@@ -301,7 +280,6 @@ while (have_posts()) :
                                 </div>
                             </div>
 
-                            <!-- Badge 3: Authentic Ayurveda -->
                             <div class="ayur-trust-badge-card">
                                 <div class="ayur-trust-badge-icon" aria-hidden="true">
                                     <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
@@ -315,7 +293,6 @@ while (have_posts()) :
                                 </div>
                             </div>
 
-                            <!-- Badge 4: Quality Assured -->
                             <div class="ayur-trust-badge-card">
                                 <div class="ayur-trust-badge-icon" aria-hidden="true">
                                     <svg class="ayur-trust-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
@@ -330,7 +307,6 @@ while (have_posts()) :
                             </div>
                         </div>
 
-                        <!-- Verified Business Trust Signals Strip -->
                         <div class="ayur-trust-compliance-strip">
                             <div class="ayur-compliance-pill">
                                 <svg class="ayur-compliance-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -347,52 +323,31 @@ while (have_posts()) :
                             </div>
                         </div>
                     </div>
-
-                    <!-- Compact Delivery Information Panel -->
-                    <div class="ayur-delivery-info-panel">
-                        <div class="ayur-delivery-panel-title">
-                            <?php echo ayur_svg_icon('truck', '', 15); ?>
-                            <span><?php _e('DELIVERY & SERVICE DETAILS', 'ayur-wellness'); ?></span>
-                        </div>
-                        <div class="ayur-delivery-grid">
-                            <div class="ayur-delivery-cell">
-                                <span class="cell-k"><?php _e('DISPATCH', 'ayur-wellness'); ?></span>
-                                <span class="cell-v"><?php _e('Within 24–48 hours from Maharashtra Hub', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-delivery-cell">
-                                <span class="cell-k"><?php _e('METRO DELIVERY', 'ayur-wellness'); ?></span>
-                                <span class="cell-v"><?php _e('2–4 business days via Delhivery, BlueDart, DTDC', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-delivery-cell">
-                                <span class="cell-k"><?php _e('FREE DELIVERY', 'ayur-wellness'); ?></span>
-                                <span class="cell-v"><?php _e('Orders above ₹999 (₹70 below ₹999)', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-delivery-cell">
-                                <span class="cell-k"><?php _e('COD AVAILABLE', 'ayur-wellness'); ?></span>
-                                <span class="cell-v"><?php _e('Pay on arrival across serviceable pincodes', 'ayur-wellness'); ?></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Compact Above-The-Fold Formulation Highlights (Max 4 Points) -->
-                    <?php if (!empty($ext_data['benefits'])) : ?>
-                        <div class="ayur-panel-benefits">
-                            <h4 class="ayur-panel-benefits-heading"><?php _e('Why You May Choose This Formulation', 'ayur-wellness'); ?></h4>
-                            <ul class="ayur-panel-benefits-list">
-                                <?php foreach (array_slice($ext_data['benefits'], 0, 4) as $benefit) : ?>
-                                    <li>
-                                        <span class="ayur-benefit-check"><?php echo ayur_svg_icon('check', '', 13); ?></span>
-                                        <span><?php echo esc_html($benefit); ?></span>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
 
+            <!-- 4. Product Benefits (Compact 4-Block Highlights) -->
+            <?php if (!empty($ext_data['benefits'])) : ?>
+                <section class="ayur-product-benefits-section" aria-label="<?php esc_attr_e('Product Benefits', 'ayur-wellness'); ?>">
+                    <div class="ayur-benefits-header">
+                        <span class="ayur-section-eyebrow"><?php _e('KEY FORMULATION HIGHLIGHTS', 'ayur-wellness'); ?></span>
+                        <h2 class="ayur-section-title"><?php _e('Why Choose This Formulation', 'ayur-wellness'); ?></h2>
+                    </div>
+                    <div class="ayur-benefits-grid-compact">
+                        <?php foreach (array_slice($ext_data['benefits'], 0, 4) as $benefit) : ?>
+                            <div class="ayur-benefit-card-compact">
+                                <span class="ayur-benefit-check-circle"><?php echo ayur_svg_icon('check', '', 14); ?></span>
+                                <div class="ayur-benefit-text">
+                                    <p><?php echo esc_html($benefit); ?></p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
+            <!-- 5. What's Inside Callout Banner -->
             <?php if ($product_id == 33 || !empty($ext_data['has_60_composition'])) : ?>
-                <!-- Section 16: What's Inside Callout Banner -->
                 <div class="ayur-whats-inside-banner" aria-label="<?php esc_attr_e('What\'s Inside Formulation Callout', 'ayur-wellness'); ?>">
                     <div class="ayur-whats-inside-inner">
                         <div class="ayur-wi-header">
@@ -428,34 +383,15 @@ while (have_posts()) :
                         </div>
                     </div>
                 </div>
+            <?php endif; ?>
 
-                <!-- Sections 5-12: Complete Composition Section -->
+            <!-- 6. Complete Composition Section (Names Only, Zero Quantities, No Search Box) -->
+            <?php if ($product_id == 33 || !empty($ext_data['has_60_composition'])) : ?>
                 <section id="ayurCompositionSection" class="ayur-composition-section" aria-label="<?php esc_attr_e('Complete Product Composition', 'ayur-wellness'); ?>">
                     <div class="ayur-composition-header-card">
-                        <span class="ayur-comp-eyebrow"><?php _e('DETAILED FORMULATION PANEL', 'ayur-wellness'); ?></span>
                         <h2 class="ayur-comp-title"><?php _e('COMPOSITION', 'ayur-wellness'); ?></h2>
                         <p class="ayur-comp-count"><?php _e('60 Herbs, Fruits &amp; Extracts', 'ayur-wellness'); ?></p>
-                        <div class="ayur-comp-serving-pill">
-                            <span class="serving-dot"></span>
-                            <span><?php _e('Each 10ml contains:', 'ayur-wellness'); ?></span>
-                        </div>
-                    </div>
-
-                    <!-- Search and Action Controls -->
-                    <div class="ayur-composition-controls">
-                        <div class="ayur-comp-search-box">
-                            <span class="ayur-comp-search-icon"><?php echo ayur_svg_icon('search', '', 16); ?></span>
-                            <input type="text"
-                                   id="ayurIngredientSearchInput"
-                                   class="ayur-comp-search-input"
-                                   placeholder="<?php esc_attr_e('Search ingredients (e.g., Ashwagandha, Noni, Amla, Shilajit)...', 'ayur-wellness'); ?>"
-                                   aria-label="<?php esc_attr_e('Search 60 ingredients', 'ayur-wellness'); ?>"
-                                   autocomplete="off" />
-                            <button type="button" id="ayurIngredientSearchClear" class="ayur-comp-search-clear" style="display:none;" aria-label="<?php esc_attr_e('Clear search', 'ayur-wellness'); ?>">&times;</button>
-                        </div>
-                        <div class="ayur-comp-actions">
-                            <span id="ayurCompFilterCounter" class="ayur-comp-counter"><?php _e('Showing all 60 ingredients', 'ayur-wellness'); ?></span>
-                        </div>
+                        <p class="ayur-comp-sub"><?php _e('Each 10ml contains a carefully specified blend of botanical ingredients.', 'ayur-wellness'); ?></p>
                     </div>
 
                     <!-- Mobile Accordion Trigger -->
@@ -465,222 +401,123 @@ while (have_posts()) :
                                 class="ayur-comp-mobile-toggle-btn"
                                 aria-expanded="false"
                                 aria-controls="ayurCompositionTableWrap">
-                            <span class="btn-text"><?php _e('View Complete Composition (60 Ingredients)', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('chevron-down', 'toggle-arrow', 16); ?>
+                            <span class="btn-text"><?php _e('VIEW COMPLETE COMPOSITION', 'ayur-wellness'); ?></span>
+                            <?php echo ayur_svg_icon('chevron-down', 'toggle-arrow', 14); ?>
                         </button>
                     </div>
 
-                    <!-- 60 Ingredients Table Grid -->
+                    <!-- 60 Ingredients List (Desktop 2 Columns, Mobile 1 Column) -->
                     <div id="ayurCompositionTableWrap" class="ayur-composition-table-wrap is-collapsed-mobile">
                         <div class="ayur-comp-columns-grid">
                             <!-- Left Column: Items 01 to 30 -->
                             <div class="ayur-comp-column ayur-comp-col-1">
-                                <table class="ayur-comp-table" role="table" aria-label="<?php esc_attr_e('Ingredients 1 to 30', 'ayur-wellness'); ?>">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="th-num">#</th>
-                                            <th scope="col" class="th-name"><?php _e('Ingredient', 'ayur-wellness'); ?></th>
-                                            <th scope="col" class="th-qty"><?php _e('Per 10ml', 'ayur-wellness'); ?></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $all_ingredients = ayur_get_amrit_juice_composition();
-                                        $col1 = array_slice($all_ingredients, 0, 30);
-                                        foreach ($col1 as $item) :
-                                        ?>
-                                        <tr class="ayur-comp-row" data-search="<?php echo esc_attr($item['search']); ?>" data-name="<?php echo esc_attr(strtolower($item['name'])); ?>">
-                                            <td class="td-num"><?php echo esc_html($item['num']); ?></td>
-                                            <td class="td-name">
-                                                <span class="ing-name"><?php echo esc_html($item['name']); ?></span>
-                                                <?php if (!empty($item['label_name']) && $item['label_name'] !== $item['name']) : ?>
-                                                    <span class="ing-label-alt" title="<?php esc_attr_e('Spelling on packaging label', 'ayur-wellness'); ?>">(<?php echo esc_html($item['label_name']); ?>)</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="td-qty"><?php echo esc_html($item['qty']); ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                <ul class="ayur-comp-clean-list" role="list">
+                                    <?php
+                                    $all_ingredients = ayur_get_amrit_juice_composition();
+                                    $col1 = array_slice($all_ingredients, 0, 30);
+                                    foreach ($col1 as $item) :
+                                    ?>
+                                    <li class="ayur-comp-clean-item">
+                                        <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
+                                        <span class="comp-name"><?php echo esc_html($item['name']); ?></span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
                             </div>
 
                             <!-- Right Column: Items 31 to 60 -->
                             <div class="ayur-comp-column ayur-comp-col-2">
-                                <table class="ayur-comp-table" role="table" aria-label="<?php esc_attr_e('Ingredients 31 to 60', 'ayur-wellness'); ?>">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="th-num">#</th>
-                                            <th scope="col" class="th-name"><?php _e('Ingredient', 'ayur-wellness'); ?></th>
-                                            <th scope="col" class="th-qty"><?php _e('Per 10ml', 'ayur-wellness'); ?></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $col2 = array_slice($all_ingredients, 30, 30);
-                                        foreach ($col2 as $item) :
-                                        ?>
-                                        <tr class="ayur-comp-row" data-search="<?php echo esc_attr($item['search']); ?>" data-name="<?php echo esc_attr(strtolower($item['name'])); ?>">
-                                            <td class="td-num"><?php echo esc_html($item['num']); ?></td>
-                                            <td class="td-name">
-                                                <span class="ing-name"><?php echo esc_html($item['name']); ?></span>
-                                                <?php if (!empty($item['label_name']) && $item['label_name'] !== $item['name']) : ?>
-                                                    <span class="ing-label-alt" title="<?php esc_attr_e('Spelling on packaging label', 'ayur-wellness'); ?>">(<?php echo esc_html($item['label_name']); ?>)</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="td-qty"><?php echo esc_html($item['qty']); ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                <ul class="ayur-comp-clean-list" role="list">
+                                    <?php
+                                    $col2 = array_slice($all_ingredients, 30, 30);
+                                    foreach ($col2 as $item) :
+                                    ?>
+                                    <li class="ayur-comp-clean-item">
+                                        <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
+                                        <span class="comp-name"><?php echo esc_html($item['name']); ?></span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
                             </div>
-                        </div>
-
-                        <div id="ayurCompNoResults" class="ayur-comp-no-results" style="display:none;">
-                            <p><?php _e('No matching ingredients found. Try a different search term or clear the filter.', 'ayur-wellness'); ?></p>
-                        </div>
-                    </div>
-
-                    <!-- Section Footer / Certification Note -->
-                    <div class="ayur-comp-footer-bar">
-                        <div class="ayur-comp-footer-left">
-                            <span class="ayur-proprietary-badge"><?php _e('An Ayurvedic Proprietary Medicine', 'ayur-wellness'); ?></span>
-                        </div>
-                        <div class="ayur-comp-footer-right">
-                            <p class="ayur-comp-notice"><?php _e('Total 60 herbs, fruits &amp; extracts. Formulated and tested in an AYUSH-compliant facility. No artificial colours or flavours added.', 'ayur-wellness'); ?></p>
                         </div>
                     </div>
                 </section>
             <?php endif; ?>
 
-            <!-- Product Information Hierarchy (Phase 5 Structured Presentation) -->
-            <div class="ayur-product-details-wrap">
+            <!-- 7. How to Use & Suggested Routine (Compact 3-Step Guideline) -->
+            <section class="ayur-how-to-use-section" aria-label="<?php esc_attr_e('How to Use & Suggested Routine', 'ayur-wellness'); ?>">
+                <div class="ayur-how-header">
+                    <span class="ayur-section-eyebrow"><?php _e('DAILY USAGE GUIDELINE', 'ayur-wellness'); ?></span>
+                    <h2 class="ayur-section-title"><?php _e('How to Use &amp; Suggested Routine', 'ayur-wellness'); ?></h2>
+                </div>
+                <div class="ayur-how-steps-grid">
+                    <div class="ayur-how-step-card">
+                        <span class="step-num">01</span>
+                        <div class="step-content">
+                            <h4><?php _e('Measure 10–15 ml', 'ayur-wellness'); ?></h4>
+                            <p><?php _e('Shake well before use. Measure 10–15 ml using the included measuring cup.', 'ayur-wellness'); ?></p>
+                        </div>
+                    </div>
+                    <div class="ayur-how-step-card">
+                        <span class="step-num">02</span>
+                        <div class="step-content">
+                            <h4><?php _e('Mix in Water', 'ayur-wellness'); ?></h4>
+                            <p><?php _e('Mix in a glass (150–200 ml) of normal or lukewarm water. Drink once daily on an empty stomach in the morning.', 'ayur-wellness'); ?></p>
+                        </div>
+                    </div>
+                    <div class="ayur-how-step-card">
+                        <span class="step-num">03</span>
+                        <div class="step-content">
+                            <h4><?php _e('Consistent Daily Routine', 'ayur-wellness'); ?></h4>
+                            <p><?php _e('Maintain consistent daily intake alongside balanced nutrition and wholesome hydration for enduring vitality.', 'ayur-wellness'); ?></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. Additional Product Information (Compact Specifications & Shipping) -->
+            <section class="ayur-product-details-wrap" aria-label="<?php esc_attr_e('Additional Product Information', 'ayur-wellness'); ?>">
+                <div class="ayur-additional-info-header">
+                    <span class="ayur-section-eyebrow"><?php _e('SPECIFICATIONS &amp; ASSURANCE', 'ayur-wellness'); ?></span>
+                    <h2 class="ayur-section-title"><?php _e('Additional Product Information', 'ayur-wellness'); ?></h2>
+                </div>
                 <div class="ayur-details-grid">
-                    <!-- Main Content Group (Left Column on Desktop, Ordered on Mobile) -->
                     <div class="ayur-details-main">
-                        <!-- 1. Why You May Choose This Formulation -->
-                        <details class="ayur-product-accordion ayur-section-why is-default-open" open>
-                            <summary class="ayur-accordion-summary">
-                                <h3 class="ayur-detail-heading"><?php _e('Why You May Choose This Formulation', 'ayur-wellness'); ?></h3>
-                                <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
-                            </summary>
-                            <div class="ayur-accordion-content">
-                                <p class="ayur-section-lead-text"><?php echo esc_html($ext_data['positioning']); ?></p>
-                                <ul class="ayur-benefits-checklist">
-                                    <?php foreach ($ext_data['benefits'] as $benefit) : ?>
-                                        <li>
-                                            <span class="ayur-check-bullet"><?php echo ayur_svg_icon('check', '', 14); ?></span>
-                                            <span><?php echo esc_html($benefit); ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </details>
-
-                        <!-- 2. Key Botanicals -->
-                        <?php if (!empty($ext_data['botanicals'])) : ?>
-                            <details class="ayur-product-accordion ayur-section-botanicals is-default-open" open>
+                        <!-- Product Specifications -->
+                        <?php if (!empty($ext_data['specs'])) : ?>
+                            <details class="ayur-product-accordion ayur-section-specs is-default-open" open>
                                 <summary class="ayur-accordion-summary">
-                                    <h3 class="ayur-detail-heading"><?php _e('Key Botanicals & Classical Ingredients', 'ayur-wellness'); ?></h3>
+                                    <h4 class="ayur-side-heading">
+                                        <?php echo ayur_svg_icon('badge-check', '', 18); ?>
+                                        <span><?php _e('Product Specifications', 'ayur-wellness'); ?></span>
+                                    </h4>
                                     <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
                                 </summary>
                                 <div class="ayur-accordion-content">
-                                    <div class="ayur-botanicals-list">
-                                        <?php foreach ($ext_data['botanicals'] as $botanical) : ?>
-                                            <div class="ayur-botanical-card">
-                                                <div class="ayur-botanical-header">
-                                                    <span class="ayur-botanical-name"><?php echo esc_html($botanical['name']); ?></span>
-                                                    <?php if (!empty($botanical['latin'])) : ?>
-                                                        <span class="ayur-botanical-latin"><?php echo esc_html($botanical['latin']); ?></span>
-                                                    <?php endif; ?>
-                                                </div>
-                                                <p class="ayur-botanical-role"><?php echo esc_html($botanical['role']); ?></p>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            </details>
-                        <?php endif; ?>
-
-                        <!-- 3. Formulation Story -->
-                        <?php if (!empty($ext_data['formulation_story'])) : ?>
-                            <details class="ayur-product-accordion ayur-section-story is-default-open" open>
-                                <summary class="ayur-accordion-summary">
-                                    <h3 class="ayur-detail-heading"><?php _e('Formulation Story & Ayurvedic Context', 'ayur-wellness'); ?></h3>
-                                    <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
-                                </summary>
-                                <div class="ayur-accordion-content">
-                                    <div class="ayur-story-block">
-                                        <p class="ayur-story-intro"><?php echo esc_html($ext_data['formulation_story']['intro']); ?></p>
-                                        <div class="ayur-story-sub">
-                                            <h5 class="ayur-story-subtitle"><?php _e('Traditional Formulation', 'ayur-wellness'); ?></h5>
-                                            <p><?php echo esc_html($ext_data['formulation_story']['traditional']); ?></p>
-                                        </div>
-                                        <div class="ayur-story-sub">
-                                            <h5 class="ayur-story-subtitle"><?php _e('Why This Formulation', 'ayur-wellness'); ?></h5>
-                                            <p><?php echo esc_html($ext_data['formulation_story']['why']); ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </details>
-                        <?php endif; ?>
-
-                        <!-- 4. How to Use & Routine -->
-                        <?php if (!empty($ext_data['usage_steps'])) : ?>
-                            <details class="ayur-product-accordion ayur-section-usage is-default-open" open>
-                                <summary class="ayur-accordion-summary">
-                                    <h3 class="ayur-detail-heading"><?php _e('How to Use & Suggested Routine', 'ayur-wellness'); ?></h3>
-                                    <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
-                                </summary>
-                                <div class="ayur-accordion-content">
-                                    <div class="ayur-usage-steps">
-                                        <?php foreach ($ext_data['usage_steps'] as $step) : ?>
-                                            <div class="ayur-usage-step">
-                                                <span class="ayur-usage-num"><?php echo esc_html($step['num']); ?></span>
-                                                <div class="ayur-usage-body">
-                                                    <h5 class="ayur-usage-step-title"><?php echo esc_html($step['title']); ?></h5>
-                                                    <p class="ayur-usage-step-desc"><?php echo esc_html($step['desc']); ?></p>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
+                                    <div class="ayur-spec-card">
+                                        <table class="ayur-spec-table">
+                                            <tbody>
+                                                <?php foreach ($ext_data['specs'] as $label => $val) : ?>
+                                                    <tr>
+                                                        <th scope="row"><?php echo esc_html($label); ?></th>
+                                                        <td><?php echo esc_html($val); ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </details>
                         <?php endif; ?>
                     </div>
 
-                    <!-- Supporting Side Column (Right on Desktop, Ordered on Mobile) -->
                     <div class="ayur-details-side">
-                        <!-- 5. Product Details & Specifications -->
-                        <details class="ayur-product-accordion ayur-section-specs">
-                            <summary class="ayur-accordion-summary">
-                                <h4 class="ayur-side-heading">
-                                    <?php echo ayur_svg_icon('badge-check', '', 18); ?>
-                                    <span><?php _e('Product Information & Specifications', 'ayur-wellness'); ?></span>
-                                </h4>
-                                <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
-                            </summary>
-                            <div class="ayur-accordion-content">
-                                <div class="ayur-spec-card">
-                                    <table class="ayur-spec-table">
-                                        <tbody>
-                                            <?php foreach ($ext_data['specs'] as $label => $val) : ?>
-                                                <tr>
-                                                    <th scope="row"><?php echo esc_html($label); ?></th>
-                                                    <td><?php echo esc_html($val); ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </details>
-
-                        <!-- 6. Shipping & Delivery Policy -->
-                        <details class="ayur-product-accordion ayur-section-shipping">
+                        <!-- Shipping & Delivery Policy -->
+                        <details class="ayur-product-accordion ayur-section-shipping is-default-open" open>
                             <summary class="ayur-accordion-summary">
                                 <h4 class="ayur-side-heading">
                                     <?php echo ayur_svg_icon('truck', '', 18); ?>
-                                    <span><?php _e('Shipping & Delivery Policy', 'ayur-wellness'); ?></span>
+                                    <span><?php _e('Shipping &amp; Delivery Policy', 'ayur-wellness'); ?></span>
                                 </h4>
                                 <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
                             </summary>
@@ -701,40 +538,42 @@ while (have_posts()) :
                                         </div>
                                         <div class="ayur-shipping-row">
                                             <span class="ayur-ship-label"><?php _e('PAYMENTS & COD', 'ayur-wellness'); ?></span>
-                                            <span class="ayur-ship-val"><?php _e('Cash on Delivery & Secure UPI / Card Checkout', 'ayur-wellness'); ?></span>
+                                            <span class="ayur-ship-val"><?php _e('Cash on Delivery &amp; Secure UPI / Card Checkout', 'ayur-wellness'); ?></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </details>
 
-                        <!-- 7. Important Information -->
-                        <details class="ayur-product-accordion ayur-section-caution">
-                            <summary class="ayur-accordion-summary">
-                                <h4 class="ayur-side-heading">
-                                    <?php echo ayur_svg_icon('shield-check', '', 18); ?>
-                                    <span><?php _e('Important Product Information', 'ayur-wellness'); ?></span>
-                                </h4>
-                                <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
-                            </summary>
-                            <div class="ayur-accordion-content">
-                                <div class="ayur-spec-card ayur-caution-card">
-                                    <p class="ayur-caution-text"><?php echo esc_html($ext_data['important_note']); ?></p>
+                        <!-- Important Product Information -->
+                        <?php if (!empty($ext_data['important_note'])) : ?>
+                            <details class="ayur-product-accordion ayur-section-caution">
+                                <summary class="ayur-accordion-summary">
+                                    <h4 class="ayur-side-heading">
+                                        <?php echo ayur_svg_icon('shield-check', '', 18); ?>
+                                        <span><?php _e('Important Product Information', 'ayur-wellness'); ?></span>
+                                    </h4>
+                                    <?php echo ayur_svg_icon('chevron-down', 'ayur-accordion-icon', 16); ?>
+                                </summary>
+                                <div class="ayur-accordion-content">
+                                    <div class="ayur-spec-card ayur-caution-card">
+                                        <p class="ayur-caution-text"><?php echo esc_html($ext_data['important_note']); ?></p>
+                                    </div>
                                 </div>
-                            </div>
-                        </details>
+                            </details>
+                        <?php endif; ?>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Amazon-Style Authentic Customer Reviews System -->
+            <!-- 9. Customer Reviews -->
             <?php
             if (class_exists('Ayur_Reviews')) {
                 Ayur_Reviews::render_product_reviews($product_id);
             }
             ?>
 
-            <!-- Smart Complementary Related Formulations -->
+            <!-- 10. Complementary Related Formulations -->
             <?php
             $related_products = ayur_get_smart_related_products($product_id, 4);
             if (!empty($related_products)) :
@@ -758,52 +597,9 @@ while (have_posts()) :
                 </div>
             <?php endif; ?>
         </div>
-        <!-- Native Product Image Lightbox -->
-        <div id="ayurImageLightbox" class="ayur-image-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Product Image Gallery Lightbox', 'ayur-wellness'); ?>">
-            <div class="ayur-lightbox-backdrop" id="ayurLightboxBackdrop"></div>
-            <div class="ayur-lightbox-dialog">
-                <div class="ayur-lightbox-header-bar">
-                    <div class="ayur-lightbox-zoom-toolbar" id="ayurLightboxZoomToolbar" aria-label="<?php esc_attr_e('Image Zoom Controls', 'ayur-wellness'); ?>">
-                        <button type="button" class="ayur-lb-zoom-btn" id="ayurLbZoomOut" aria-label="<?php esc_attr_e('Zoom out', 'ayur-wellness'); ?>" title="<?php esc_attr_e('Zoom out (-)', 'ayur-wellness'); ?>">
-                            <?php echo ayur_svg_icon('minus', '', 14); ?>
-                        </button>
-                        <span class="ayur-lb-zoom-level" id="ayurLbZoomLevel">100%</span>
-                        <button type="button" class="ayur-lb-zoom-btn" id="ayurLbZoomIn" aria-label="<?php esc_attr_e('Zoom in', 'ayur-wellness'); ?>" title="<?php esc_attr_e('Zoom in (+)', 'ayur-wellness'); ?>">
-                            <?php echo ayur_svg_icon('plus', '', 14); ?>
-                        </button>
-                        <button type="button" class="ayur-lb-zoom-btn ayur-lb-zoom-reset" id="ayurLbZoomReset" aria-label="<?php esc_attr_e('Reset zoom', 'ayur-wellness'); ?>" title="<?php esc_attr_e('Reset (100%)', 'ayur-wellness'); ?>">
-                            <span><?php _e('Reset', 'ayur-wellness'); ?></span>
-                        </button>
-                    </div>
-                    <button type="button" class="ayur-lightbox-close" id="ayurLightboxClose" aria-label="<?php esc_attr_e('Close lightbox', 'ayur-wellness'); ?>">
-                        <?php echo ayur_svg_icon('x', '', 20); ?>
-                    </button>
-                </div>
-                <?php if (count($gallery_ids) > 1) : ?>
-                    <button type="button" class="ayur-lightbox-nav ayur-lightbox-prev" id="ayurLightboxPrev" aria-label="<?php esc_attr_e('Previous image', 'ayur-wellness'); ?>">
-                        <?php echo ayur_svg_icon('chevron-left', '', 22); ?>
-                    </button>
-                    <button type="button" class="ayur-lightbox-nav ayur-lightbox-next" id="ayurLightboxNext" aria-label="<?php esc_attr_e('Next image', 'ayur-wellness'); ?>">
-                        <?php echo ayur_svg_icon('chevron-right', '', 22); ?>
-                    </button>
-                <?php endif; ?>
-                <div class="ayur-lightbox-stage" id="ayurLightboxStage">
-                    <div class="ayur-lightbox-pan-wrap" id="ayurLightboxPanWrap">
-                        <img id="ayurLightboxImg" src="<?php echo esc_url(get_the_post_thumbnail_url($product_id, 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" draggable="false" />
-                    </div>
-                </div>
-                <div class="ayur-lightbox-footer">
-                    <span class="ayur-lightbox-title"><?php the_title(); ?></span>
-                    <?php if (count($gallery_ids) > 1) : ?>
-                        <span class="ayur-lightbox-counter" id="ayurLightboxCounter">1 / <?php echo count($gallery_ids); ?></span>
-                    <?php endif; ?>
-                    <span class="ayur-lightbox-hint"><?php _e('High-resolution product view &bull; Use buttons or double-tap to zoom', 'ayur-wellness'); ?></span>
-                </div>
-            </div>
-        </div>
     </article>
 
-    <!-- Native Mobile Sticky Bottom Bar -->
+    <!-- Native Mobile Sticky Bottom Bar (Essential Ecommerce Invariant) -->
     <div class="ayur-mobile-sticky-bar" id="ayurMobileStickyBar" role="region" aria-label="<?php esc_attr_e('Mobile Purchase Bar', 'ayur-wellness'); ?>">
         <div class="ayur-sticky-inner">
             <div class="sticky-purchase-price ayur-sticky-info">
@@ -839,4 +635,3 @@ while (have_posts()) :
 endwhile;
 
 get_footer();
-

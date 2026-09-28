@@ -427,280 +427,65 @@
 
     /**
     /**
-     * Product Gallery & Unified Lightbox Suite
+    /**
+     * Product Gallery (Compact Thumbnail Switcher, Strictly No Lightbox)
      */
     function initProductGallery() {
         var $stage = $('#ayurGalleryStage');
         var $mainImg = $('#ayurMainProductImg');
-        var $lightbox = $('#ayurImageLightbox');
-        var $lightboxImg = $('#ayurLightboxImg');
-        var $counter = $('#ayurLightboxCounter');
+        var $thumbBtns = $('.ayur-gallery-thumb-btn');
 
         if (!$stage.length || !$mainImg.length) return;
 
         // Collect all gallery items
         var galleryItems = [];
-        var $thumbBtns = $('.ayur-gallery-thumb-btn');
 
         if ($thumbBtns.length > 0) {
             $thumbBtns.each(function(i) {
                 var $btn = $(this);
                 var largeUrl = $btn.data('large') || $btn.data('full') || $btn.find('img').attr('src');
-                var fullUrl = $btn.data('full') || largeUrl;
                 var alt = $btn.data('alt') || $mainImg.attr('alt') || '';
                 galleryItems.push({
                     index: i,
                     large: largeUrl,
-                    full: fullUrl,
                     alt: alt
                 });
             });
-        } else {
-            var initialSrc = $mainImg.attr('src');
-            var initialFull = $mainImg.data('full') || $stage.data('zoom-url') || initialSrc;
-            galleryItems.push({
-                index: 0,
-                large: initialSrc,
-                full: initialFull,
-                alt: $mainImg.attr('alt') || ''
-            });
-        }
-
-        var currentIndex = 0;
-
-        function updateCounter(idx) {
-            if ($counter.length && galleryItems.length > 0) {
-                $counter.text((idx + 1) + ' / ' + galleryItems.length);
-            }
         }
 
         function setMainImage(idx) {
             if (!galleryItems[idx]) return;
             var item = galleryItems[idx];
-            currentIndex = idx;
 
             // Smooth image transition on main stage
-            $mainImg.css('opacity', '0.35');
-            $mainImg.attr('src', item.large).removeAttr('srcset').attr('data-full', item.full).attr('data-index', idx);
+            $mainImg.css('opacity', '0.4');
+            $mainImg.attr('src', item.large).removeAttr('srcset').attr('data-index', idx);
             if (item.alt) $mainImg.attr('alt', item.alt);
 
             setTimeout(function() {
                 $mainImg.css('opacity', '1');
-            }, 100);
+            }, 80);
 
             // Update active thumbnail border
             $('.ayur-gallery-thumb-btn').removeClass('active');
             $('.ayur-gallery-thumb-btn[data-index="' + idx + '"]').addClass('active');
         }
 
-        function openLightbox(idx, fullUrlOverride) {
-            if (!$lightbox.length) return;
-            var item = galleryItems[idx] || galleryItems[0] || {};
-            var srcToUse = fullUrlOverride || item.full || item.large || $mainImg.attr('src');
-            if (!srcToUse) return;
-
-            currentIndex = idx;
-            updateCounter(currentIndex);
-
-            // Blank image failure protection: fallback to main image if full fails
-            $lightboxImg.off('error').on('error', function() {
-                var fallbackSrc = item.large || $mainImg.attr('src');
-                if (fallbackSrc && $(this).attr('src') !== fallbackSrc) {
-                    $(this).attr('src', fallbackSrc);
-                } else {
-                    closeLightbox();
-                }
-            });
-
-            $lightboxImg.attr('src', srcToUse);
-            if (item.alt) $lightboxImg.attr('alt', item.alt);
-
-            resetZoom();
-            $lightbox.addClass('is-open').attr('aria-hidden', 'false');
-            $('body').addClass('ayur-scroll-locked');
-            $('#ayurLightboxClose').focus();
-        }
-
-        function closeLightbox() {
-            if (!$lightbox.length) return;
-            resetZoom();
-            $lightbox.removeClass('is-open').attr('aria-hidden', 'true');
-            $('body').removeClass('ayur-scroll-locked');
-        }
-
-        // --- High-Resolution Zoom & Pan Controls ---
-        var currentZoom = 1;
-        var panX = 0;
-        var panY = 0;
-        var isDragging = false;
-        var startX = 0;
-        var startY = 0;
-        var $panWrap = $('#ayurLightboxPanWrap');
-        var $zoomLevel = $('#ayurLbZoomLevel');
-
-        function applyZoomPan() {
-            if (!$panWrap.length) return;
-            $panWrap.css('transform', 'scale(' + currentZoom + ') translate(' + panX + 'px, ' + panY + 'px)');
-            if ($zoomLevel.length) {
-                $zoomLevel.text(Math.round(currentZoom * 100) + '%');
-            }
-            if (currentZoom > 1) {
-                $('#ayurLightboxStage').css('cursor', 'grab');
-            } else {
-                $('#ayurLightboxStage').css('cursor', 'default');
-            }
-        }
-
-        function resetZoom() {
-            currentZoom = 1;
-            panX = 0;
-            panY = 0;
-            applyZoomPan();
-        }
-
-        $(document).on('click', '#ayurLbZoomIn', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (currentZoom < 3) {
-                currentZoom = Math.min(3, +(currentZoom + 0.5).toFixed(1));
-                applyZoomPan();
-            }
-        });
-
-        $(document).on('click', '#ayurLbZoomOut', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (currentZoom > 1) {
-                currentZoom = Math.max(1, +(currentZoom - 0.5).toFixed(1));
-                if (currentZoom === 1) {
-                    panX = 0;
-                    panY = 0;
-                }
-                applyZoomPan();
-            }
-        });
-
-        $(document).on('click', '#ayurLbZoomReset', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            resetZoom();
-        });
-
-        // Double-click to toggle zoom (1x <-> 2x)
-        $('#ayurLightboxStage').on('dblclick', function(e) {
-            e.preventDefault();
-            if (currentZoom === 1) {
-                currentZoom = 2;
-            } else {
-                resetZoom();
-                return;
-            }
-            applyZoomPan();
-        });
-
-        // Mouse Drag to Pan when zoomed
-        $('#ayurLightboxStage').on('mousedown', function(e) {
-            if (currentZoom <= 1) return;
-            isDragging = true;
-            startX = e.clientX - (panX * currentZoom);
-            startY = e.clientY - (panY * currentZoom);
-            $(this).css('cursor', 'grabbing');
-        });
-
-        $(document).on('mousemove', function(e) {
-            if (!isDragging || currentZoom <= 1) return;
-            panX = (e.clientX - startX) / currentZoom;
-            panY = (e.clientY - startY) / currentZoom;
-            applyZoomPan();
-        });
-
-        $(document).on('mouseup', function() {
-            if (isDragging) {
-                isDragging = false;
-                $('#ayurLightboxStage').css('cursor', currentZoom > 1 ? 'grab' : 'default');
-            }
-        });
-
-        // Touch Drag to Pan on Mobile
-        var touchStartX = 0;
-        var touchStartY = 0;
-        $('#ayurLightboxStage').on('touchstart', function(e) {
-            if (currentZoom <= 1) return;
-            var touch = e.originalEvent.touches[0];
-            touchStartX = touch.clientX - (panX * currentZoom);
-            touchStartY = touch.clientY - (panY * currentZoom);
-        });
-
-        $('#ayurLightboxStage').on('touchmove', function(e) {
-            if (currentZoom <= 1 || e.originalEvent.touches.length !== 1) return;
-            var touch = e.originalEvent.touches[0];
-            panX = (touch.clientX - touchStartX) / currentZoom;
-            panY = (touch.clientY - touchStartY) / currentZoom;
-            applyZoomPan();
-        });
-
-        // Thumbnail Click: update main image AND open lightbox
+        // Thumbnail Click: update main image ONLY (No lightbox, no popup)
         $(document).on('click', '.ayur-gallery-thumb-btn', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             var idx = parseInt($(this).data('index'), 10) || 0;
-            var fullUrl = $(this).data('full');
             setMainImage(idx);
-            openLightbox(idx, fullUrl);
         });
 
-        // Stage click or zoom badge click
+        // Stage click: strictly do nothing special (no modal, no popup, no zoom overlay)
         $stage.on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var activeIdx = parseInt($mainImg.attr('data-index'), 10) || currentIndex;
-            var fullUrl = $mainImg.attr('data-full');
-            openLightbox(activeIdx, fullUrl);
-        });
-
-        $stage.on('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openLightbox(currentIndex);
-            }
-        });
-
-        // Prev & Next Buttons in Lightbox
-        $('#ayurLightboxPrev').on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (galleryItems.length < 2) return;
-            currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-            setMainImage(currentIndex);
-            openLightbox(currentIndex);
-        });
-
-        $('#ayurLightboxNext').on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (galleryItems.length < 2) return;
-            currentIndex = (currentIndex + 1) % galleryItems.length;
-            setMainImage(currentIndex);
-            openLightbox(currentIndex);
-        });
-
-        // Close handlers
-        $('#ayurLightboxClose, #ayurLightboxBackdrop').on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            closeLightbox();
-        });
-
-        $(document).on('keyup', function(e) {
-            if (!$lightbox.hasClass('is-open')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') $('#ayurLightboxPrev').trigger('click');
-            if (e.key === 'ArrowRight') $('#ayurLightboxNext').trigger('click');
+            // Passive click - strictly do nothing
         });
     }
 
     function initProductLightbox() {
-        // Lifecycle managed in initProductGallery
+        // Disabled per specification - strictly no lightbox
     }
 
     /**
@@ -957,96 +742,26 @@
     }
 
     /**
-     * Amrit Juice 60-Botanical Composition Suite: Search, Collapsible Mobile View & Inspection
+     * Amrit Juice 60-Botanical Composition: Mobile Expand/Collapse Accordion
      */
     function initAmritComposition() {
-        var $searchInput = $('#ayurIngredientSearchInput');
-        var $clearBtn = $('#ayurIngredientSearchClear');
-        var $counter = $('#ayurCompFilterCounter');
-        var $rows = $('.ayur-comp-row');
-        var $noResults = $('#ayurCompNoResults');
         var $mobileToggle = $('#ayurCompMobileToggle');
         var $tableWrap = $('#ayurCompositionTableWrap');
-        var $atfBtn = $('#ayurAtfViewBtn');
 
-        if (!$rows.length) return;
+        if (!$mobileToggle.length || !$tableWrap.length) return;
 
-        var totalCount = $rows.length;
-
-        // 1. Instant Real-time Search Filter
-        $searchInput.on('input', function() {
-            var term = $(this).val().toLowerCase().trim();
-            if (term.length === 0) {
-                $rows.removeClass('is-hidden');
-                $clearBtn.hide();
-                $noResults.hide();
-                $counter.text('Showing all ' + totalCount + ' ingredients');
-                return;
-            }
-
-            $clearBtn.show();
-            var visibleCount = 0;
-
-            $rows.each(function() {
-                var searchData = ($(this).data('search') || '').toString().toLowerCase();
-                var nameData = ($(this).data('name') || '').toString().toLowerCase();
-                if (searchData.indexOf(term) !== -1 || nameData.indexOf(term) !== -1) {
-                    $(this).removeClass('is-hidden');
-                    visibleCount++;
-                } else {
-                    $(this).addClass('is-hidden');
-                }
-            });
-
-            // If searching on mobile and list is collapsed, automatically expand so user sees matches
-            if ($tableWrap.hasClass('is-collapsed-mobile')) {
-                $tableWrap.removeClass('is-collapsed-mobile');
-                $mobileToggle.attr('aria-expanded', 'true');
-                $mobileToggle.find('.btn-text').text('Collapse Composition ↑');
-            }
-
-            if (visibleCount === 0) {
-                $noResults.show();
-                $counter.text('No ingredients matching "' + term + '"');
-            } else {
-                $noResults.hide();
-                $counter.text('Showing ' + visibleCount + ' of ' + totalCount + ' ingredients');
-            }
-        });
-
-        // Clear Search Button
-        $clearBtn.on('click', function(e) {
-            e.preventDefault();
-            $searchInput.val('').trigger('input').focus();
-        });
-
-        // 2. Mobile Expand/Collapse Accordion
+        // Mobile Expand/Collapse Accordion
         $mobileToggle.on('click', function(e) {
             e.preventDefault();
             var isCollapsed = $tableWrap.hasClass('is-collapsed-mobile');
             if (isCollapsed) {
                 $tableWrap.removeClass('is-collapsed-mobile');
                 $(this).attr('aria-expanded', 'true');
-                $(this).find('.btn-text').text('Collapse Composition ↑');
+                $(this).find('.btn-text').text('COLLAPSE COMPOSITION');
             } else {
                 $tableWrap.addClass('is-collapsed-mobile');
                 $(this).attr('aria-expanded', 'false');
-                $(this).find('.btn-text').text('View Complete Composition (' + totalCount + ' Ingredients) ↓');
-            }
-        });
-
-        // 3. Above-the-fold "VIEW COMPLETE COMPOSITION" smooth scroll & mobile expand
-        $atfBtn.on('click', function(e) {
-            var targetSection = document.getElementById('ayurCompositionSection');
-            if (targetSection) {
-                e.preventDefault();
-                // If on mobile, expand the accordion so it's open when scrolled into view
-                if ($tableWrap.hasClass('is-collapsed-mobile')) {
-                    $tableWrap.removeClass('is-collapsed-mobile');
-                    $mobileToggle.attr('aria-expanded', 'true');
-                    $mobileToggle.find('.btn-text').text('Collapse Composition ↑');
-                }
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                $(this).find('.btn-text').text('VIEW COMPLETE COMPOSITION');
             }
         });
     }
