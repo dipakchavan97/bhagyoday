@@ -615,51 +615,82 @@ function ayur_get_product_extended_data($product_id) {
 
     // Standardized repository of verified product information
     $data_map = array(
-        // Product 30: Ashwagandha Shilajit
+        // Product 30: Men Power Capsule
         30 => array(
-            'positioning' => 'Traditional Ayurvedic Rasayana combining purified Himalayan Shilajit with standardized Ashwagandha root extract for physical endurance, natural vitality, and nervous resilience.',
+            'has_men_power_composition' => true,
+            'positioning' => 'Daily Herbal Wellness Formula for Men',
             'benefits' => array(
-                'Combines pure purified Shilajit with standardized Ashwagandha root extract',
-                'Traditionally used in classical Ayurveda to support daily stamina and cellular energy reserves',
-                'Formulated with Safed Musli and Gokshura to aid muscle vigor and post-exertion recovery',
-                '100% plant cellulose vegetarian capsule format with zero synthetic stimulants'
+                'Formulated with classical Rasayana botanicals including Ashwagandha, Safed Musli, and Purified Shilajit',
+                'Supports daily vitality, natural energy reserves, and an active lifestyle',
+                'Includes Kaunch Beej, Gokhru, and Vidarikand to promote physical stamina and endurance',
+                '100% vegetarian plant cellulose capsules with zero synthetic stimulants or artificial binders'
             ),
             'botanicals' => array(
                 array(
-                    'name'  => 'Ashwagandha Root Extract',
-                    'latin' => 'Withania somnifera (300 mg)',
-                    'role'  => 'Standardized classical root extract traditionally utilized to foster Ojas, support vitality, and build resilience against daily mental and physical stress.'
+                    'name'  => 'Ashwagandha',
+                    'latin' => 'Withania somnifera',
+                    'role'  => 'Classical Rasayana adaptogen traditionally utilized to foster Ojas, support vitality, and build resilience against daily stress.'
                 ),
                 array(
-                    'name'  => 'Shuddha Himalayan Shilajit',
-                    'latin' => 'Asphaltum punjabianum (350 mg)',
-                    'role'  => 'Triphala-purified classical mineral pitch rich in natural fulvic acid and trace minerals to sustain cellular ATP.'
+                    'name'  => 'Safed Musli',
+                    'latin' => 'Chlorophytum borivilianum',
+                    'role'  => 'Venerated Ayurvedic Vajikarana botanical traditionally valued for restorative physical strength and stamina.'
                 ),
                 array(
-                    'name'  => 'Safed Musli Extract',
-                    'latin' => 'Chlorophytum borivilianum (100 mg)',
-                    'role'  => 'Venerated Ayurvedic Vajikarana botanical traditionally valued for restorative physical strength and connective vigor.'
+                    'name'  => 'Gokhru',
+                    'latin' => 'Tribulus terrestris',
+                    'role'  => 'Classical botanical supportive of physical endurance, vitality, and natural fluid balance.'
                 ),
                 array(
-                    'name'  => 'Gokshura Fruit Extract',
-                    'latin' => 'Tribulus terrestris (50 mg)',
-                    'role'  => 'Classical Rasayana herb supportive of urinary tract wellness, reproductive tissue vigor, and natural fluid balance.'
+                    'name'  => 'Kaunch Beej',
+                    'latin' => 'Mucuna pruriens',
+                    'role'  => 'Traditional seed extract known to nourish vital bodily tissues (Dhatus) and support muscle tone.'
+                ),
+                array(
+                    'name'  => 'Shudh Shilajeet',
+                    'latin' => 'Asphaltum punjabianum',
+                    'role'  => 'Classical mineral pitch rich in natural fulvic acid and trace minerals to sustain cellular energy.'
+                ),
+                array(
+                    'name'  => 'Garlic',
+                    'latin' => 'Allium sativum',
+                    'role'  => 'Traditional culinary herb valued in Ayurveda for supporting healthy micro-circulation and metabolism.'
+                ),
+                array(
+                    'name'  => 'Jaiphal',
+                    'latin' => 'Myristica fragrans',
+                    'role'  => 'Aromatic classical spice supporting nervous relaxation, digestive comfort, and vital balance.'
+                ),
+                array(
+                    'name'  => 'Vidarikand',
+                    'latin' => 'Pueraria tuberosa',
+                    'role'  => 'Classical rejuvenating tuber traditionally prized for physical strength, nourishment, and natural recovery.'
+                ),
+                array(
+                    'name'  => 'Maca Root',
+                    'latin' => 'Lepidium meyenii',
+                    'role'  => 'Nutrient-rich adaptogenic root renowned for supporting sustained vitality and energy reserves.'
+                ),
+                array(
+                    'name'  => 'Kali Mirch',
+                    'latin' => 'Piper nigrum',
+                    'role'  => 'Bioavailability enhancer (Trikatu component) that supports digestive absorption of complementary herbs.'
                 ),
             ),
             'formulation_story' => array(
-                'intro'       => 'Crafted in accordance with classical Ayurvedic Vajikarana texts, this formulation combines mineral-rich Shilajit purified through the traditional Shodhana process with whole-root Withania somnifera extract.',
-                'traditional' => 'Classical Ayurvedic texts emphasize purifying Himalayan Shilajit using Triphala decoctions to remove insoluble compounds and enhance bio-availability. Paired with Ashwagandha root, it delivers foundational physiological nourishment.',
-                'why'         => 'Unlike synthetic stamina pills that spike blood pressure and crash energy, this classical combination builds foundational vitality from within over time. 100% vegetarian plant cellulose capsules with zero synthetic fillers.'
+                'intro'       => 'Crafted in accordance with classical Ayurvedic principles, Men Power Capsule combines 10 verified botanicals into a unified herbal wellness formula for modern men.',
+                'traditional' => 'Classical Ayurvedic philosophy pairs foundational Rasayanas like Ashwagandha and Shudh Shilajeet with nourishing seeds and warming spices to maintain balanced vigor and endurance.',
+                'why'         => '100% vegetarian plant cellulose capsules with zero synthetic fillers, zero artificial stimulants, and zero heavy metals. Designed for daily holistic nourishment.'
             ),
             'usage_steps' => array(
                 array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 Capsule per serving.'),
-                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily with warm milk or lukewarm water, ideally after breakfast and dinner.'),
+                array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily with warm milk or lukewarm water, ideally 30 minutes after breakfast and dinner.'),
                 array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent intake for 60 to 90 days recommended for balanced, enduring results.')
             ),
             'specs' => array(
                 'Form'              => 'Vegetarian Capsules (100% HPMC Plant Cellulose)',
-                'Net Quantity'      => $net_qty ? $net_qty : '30 Capsules (800 mg each)',
-                'Key Botanicals'    => 'Shuddha Shilajit, Ashwagandha Root, Safed Musli, Gokshura',
+                'Net Quantity'      => $net_qty ? $net_qty : '30 Vegetarian Capsules (800 mg)',
+                'Key Botanicals'    => 'Ashwagandha, Safed Musli, Gokhru, Kaunch Beej, Shudh Shilajeet, Garlic, Jaiphal, Vidarikand, Maca Root, Kali Mirch',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'Sealed amber bottle with moisture-proof barrier',
@@ -667,7 +698,7 @@ function ayur_get_product_extended_data($product_id) {
                 'Storage'           => 'Store in a cool, dry place away from direct sunlight. Keep bottle tightly closed.'
             ),
             'storage' => 'Store in a cool, dry place away from direct sunlight. Keep bottle tightly closed.',
-            'important_note' => 'Classical Ayurvedic proprietary wellness formulation. Dietary supplement; not intended to diagnose, treat, cure, or prevent any acute or chronic disease. Consult your physician prior to use if you are on blood pressure or cardiac medications. Keep out of reach of children.'
+            'important_note' => 'Classical Ayurvedic herbal wellness formulation. Dietary supplement; not intended to diagnose, treat, cure, or prevent any acute or chronic disease. Consult your physician prior to use if you are under medical supervision. Keep out of reach of children.'
         ),
 
         // Product 31: Slim Care Weight Management Juice
@@ -1489,3 +1520,33 @@ function ayur_get_amrit_juice_composition() {
     );
 }
 
+/**
+ * Verified 10-Botanical Composition for Men Power Capsule 800mg (Product ID 30)
+ * Source: Official Packaging Composition Label
+ * Verified Total: 10 Clearly Visible Ayurvedic Botanicals
+ * Quantities preserved in backend data model:
+ * 1. Ashwagandha — 50 mg
+ * 2. Safed Musli — 50 mg
+ * 3. Gokhru — 30 mg
+ * 4. Kaunch Beej — 50 mg
+ * 5. Shudh Shilajeet — 20 mg
+ * 6. Garlic — 20 mg
+ * 7. Jaiphal — 20 mg
+ * 8. Vidarikand — 20 mg
+ * 9. Maca Root — 10 mg
+ * 10. Kali Mirch — 10 mg
+ */
+function ayur_get_men_power_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Ashwagandha', 'qty' => '50 mg'),
+        array('num' => '02', 'name' => 'Safed Musli', 'qty' => '50 mg'),
+        array('num' => '03', 'name' => 'Gokhru', 'qty' => '30 mg'),
+        array('num' => '04', 'name' => 'Kaunch Beej', 'qty' => '50 mg'),
+        array('num' => '05', 'name' => 'Shudh Shilajeet', 'qty' => '20 mg'),
+        array('num' => '06', 'name' => 'Garlic', 'qty' => '20 mg'),
+        array('num' => '07', 'name' => 'Jaiphal', 'qty' => '20 mg'),
+        array('num' => '08', 'name' => 'Vidarikand', 'qty' => '20 mg'),
+        array('num' => '09', 'name' => 'Maca Root', 'qty' => '10 mg'),
+        array('num' => '10', 'name' => 'Kali Mirch', 'qty' => '10 mg'),
+    );
+}

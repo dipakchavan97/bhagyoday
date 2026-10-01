@@ -385,6 +385,42 @@ while (have_posts()) :
                         </div>
                     </div>
                 </div>
+            <?php elseif ($product_id == 30 || !empty($ext_data['has_men_power_composition'])) : ?>
+                <div class="ayur-whats-inside-banner" aria-label="<?php esc_attr_e('What\'s Inside Formulation Callout', 'ayur-wellness'); ?>">
+                    <div class="ayur-whats-inside-inner">
+                        <div class="ayur-wi-header">
+                            <span class="ayur-wi-eyebrow"><?php _e('AUTHENTIC AYURVEDIC FORMULATION', 'ayur-wellness'); ?></span>
+                            <span class="ayur-wi-subhead"><?php _e('WHAT\'S INSIDE', 'ayur-wellness'); ?></span>
+                        </div>
+                        <div class="ayur-wi-main">
+                            <div class="ayur-wi-count-badge">
+                                <span class="ayur-wi-count">10</span>
+                            </div>
+                            <div class="ayur-wi-content">
+                                <h3 class="ayur-wi-title"><?php _e('VERIFIED AYURVEDIC BOTANICALS', 'ayur-wellness'); ?></h3>
+                                <p class="ayur-wi-desc"><?php _e('A synergistic blend of authentic classical herbs formulated for daily male vitality.', 'ayur-wellness'); ?></p>
+                            </div>
+                        </div>
+                        <div class="ayur-wi-badges-row">
+                            <div class="ayur-wi-pill">
+                                <?php echo ayur_svg_icon('check', '', 13); ?>
+                                <span><?php _e('100% Vegetarian Capsule', 'ayur-wellness'); ?></span>
+                            </div>
+                            <div class="ayur-wi-pill">
+                                <?php echo ayur_svg_icon('check', '', 13); ?>
+                                <span><?php _e('Zero Synthetic Additives', 'ayur-wellness'); ?></span>
+                            </div>
+                            <div class="ayur-wi-pill">
+                                <?php echo ayur_svg_icon('check', '', 13); ?>
+                                <span><?php _e('Standardized Extracts', 'ayur-wellness'); ?></span>
+                            </div>
+                            <div class="ayur-wi-pill">
+                                <?php echo ayur_svg_icon('check', '', 13); ?>
+                                <span><?php _e('AYUSH Licensed Facility', 'ayur-wellness'); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <?php endif; ?>
 
             <!-- 6. Complete Composition Section (Names Only, Zero Quantities, No Search Box) -->
@@ -444,36 +480,75 @@ while (have_posts()) :
                         </div>
                     </div>
                 </section>
+            <?php elseif ($product_id == 30 || !empty($ext_data['has_men_power_composition'])) : ?>
+                <section id="ayurCompositionSection" class="ayur-composition-section ayur-composition-men-power" aria-label="<?php esc_attr_e('Complete Product Composition', 'ayur-wellness'); ?>">
+                    <div class="ayur-composition-header-card">
+                        <h2 class="ayur-comp-title"><?php _e('COMPOSITION', 'ayur-wellness'); ?></h2>
+                        <p class="ayur-comp-count"><?php _e('10 Verified Ayurvedic Botanicals', 'ayur-wellness'); ?></p>
+                        <p class="ayur-comp-sub"><?php _e('Formulated with authentic classical herbs for daily male vitality.', 'ayur-wellness'); ?></p>
+                    </div>
+
+                    <!-- 10 Ingredients List (Desktop 2 Columns of 5 items, Mobile 1 Column) -->
+                    <div id="ayurCompositionTableWrap" class="ayur-composition-table-wrap">
+                        <div class="ayur-comp-columns-grid">
+                            <!-- Left Column: Items 01 to 05 -->
+                            <div class="ayur-comp-column ayur-comp-col-1">
+                                <ul class="ayur-comp-clean-list" role="list">
+                                    <?php
+                                    $men_power_ingredients = ayur_get_men_power_composition();
+                                    $col1 = array_slice($men_power_ingredients, 0, 5);
+                                    foreach ($col1 as $item) :
+                                    ?>
+                                    <li class="ayur-comp-clean-item">
+                                        <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
+                                        <span class="comp-name"><?php echo esc_html($item['name']); ?></span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+
+                            <!-- Right Column: Items 06 to 10 -->
+                            <div class="ayur-comp-column ayur-comp-col-2">
+                                <ul class="ayur-comp-clean-list" role="list">
+                                    <?php
+                                    $col2 = array_slice($men_power_ingredients, 5, 5);
+                                    foreach ($col2 as $item) :
+                                    ?>
+                                    <li class="ayur-comp-clean-item">
+                                        <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
+                                        <span class="comp-name"><?php echo esc_html($item['name']); ?></span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             <?php endif; ?>
 
-            <!-- 7. How to Use & Suggested Routine (Compact 3-Step Guideline) -->
+            <!-- 7. How to Use & Suggested Routine -->
             <section class="ayur-how-to-use-section" aria-label="<?php esc_attr_e('How to Use & Suggested Routine', 'ayur-wellness'); ?>">
                 <div class="ayur-how-header">
                     <span class="ayur-section-eyebrow"><?php _e('DAILY USAGE GUIDELINE', 'ayur-wellness'); ?></span>
                     <h2 class="ayur-section-title"><?php _e('How to Use &amp; Suggested Routine', 'ayur-wellness'); ?></h2>
                 </div>
                 <div class="ayur-how-steps-grid">
-                    <div class="ayur-how-step-card">
-                        <span class="step-num">01</span>
-                        <div class="step-content">
-                            <h4><?php _e('Measure 10–15 ml', 'ayur-wellness'); ?></h4>
-                            <p><?php _e('Shake well before use. Measure 10–15 ml using the included measuring cup.', 'ayur-wellness'); ?></p>
+                    <?php
+                    $steps = !empty($ext_data['usage_steps']) ? $ext_data['usage_steps'] : array(
+                        array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 Capsule per serving.'),
+                        array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily after meals with lukewarm water or warm milk.'),
+                        array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent daily intake for enduring vitality.')
+                    );
+                    foreach ($steps as $step) :
+                    ?>
+                        <div class="ayur-how-step-card">
+                            <span class="step-num"><?php echo esc_html($step['num']); ?></span>
+                            <div class="step-content">
+                                <h4><?php echo esc_html($step['title']); ?></h4>
+                                <p><?php echo esc_html($step['desc']); ?></p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ayur-how-step-card">
-                        <span class="step-num">02</span>
-                        <div class="step-content">
-                            <h4><?php _e('Mix in Water', 'ayur-wellness'); ?></h4>
-                            <p><?php _e('Mix in a glass (150–200 ml) of normal or lukewarm water. Drink once daily on an empty stomach in the morning.', 'ayur-wellness'); ?></p>
-                        </div>
-                    </div>
-                    <div class="ayur-how-step-card">
-                        <span class="step-num">03</span>
-                        <div class="step-content">
-                            <h4><?php _e('Consistent Daily Routine', 'ayur-wellness'); ?></h4>
-                            <p><?php _e('Maintain consistent daily intake alongside balanced nutrition and wholesome hydration for enduring vitality.', 'ayur-wellness'); ?></p>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </section>
 

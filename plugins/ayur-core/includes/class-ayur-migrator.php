@@ -47,9 +47,120 @@ class Ayur_Migrator {
     }
 
     public static function check_migration_trigger() {
+        if (isset($_GET['ayur_upgrade_men_power']) && $_GET['ayur_upgrade_men_power'] === '2026_men_power_verified') {
+            self::upgrade_men_power_product();
+        }
+
         if (isset($_GET['ayur_run_source_migration'])) {
             wp_die('Migration complete. This endpoint has been permanently deactivated for production security.', 'Access Denied', array('response' => 403));
         }
+    }
+
+    public static function upgrade_men_power_product() {
+        if (!class_exists('WooCommerce')) {
+            wp_die('WooCommerce not loaded', 'Error', array('response' => 500));
+        }
+
+        $prod_id = wc_get_product_id_by_sku('AYUR-SHIL-30');
+        if (!$prod_id) {
+            $prod_id = 30;
+        }
+
+        $product = wc_get_product($prod_id);
+        if (!$product) {
+            wp_die('Product not found', 'Error', array('response' => 404));
+        }
+
+        // 1. Capture Before Snapshot
+        $before = array(
+            'id'             => $product->get_id(),
+            'name'           => $product->get_name(),
+            'slug'           => $product->get_slug(),
+            'sku'            => $product->get_sku(),
+            'regular_price'  => $product->get_regular_price(),
+            'sale_price'     => $product->get_sale_price(),
+            'price'          => $product->get_price(),
+            'weight'         => $product->get_weight(),
+            'length'         => $product->get_length(),
+            'width'          => $product->get_width(),
+            'height'         => $product->get_height(),
+            'mrp_meta'       => get_post_meta($prod_id, '_ayur_mrp', true),
+            'ingredients'    => get_post_meta($prod_id, '_ayur_ingredients', true),
+            'benefits'       => get_post_meta($prod_id, '_ayur_benefits', true),
+            'dosage'         => get_post_meta($prod_id, '_ayur_dosage', true),
+            'net_qty'        => get_post_meta($prod_id, '_ayur_net_quantity', true),
+            'certifications' => get_post_meta($prod_id, '_ayur_certifications', true),
+        );
+
+        // 2. Verified Content Definition (Strict Price, SKU, Shiprocket, and Compliance Protection)
+        $new_title = 'Men Power Capsule 800mg (30 Capsules)';
+        $new_short_desc = 'Men Power Capsule — Daily Herbal Wellness Formula crafted with 10 verified Ayurvedic botanicals including Ashwagandha, Safed Musli, and Shudh Shilajeet for natural stamina and physical vitality.';
+        $new_desc = "<h3>Men Power Capsule (800mg)</h3>\n<p class=\"ayur-lead\">Daily Herbal Wellness Formula for Men crafted with pure, verified classical Ayurvedic botanicals to support sustained physical stamina, natural vitality, and daily wellness.</p>\n\n<div class=\"ayur-desc-section\">\n<h4>KEY BENEFITS</h4>\n<ul class=\"ayur-feature-list\">\n<li>Synergistic blend of 10 verified classical Ayurvedic botanicals</li>\n<li>Supports healthy physical endurance, daily stamina, and active lifestyle</li>\n<li>Aids natural recovery, vitality, and nervous resilience</li>\n<li>100% vegetarian capsules with zero chemical additives or heavy metals</li>\n</ul>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>WHAT'S INSIDE</h4>\n<p>Ashwagandha, Safed Musli, Gokhru, Kaunch Beej, Shudh Shilajeet, Garlic, Jaiphal, Vidarikand, Maca Root, Kali Mirch, Vegetarian Plant Cellulose Capsule.</p>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>HOW TO USE & DOSAGE</h4>\n<p>Take 1 capsule twice daily with warm milk or lukewarm water, ideally after breakfast and dinner. For optimal results, use consistently for 60 to 90 days.</p>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>PRODUCT DETAILS</h4>\n<p><strong>Net Quantity:</strong> 30 Vegetarian Capsules<br><strong>Form:</strong> Vegetable Capsule (800 mg)<br><strong>Pack:</strong> Sealed Amber Bottle<br><strong>Origin:</strong> India<br><strong>Storage:</strong> Store in a cool, dry place away from direct sunlight.</p>\n</div>\n\n<div class=\"ayur-desc-section ayur-important-note\">\n<p><em><strong>IMPORTANT:</strong> Classical Ayurvedic proprietary formulation. Not intended to diagnose, treat, cure, or prevent any medical condition. Consult your physician if you are under medication for any chronic health condition.</em></p>\n</div>";
+
+        // Verified 10 Ingredients (preserving exact quantitative mg in backend data model)
+        $new_ingredients = "Ashwagandha (50mg)\nSafed Musli (50mg)\nGokhru (30mg)\nKaunch Beej (50mg)\nShudh Shilajeet (20mg)\nGarlic (20mg)\nJaiphal (20mg)\nVidarikand (20mg)\nMaca Root (10mg)\nKali Mirch (10mg)\nVegetarian Plant Cellulose Capsule";
+        $new_benefits = "• Synergistic blend of 10 verified classical Ayurvedic botanicals\n• Supports healthy physical endurance, daily stamina, and active lifestyle\n• Aids natural recovery, vitality, and nervous resilience\n• 100% vegetarian capsules with zero synthetic additives or heavy metals";
+        $new_dosage = 'Take 1 capsule twice daily with warm milk or lukewarm water, ideally after breakfast and dinner.';
+        $new_net_qty = '30 Vegetarian Capsules (800 mg)';
+        $new_cert = 'AYUSH Licensed • Classical Ayurvedic Formulation • 10 Verified Botanicals';
+
+        // 3. Apply updates preserving prices, SKU, dimensions, and weight
+        $product->set_name($new_title);
+        $product->set_short_description($new_short_desc);
+        $product->set_description($new_desc);
+        $product->set_regular_price($before['regular_price']);
+        $product->set_sale_price($before['sale_price']);
+        $product->set_price($before['price']);
+        $product->set_sku($before['sku']);
+        $product->set_weight($before['weight']);
+        $product->set_length($before['length']);
+        $product->set_width($before['width']);
+        $product->set_height($before['height']);
+        $product->save();
+
+        // 4. Update Meta
+        update_post_meta($prod_id, '_ayur_ingredients', $new_ingredients);
+        update_post_meta($prod_id, '_ayur_benefits', $new_benefits);
+        update_post_meta($prod_id, '_ayur_dosage', $new_dosage);
+        update_post_meta($prod_id, '_ayur_net_quantity', $new_net_qty);
+        update_post_meta($prod_id, '_ayur_certifications', $new_cert);
+
+        // 5. Reload Product & Capture After Snapshot
+        $updated_product = wc_get_product($prod_id);
+        $after = array(
+            'id'             => $updated_product->get_id(),
+            'name'           => $updated_product->get_name(),
+            'slug'           => $updated_product->get_slug(),
+            'sku'            => $updated_product->get_sku(),
+            'regular_price'  => $updated_product->get_regular_price(),
+            'sale_price'     => $updated_product->get_sale_price(),
+            'price'          => $updated_product->get_price(),
+            'weight'         => $updated_product->get_weight(),
+            'length'         => $updated_product->get_length(),
+            'width'          => $updated_product->get_width(),
+            'height'         => $updated_product->get_height(),
+            'mrp_meta'       => get_post_meta($prod_id, '_ayur_mrp', true),
+            'ingredients'    => get_post_meta($prod_id, '_ayur_ingredients', true),
+            'benefits'       => get_post_meta($prod_id, '_ayur_benefits', true),
+            'dosage'         => get_post_meta($prod_id, '_ayur_dosage', true),
+            'net_qty'        => get_post_meta($prod_id, '_ayur_net_quantity', true),
+            'certifications' => get_post_meta($prod_id, '_ayur_certifications', true),
+        );
+
+        $response = array(
+            'success'              => true,
+            'price_unchanged'      => ($before['regular_price'] === $after['regular_price'] && $before['sale_price'] === $after['sale_price'] && $before['price'] === $after['price']),
+            'shiprocket_unchanged' => ($before['weight'] === $after['weight'] && $before['length'] === $after['length'] && $before['width'] === $after['width'] && $before['height'] === $after['height']),
+            'sku_unchanged'        => ($before['sku'] === $after['sku']),
+            'id_unchanged'         => ($before['id'] === $after['id']),
+            'before'               => $before,
+            'after'                => $after,
+            'timestamp'            => current_time('mysql'),
+        );
+
+        header('Content-Type: application/json');
+        echo json_encode($response, JSON_PRETTY_PRINT);
+        exit;
     }
 
     public static function execute_migration() {
@@ -376,7 +487,7 @@ class Ayur_Migrator {
     public static function get_authentic_catalog_data() {
         return array(
             array(
-                'title'        => 'Ashwagandha Shilajit Men Wellness Capsules 800mg (30 Capsules)',
+                'title'        => 'Men Power Capsule 800mg (30 Capsules)',
                 'slug'         => 'ashwagandha-shilajit-men-wellness-capsules',
                 'sku'          => 'AYUR-SHIL-30',
                 'mrp'          => '1990',
@@ -388,8 +499,8 @@ class Ayur_Migrator {
                 'weight'       => 0.14,
                 'dimensions'   => array('length' => 6, 'width' => 6, 'height' => 11),
                 'net_qty'      => '30 Vegetarian Capsules (800 mg)',
-                'cert'         => 'AYUSH Licensed • Classical Vajikarana Rasayana • Shodhit Shilajit',
-                'short_desc'   => 'Classical Shodhit Shilajit and High-Potency KSM-66 Ashwagandha for Natural Stamina, Physical Vitality, and Stress Recovery.',
+                'cert'         => 'AYUSH Licensed • Classical Ayurvedic Formulation • 10 Verified Botanicals',
+                'short_desc'   => 'Men Power Capsule — Daily Herbal Wellness Formula crafted with 10 verified Ayurvedic botanicals including Ashwagandha, Safed Musli, and Shudh Shilajeet for natural stamina and physical vitality.',
                 'image_files'  => array(
                     'featured' => 'bhagyoday-ashwagandha-shilajit-capsules-featured.webp',
                     'gallery'  => array(
@@ -397,9 +508,9 @@ class Ayur_Migrator {
                         'bhagyoday-ashwagandha-shilajit-capsules-packaging.webp'
                     )
                 ),
-                'desc'         => "<h3>Ashwagandha Shilajit Men Wellness Capsules (800mg)</h3>\n<p class=\"ayur-lead\">Pure Shodhit Himalayan Shilajit and KSM-66 Ashwagandha root extract crafted for sustained masculine vigor, physical endurance, and nervous resilience.</p>\n\n<div class=\"ayur-desc-section\">\n<h4>KEY BENEFITS</h4>\n<ul class=\"ayur-feature-list\">\n<li>Combines pure purified Shilajit with standardized Ashwagandha root extract</li>\n<li>Supports healthy energy reserves, physical stamina, and muscle vigor</li>\n<li>Aids post-workout recovery and daily stress resilience (Vajikarana Rasayana)</li>\n<li>Boosts cellular mitochondrial energy (ATP) naturally without stimulants</li>\n</ul>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>WHY CHOOSE THIS PRODUCT</h4>\n<p>Unlike synthetic stamina pills that spike blood pressure and crash energy, Bhagyoday Ayurveda Ashwagandha Shilajit Capsules rely on classical Himalayan Shilajit purified through the traditional Triphala Shodhana method, combined with premium Withania somnifera. It builds foundational vitality from within over time.</p>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>INGREDIENTS</h4>\n<p>Shuddha Himalayan Shilajit (Asphaltum punjabianum) 350 mg, Ashwagandha Root Extract (Withania somnifera) 300 mg, Safed Musli (Chlorophytum borivilianum) 100 mg, Gokshura Fruit Extract (Tribulus terrestris) 50 mg, Vegetarian Plant Cellulose Capsule.</p>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>HOW TO USE & DOSAGE</h4>\n<p>Take 1 capsule twice daily with warm milk or lukewarm water, ideally after breakfast and dinner. For best results, use consistently for 60 to 90 days.</p>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>PRODUCT DETAILS</h4>\n<p><strong>Net Quantity:</strong> 30 Vegetarian Capsules<br><strong>Form:</strong> Vegetable Capsule (800 mg)<br><strong>Pack:</strong> Sealed Amber Bottle<br><strong>Origin:</strong> India<br><strong>Storage:</strong> Store in a cool, dry place away from direct sunlight.</p>\n</div>\n\n<div class=\"ayur-desc-section ayur-important-note\">\n<p><em><strong>IMPORTANT:</strong> Classical Ayurvedic Vajikarana formulation. Not intended to diagnose, treat, or cure acute medical conditions. Consult your doctor if on chronic blood pressure medications.</em></p>\n</div>",
-                'ingredients'  => "Shuddha Himalayan Shilajit (Asphaltum punjabianum) 350 mg\nAshwagandha Root Extract (Withania somnifera) 300 mg\nSafed Musli (Chlorophytum borivilianum) 100 mg\nGokshura Fruit Extract (Tribulus terrestris) 50 mg\nVegetarian Plant Cellulose Capsule",
-                'benefits'     => "• Combines pure purified Shilajit with standardized Ashwagandha root extract\n• Supports healthy energy reserves, physical stamina, and muscle vigor\n• Aids post-workout recovery and daily stress resilience (Vajikarana Rasayana)\n• Boosts cellular mitochondrial energy (ATP) naturally without stimulants",
+                'desc'         => "<h3>Men Power Capsule (800mg)</h3>\n<p class=\"ayur-lead\">Daily Herbal Wellness Formula for Men crafted with pure, verified classical Ayurvedic botanicals to support sustained physical stamina, natural vitality, and daily wellness.</p>\n\n<div class=\"ayur-desc-section\">\n<h4>KEY BENEFITS</h4>\n<ul class=\"ayur-feature-list\">\n<li>Synergistic blend of 10 verified classical Ayurvedic botanicals</li>\n<li>Supports healthy physical endurance, daily stamina, and active lifestyle</li>\n<li>Aids natural recovery, vitality, and nervous resilience</li>\n<li>100% vegetarian capsules with zero chemical additives or heavy metals</li>\n</ul>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>WHAT'S INSIDE</h4>\n<p>Ashwagandha, Safed Musli, Gokhru, Kaunch Beej, Shudh Shilajeet, Garlic, Jaiphal, Vidarikand, Maca Root, Kali Mirch, Vegetarian Plant Cellulose Capsule.</p>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>HOW TO USE & DOSAGE</h4>\n<p>Take 1 capsule twice daily with warm milk or lukewarm water, ideally after breakfast and dinner. For optimal results, use consistently for 60 to 90 days.</p>\n</div>\n\n<div class=\"ayur-desc-section\">\n<h4>PRODUCT DETAILS</h4>\n<p><strong>Net Quantity:</strong> 30 Vegetarian Capsules<br><strong>Form:</strong> Vegetable Capsule (800 mg)<br><strong>Pack:</strong> Sealed Amber Bottle<br><strong>Origin:</strong> India<br><strong>Storage:</strong> Store in a cool, dry place away from direct sunlight.</p>\n</div>\n\n<div class=\"ayur-desc-section ayur-important-note\">\n<p><em><strong>IMPORTANT:</strong> Classical Ayurvedic proprietary formulation. Not intended to diagnose, treat, cure, or prevent any medical condition. Consult your physician if you are under medication for any chronic health condition.</em></p>\n</div>",
+                'ingredients'  => "Ashwagandha (50mg)\nSafed Musli (50mg)\nGokhru (30mg)\nKaunch Beej (50mg)\nShudh Shilajeet (20mg)\nGarlic (20mg)\nJaiphal (20mg)\nVidarikand (20mg)\nMaca Root (10mg)\nKali Mirch (10mg)\nVegetarian Plant Cellulose Capsule",
+                'benefits'     => "• Synergistic blend of 10 verified classical Ayurvedic botanicals\n• Supports healthy physical endurance, daily stamina, and active lifestyle\n• Aids natural recovery, vitality, and nervous resilience\n• 100% vegetarian capsules with zero synthetic additives or heavy metals",
                 'dosage'       => 'Take 1 capsule twice daily with warm milk or lukewarm water, ideally after breakfast and dinner.',
                 'precautions'  => 'Store in a cool dry place away from direct sunlight. Not recommended for children under 18 years. Consult physician if you suffer from high uric acid.',
             ),
