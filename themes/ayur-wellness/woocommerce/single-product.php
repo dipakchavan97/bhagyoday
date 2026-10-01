@@ -348,8 +348,18 @@ while (have_posts()) :
                 </section>
             <?php endif; ?>
 
-            <!-- 5. What's Inside Callout Banner -->
-            <?php if ($product_id == 33 || !empty($ext_data['has_60_composition'])) : ?>
+            <!-- 5. What's Inside Callout Banner & 6. Complete Composition Section -->
+            <?php
+            $comp_info = ayur_get_product_composition_info($product_id);
+            if ($comp_info && !empty($comp_info['ingredients'])) :
+                $ingredients = $comp_info['ingredients'];
+                $total_items = count($ingredients);
+                $half = (int)ceil($total_items / 2);
+                $col1 = array_slice($ingredients, 0, $half);
+                $col2 = array_slice($ingredients, $half);
+                $is_collapsed = !empty($comp_info['is_collapsible']);
+            ?>
+                <!-- 5. What's Inside Callout Banner -->
                 <div class="ayur-whats-inside-banner" aria-label="<?php esc_attr_e('What\'s Inside Formulation Callout', 'ayur-wellness'); ?>">
                     <div class="ayur-whats-inside-inner">
                         <div class="ayur-wi-header">
@@ -358,147 +368,55 @@ while (have_posts()) :
                         </div>
                         <div class="ayur-wi-main">
                             <div class="ayur-wi-count-badge">
-                                <span class="ayur-wi-count">60</span>
+                                <span class="ayur-wi-count"><?php echo esc_html($comp_info['count_badge']); ?></span>
                             </div>
                             <div class="ayur-wi-content">
-                                <h3 class="ayur-wi-title"><?php _e('HERBS &bull; FRUITS &bull; EXTRACTS', 'ayur-wellness'); ?></h3>
-                                <p class="ayur-wi-desc"><?php _e('Each 10ml contains a carefully specified blend of botanical ingredients.', 'ayur-wellness'); ?></p>
+                                <h3 class="ayur-wi-title"><?php echo wp_kses_post($comp_info['title']); ?></h3>
+                                <p class="ayur-wi-desc"><?php echo esc_html($comp_info['sub_desc']); ?></p>
                             </div>
                         </div>
-                        <div class="ayur-wi-badges-row">
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('No Added Sugar', 'ayur-wellness'); ?></span>
+                        <?php if (!empty($comp_info['pills'])) : ?>
+                            <div class="ayur-wi-badges-row">
+                                <?php foreach ($comp_info['pills'] as $pill) : ?>
+                                    <div class="ayur-wi-pill">
+                                        <?php echo ayur_svg_icon('check', '', 13); ?>
+                                        <span><?php echo esc_html($pill); ?></span>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('No Artificial Colour', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('No Artificial Flavour', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('100% Natural Ingredients', 'ayur-wellness'); ?></span>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-            <?php elseif ($product_id == 30 || !empty($ext_data['has_men_power_composition'])) : ?>
-                <div class="ayur-whats-inside-banner" aria-label="<?php esc_attr_e('What\'s Inside Formulation Callout', 'ayur-wellness'); ?>">
-                    <div class="ayur-whats-inside-inner">
-                        <div class="ayur-wi-header">
-                            <span class="ayur-wi-eyebrow"><?php _e('AUTHENTIC AYURVEDIC FORMULATION', 'ayur-wellness'); ?></span>
-                            <span class="ayur-wi-subhead"><?php _e('WHAT\'S INSIDE', 'ayur-wellness'); ?></span>
-                        </div>
-                        <div class="ayur-wi-main">
-                            <div class="ayur-wi-count-badge">
-                                <span class="ayur-wi-count">10</span>
-                            </div>
-                            <div class="ayur-wi-content">
-                                <h3 class="ayur-wi-title"><?php _e('VERIFIED AYURVEDIC BOTANICALS', 'ayur-wellness'); ?></h3>
-                                <p class="ayur-wi-desc"><?php _e('A synergistic blend of authentic classical herbs formulated for daily male vitality.', 'ayur-wellness'); ?></p>
-                            </div>
-                        </div>
-                        <div class="ayur-wi-badges-row">
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('100% Vegetarian Capsule', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('Zero Synthetic Additives', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('Standardized Extracts', 'ayur-wellness'); ?></span>
-                            </div>
-                            <div class="ayur-wi-pill">
-                                <?php echo ayur_svg_icon('check', '', 13); ?>
-                                <span><?php _e('AYUSH Licensed Facility', 'ayur-wellness'); ?></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endif; ?>
 
-            <!-- 6. Complete Composition Section (Names Only, Zero Quantities, No Search Box) -->
-            <?php if ($product_id == 33 || !empty($ext_data['has_60_composition'])) : ?>
+                <!-- 6. Complete Composition Section (Names Only, Zero Quantities, No Search Box) -->
                 <section id="ayurCompositionSection" class="ayur-composition-section" aria-label="<?php esc_attr_e('Complete Product Composition', 'ayur-wellness'); ?>">
                     <div class="ayur-composition-header-card">
-                        <h2 class="ayur-comp-title"><?php _e('COMPOSITION', 'ayur-wellness'); ?></h2>
-                        <p class="ayur-comp-count"><?php _e('60 Herbs, Fruits &amp; Extracts', 'ayur-wellness'); ?></p>
-                        <p class="ayur-comp-sub"><?php _e('Each 10ml contains a carefully specified blend of botanical ingredients.', 'ayur-wellness'); ?></p>
+                        <h2 class="ayur-comp-title"><?php echo esc_html($comp_info['header_title']); ?></h2>
+                        <p class="ayur-comp-count"><?php echo esc_html($comp_info['header_count']); ?></p>
+                        <p class="ayur-comp-sub"><?php echo esc_html($comp_info['header_sub']); ?></p>
                     </div>
 
-                    <!-- Mobile Accordion Trigger -->
-                    <div class="ayur-comp-mobile-toggle-wrap">
-                        <button type="button"
-                                id="ayurCompMobileToggle"
-                                class="ayur-comp-mobile-toggle-btn"
-                                aria-expanded="false"
-                                aria-controls="ayurCompositionTableWrap">
-                            <span class="btn-text"><?php _e('VIEW COMPLETE COMPOSITION', 'ayur-wellness'); ?></span>
-                            <?php echo ayur_svg_icon('chevron-down', 'toggle-arrow', 14); ?>
-                        </button>
-                    </div>
-
-                    <!-- 60 Ingredients List (Desktop 2 Columns, Mobile 1 Column) -->
-                    <div id="ayurCompositionTableWrap" class="ayur-composition-table-wrap is-collapsed-mobile">
-                        <div class="ayur-comp-columns-grid">
-                            <!-- Left Column: Items 01 to 30 -->
-                            <div class="ayur-comp-column ayur-comp-col-1">
-                                <ul class="ayur-comp-clean-list" role="list">
-                                    <?php
-                                    $all_ingredients = ayur_get_amrit_juice_composition();
-                                    $col1 = array_slice($all_ingredients, 0, 30);
-                                    foreach ($col1 as $item) :
-                                    ?>
-                                    <li class="ayur-comp-clean-item">
-                                        <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
-                                        <span class="comp-name"><?php echo esc_html($item['name']); ?></span>
-                                    </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-
-                            <!-- Right Column: Items 31 to 60 -->
-                            <div class="ayur-comp-column ayur-comp-col-2">
-                                <ul class="ayur-comp-clean-list" role="list">
-                                    <?php
-                                    $col2 = array_slice($all_ingredients, 30, 30);
-                                    foreach ($col2 as $item) :
-                                    ?>
-                                    <li class="ayur-comp-clean-item">
-                                        <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
-                                        <span class="comp-name"><?php echo esc_html($item['name']); ?></span>
-                                    </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
+                    <?php if ($is_collapsed) : ?>
+                        <!-- Mobile Accordion Trigger -->
+                        <div class="ayur-comp-mobile-toggle-wrap">
+                            <button type="button"
+                                    id="ayurCompMobileToggle"
+                                    class="ayur-comp-mobile-toggle-btn"
+                                    aria-expanded="false"
+                                    aria-controls="ayurCompositionTableWrap">
+                                <span class="btn-text"><?php _e('VIEW COMPLETE COMPOSITION', 'ayur-wellness'); ?></span>
+                                <?php echo ayur_svg_icon('chevron-down', 'toggle-arrow', 14); ?>
+                            </button>
                         </div>
-                    </div>
-                </section>
-            <?php elseif ($product_id == 30 || !empty($ext_data['has_men_power_composition'])) : ?>
-                <section id="ayurCompositionSection" class="ayur-composition-section ayur-composition-men-power" aria-label="<?php esc_attr_e('Complete Product Composition', 'ayur-wellness'); ?>">
-                    <div class="ayur-composition-header-card">
-                        <h2 class="ayur-comp-title"><?php _e('COMPOSITION', 'ayur-wellness'); ?></h2>
-                        <p class="ayur-comp-count"><?php _e('10 Verified Ayurvedic Botanicals', 'ayur-wellness'); ?></p>
-                        <p class="ayur-comp-sub"><?php _e('Formulated with authentic classical herbs for daily male vitality.', 'ayur-wellness'); ?></p>
-                    </div>
+                    <?php endif; ?>
 
-                    <!-- 10 Ingredients List (Desktop 2 Columns of 5 items, Mobile 1 Column) -->
-                    <div id="ayurCompositionTableWrap" class="ayur-composition-table-wrap">
+                    <!-- Ingredients List (Desktop 2 Columns, Mobile 1 Column) -->
+                    <div id="ayurCompositionTableWrap" class="ayur-composition-table-wrap<?php echo $is_collapsed ? ' is-collapsed-mobile' : ''; ?>">
                         <div class="ayur-comp-columns-grid">
-                            <!-- Left Column: Items 01 to 05 -->
+                            <!-- Left Column -->
                             <div class="ayur-comp-column ayur-comp-col-1">
                                 <ul class="ayur-comp-clean-list" role="list">
-                                    <?php
-                                    $men_power_ingredients = ayur_get_men_power_composition();
-                                    $col1 = array_slice($men_power_ingredients, 0, 5);
-                                    foreach ($col1 as $item) :
-                                    ?>
+                                    <?php foreach ($col1 as $item) : ?>
                                     <li class="ayur-comp-clean-item">
                                         <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
                                         <span class="comp-name"><?php echo esc_html($item['name']); ?></span>
@@ -507,13 +425,10 @@ while (have_posts()) :
                                 </ul>
                             </div>
 
-                            <!-- Right Column: Items 06 to 10 -->
+                            <!-- Right Column -->
                             <div class="ayur-comp-column ayur-comp-col-2">
                                 <ul class="ayur-comp-clean-list" role="list">
-                                    <?php
-                                    $col2 = array_slice($men_power_ingredients, 5, 5);
-                                    foreach ($col2 as $item) :
-                                    ?>
+                                    <?php foreach ($col2 as $item) : ?>
                                     <li class="ayur-comp-clean-item">
                                         <span class="comp-num"><?php echo esc_html($item['num']); ?></span>
                                         <span class="comp-name"><?php echo esc_html($item['name']); ?></span>

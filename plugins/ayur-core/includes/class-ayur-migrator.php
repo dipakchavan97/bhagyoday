@@ -47,6 +47,10 @@ class Ayur_Migrator {
     }
 
     public static function check_migration_trigger() {
+        if (isset($_GET['ayur_upgrade_five_compositions']) && $_GET['ayur_upgrade_five_compositions'] === '2026_five_compositions_verified') {
+            self::upgrade_five_product_compositions();
+        }
+
         if (isset($_GET['ayur_upgrade_men_power']) && $_GET['ayur_upgrade_men_power'] === '2026_men_power_verified') {
             self::upgrade_men_power_product();
         }
@@ -54,6 +58,336 @@ class Ayur_Migrator {
         if (isset($_GET['ayur_run_source_migration'])) {
             wp_die('Migration complete. This endpoint has been permanently deactivated for production security.', 'Access Denied', array('response' => 403));
         }
+    }
+
+    public static function upgrade_five_product_compositions() {
+        if (!class_exists('WooCommerce')) {
+            wp_die('WooCommerce not loaded', 'Error', array('response' => 500));
+        }
+
+        $products_config = array(
+            // Product 1: Slim Care Weight Management Juice
+            31 => array(
+                'sku'                   => 'AYUR-SLIM-500',
+                'title'                 => 'Slim Care Weight Management Juice 500ml',
+                'short_desc'            => 'Authentic Ayurvedic metabolic wellness elixir blending 16 verified herbs and botanical extracts formulated to support digestive Agni and natural balance.',
+                'desc_whats_inside'     => "Aawala, Baheda, Harad, Guggul, Garcinia Cambogia, Punarnava, Methi, Cinnamon, Moringa, Ginger, Jeera (Cumin), Giloy, Ashwagandha, Garlic, Green Tea.",
+                'customer_ingredients'  => array('Aawala', 'Baheda', 'Harad', 'Guggul', 'Garcinia Cambogia', 'Punarnava', 'Methi', 'Cinnamon', 'Moringa', 'Ginger', 'Jeera (Cumin)', 'Giloy', 'Ashwagandha', 'Garlic', 'Green Tea'),
+                'source_composition'    => array(
+                    array('num' => '01', 'name' => 'Aawala', 'qty' => '300mg'),
+                    array('num' => '02', 'name' => 'Baheda', 'qty' => '300mg'),
+                    array('num' => '03', 'name' => 'Harad', 'qty' => '300mg'),
+                    array('num' => '04', 'name' => 'Guggul', 'qty' => '400mg'),
+                    array('num' => '05', 'name' => 'Garcinia Cambogia', 'qty' => '200mg'),
+                    array('num' => '06', 'name' => 'Punarnava', 'qty' => '300mg'),
+                    array('num' => '07', 'name' => 'Methi', 'qty' => '300mg'),
+                    array('num' => '08', 'name' => 'Cinnamon', 'qty' => '400mg'),
+                    array('num' => '09', 'name' => 'Moringa', 'qty' => '500mg'),
+                    array('num' => '10', 'name' => 'Ginger', 'qty' => '300mg'),
+                    array('num' => '11', 'name' => 'Jeera (Cumin)', 'qty' => '300mg'),
+                    array('num' => '12', 'name' => 'Giloy', 'qty' => '200mg'),
+                    array('num' => '13', 'name' => 'Ashwagandha', 'qty' => '200mg'),
+                    array('num' => '14', 'name' => 'Garlic', 'qty' => '100mg'),
+                    array('num' => '15', 'name' => 'Green Tea', 'qty' => '200mg'),
+                    array('num' => '16', 'name' => 'Cinnamon', 'qty' => '400mg', 'is_duplicate_source_entry' => true),
+                ),
+                'duplicate_note'        => 'Cinnamon appears twice in supplied source artwork (#8 400mg & #16 400mg). Both entries preserved in source metadata; normalized to 15 unique names for customer display.',
+                'benefits_str'          => "• Formulated with 16 verified herbs and extracts including Garcinia Cambogia, Triphala, and Guggul\n• Supports healthy digestive fire (Deepana-Pachana) and natural metabolic rhythm\n• Infused with Moringa, Ginger, Cumin, Giloy, and Green Tea for daily antioxidant nourishment\n• Zero added sugar, no artificial flavours, and zero synthetic stimulants",
+                'dosage_str'            => 'Measure 20 to 30 ml, dilute in a glass of lukewarm water and drink on an empty stomach in the morning.',
+                'net_qty_str'           => '500 ml',
+                'cert_str'              => 'GMP & AYUSH Compliant • 16 Powerful Herbs & Extracts • Zero Added Sugar',
+            ),
+
+            // Product 2: Lady Care Juice / Shatavari Ashoka
+            36 => array(
+                'sku'                   => 'AYUR-SHAT-500',
+                'title'                 => 'Shatavari Ashoka Women Wellness Juice 500ml',
+                'short_desc'            => 'Revered classical Nari Rasayana blending 14 authentic Ayurvedic botanicals including Shatavari, Ashoka, Trifala, and Kanchanar Guggulu for hormonal rhythm and feminine vitality.',
+                'desc_whats_inside'     => "Shatavari, Ashwagandha, Trifala, Kanchanar Guggulu, Ashoka, Lodhra, Guduchi, Moringa, Cinnamon, Turmeric, Pippali, Varuna, Bilva, Punarnava.",
+                'customer_ingredients'  => array('Shatavari', 'Ashwagandha', 'Trifala', 'Kanchanar Guggulu', 'Ashoka', 'Lodhra', 'Guduchi', 'Moringa', 'Cinnamon', 'Turmeric', 'Pippali', 'Varuna', 'Bilva', 'Punarnava'),
+                'source_composition'    => array(
+                    array('num' => '01', 'name' => 'Shatavari', 'botanical' => 'Asparagus racemosus', 'qty' => '200mg'),
+                    array('num' => '02', 'name' => 'Ashwagandha', 'botanical' => 'Withania somnifera', 'qty' => '200mg'),
+                    array('num' => '03', 'name' => 'Trifala', 'botanical' => 'Terminalia chebula, Terminalia bellirica, Emblica officinalis', 'qty' => '200mg'),
+                    array('num' => '04', 'name' => 'Kanchanar Guggulu', 'botanical' => 'Bauhinia variegata, Commiphora mukul', 'qty' => '200mg'),
+                    array('num' => '05', 'name' => 'Ashoka', 'botanical' => 'Saraca asoca', 'qty' => '200mg'),
+                    array('num' => '06', 'name' => 'Lodhra', 'botanical' => 'Symplocos racemosa', 'qty' => '200mg'),
+                    array('num' => '07', 'name' => 'Guduchi', 'botanical' => 'Tinospora cordifolia', 'qty' => '200mg'),
+                    array('num' => '08', 'name' => 'Moringa', 'botanical' => 'Moringa oleifera', 'qty' => '200mg'),
+                    array('num' => '09', 'name' => 'Cinnamon', 'botanical' => 'Cinnamomum verum', 'qty' => '200mg'),
+                    array('num' => '10', 'name' => 'Turmeric', 'botanical' => 'Curcuma longa', 'qty' => '100mg'),
+                    array('num' => '11', 'name' => 'Pippali', 'botanical' => 'Piper longum', 'qty' => '100mg'),
+                    array('num' => '12', 'name' => 'Varuna', 'botanical' => 'Crataeva nurvala', 'qty' => '100mg'),
+                    array('num' => '13', 'name' => 'Bilva', 'botanical' => 'Aegle marmelos', 'qty' => '100mg'),
+                    array('num' => '14', 'name' => 'Punarnava', 'botanical' => 'Boerhaavia diffusa', 'qty' => '100mg'),
+                ),
+                'duplicate_note'        => 'None. 14 unique verified botanicals with complete botanical taxonomy and source quantities.',
+                'benefits_str'          => "• Formulated with 14 authentic classical herbs including Shatavari, Ashoka, Lodhra, and Trifala\n• Nourishes feminine hormonal balance, pelvic tissue vitality, and natural cyclic rhythm\n• Enriched with Guduchi, Moringa, Turmeric, Cinnamon, and Punarnava for cellular vitality\n• Zero added sugar, no artificial flavours, and zero synthetic hormones",
+                'dosage_str'            => 'Dilute 20 to 25 ml in half a glass of lukewarm water and drink twice daily after meals.',
+                'net_qty_str'           => '500 ml',
+                'cert_str'              => 'GMP & AYUSH Compliant • TOTAL 14 POWERFUL HERBS • 100% Natural Formulation',
+            ),
+
+            // Product 3: Men Power Capsule
+            30 => array(
+                'sku'                   => 'AYUR-SHIL-30',
+                'title'                 => 'Men Power Capsule 800mg (30 Capsules)',
+                'short_desc'            => 'Daily Herbal Wellness Formula crafted with 20 verified Ayurvedic botanicals including Ashwagandha, Safed Musli, Purified Shilajit, Kaunch Beej, and Maca Root for natural stamina and physical vitality.',
+                'desc_whats_inside'     => "Ashwagandha, Safed Musli, Gokhru, Kaunch Beej, Shudh Shilajeet, Garlic, Jaiphal, Vidarikand, Maca Root, Kali Mirch, Kuchala, Saunth, Elaichi, Mastic Gum, Kala Jeera, Salav Mishri, Dalchini, Singhada, Harmal, Wang Bhasam, Vegetarian Plant Cellulose Capsule.",
+                'customer_ingredients'  => array('Ashwagandha', 'Safed Musli', 'Gokhru', 'Kaunch Beej', 'Shudh Shilajeet', 'Garlic', 'Jaiphal', 'Vidarikand', 'Maca Root', 'Kali Mirch', 'Kuchala', 'Saunth', 'Elaichi', 'Mastic Gum', 'Kala Jeera', 'Salav Mishri', 'Dalchini', 'Singhada', 'Harmal', 'Wang Bhasam'),
+                'source_composition'    => array(
+                    array('num' => '01', 'name' => 'Ashwagandha', 'qty' => '50mg'),
+                    array('num' => '02', 'name' => 'Safed Musli', 'qty' => '50mg'),
+                    array('num' => '03', 'name' => 'Gokhru', 'qty' => '30mg'),
+                    array('num' => '04', 'name' => 'Kaunch Beej', 'qty' => '50mg'),
+                    array('num' => '05', 'name' => 'Shudh Shilajeet', 'qty' => '20mg'),
+                    array('num' => '06', 'name' => 'Garlic', 'qty' => '20mg'),
+                    array('num' => '07', 'name' => 'Jaiphal', 'qty' => '30mg'),
+                    array('num' => '08', 'name' => 'Vidarikand', 'qty' => '20mg'),
+                    array('num' => '09', 'name' => 'Maca Root', 'qty' => '20mg'),
+                    array('num' => '10', 'name' => 'Kali Mirch', 'qty' => '5mg'),
+                    array('num' => '11', 'name' => 'Kuchala', 'qty' => '20mg'),
+                    array('num' => '12', 'name' => 'Saunth', 'qty' => '20mg'),
+                    array('num' => '13', 'name' => 'Elaichi', 'qty' => '5mg'),
+                    array('num' => '14', 'name' => 'Mastic Gum', 'qty' => '20mg'),
+                    array('num' => '15', 'name' => 'Kala Jeera', 'qty' => '20mg'),
+                    array('num' => '16', 'name' => 'Salav Mishri', 'qty' => '10mg'),
+                    array('num' => '17', 'name' => 'Dalchini', 'qty' => '20mg'),
+                    array('num' => '18', 'name' => 'Singhada', 'qty' => '30mg'),
+                    array('num' => '19', 'name' => 'Harmal', 'qty' => '10mg'),
+                    array('num' => '20', 'name' => 'Wang Bhasam', 'qty' => '10mg'),
+                ),
+                'duplicate_note'        => 'None. Complete 20-ingredient verified formulation replacing earlier 10-item baseline.',
+                'benefits_str'          => "• Formulated with 20 classical Rasayana botanicals including Ashwagandha, Safed Musli, Purified Shilajit, Kaunch Beej, and Maca Root\n• Supports daily vitality, natural energy reserves, and an active lifestyle\n• Includes Kaunch Beej, Gokhru, and Vidarikand to promote physical stamina and endurance\n• 100% vegetarian plant cellulose capsules with zero synthetic stimulants or artificial binders",
+                'dosage_str'            => 'Take 1 capsule twice daily with warm milk or lukewarm water, ideally after breakfast and dinner.',
+                'net_qty_str'           => '30 Vegetarian Capsules (800 mg)',
+                'cert_str'              => 'AYUSH Licensed • TOTAL 20 POWERFUL HERBS • 100% Vegetarian Plant Cellulose',
+            ),
+
+            // Product 4: Diabetic Control Capsule / Karela Jamun
+            34 => array(
+                'sku'                   => 'AYUR-SUGAR-60',
+                'title'                 => 'Karela Jamun Blood Sugar Control Capsules 500mg (60 Capsules)',
+                'short_desc'            => 'Synergistic Ayurvedic wellness formulation blending 10 verified botanicals including Gudmaar, Jamun, Methi, and Bitter Guard to support healthy carbohydrate digestion and metabolic balance.',
+                'desc_whats_inside'     => "Gudmaar, Periwinkle, Methi, Costus Igneous, Jamun, Neem, Tulsi, Vijaysaar, Stevia, Bitter Guard / Karela, Vegetarian Plant Cellulose Capsule.",
+                'customer_ingredients'  => array('Gudmaar', 'Periwinkle', 'Methi', 'Costus Igneous', 'Jamun', 'Neem', 'Tulsi', 'Vijaysaar', 'Stevia', 'Bitter Guard / Karela'),
+                'source_composition'    => array(
+                    array('num' => '01', 'name' => 'Gudmaar', 'botanical' => 'Gymnema sylvestre', 'qty' => '200mg'),
+                    array('num' => '02', 'name' => 'Periwinkle', 'botanical' => 'Catharanthus roseus', 'qty' => '200mg'),
+                    array('num' => '03', 'name' => 'Methi', 'botanical' => 'Trigonella foenum-graecum', 'qty' => '200mg'),
+                    array('num' => '04', 'name' => 'Costus Igneous', 'botanical' => 'Insulin Plant', 'qty' => '200mg'),
+                    array('num' => '05', 'name' => 'Jamun', 'botanical' => 'Syzygium cumini', 'qty' => '200mg'),
+                    array('num' => '06', 'name' => 'Neem', 'botanical' => 'Azadirachta indica', 'qty' => '200mg'),
+                    array('num' => '07', 'name' => 'Tulsi', 'botanical' => 'Ocimum sanctum', 'qty' => '200mg'),
+                    array('num' => '08', 'name' => 'Vijaysaar', 'botanical' => 'Pterocarpus marsupium', 'qty' => '100mg'),
+                    array('num' => '09', 'name' => 'Stevia', 'botanical' => 'Stevia rebaudiana', 'qty' => '100mg'),
+                    array('num' => '10', 'name' => 'Bitter Guard / Karela', 'botanical' => 'Momordica charantia', 'qty' => '100mg'),
+                ),
+                'duplicate_note'        => 'None. 10 verified classical botanicals with botanical names and source quantities.',
+                'benefits_str'          => "• Combines 10 verified botanicals including Gudmaar (Gymnema), Jamun, Methi, and Karela\n• Supports healthy carbohydrate digestion and everyday metabolic harmony\n• Features Costus Igneous, Vijaysaar, Neem, and Tulsi for balanced physiological vitality\n• 100% vegetarian plant cellulose capsules with zero synthetic fillers or artificial additives",
+                'dosage_str'            => 'Take 1 capsule twice daily, approximately 30 minutes before your morning and evening meals with lukewarm water.',
+                'net_qty_str'           => '60 Capsules (500 mg each)',
+                'cert_str'              => 'GMP & AYUSH Compliant • 10 POWERFUL HERBS • 100% Plant Cellulose',
+            ),
+
+            // Product 5: Ortho Care Capsule / Shallaki Hadjod
+            35 => array(
+                'sku'                   => 'AYUR-SHAL-60',
+                'title'                 => 'Shallaki Joint Bone Care Capsules 500mg (60 Capsules)',
+                'short_desc'            => 'Synergistic classical Ayurvedic formulation blending 13 verified botanicals including Shallaki, Ashwagandha, Hadjod, and Nirgundi for joint comfort and daily mobility.',
+                'desc_whats_inside'     => "Shallaki, Ashwagandha, Guggul, Saunth / Adrak, Haldi, Methi, Aloevera, Hadjod, Drumstick / Sahajan, Nilgiri, Calotropis / Saak / Madar, Nirgundi, Ginger, Vegetarian Plant Cellulose Capsule.",
+                'customer_ingredients'  => array('Shallaki', 'Ashwagandha', 'Guggul', 'Saunth / Adrak', 'Haldi', 'Methi', 'Aloevera', 'Hadjod', 'Drumstick / Sahajan', 'Nilgiri', 'Calotropis / Saak / Madar', 'Nirgundi', 'Ginger'),
+                'source_composition'    => array(
+                    array('num' => '01', 'name' => 'Shallaki', 'botanical' => 'Boswellia serrata', 'qty' => '100mg'),
+                    array('num' => '02', 'name' => 'Ashwagandha', 'botanical' => 'Withania somnifera', 'qty' => '100mg'),
+                    array('num' => '03', 'name' => 'Guggul', 'botanical' => 'Commiphora mukul', 'qty' => '100mg'),
+                    array('num' => '04', 'name' => 'Saunth / Adrak', 'botanical' => 'Zingiber officinale', 'qty' => '100mg'),
+                    array('num' => '05', 'name' => 'Haldi', 'botanical' => 'Curcuma longa', 'qty' => '70mg'),
+                    array('num' => '06', 'name' => 'Methi', 'botanical' => 'Fenugreek', 'qty' => '100mg'),
+                    array('num' => '07', 'name' => 'Aloevera', 'botanical' => 'Aloe barbadensis', 'qty' => '80mg'),
+                    array('num' => '08', 'name' => 'Hadjod', 'botanical' => 'Cissus quadrangularis', 'qty' => '100mg'),
+                    array('num' => '09', 'name' => 'Drumstick (Sahajan)', 'botanical' => 'Moringa', 'qty' => '70mg'),
+                    array('num' => '10', 'name' => 'Nilgiri', 'botanical' => 'Eucalyptus globulus', 'qty' => '50mg'),
+                    array('num' => '11', 'name' => 'Calotropis (Saak/Madar)', 'botanical' => 'Calotropis gigantea', 'qty' => '60mg'),
+                    array('num' => '12', 'name' => 'Nirgundi', 'botanical' => 'Vitex negundo', 'qty' => '70mg'),
+                    array('num' => '13', 'name' => 'Ginger', 'botanical' => 'Zingiber officinale', 'qty' => '80mg'),
+                ),
+                'duplicate_note'        => 'None. 13 verified classical botanicals with botanical names and source quantities.',
+                'benefits_str'          => "• Formulated with 13 verified botanicals including Shallaki, Ashwagandha, Guggul, and Hadjod\n• Supports daily joint comfort, connective tissue strength, and morning ease of motion\n• Enriched with Nirgundi, Haldi, Methi, and Aloevera for holistic musculoskeletal nourishment\n• 100% vegetarian plant cellulose capsules with zero synthetic binders or harsh additives",
+                'dosage_str'            => 'Take 1 capsule twice daily after meals with lukewarm water or warm milk.',
+                'net_qty_str'           => '60 Capsules (500 mg each)',
+                'cert_str'              => 'AYUSH Licensed • TOTAL 13 POWERFUL HERBS • 100% Plant Cellulose',
+            ),
+        );
+
+        $results = array();
+
+        foreach ($products_config as $target_id => $cfg) {
+            $prod_id = wc_get_product_id_by_sku($cfg['sku']);
+            if (!$prod_id) {
+                $prod_id = $target_id;
+            }
+
+            $product = wc_get_product($prod_id);
+            if (!$product) {
+                $results[$target_id] = array('error' => "Product ID {$prod_id} with SKU {$cfg['sku']} not found");
+                continue;
+            }
+
+            // 1. Capture BEFORE snapshot
+            $before = array(
+                'id'             => $product->get_id(),
+                'name'           => $product->get_name(),
+                'slug'           => $product->get_slug(),
+                'sku'            => $product->get_sku(),
+                'regular_price'  => $product->get_regular_price(),
+                'sale_price'     => $product->get_sale_price(),
+                'price'          => $product->get_price(),
+                'weight'         => $product->get_weight(),
+                'length'         => $product->get_length(),
+                'width'          => $product->get_width(),
+                'height'         => $product->get_height(),
+                'mrp_meta'       => get_post_meta($prod_id, '_ayur_mrp', true),
+                'ingredients'    => get_post_meta($prod_id, '_ayur_ingredients', true),
+                'benefits'       => get_post_meta($prod_id, '_ayur_benefits', true),
+                'dosage'         => get_post_meta($prod_id, '_ayur_dosage', true),
+                'net_qty'        => get_post_meta($prod_id, '_ayur_net_quantity', true),
+                'certifications' => get_post_meta($prod_id, '_ayur_certifications', true),
+            );
+
+            // 2. Build clean post_content description (No milligram claims, clean section structure)
+            $is_juice = (stripos($product->get_name(), 'Juice') !== false || stripos($cfg['title'], 'Juice') !== false);
+            $form_desc = $is_juice ? 'Liquid Herbal Tonic Juice (500 ml)' : 'Vegetable Capsules (100% Plant Cellulose)';
+            $pack_desc = $is_juice ? 'BPA-Free Food-Grade Bottle' : 'Sealed Amber Bottle';
+
+            $clean_desc = "<h3>" . esc_html($cfg['title']) . "</h3>\n" .
+                "<p class=\"ayur-lead\">" . esc_html($cfg['short_desc']) . "</p>\n\n" .
+                "<div class=\"ayur-desc-section\">\n" .
+                "<h4>KEY FORMULATION HIGHLIGHTS</h4>\n" .
+                "<ul class=\"ayur-feature-list\">\n";
+            foreach (explode("\n", $cfg['benefits_str']) as $b_line) {
+                $b_clean = trim(ltrim($b_line, "•- "));
+                if (!empty($b_clean)) {
+                    $clean_desc .= "<li>" . esc_html($b_clean) . "</li>\n";
+                }
+            }
+            $clean_desc .= "</ul>\n</div>\n\n" .
+                "<div class=\"ayur-desc-section\">\n" .
+                "<h4>WHAT'S INSIDE</h4>\n" .
+                "<p>" . esc_html($cfg['desc_whats_inside']) . "</p>\n" .
+                "</div>\n\n" .
+                "<div class=\"ayur-desc-section\">\n" .
+                "<h4>HOW TO USE &amp; DOSAGE</h4>\n" .
+                "<p>" . esc_html($cfg['dosage_str']) . " Consistent daily use for 60 to 90 days recommended.</p>\n" .
+                "</div>\n\n" .
+                "<div class=\"ayur-desc-section\">\n" .
+                "<h4>PRODUCT SPECIFICATIONS</h4>\n" .
+                "<p><strong>Net Quantity:</strong> " . esc_html($cfg['net_qty_str']) . "<br>" .
+                "<strong>Form:</strong> " . esc_html($form_desc) . "<br>" .
+                "<strong>Packaging:</strong> " . esc_html($pack_desc) . "<br>" .
+                "<strong>Origin:</strong> India (Jalna, Maharashtra)<br>" .
+                "<strong>Storage:</strong> Store in a cool, dry place away from direct sunlight.</p>\n" .
+                "</div>\n\n" .
+                "<div class=\"ayur-desc-section ayur-important-note\">\n" .
+                "<p><em><strong>IMPORTANT:</strong> Classical Ayurvedic proprietary wellness formulation. Not intended to diagnose, treat, cure, or prevent any disease. Consult your physician prior to use if pregnant, lactating, or undergoing medical supervision.</em></p>\n" .
+                "</div>";
+
+            // 3. Strict Invariant Preservation: Restore prices, SKU, dimensions, and weight
+            $product->set_name($cfg['title']);
+            $product->set_short_description($cfg['short_desc']);
+            $product->set_description($clean_desc);
+            $product->set_regular_price($before['regular_price']);
+            $product->set_sale_price($before['sale_price']);
+            $product->set_price($before['price']);
+            $product->set_sku($before['sku']);
+            $product->set_weight($before['weight']);
+            $product->set_length($before['length']);
+            $product->set_width($before['width']);
+            $product->set_height($before['height']);
+            $product->save();
+
+            // 4. Update Meta: Clean customer-facing ingredient names (no milligrams!)
+            $clean_ingredients_text = implode("\n", $cfg['customer_ingredients']);
+            update_post_meta($prod_id, '_ayur_ingredients', $clean_ingredients_text);
+            update_post_meta($prod_id, '_ayur_composition_data', json_encode($cfg['source_composition']));
+            update_post_meta($prod_id, '_ayur_source_composition', $cfg['source_composition']);
+            update_post_meta($prod_id, '_ayur_benefits', $cfg['benefits_str']);
+            update_post_meta($prod_id, '_ayur_dosage', $cfg['dosage_str']);
+            update_post_meta($prod_id, '_ayur_net_quantity', $cfg['net_qty_str']);
+            update_post_meta($prod_id, '_ayur_certifications', $cfg['cert_str']);
+
+            // 5. Reload Product & Capture AFTER snapshot
+            $updated_product = wc_get_product($prod_id);
+            $after = array(
+                'id'             => $updated_product->get_id(),
+                'name'           => $updated_product->get_name(),
+                'slug'           => $updated_product->get_slug(),
+                'sku'            => $updated_product->get_sku(),
+                'regular_price'  => $updated_product->get_regular_price(),
+                'sale_price'     => $updated_product->get_sale_price(),
+                'price'          => $updated_product->get_price(),
+                'weight'         => $updated_product->get_weight(),
+                'length'         => $updated_product->get_length(),
+                'width'          => $updated_product->get_width(),
+                'height'         => $updated_product->get_height(),
+                'mrp_meta'       => get_post_meta($prod_id, '_ayur_mrp', true),
+                'ingredients'    => get_post_meta($prod_id, '_ayur_ingredients', true),
+                'benefits'       => get_post_meta($prod_id, '_ayur_benefits', true),
+                'dosage'         => get_post_meta($prod_id, '_ayur_dosage', true),
+                'net_qty'        => get_post_meta($prod_id, '_ayur_net_quantity', true),
+                'certifications' => get_post_meta($prod_id, '_ayur_certifications', true),
+            );
+
+            // 6. Invariant Assertions
+            $price_ok = ($before['regular_price'] === $after['regular_price'] && $before['sale_price'] === $after['sale_price'] && $before['price'] === $after['price']);
+            $shiprocket_ok = ($before['weight'] === $after['weight'] && $before['length'] === $after['length'] && $before['width'] === $after['width'] && $before['height'] === $after['height']);
+            $sku_ok = ($before['sku'] === $after['sku']);
+            $id_ok = ($before['id'] === $after['id']);
+
+            $results[$prod_id] = array(
+                'product_id'             => $prod_id,
+                'name'                   => $after['name'],
+                'sku'                    => $after['sku'],
+                'source_ingredient_count'=> count($cfg['source_composition']),
+                'customer_name_count'    => count($cfg['customer_ingredients']),
+                'duplicate_note'         => $cfg['duplicate_note'],
+                'price_before'           => $before['price'],
+                'price_after'            => $after['price'],
+                'regular_price_before'   => $before['regular_price'],
+                'regular_price_after'    => $after['regular_price'],
+                'sale_price_before'      => $before['sale_price'],
+                'sale_price_after'       => $after['sale_price'],
+                'mrp_before'             => $before['mrp_meta'],
+                'mrp_after'              => $after['mrp_meta'],
+                'weight_before'          => $before['weight'],
+                'weight_after'           => $after['weight'],
+                'dimensions_before'      => "{$before['length']}x{$before['width']}x{$before['height']}",
+                'dimensions_after'       => "{$after['length']}x{$after['width']}x{$after['height']}",
+                'price_unchanged'        => $price_ok,
+                'shiprocket_unchanged'   => $shiprocket_ok,
+                'sku_unchanged'          => $sku_ok,
+                'id_unchanged'           => $id_ok,
+                'customer_names'         => $cfg['customer_ingredients'],
+                'source_composition'     => $cfg['source_composition'],
+            );
+        }
+
+        $all_prices_unchanged = true;
+        $all_shiprocket_unchanged = true;
+        foreach ($results as $res) {
+            if (empty($res['price_unchanged'])) $all_prices_unchanged = false;
+            if (empty($res['shiprocket_unchanged'])) $all_shiprocket_unchanged = false;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(array(
+            'success'                 => true,
+            'all_prices_protected'    => $all_prices_unchanged,
+            'all_shiprocket_protected'=> $all_shiprocket_unchanged,
+            'timestamp'               => current_time('mysql'),
+            'products'                => $results,
+        ), JSON_PRETTY_PRINT);
+        exit;
     }
 
     public static function upgrade_men_power_product() {

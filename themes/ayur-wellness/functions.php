@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_THEME_VERSION', '3.4.4');
+define('AYUR_THEME_VERSION', '3.4.5');
 
 /**
  * Theme Setup
@@ -620,7 +620,7 @@ function ayur_get_product_extended_data($product_id) {
             'has_men_power_composition' => true,
             'positioning' => 'Daily Herbal Wellness Formula for Men',
             'benefits' => array(
-                'Formulated with classical Rasayana botanicals including Ashwagandha, Safed Musli, and Purified Shilajit',
+                'Formulated with 20 classical Rasayana botanicals including Ashwagandha, Safed Musli, Purified Shilajit, Kaunch Beej, and Maca Root',
                 'Supports daily vitality, natural energy reserves, and an active lifestyle',
                 'Includes Kaunch Beej, Gokhru, and Vidarikand to promote physical stamina and endurance',
                 '100% vegetarian plant cellulose capsules with zero synthetic stimulants or artificial binders'
@@ -651,34 +651,9 @@ function ayur_get_product_extended_data($product_id) {
                     'latin' => 'Asphaltum punjabianum',
                     'role'  => 'Classical mineral pitch rich in natural fulvic acid and trace minerals to sustain cellular energy.'
                 ),
-                array(
-                    'name'  => 'Garlic',
-                    'latin' => 'Allium sativum',
-                    'role'  => 'Traditional culinary herb valued in Ayurveda for supporting healthy micro-circulation and metabolism.'
-                ),
-                array(
-                    'name'  => 'Jaiphal',
-                    'latin' => 'Myristica fragrans',
-                    'role'  => 'Aromatic classical spice supporting nervous relaxation, digestive comfort, and vital balance.'
-                ),
-                array(
-                    'name'  => 'Vidarikand',
-                    'latin' => 'Pueraria tuberosa',
-                    'role'  => 'Classical rejuvenating tuber traditionally prized for physical strength, nourishment, and natural recovery.'
-                ),
-                array(
-                    'name'  => 'Maca Root',
-                    'latin' => 'Lepidium meyenii',
-                    'role'  => 'Nutrient-rich adaptogenic root renowned for supporting sustained vitality and energy reserves.'
-                ),
-                array(
-                    'name'  => 'Kali Mirch',
-                    'latin' => 'Piper nigrum',
-                    'role'  => 'Bioavailability enhancer (Trikatu component) that supports digestive absorption of complementary herbs.'
-                ),
             ),
             'formulation_story' => array(
-                'intro'       => 'Crafted in accordance with classical Ayurvedic principles, Men Power Capsule combines 10 verified botanicals into a unified herbal wellness formula for modern men.',
+                'intro'       => 'Crafted in accordance with classical Ayurvedic principles, Men Power Capsule combines 20 verified botanicals into a unified herbal wellness formula for modern men.',
                 'traditional' => 'Classical Ayurvedic philosophy pairs foundational Rasayanas like Ashwagandha and Shudh Shilajeet with nourishing seeds and warming spices to maintain balanced vigor and endurance.',
                 'why'         => '100% vegetarian plant cellulose capsules with zero synthetic fillers, zero artificial stimulants, and zero heavy metals. Designed for daily holistic nourishment.'
             ),
@@ -690,7 +665,7 @@ function ayur_get_product_extended_data($product_id) {
             'specs' => array(
                 'Form'              => 'Vegetarian Capsules (100% HPMC Plant Cellulose)',
                 'Net Quantity'      => $net_qty ? $net_qty : '30 Vegetarian Capsules (800 mg)',
-                'Key Botanicals'    => 'Ashwagandha, Safed Musli, Gokhru, Kaunch Beej, Shudh Shilajeet, Garlic, Jaiphal, Vidarikand, Maca Root, Kali Mirch',
+                'Key Botanicals'    => 'Ashwagandha, Safed Musli, Gokhru, Kaunch Beej, Shudh Shilajeet, Garlic, Jaiphal, Vidarikand, Maca Root, Kali Mirch, Kuchala, Saunth, Elaichi, Mastic Gum, Kala Jeera, Salav Mishri, Dalchini, Singhada, Harmal, Wang Bhasam',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'Sealed amber bottle with moisture-proof barrier',
@@ -703,12 +678,13 @@ function ayur_get_product_extended_data($product_id) {
 
         // Product 31: Slim Care Weight Management Juice
         31 => array(
-            'positioning' => 'Classical botanical metabolic elixir blending Garcinia Cambogia, Triphala, and Guggal formulated to awaken digestive fire (Agni) and support natural weight balance.',
+            'has_slim_care_composition' => true,
+            'positioning' => 'Authentic Ayurvedic metabolic wellness elixir blending 16 verified herbs and botanical extracts formulated to support digestive Agni and natural balance.',
             'benefits' => array(
-                'Vrikshamla (Garcinia Cambogia) provides natural Hydroxycitric Acid (HCA) to support healthy lipid metabolism',
-                'Classical Triphala promotes natural digestive cleansing and healthy morning bowel regularity',
-                'Shuddha Guggulu supports optimal metabolic rate and cellular toxin clearance',
-                'Pure Aloe Vera inner-leaf juice soothes the gut lining without synthetic stimulants'
+                'Formulated with 16 verified herbs and extracts including Garcinia Cambogia, Triphala (Aawala, Baheda, Harad), and Guggul',
+                'Supports healthy digestive fire (Deepana-Pachana) and natural metabolic rhythm',
+                'Infused with Moringa, Ginger, Cumin, Giloy, and Green Tea for daily antioxidant nourishment',
+                'Zero added sugar, no artificial flavours, and zero synthetic stimulants'
             ),
             'botanicals' => array(
                 array(
@@ -717,24 +693,24 @@ function ayur_get_product_extended_data($product_id) {
                     'role'  => 'Traditional Ayurvedic fruit rich in natural Hydroxycitric Acid (HCA) that assists in natural satiety and lipid metabolism.'
                 ),
                 array(
-                    'name'  => 'Classical Triphala',
+                    'name'  => 'Classical Triphala (Aawala, Baheda, Harad)',
                     'latin' => 'Emblica officinalis, Terminalia bellirica, Terminalia chebula',
-                    'role'  => 'Three foundational rejuvenating fruits (Amalaki, Bibhitaki, Haritaki) for balanced gut motility and gentle elimination.'
+                    'role'  => 'Three foundational rejuvenating fruits for balanced gut motility and gentle elimination.'
                 ),
                 array(
-                    'name'  => 'Shuddha Guggulu Extract',
+                    'name'  => 'Guggul Extract',
                     'latin' => 'Commiphora mukul',
                     'role'  => 'Purified classical gum resin celebrated in Ayurveda for supporting balanced metabolic rate and clearing metabolic waste (Ama).'
                 ),
                 array(
-                    'name'  => 'Pure Aloe Vera Juice',
-                    'latin' => 'Aloe barbadensis (Kumari)',
-                    'role'  => 'Cold-extracted inner-leaf gel that hydrates the digestive mucosal lining and supports optimal nutrient absorption.'
+                    'name'  => 'Moringa & Green Tea',
+                    'latin' => 'Moringa oleifera & Camellia sinensis',
+                    'role'  => 'Nutrient-rich botanical duo providing natural antioxidants and phytonutrients for cellular vigor.'
                 ),
             ),
             'formulation_story' => array(
                 'intro'       => 'Developed on the classical principle of Deepana-Pachana (igniting digestive fire and clearing metabolic residue), Slim Care Juice harmonizes the body\'s natural metabolic balance.',
-                'traditional' => 'Classical Ayurvedic formulations pair astringent and bitter botanicals like Triphala and Guggulu to counterbalance heavy Kapha accumulation while soothing Pitta with cooling Aloe Vera.',
+                'traditional' => 'Classical Ayurvedic formulations pair astringent and bitter botanicals like Triphala and Guggul with warming herbs like Ginger, Cinnamon, and Cumin to maintain balanced metabolic vitality.',
                 'why'         => 'Zero added sugar, zero artificial colors, zero synthetic stimulants. A clean, herbal elixir designed for sustainable everyday wellness.'
             ),
             'usage_steps' => array(
@@ -745,7 +721,7 @@ function ayur_get_product_extended_data($product_id) {
             'specs' => array(
                 'Form'              => 'Liquid Herbal Extract Juice',
                 'Net Quantity'      => $net_qty ? $net_qty : '500 ml',
-                'Key Botanicals'    => 'Garcinia Cambogia, Triphala, Guggulu, Aloe Vera',
+                'Key Botanicals'    => 'Aawala, Baheda, Harad, Guggul, Garcinia Cambogia, Punarnava, Methi, Cinnamon, Moringa, Ginger, Jeera (Cumin), Giloy, Ashwagandha, Garlic, Green Tea',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'BPA-free food-grade bottle with precision measuring cap',
@@ -878,51 +854,52 @@ function ayur_get_product_extended_data($product_id) {
             'important_note' => 'Ayurvedic proprietary formulation. Not intended to diagnose, treat, cure, or prevent any disease. Consult a physician before use if pregnant, lactating, or undergoing medical treatment.'
         ),
 
-        // Product 34: Karela Jamun Blood Sugar Control Capsules
+        // Product 34: Karela Jamun Blood Sugar Control Capsules / Diabetic Control
         34 => array(
-            'positioning' => 'Potent 5-herb botanical synergy with Bitter Gourd, Jamun Seed, and Gymnema (The Sugar Destroyer) to support healthy glucose metabolism and curb sugar snacking.',
+            'has_diabetic_control_composition' => true,
+            'positioning' => 'Synergistic Ayurvedic wellness formulation blending 10 verified botanicals including Gudmaar, Jamun, Methi, and Bitter Guard to support healthy carbohydrate digestion and metabolic balance.',
             'benefits' => array(
-                'Gurmar (Gymnema sylvestre) suppresses sweet taste receptors to reduce sugar cravings',
-                'Jamun seed (Jambu) aids healthy postprandial glucose stability and pancreatic wellness',
-                'Karela provides natural charantin to support cellular glucose uptake',
-                'Fenugreek and Vijayasar support healthy digestive enzyme secretion and steady energy'
+                'Combines 10 verified botanicals including Gudmaar (Gymnema), Jamun, Methi, and Karela',
+                'Supports healthy carbohydrate digestion and everyday metabolic harmony',
+                'Features Costus Igneous, Vijaysaar, Neem, and Tulsi for balanced physiological vitality',
+                '100% vegetarian plant cellulose capsules with zero synthetic fillers or artificial additives'
             ),
             'botanicals' => array(
                 array(
-                    'name'  => 'Karela (Bitter Gourd) Extract',
-                    'latin' => 'Momordica charantia (150 mg)',
-                    'role'  => 'Standardized extract containing charantin and vicine to support natural cellular glucose uptake.'
+                    'name'  => 'Gudmaar Leaf Extract',
+                    'latin' => 'Gymnema sylvestre',
+                    'role'  => 'Classical botanical traditionally valued for supporting natural sweetness perception and carbohydrate balance.'
                 ),
                 array(
                     'name'  => 'Jamun Seed Extract',
-                    'latin' => 'Syzygium cumini (150 mg)',
-                    'role'  => 'Contains natural jamboline glycosides to assist in slowing down the conversion of dietary starch into sugar.'
+                    'latin' => 'Syzygium cumini',
+                    'role'  => 'Revered seed extract traditionally used to assist healthy post-meal metabolic balance.'
                 ),
                 array(
-                    'name'  => 'Gurmar Leaf Extract',
-                    'latin' => 'Gymnema sylvestre (100 mg)',
-                    'role'  => 'The classical \'sugar destroyer\' that blocks sweet receptors on the tongue and supports healthy beta cell function.'
+                    'name'  => 'Bitter Guard / Karela Extract',
+                    'latin' => 'Momordica charantia',
+                    'role'  => 'Time-honored bitter herb celebrated for supporting cellular carbohydrate utilization.'
                 ),
                 array(
-                    'name'  => 'Methi (Fenugreek) & Vijayasar',
-                    'latin' => 'Trigonella foenum-graecum & Pterocarpus marsupium (100 mg)',
-                    'role'  => 'Traditional botanicals rich in soluble galactomannan and flavonoids that support digestive glucose absorption.'
+                    'name'  => 'Costus Igneous & Vijaysaar',
+                    'latin' => 'Costus igneus & Pterocarpus marsupium',
+                    'role'  => 'Traditional botanicals supporting digestive balance and natural metabolic rhythm.'
                 ),
             ),
             'formulation_story' => array(
-                'intro'       => 'Classical Ayurveda categorizes blood sugar imbalances under Madhumeha, recommending bitter (Tikta) and astringent (Kashaya) herbs to pacify Kapha and regulate carbohydrate digestion.',
-                'traditional' => 'Unlike single-herb products, this 5-herb synergy targets both the oral taste receptors, digestive transit, and peripheral tissue cellular utilization.',
-                'why'         => 'Utilizes concentrated botanical extracts rather than unstandardized raw powders, providing reliable consistency in vegetarian plant cellulose capsules.'
+                'intro'       => 'Classical Ayurveda emphasizes bitter (Tikta) and astringent (Kashaya) herbs to balance Kapha and support healthy carbohydrate digestion.',
+                'traditional' => 'Formulated with 10 synergistic classical botanicals including Gudmaar, Periwinkle, Methi, and Jamun to nourish systemic metabolic pathways.',
+                'why'         => '100% vegetarian plant cellulose capsules with zero synthetic fillers, zero preservatives, and standardized purity.'
             ),
             'usage_steps' => array(
                 array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 Capsule per serving.'),
                 array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily, approximately 30 minutes before your morning and evening meals with lukewarm water.'),
-                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent daily intake alongside a balanced glycemic diet recommended.')
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Consistent daily intake alongside a wholesome, balanced diet recommended.')
             ),
             'specs' => array(
                 'Form'              => 'Vegetarian Capsules (100% Plant Cellulose)',
                 'Net Quantity'      => $net_qty ? $net_qty : '60 Capsules (500 mg each)',
-                'Key Botanicals'    => 'Karela, Jamun, Gurmar, Fenugreek, Vijayasar',
+                'Key Botanicals'    => 'Gudmaar, Periwinkle, Methi, Costus Igneous, Jamun, Neem, Tulsi, Vijaysaar, Stevia, Bitter Guard / Karela',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'Sealed amber container with freshness seal',
@@ -933,51 +910,52 @@ function ayur_get_product_extended_data($product_id) {
             'important_note' => 'Dietary Ayurvedic wellness supplement for carbohydrate metabolism. Not intended to diagnose, treat, or replace diabetes medication. Regularly monitor your blood glucose levels when taking alongside conventional medication.'
         ),
 
-        // Product 35: Shallaki Joint Bone Care Capsules
+        // Product 35: Shallaki Joint Bone Care Capsules / Ortho Care
         35 => array(
-            'positioning' => 'Standardized Boswellia Serrata (65% Boswellic Acids) combined with Hadjod and Nirgundi for joint comfort, cartilage lubrication, and morning flexibility.',
+            'has_ortho_care_composition' => true,
+            'positioning' => 'Synergistic classical Ayurvedic formulation blending 13 verified botanicals including Shallaki, Ashwagandha, Hadjod, and Nirgundi for joint comfort and daily mobility.',
             'benefits' => array(
-                'Standardized Boswellia serrata inhibits inflammatory 5-LOX enzymes to soothe joint stiffness',
-                'Hadjod (Cissus quadrangularis) accelerates bone mineral deposition and connective tissue strength',
-                'Nirgundi alleviates joint tenderness and enhances morning range of motion',
-                'Gentle on the stomach lining compared to synthetic joint formulations'
+                'Formulated with 13 verified botanicals including Shallaki, Ashwagandha, Guggul, and Hadjod',
+                'Supports daily joint comfort, connective tissue strength, and morning ease of motion',
+                'Enriched with Nirgundi, Haldi, Methi, and Aloevera for holistic musculoskeletal nourishment',
+                '100% vegetarian plant cellulose capsules with zero synthetic binders or harsh additives'
             ),
             'botanicals' => array(
                 array(
                     'name'  => 'Shallaki Gum Resin Extract',
-                    'latin' => 'Boswellia serrata (65% Boswellic Acids)',
-                    'role'  => 'Standardized resin extract that inhibits the 5-LOX inflammatory pathway, helping preserve cartilage matrix and ease stiffness.'
+                    'latin' => 'Boswellia serrata',
+                    'role'  => 'Classical resin botanical traditionally utilized to soothe joint discomfort and ease morning stiffness.'
                 ),
                 array(
                     'name'  => 'Hadjod Stem Extract',
-                    'latin' => 'Cissus quadrangularis (Asthisamharaka)',
-                    'role'  => 'Ancient bone-setting botanical that supports calcium assimilation and strengthens connective ligaments.'
+                    'latin' => 'Cissus quadrangularis',
+                    'role'  => 'Ancient bone-nourishing botanical celebrated for supporting connective tissue resilience.'
                 ),
                 array(
                     'name'  => 'Nirgundi Leaf Extract',
                     'latin' => 'Vitex negundo',
-                    'role'  => 'Revered anti-inflammatory leaf traditionally used to pacify Vata, relieve muscular tenderness, and support joint mobility.'
+                    'role'  => 'Revered classical herb traditionally used to pacify Vata, relieve muscular fatigue, and support joint mobility.'
                 ),
                 array(
-                    'name'  => 'Shuddha Guggulu',
+                    'name'  => 'Shuddha Guggul',
                     'latin' => 'Commiphora mukul',
-                    'role'  => 'Purified gum resin that clears deep Ama from joint pockets and enhances synovial fluid ease.'
+                    'role'  => 'Purified classical gum resin that helps clear metabolic residue (Ama) and supports fluid ease.'
                 ),
             ),
             'formulation_story' => array(
-                'intro'       => 'Joint discomfort and morning stiffness are classically attributed to Sandhigata Vata, where dryness and Ama accumulate in joint capsules.',
-                'traditional' => 'Classical Ayurvedic formulation balances the penetrating properties of Shallaki with the restorative bone-nourishing properties of Hadjod and Nirgundi.',
-                'why'         => 'Standardized active markers ensure consistent botanical potency without gastrointestinal irritation.'
+                'intro'       => 'Classical Ayurveda approaches musculoskeletal comfort through balancing Vata and nourishing Asthi and Sandhi tissues.',
+                'traditional' => 'Balancing the penetrating qualities of Shallaki and Guggul with the restorative nourishment of Hadjod, Ashwagandha, and Nirgundi ensures comprehensive joint support.',
+                'why'         => '100% vegetarian plant cellulose capsules with zero synthetic fillers and gentle gastrointestinal tolerance.'
             ),
             'usage_steps' => array(
                 array('num' => '01', 'title' => 'Recommended Dose', 'desc' => '1 Capsule per serving.'),
                 array('num' => '02', 'title' => 'When & How to Take', 'desc' => 'Take twice daily after meals with lukewarm water or warm milk.'),
-                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Follow a 60 to 90 day regimen for comprehensive connective tissue and cartilage support.')
+                array('num' => '03', 'title' => 'Recommended Routine', 'desc' => 'Follow a 60 to 90 day regimen for comprehensive connective tissue and mobility support.')
             ),
             'specs' => array(
                 'Form'              => 'Vegetarian Capsules (100% Plant Cellulose)',
                 'Net Quantity'      => $net_qty ? $net_qty : '60 Capsules (500 mg each)',
-                'Key Botanicals'    => 'Shallaki (Boswellia), Hadjod, Nirgundi, Shuddha Guggulu',
+                'Key Botanicals'    => 'Shallaki, Ashwagandha, Guggul, Saunth / Adrak, Haldi, Methi, Aloevera, Hadjod, Drumstick / Sahajan, Nilgiri, Calotropis / Saak / Madar, Nirgundi, Ginger',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'Sealed amber bottle with safety seal',
@@ -988,40 +966,41 @@ function ayur_get_product_extended_data($product_id) {
             'important_note' => 'Ayurvedic wellness formulation for joint and bone support. Not intended to treat severe arthritic conditions or replace orthopedic consultation. Consult your doctor if pregnant or lactating.'
         ),
 
-        // Product 36: Shatavari Ashoka Women Wellness Juice
+        // Product 36: Shatavari Ashoka Women Wellness Juice / Lady Care
         36 => array(
-            'positioning' => 'Nurturing Nari Rasayana with Pure Shatavari Root, Classical Ashoka Bark, Lodhra, and Dashmula for hormonal rhythm, cycle comfort, and radiant vitality.',
+            'has_lady_care_composition' => true,
+            'positioning' => 'Revered classical Nari Rasayana blending 14 authentic Ayurvedic botanicals including Shatavari, Ashoka, Trifala, and Kanchanar Guggulu for hormonal rhythm and feminine vitality.',
             'benefits' => array(
-                'Pure Shatavari root provides natural plant phytoestrogens to nurture female hormonal balance',
-                'Classical Ashoka bark tones uterine muscles and eases monthly cramping and discomfort',
-                'Lodhra supports pelvic tissue resilience and promotes clear, radiant skin',
-                'Dashmula roots soothe pelvic nervous fatigue and restore calm energy reserves'
+                'Formulated with 14 authentic classical herbs including Shatavari, Ashoka, Lodhra, and Trifala',
+                'Nourishes feminine hormonal balance, pelvic tissue vitality, and natural cyclic rhythm',
+                'Enriched with Guduchi, Moringa, Turmeric, Cinnamon, and Punarnava for cellular vitality',
+                'Zero added sugar, no artificial flavours, and zero synthetic hormones'
             ),
             'botanicals' => array(
                 array(
                     'name'  => 'Pure Shatavari Root Extract',
                     'latin' => 'Asparagus racemosus',
-                    'role'  => 'The supreme Ayurvedic female rejuvenator (Nari Rasayana) that nourishes Shukra and Rasa Dhatus for hormonal balance and emotional calm.'
+                    'role'  => 'The supreme Ayurvedic female rejuvenator (Nari Rasayana) that deeply nourishes Rasa Dhatu and supports hormonal harmony.'
                 ),
                 array(
                     'name'  => 'Classical Ashoka Bark Decoction',
                     'latin' => 'Saraca asoca',
-                    'role'  => 'Time-honored uterine tonic celebrated for regulating menstrual flow and alleviating cyclic abdominal discomfort.'
+                    'role'  => 'Time-honored botanical celebrated for supporting uterine tone and soothing cyclic abdominal discomfort.'
                 ),
                 array(
                     'name'  => 'Lodhra Bark Extract',
                     'latin' => 'Symplocos racemosa',
-                    'role'  => 'Astringent Pitta-pacifying botanical that helps tone pelvic tissues and support clear skin complexion.'
+                    'role'  => 'Astringent Pitta-pacifying botanical that supports pelvic tissue resilience and complexion radiance.'
                 ),
                 array(
-                    'name'  => 'Dashmula Ten Roots Synergy',
-                    'latin' => 'Classical Dashmula Group',
-                    'role'  => 'Traditional ten-root formulation that calms lower abdominal Vata, relieves nervous tension, and restores natural energy.'
+                    'name'  => 'Kanchanar Guggulu & Trifala',
+                    'latin' => 'Bauhinia variegata, Commiphora mukul & Three Classical Fruits',
+                    'role'  => 'Classical Ayurvedic synergy for metabolic detoxification and lymphatic balance.'
                 ),
             ),
             'formulation_story' => array(
                 'intro'       => 'A dedicated classical Nari Rasayana created to accompany women through every phase of life, supporting cycle regularity, hormonal harmony, and deep vitality.',
-                'traditional' => 'Ancient classical texts regard Ashoka and Shatavari as an essential botanical pair: Ashoka tones and purifies the reproductive seat, while Shatavari deeply hydrates and restores vital Ojas.',
+                'traditional' => 'Ancient classical texts regard Ashoka and Shatavari as an essential botanical pair: Ashoka tones and purifies, while Shatavari deeply hydrates and restores vital Ojas.',
                 'why'         => 'Crafted from classical decoctions without synthetic hormones, artificial sweeteners, or added sugar.'
             ),
             'usage_steps' => array(
@@ -1032,7 +1011,7 @@ function ayur_get_product_extended_data($product_id) {
             'specs' => array(
                 'Form'              => 'Liquid Herbal Tonic Juice',
                 'Net Quantity'      => $net_qty ? $net_qty : '500 ml',
-                'Key Botanicals'    => 'Shatavari Root, Ashoka Bark, Lodhra, Dashmula',
+                'Key Botanicals'    => 'Shatavari, Ashwagandha, Trifala, Kanchanar Guggulu, Ashoka, Lodhra, Guduchi, Moringa, Cinnamon, Turmeric, Pippali, Varuna, Bilva, Punarnava',
                 'Country of Origin' => 'India (Jalna, Maharashtra)',
                 'Manufacturer'      => 'Bhagyoday Ayurveda, Mantha, Jalna, Maharashtra 431504',
                 'Packaging'         => 'BPA-free food-grade bottle with calibrated dosing cap',
@@ -1521,32 +1500,372 @@ function ayur_get_amrit_juice_composition() {
 }
 
 /**
- * Verified 10-Botanical Composition for Men Power Capsule 800mg (Product ID 30)
- * Source: Official Packaging Composition Label
- * Verified Total: 10 Clearly Visible Ayurvedic Botanicals
- * Quantities preserved in backend data model:
- * 1. Ashwagandha — 50 mg
- * 2. Safed Musli — 50 mg
- * 3. Gokhru — 30 mg
- * 4. Kaunch Beej — 50 mg
- * 5. Shudh Shilajeet — 20 mg
- * 6. Garlic — 20 mg
- * 7. Jaiphal — 20 mg
- * 8. Vidarikand — 20 mg
- * 9. Maca Root — 10 mg
- * 10. Kali Mirch — 10 mg
+ * =========================================================================
+ * AUTHENTIC PRODUCT COMPOSITIONS — 5 AYURVEDIC PRODUCTS
+ * Sourced directly from verified physical product packaging artwork.
+ * Customer-Facing Rule: Display INGREDIENT NAMES ONLY (Zero Milligrams).
+ * Source / Backend Data: Retains exact mg quantities and botanical names.
+ * =========================================================================
+ */
+
+/**
+ * Product 1 — Slim Care Weight Management Juice 500ml (Product ID 31)
+ * Customer-Facing: 15 Unique Ingredient Names (Cinnamon appears twice in source, normalized to 1 visually).
+ */
+function ayur_get_slim_care_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Aawala'),
+        array('num' => '02', 'name' => 'Baheda'),
+        array('num' => '03', 'name' => 'Harad'),
+        array('num' => '04', 'name' => 'Guggul'),
+        array('num' => '05', 'name' => 'Garcinia Cambogia'),
+        array('num' => '06', 'name' => 'Punarnava'),
+        array('num' => '07', 'name' => 'Methi'),
+        array('num' => '08', 'name' => 'Cinnamon'),
+        array('num' => '09', 'name' => 'Moringa'),
+        array('num' => '10', 'name' => 'Ginger'),
+        array('num' => '11', 'name' => 'Jeera (Cumin)'),
+        array('num' => '12', 'name' => 'Giloy'),
+        array('num' => '13', 'name' => 'Ashwagandha'),
+        array('num' => '14', 'name' => 'Garlic'),
+        array('num' => '15', 'name' => 'Green Tea'),
+    );
+}
+
+/**
+ * Product 1 — Slim Care Weight Management Juice Source Data (16 Entries)
+ * Retains exact source quantities and the duplicate Cinnamon entry (#8 400mg & #16 400mg).
+ */
+function ayur_get_slim_care_source_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Aawala', 'qty' => '300mg'),
+        array('num' => '02', 'name' => 'Baheda', 'qty' => '300mg'),
+        array('num' => '03', 'name' => 'Harad', 'qty' => '300mg'),
+        array('num' => '04', 'name' => 'Guggul', 'qty' => '400mg'),
+        array('num' => '05', 'name' => 'Garcinia Cambogia', 'qty' => '200mg'),
+        array('num' => '06', 'name' => 'Punarnava', 'qty' => '300mg'),
+        array('num' => '07', 'name' => 'Methi', 'qty' => '300mg'),
+        array('num' => '08', 'name' => 'Cinnamon', 'qty' => '400mg'),
+        array('num' => '09', 'name' => 'Moringa', 'qty' => '500mg'),
+        array('num' => '10', 'name' => 'Ginger', 'qty' => '300mg'),
+        array('num' => '11', 'name' => 'Jeera (Cumin)', 'qty' => '300mg'),
+        array('num' => '12', 'name' => 'Giloy', 'qty' => '200mg'),
+        array('num' => '13', 'name' => 'Ashwagandha', 'qty' => '200mg'),
+        array('num' => '14', 'name' => 'Garlic', 'qty' => '100mg'),
+        array('num' => '15', 'name' => 'Green Tea', 'qty' => '200mg'),
+        array('num' => '16', 'name' => 'Cinnamon', 'qty' => '400mg', 'is_duplicate_source_entry' => true),
+    );
+}
+
+/**
+ * Product 2 — Lady Care Juice 500ml (Product ID 36)
+ * Customer-Facing: 14 Ingredient Names.
+ */
+function ayur_get_lady_care_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Shatavari'),
+        array('num' => '02', 'name' => 'Ashwagandha'),
+        array('num' => '03', 'name' => 'Trifala'),
+        array('num' => '04', 'name' => 'Kanchanar Guggulu'),
+        array('num' => '05', 'name' => 'Ashoka'),
+        array('num' => '06', 'name' => 'Lodhra'),
+        array('num' => '07', 'name' => 'Guduchi'),
+        array('num' => '08', 'name' => 'Moringa'),
+        array('num' => '09', 'name' => 'Cinnamon'),
+        array('num' => '10', 'name' => 'Turmeric'),
+        array('num' => '11', 'name' => 'Pippali'),
+        array('num' => '12', 'name' => 'Varuna'),
+        array('num' => '13', 'name' => 'Bilva'),
+        array('num' => '14', 'name' => 'Punarnava'),
+    );
+}
+
+/**
+ * Product 2 — Lady Care Juice Source Data (14 Entries with Botanical Names & Quantities)
+ */
+function ayur_get_lady_care_source_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Shatavari', 'botanical' => 'Asparagus racemosus', 'qty' => '200mg'),
+        array('num' => '02', 'name' => 'Ashwagandha', 'botanical' => 'Withania somnifera', 'qty' => '200mg'),
+        array('num' => '03', 'name' => 'Trifala', 'botanical' => 'Terminalia chebula, Terminalia bellirica, Emblica officinalis', 'qty' => '200mg'),
+        array('num' => '04', 'name' => 'Kanchanar Guggulu', 'botanical' => 'Bauhinia variegata, Commiphora mukul', 'qty' => '200mg'),
+        array('num' => '05', 'name' => 'Ashoka', 'botanical' => 'Saraca asoca', 'qty' => '200mg'),
+        array('num' => '06', 'name' => 'Lodhra', 'botanical' => 'Symplocos racemosa', 'qty' => '200mg'),
+        array('num' => '07', 'name' => 'Guduchi', 'botanical' => 'Tinospora cordifolia', 'qty' => '200mg'),
+        array('num' => '08', 'name' => 'Moringa', 'botanical' => 'Moringa oleifera', 'qty' => '200mg'),
+        array('num' => '09', 'name' => 'Cinnamon', 'botanical' => 'Cinnamomum verum', 'qty' => '200mg'),
+        array('num' => '10', 'name' => 'Turmeric', 'botanical' => 'Curcuma longa', 'qty' => '100mg'),
+        array('num' => '11', 'name' => 'Pippali', 'botanical' => 'Piper longum', 'qty' => '100mg'),
+        array('num' => '12', 'name' => 'Varuna', 'botanical' => 'Crataeva nurvala', 'qty' => '100mg'),
+        array('num' => '13', 'name' => 'Bilva', 'botanical' => 'Aegle marmelos', 'qty' => '100mg'),
+        array('num' => '14', 'name' => 'Punarnava', 'botanical' => 'Boerhaavia diffusa', 'qty' => '100mg'),
+    );
+}
+
+/**
+ * Product 3 — Men Power Capsule (Product ID 30)
+ * Customer-Facing: Complete 20-Ingredient Formulation (Names Only).
  */
 function ayur_get_men_power_composition() {
     return array(
-        array('num' => '01', 'name' => 'Ashwagandha', 'qty' => '50 mg'),
-        array('num' => '02', 'name' => 'Safed Musli', 'qty' => '50 mg'),
-        array('num' => '03', 'name' => 'Gokhru', 'qty' => '30 mg'),
-        array('num' => '04', 'name' => 'Kaunch Beej', 'qty' => '50 mg'),
-        array('num' => '05', 'name' => 'Shudh Shilajeet', 'qty' => '20 mg'),
-        array('num' => '06', 'name' => 'Garlic', 'qty' => '20 mg'),
-        array('num' => '07', 'name' => 'Jaiphal', 'qty' => '20 mg'),
-        array('num' => '08', 'name' => 'Vidarikand', 'qty' => '20 mg'),
-        array('num' => '09', 'name' => 'Maca Root', 'qty' => '10 mg'),
-        array('num' => '10', 'name' => 'Kali Mirch', 'qty' => '10 mg'),
+        array('num' => '01', 'name' => 'Ashwagandha'),
+        array('num' => '02', 'name' => 'Safed Musli'),
+        array('num' => '03', 'name' => 'Gokhru'),
+        array('num' => '04', 'name' => 'Kaunch Beej'),
+        array('num' => '05', 'name' => 'Shudh Shilajeet'),
+        array('num' => '06', 'name' => 'Garlic'),
+        array('num' => '07', 'name' => 'Jaiphal'),
+        array('num' => '08', 'name' => 'Vidarikand'),
+        array('num' => '09', 'name' => 'Maca Root'),
+        array('num' => '10', 'name' => 'Kali Mirch'),
+        array('num' => '11', 'name' => 'Kuchala'),
+        array('num' => '12', 'name' => 'Saunth'),
+        array('num' => '13', 'name' => 'Elaichi'),
+        array('num' => '14', 'name' => 'Mastic Gum'),
+        array('num' => '15', 'name' => 'Kala Jeera'),
+        array('num' => '16', 'name' => 'Salav Mishri'),
+        array('num' => '17', 'name' => 'Dalchini'),
+        array('num' => '18', 'name' => 'Singhada'),
+        array('num' => '19', 'name' => 'Harmal'),
+        array('num' => '20', 'name' => 'Wang Bhasam'),
     );
 }
+
+/**
+ * Product 3 — Men Power Capsule Source Data (20 Entries with Quantities)
+ */
+function ayur_get_men_power_source_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Ashwagandha', 'qty' => '50mg'),
+        array('num' => '02', 'name' => 'Safed Musli', 'qty' => '50mg'),
+        array('num' => '03', 'name' => 'Gokhru', 'qty' => '30mg'),
+        array('num' => '04', 'name' => 'Kaunch Beej', 'qty' => '50mg'),
+        array('num' => '05', 'name' => 'Shudh Shilajeet', 'qty' => '20mg'),
+        array('num' => '06', 'name' => 'Garlic', 'qty' => '20mg'),
+        array('num' => '07', 'name' => 'Jaiphal', 'qty' => '30mg'),
+        array('num' => '08', 'name' => 'Vidarikand', 'qty' => '20mg'),
+        array('num' => '09', 'name' => 'Maca Root', 'qty' => '20mg'),
+        array('num' => '10', 'name' => 'Kali Mirch', 'qty' => '5mg'),
+        array('num' => '11', 'name' => 'Kuchala', 'qty' => '20mg'),
+        array('num' => '12', 'name' => 'Saunth', 'qty' => '20mg'),
+        array('num' => '13', 'name' => 'Elaichi', 'qty' => '5mg'),
+        array('num' => '14', 'name' => 'Mastic Gum', 'qty' => '20mg'),
+        array('num' => '15', 'name' => 'Kala Jeera', 'qty' => '20mg'),
+        array('num' => '16', 'name' => 'Salav Mishri', 'qty' => '10mg'),
+        array('num' => '17', 'name' => 'Dalchini', 'qty' => '20mg'),
+        array('num' => '18', 'name' => 'Singhada', 'qty' => '30mg'),
+        array('num' => '19', 'name' => 'Harmal', 'qty' => '10mg'),
+        array('num' => '20', 'name' => 'Wang Bhasam', 'qty' => '10mg'),
+    );
+}
+
+/**
+ * Product 4 — Diabetic Control Capsule / Amrit Formulation (Product ID 34)
+ * Customer-Facing: 10 Ingredient Names.
+ */
+function ayur_get_diabetic_control_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Gudmaar'),
+        array('num' => '02', 'name' => 'Periwinkle'),
+        array('num' => '03', 'name' => 'Methi'),
+        array('num' => '04', 'name' => 'Costus Igneous'),
+        array('num' => '05', 'name' => 'Jamun'),
+        array('num' => '06', 'name' => 'Neem'),
+        array('num' => '07', 'name' => 'Tulsi'),
+        array('num' => '08', 'name' => 'Vijaysaar'),
+        array('num' => '09', 'name' => 'Stevia'),
+        array('num' => '10', 'name' => 'Bitter Guard / Karela'),
+    );
+}
+
+/**
+ * Product 4 — Diabetic Control Capsule Source Data (10 Entries with Botanical Names & Quantities)
+ */
+function ayur_get_diabetic_control_source_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Gudmaar', 'botanical' => 'Gymnema sylvestre', 'qty' => '200mg'),
+        array('num' => '02', 'name' => 'Periwinkle', 'botanical' => 'Catharanthus roseus', 'qty' => '200mg'),
+        array('num' => '03', 'name' => 'Methi', 'botanical' => 'Trigonella foenum-graecum', 'qty' => '200mg'),
+        array('num' => '04', 'name' => 'Costus Igneous', 'botanical' => 'Insulin Plant', 'qty' => '200mg'),
+        array('num' => '05', 'name' => 'Jamun', 'botanical' => 'Syzygium cumini', 'qty' => '200mg'),
+        array('num' => '06', 'name' => 'Neem', 'botanical' => 'Azadirachta indica', 'qty' => '200mg'),
+        array('num' => '07', 'name' => 'Tulsi', 'botanical' => 'Ocimum sanctum', 'qty' => '200mg'),
+        array('num' => '08', 'name' => 'Vijaysaar', 'botanical' => 'Pterocarpus marsupium', 'qty' => '100mg'),
+        array('num' => '09', 'name' => 'Stevia', 'botanical' => 'Stevia rebaudiana', 'qty' => '100mg'),
+        array('num' => '10', 'name' => 'Bitter Guard / Karela', 'botanical' => 'Momordica charantia', 'qty' => '100mg'),
+    );
+}
+
+/**
+ * Product 5 — Ortho Care Capsule 60 Capsules (Product ID 35)
+ * Customer-Facing: 13 Ingredient Names.
+ */
+function ayur_get_ortho_care_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Shallaki'),
+        array('num' => '02', 'name' => 'Ashwagandha'),
+        array('num' => '03', 'name' => 'Guggul'),
+        array('num' => '04', 'name' => 'Saunth / Adrak'),
+        array('num' => '05', 'name' => 'Haldi'),
+        array('num' => '06', 'name' => 'Methi'),
+        array('num' => '07', 'name' => 'Aloevera'),
+        array('num' => '08', 'name' => 'Hadjod'),
+        array('num' => '09', 'name' => 'Drumstick / Sahajan'),
+        array('num' => '10', 'name' => 'Nilgiri'),
+        array('num' => '11', 'name' => 'Calotropis / Saak / Madar'),
+        array('num' => '12', 'name' => 'Nirgundi'),
+        array('num' => '13', 'name' => 'Ginger'),
+    );
+}
+
+/**
+ * Product 5 — Ortho Care Capsule Source Data (13 Entries with Botanical Names & Quantities)
+ */
+function ayur_get_ortho_care_source_composition() {
+    return array(
+        array('num' => '01', 'name' => 'Shallaki', 'botanical' => 'Boswellia serrata', 'qty' => '100mg'),
+        array('num' => '02', 'name' => 'Ashwagandha', 'botanical' => 'Withania somnifera', 'qty' => '100mg'),
+        array('num' => '03', 'name' => 'Guggul', 'botanical' => 'Commiphora mukul', 'qty' => '100mg'),
+        array('num' => '04', 'name' => 'Saunth / Adrak', 'botanical' => 'Zingiber officinale', 'qty' => '100mg'),
+        array('num' => '05', 'name' => 'Haldi', 'botanical' => 'Curcuma longa', 'qty' => '70mg'),
+        array('num' => '06', 'name' => 'Methi', 'botanical' => 'Fenugreek', 'qty' => '100mg'),
+        array('num' => '07', 'name' => 'Aloevera', 'botanical' => 'Aloe barbadensis', 'qty' => '80mg'),
+        array('num' => '08', 'name' => 'Hadjod', 'botanical' => 'Cissus quadrangularis', 'qty' => '100mg'),
+        array('num' => '09', 'name' => 'Drumstick (Sahajan)', 'botanical' => 'Moringa', 'qty' => '70mg'),
+        array('num' => '10', 'name' => 'Nilgiri', 'botanical' => 'Eucalyptus globulus', 'qty' => '50mg'),
+        array('num' => '11', 'name' => 'Calotropis (Saak/Madar)', 'botanical' => 'Calotropis gigantea', 'qty' => '60mg'),
+        array('num' => '12', 'name' => 'Nirgundi', 'botanical' => 'Vitex negundo', 'qty' => '70mg'),
+        array('num' => '13', 'name' => 'Ginger', 'botanical' => 'Zingiber officinale', 'qty' => '80mg'),
+    );
+}
+
+/**
+ * Unified Composition Information Resolver for Single Product Pages
+ * Returns structured metadata and customer-facing ingredient lists for all authorized products.
+ */
+function ayur_get_product_composition_info($product_id) {
+    $product_id = (int)$product_id;
+
+    // 1. Men Power Capsule (ID 30) - 20 Botanicals
+    if ($product_id === 30) {
+        return array(
+            'count_badge'  => '20',
+            'title'        => __('TOTAL 20 POWERFUL HERBS', 'ayur-wellness'),
+            'sub_desc'     => __('A synergistic blend of 20 verified classical Ayurvedic botanicals formulated for daily male vitality.', 'ayur-wellness'),
+            'header_title' => __('COMPOSITION', 'ayur-wellness'),
+            'header_count' => __('20 Powerful Ayurvedic Herbs', 'ayur-wellness'),
+            'header_sub'   => __('Formulated with authentic classical herbs for daily male vitality and endurance.', 'ayur-wellness'),
+            'pills'        => array(
+                __('100% Vegetarian Capsule', 'ayur-wellness'),
+                __('Zero Synthetic Additives', 'ayur-wellness'),
+                __('Standardized Extracts', 'ayur-wellness'),
+                __('AYUSH Licensed Facility', 'ayur-wellness'),
+            ),
+            'ingredients'  => ayur_get_men_power_composition(),
+            'is_collapsible' => false,
+        );
+    }
+
+    // 2. Slim Care Weight Management Juice (ID 31) - 16 Source / 15 Unique Botanicals
+    if ($product_id === 31) {
+        return array(
+            'count_badge'  => '16',
+            'title'        => __('16 POWERFUL HERBS & EXTRACTS', 'ayur-wellness'),
+            'sub_desc'     => __('A synergistic Ayurvedic formulation blending 16 verified herbs and botanical extracts for daily metabolic balance.', 'ayur-wellness'),
+            'header_title' => __('COMPOSITION', 'ayur-wellness'),
+            'header_count' => __('16 Powerful Herbs & Extracts (15 Unique Botanicals)', 'ayur-wellness'),
+            'header_sub'   => __('Formulated with authentic classical herbs and extracts in accordance with traditional Ayurvedic preparation.', 'ayur-wellness'),
+            'pills'        => array(
+                __('100% Natural Ingredients', 'ayur-wellness'),
+                __('Standardized Extracts', 'ayur-wellness'),
+                __('GMP & AYUSH Compliant', 'ayur-wellness'),
+                __('Zero Added Sugar', 'ayur-wellness'),
+            ),
+            'ingredients'  => ayur_get_slim_care_composition(),
+            'is_collapsible' => false,
+        );
+    }
+
+    // 3. Amrit Heart Health Immunity Juice (ID 33) - 60 Botanicals
+    if ($product_id === 33) {
+        return array(
+            'count_badge'  => '60',
+            'title'        => __('HERBS &bull; FRUITS &bull; EXTRACTS', 'ayur-wellness'),
+            'sub_desc'     => __('Each 10ml contains a carefully specified blend of botanical ingredients.', 'ayur-wellness'),
+            'header_title' => __('COMPOSITION', 'ayur-wellness'),
+            'header_count' => __('60 Herbs, Fruits & Extracts', 'ayur-wellness'),
+            'header_sub'   => __('Each 10ml contains a carefully specified blend of botanical ingredients.', 'ayur-wellness'),
+            'pills'        => array(
+                __('No Added Sugar', 'ayur-wellness'),
+                __('No Artificial Colour', 'ayur-wellness'),
+                __('No Artificial Flavour', 'ayur-wellness'),
+                __('100% Natural Ingredients', 'ayur-wellness'),
+            ),
+            'ingredients'  => ayur_get_amrit_juice_composition(),
+            'is_collapsible' => true,
+        );
+    }
+
+    // 4. Diabetic Control / Amrit Formulation Capsule (ID 34) - 10 Botanicals
+    if ($product_id === 34) {
+        return array(
+            'count_badge'  => '10',
+            'title'        => __('10 POWERFUL HERBS', 'ayur-wellness'),
+            'sub_desc'     => __('A synergistic Ayurvedic formulation blending 10 verified botanicals to support healthy carbohydrate digestion and metabolic harmony.', 'ayur-wellness'),
+            'header_title' => __('COMPOSITION', 'ayur-wellness'),
+            'header_count' => __('10 Powerful Ayurvedic Herbs', 'ayur-wellness'),
+            'header_sub'   => __('Authentic classical herbs formulated to support balanced metabolism and daily vitality.', 'ayur-wellness'),
+            'pills'        => array(
+                __('100% Vegetarian Capsule', 'ayur-wellness'),
+                __('Zero Synthetic Fillers', 'ayur-wellness'),
+                __('Standardized Extracts', 'ayur-wellness'),
+                __('GMP & AYUSH Compliant', 'ayur-wellness'),
+            ),
+            'ingredients'  => ayur_get_diabetic_control_composition(),
+            'is_collapsible' => false,
+        );
+    }
+
+    // 5. Ortho Care Capsule (ID 35) - 13 Botanicals
+    if ($product_id === 35) {
+        return array(
+            'count_badge'  => '13',
+            'title'        => __('TOTAL 13 POWERFUL HERBS', 'ayur-wellness'),
+            'sub_desc'     => __('A time-honored synergy of 13 classical Ayurvedic botanicals formulated for daily joint comfort and mobility.', 'ayur-wellness'),
+            'header_title' => __('COMPOSITION', 'ayur-wellness'),
+            'header_count' => __('13 Powerful Ayurvedic Herbs', 'ayur-wellness'),
+            'header_sub'   => __('Formulated with classical herbs and standardized extracts for daily joint comfort and flexible mobility.', 'ayur-wellness'),
+            'pills'        => array(
+                __('100% Vegetarian Capsule', 'ayur-wellness'),
+                __('Zero Synthetic Additives', 'ayur-wellness'),
+                __('Standardized Extracts', 'ayur-wellness'),
+                __('AYUSH Licensed Facility', 'ayur-wellness'),
+            ),
+            'ingredients'  => ayur_get_ortho_care_composition(),
+            'is_collapsible' => false,
+        );
+    }
+
+    // 6. Lady Care Juice (ID 36) - 14 Botanicals
+    if ($product_id === 36) {
+        return array(
+            'count_badge'  => '14',
+            'title'        => __('TOTAL 14 POWERFUL HERBS', 'ayur-wellness'),
+            'sub_desc'     => __('A classical Nari Rasayana synergy blending 14 authentic Ayurvedic herbs for daily female wellness.', 'ayur-wellness'),
+            'header_title' => __('COMPOSITION', 'ayur-wellness'),
+            'header_count' => __('14 Powerful Ayurvedic Herbs', 'ayur-wellness'),
+            'header_sub'   => __('Authentic classical herbs prepared in accordance with traditional Ayurvedic standards.', 'ayur-wellness'),
+            'pills'        => array(
+                __('100% Natural Ingredients', 'ayur-wellness'),
+                __('Standardized Herbal Extracts', 'ayur-wellness'),
+                __('GMP & AYUSH Compliant', 'ayur-wellness'),
+                __('Zero Synthetic Additives', 'ayur-wellness'),
+            ),
+            'ingredients'  => ayur_get_lady_care_composition(),
+            'is_collapsible' => false,
+        );
+    }
+
+    return false;
+}
+
