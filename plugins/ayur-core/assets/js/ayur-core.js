@@ -319,7 +319,7 @@
                 if ($placeOrderBtn.length) {
                     var fee = codConfig.fee_amount || 100;
                     $placeOrderBtn.attr('data-orig-text', $placeOrderBtn.attr('data-orig-text') || $placeOrderBtn.text().trim());
-                    $placeOrderBtn.text('PAY ₹' + fee + ' & CONFIRM COD ORDER');
+                    $placeOrderBtn.text('Confirm COD Order (Pay ₹' + fee + ')');
                     $placeOrderBtn.addClass('ayur-cod-fee-active');
                 }
             } else {
@@ -353,22 +353,13 @@
             var orderVal = parseInt(subtotalText, 10) + shippingVal;
 
             var boxHtml = '<div class="ayur-cod-fee-breakdown-box" id="ayurCodBreakdownBox">' +
-                '<div class="ayur-cod-fee-header">' +
-                    '<span class="badge-icon">🛡️</span>' +
-                    '<div>' +
-                        '<strong>Cash on Delivery (COD) Confirmation</strong>' +
-                        '<div class="subtext">To confirm dispatch, a non-refundable ₹' + fee + ' confirmation fee is payable online now. The remaining balance is payable on delivery.</div>' +
-                    '</div>' +
-                '</div>' +
+                '<p class="ayur-cod-explanation">Pay the applicable confirmation amount online (₹' + fee + '). Remaining balance is payable on delivery.</p>' +
                 '<div class="ayur-cod-fee-table">' +
-                    '<div class="split-row"><span>Order Value:</span> <strong>₹' + orderVal.toLocaleString('en-IN') + '</strong></div>' +
-                    '<div class="split-row"><span>Delivery:</span> <strong>' + (isFreeShipping ? 'FREE' : '₹70') + '</strong></div>' +
-                    '<div class="split-row highlight"><span>' + (codConfig.fee_label || 'COD Confirmation Fee') + ':</span> <strong>₹' + fee + '</strong></div>' +
-                    '<div class="split-row pay-now-row"><span>Total Payable Now (Online):</span> <strong class="pay-now-val">₹' + fee + '</strong></div>' +
-                    '<div class="split-row pay-cod-row"><span>Remaining Due on Delivery (Cash):</span> <strong class="pay-cod-val">₹' + orderVal.toLocaleString('en-IN') + '</strong></div>' +
-                '</div>' +
-                '<div class="ayur-cod-fee-footer-note">' +
-                    'Pay ₹' + fee + ' now via UPI, Google Pay, PhonePe, Cards or NetBanking. Zero extra hidden charges upon delivery.' +
+                    '<div class="split-row"><span>Order Value</span><strong>₹' + orderVal.toLocaleString('en-IN') + '</strong></div>' +
+                    '<div class="split-row"><span>Shipping</span><strong>' + (isFreeShipping ? 'FREE' : '₹70') + '</strong></div>' +
+                    '<div class="split-row highlight"><span>Confirmation Amount</span><strong>₹' + fee + '</strong></div>' +
+                    '<div class="split-row pay-now-row"><span>Pay Now (Online)</span><strong class="pay-now-val">₹' + fee + '</strong></div>' +
+                    '<div class="split-row pay-cod-row"><span>Remaining on Delivery</span><strong class="pay-cod-val">₹' + orderVal.toLocaleString('en-IN') + '</strong></div>' +
                 '</div>' +
             '</div>';
 

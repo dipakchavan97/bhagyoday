@@ -21,24 +21,8 @@
                 <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
                 <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
                 <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
-                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
-                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
-                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
-                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
             </div>
             <div class="ayur-announcement-item notification-item" aria-hidden="true">
-                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
-                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
-                <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
-                <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
-                <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
                 <span class="ayur-announcement-segment"><?php _e('Free Pan-India Delivery on orders above ₹999', 'ayur-wellness'); ?></span>
                 <span class="ayur-ticker-sep" aria-hidden="true">&bull;</span>
                 <span class="ayur-announcement-segment"><?php _e('Cash on Delivery Available', 'ayur-wellness'); ?></span>
