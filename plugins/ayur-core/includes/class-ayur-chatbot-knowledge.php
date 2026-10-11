@@ -499,7 +499,11 @@ class Ayur_Chatbot_Knowledge {
             'the', 'and', 'for', 'which', 'what', 'who', 'how', 'product', 'products', 'item', 'items',
             'please', 'tell', 'show', 'give', 'about', 'with', 'from', 'have', 'does', 'this', 'that',
             'medicine', 'medicines', 'dawa', 'dawai', 'aushadh', 'kaun', 'kya', 'kise', 'konta', 'konti',
-            'konte', 'wala', 'wali', 'vale', 'sa', 'se', 'hai', 'ahe', 'sanga', 'batao'
+            'konte', 'wala', 'wali', 'vale', 'sa', 'se', 'hai', 'ahe', 'sanga', 'batao',
+            'ask', 'about', 'use', 'usage', 'take', 'taking', 'ingredient', 'ingredients', 'content', 'contents',
+            'details', 'info', 'information', 'how to use', 'directions', 'compare', 'comparison', 'price',
+            'cost', 'rate', 'mrp', 'discount', 'offer', 'delivery', 'shipping', 'cod', 'payment', 'policy',
+            'कसे', 'घ्यावे', 'वापर', 'घटक', 'माहिती', 'किंमत', 'डिलिव्हरी'
         );
         $tokens = preg_split('/[\s,\.\?\!\-\+]+/', $query_clean);
         $tokens = array_filter($tokens, function($t) use ($stopwords) {
@@ -514,14 +518,19 @@ class Ayur_Chatbot_Knowledge {
                 $prod['name'] . ' ' .
                 implode(' ', $prod['aliases']) . ' ' .
                 $prod['category'] . ' ' .
-                implode(' ', $prod['clean_ingredients']) . ' ' .
-                implode(' ', $prod['benefits']) . ' ' .
-                $prod['dosage']
+                implode(' ', $prod['clean_ingredients'])
             );
 
-            // Exact name or alias match
-            if (strpos($text_corpus, $query_clean) !== false) {
-                $score += 30;
+            // Exact name or alias match (only if query is meaningful and not a stopword)
+            if (strlen($query_clean) >= 4 && !in_array($query_clean, $stopwords)) {
+                if (stripos($prod['name'], $query_clean) !== false) {
+                    $score += 35;
+                }
+                foreach ($prod['aliases'] as $alias) {
+                    if (stripos($alias, $query_clean) !== false) {
+                        $score += 30;
+                    }
+                }
             }
 
             // Keyword token matches
@@ -540,10 +549,6 @@ class Ayur_Chatbot_Knowledge {
                     if (stripos($ing, $token) !== false) {
                         $score += 8;
                     }
-                }
-                // General benefit or category match
-                if (strpos($text_corpus, $token) !== false) {
-                    $score += 4;
                 }
             }
 
@@ -630,7 +635,7 @@ class Ayur_Chatbot_Knowledge {
                 }
             }
 
-            if ($score > 0) {
+            if ($score >= 10) {
                 $scores[$sku] = $score;
             }
         }

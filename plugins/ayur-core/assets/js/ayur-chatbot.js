@@ -53,6 +53,10 @@
         // Toggle & close controls
         $launcher.off('click.ayurchat').on('click.ayurchat', toggleChat);
         $('#ayur-chat-close, #ayur-chat-minimize').off('click.ayurchat').on('click.ayurchat', closeChat);
+        $('#ayur-chat-reset').off('click.ayurchat').on('click.ayurchat', function(e) {
+            e.preventDefault();
+            resetConversation();
+        });
 
         // Escape key to close
         $(document).off('keydown.ayurchat').on('keydown.ayurchat', function(e) {
@@ -115,11 +119,40 @@
     }
 
     function initSession() {
-        if ($messages.children().length === 0) {
-            appendBotMessage(params.welcome_message, [], false);
+        var restored = restoreSession();
+        if (restored) {
             renderQuickChips(params.prompt_chips);
+        } else if ($window.hasClass('ayur-chat-open')) {
+            ensureWelcomeMessage();
         }
     }
+
+    /**
+     * Ensure Welcome Message
+     * Injects exactly ONE welcome message when a new conversation starts.
+     * Will NOT re-inject on minimize/reopen, AJAX updates, or DOM re-renders.
+     */
+    function ensureWelcomeMessage() {
+        if ($messages.children('.ayur-chat-msg').length === 0) {
+            appendBotMessage(params.welcome_message, [], false);
+            renderQuickChips(params.prompt_chips);
+            saveSession();
+        }
+    }
+
+    /**
+     * Reset / Start Fresh Conversation
+     */
+    function resetConversation() {
+        $messages.empty();
+        $error.hide();
+        $typing.hide();
+        clearSession();
+        ensureWelcomeMessage();
+        scrollToBottom();
+        $input.focus();
+    }
+    window.ayurChatReset = resetConversation;
 
     function toggleChat() {
         if (isOpen) {
@@ -134,6 +167,9 @@
         $window.removeAttr('hidden').addClass('ayur-chat-open');
         $launcher.attr('aria-expanded', 'true');
         $launcher.find('.ayur-chat-launcher-badge').hide();
+
+        // Ensure single welcome message on genuine first open
+        ensureWelcomeMessage();
 
         trackEvent('ayur_chat_opened');
         if (typeof window.fbq === 'function') {
@@ -356,6 +392,7 @@
                    '<span class="ayur-chat-msg-time">' + timeStr + '</span>' +
                    '</div>';
         $messages.append(html);
+        saveSession();
     }
 
     /**
@@ -422,16 +459,24 @@
 
                 var btnText = (params.strings && params.strings.view_prod) ? params.strings.view_prod : 'View Product';
 
+                // Responsive 3-Row Layout:
+                // Row 1: Product image on left; product name and pricing on right.
+                // Row 2: Stock status and discount badge, arranged without overlap.
+                // Row 3: Full-width View Product button.
                 html += '<a href="' + escapeAttr(permalink) + '" class="ayur-chat-card" target="_blank" rel="noopener">' +
-                        '  ' + imgHtml +
-                        '  <div class="ayur-chat-card-info">' +
-                        '    <div class="ayur-chat-card-title">' + escapeHtml(name) + '</div>' +
-                        '    <div class="ayur-chat-card-pricing">' +
-                        '      <span class="ayur-chat-card-price">' + escapeHtml(price) + '</span>' +
-                        '      ' + mrpHtml +
-                        '      ' + badgeHtml +
+                        '  <div class="ayur-chat-card-row-top">' +
+                        '    <div class="ayur-chat-card-thumb">' + imgHtml + '</div>' +
+                        '    <div class="ayur-chat-card-info">' +
+                        '      <div class="ayur-chat-card-title">' + escapeHtml(name) + '</div>' +
+                        '      <div class="ayur-chat-card-pricing">' +
+                        '        <span class="ayur-chat-card-price">' + escapeHtml(price) + '</span>' +
+                        '        ' + mrpHtml +
+                        '      </div>' +
                         '    </div>' +
+                        '  </div>' +
+                        '  <div class="ayur-chat-card-row-meta">' +
                         '    ' + stockHtml +
+                        '    ' + badgeHtml +
                         '  </div>' +
                         '  <span class="ayur-chat-card-btn">' + escapeHtml(btnText) + ' <span class="ayur-chat-card-btn-arrow" aria-hidden="true">→</span></span>' +
                         '</a>';
@@ -443,6 +488,7 @@
                 '</div>';
 
         $messages.append(html);
+        saveSession();
         scrollToBottom();
     }
 
@@ -575,6 +621,35 @@
 
     function escapeAttr(text) {
         return ('' + text).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function saveSession() {
+        try {
+            if (window.sessionStorage) {
+                sessionStorage.setItem('ayur_chat_history_v2', $messages.html());
+            }
+        } catch(e) {}
+    }
+
+    function restoreSession() {
+        try {
+            if (window.sessionStorage) {
+                var saved = sessionStorage.getItem('ayur_chat_history_v2');
+                if (saved && saved.trim().length > 0) {
+                    $messages.html(saved);
+                    return true;
+                }
+            }
+        } catch(e) {}
+        return false;
+    }
+
+    function clearSession() {
+        try {
+            if (window.sessionStorage) {
+                sessionStorage.removeItem('ayur_chat_history_v2');
+            }
+        } catch(e) {}
     }
 
 })(jQuery);

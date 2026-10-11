@@ -98,8 +98,13 @@ class Ayur_Chatbot_Config {
     }
 
     public static function get_welcome_message() {
-        $default = "Namaste! 🙏 I am your Bhagyoday Ayurveda Product Expert. Ask me about authentic herbal ingredients, how to use our formulations, order delivery, or get personalized recommendations.";
-        return get_option(self::OPTION_WELCOME_MSG, $default);
+        $clean_welcome = "Welcome to Bhagyoday Ayurveda! 🌿 I’m your Ayur Product Expert. I can help you explore our products, ingredients, usage instructions, pricing and delivery options. What would you like to know?";
+        $stored = get_option(self::OPTION_WELCOME_MSG, '');
+        // If stored is empty or still contains the old "Namaste!" template, use the clean welcome message
+        if (empty($stored) || strpos($stored, 'Namaste!') !== false) {
+            return $clean_welcome;
+        }
+        return $stored;
     }
 
     public static function get_prompt_chips() {
@@ -109,10 +114,8 @@ class Ayur_Chatbot_Config {
         }
         return array(
             'Ask about ingredients',
-            'How to use products',
-            'Compare products',
-            'Delivery & COD policy',
-            'Contact WhatsApp support'
+            'How to use',
+            'Delivery & COD'
         );
     }
 

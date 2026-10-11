@@ -98,7 +98,7 @@ class Ayur_Chatbot_Engine {
 
         // 9. If AI responded successfully, format and return
         if ($ai_response && !empty($ai_response['text'])) {
-            $reply_text = $ai_response['text'];
+            $reply_text = self::strip_leading_greeting($ai_response['text']);
 
             // Deflection check: If user asked about piles/hemorrhoids/bawasir/mulvyadh,
             // ensure the response actually addresses piles and mentions the verified formulation.
@@ -110,7 +110,7 @@ class Ayur_Chatbot_Engine {
         }
 
         if ($ai_response && !empty($ai_response['text'])) {
-            $reply_text = $ai_response['text'];
+            $reply_text = self::strip_leading_greeting($ai_response['text']);
 
             // Prepend safety note if non-refusal warning was detected
             if ($safety && !empty($safety['message'])) {
@@ -258,9 +258,13 @@ class Ayur_Chatbot_Engine {
         $recommended_cards = array();
         $target_product = !empty($matched_products) ? reset($matched_products) : null;
 
+        // Check if query is about piles / bawasir / mulvyadh
+        $is_piles_inquiry = self::contains_any($lower, array('piles', 'pile', 'bavasir', 'bawasir', 'bawaseer', 'hemorrhoid', 'haemorrhoids', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध', 'fissure'));
+
         // 1. Ingredients / Composition Inquiry
         if (self::contains_any($lower, array('ingredient', 'ingredients', 'whats inside', 'what is inside', 'content', 'herb', 'herbs', 'composition', ' घटक', 'साहित्य', 'सामग्री', 'घटक काय'))) {
-            if ($target_product) {
+            $has_product = self::has_product_context($lower, $target_product);
+            if ($has_product && $target_product) {
                 $recommended_cards[] = self::format_card_data($target_product);
                 $names = implode(', ', $target_product['clean_ingredients']);
 
@@ -289,8 +293,9 @@ class Ayur_Chatbot_Engine {
         }
 
         // 2. How to Use / Dosage Inquiry
-        elseif (self::contains_any($lower, array('how to use', 'how should i use', 'dosage', 'how to take', 'directions', 'usage', 'sevan', 'kaise lena', 'kase ghyayche', 'वापर कसा', 'कसे घ्यावे', 'कधी घ्यावे', 'उपयोग', 'कैसे इस्तेमाल', 'इस्तेमाल कैसे', 'इस्तेमाल', 'कसा वापरावा'))) {
-            if ($target_product) {
+        elseif (self::contains_any($lower, array('how to use', 'how should i use', 'dosage', 'how to take', 'directions', 'usage', 'sevan', 'kaise lena', 'kase ghyayche', 'वापर कसा', 'कसे घ्यावे', 'कधी घ्यावे', 'उपयोग', 'कैसे इस्तेमाल', 'इस्तेमाल कैसे', 'इस्तेमाल', 'कसा वापरावा', 'how do i use it'))) {
+            $has_product = self::has_product_context($lower, $target_product);
+            if ($has_product && $target_product) {
                 $recommended_cards[] = self::format_card_data($target_product);
                 if ($lang === 'hi') {
                     $message = "📋 **{$target_product['name']} लेने की विधि (निर्देश):**\n{$target_product['dosage']}\n\n💡 **सावधानी:** {$target_product['precautions']}";
@@ -304,7 +309,25 @@ class Ayur_Chatbot_Engine {
             }
         }
 
-        // 3. Product Comparison Inquiry
+        // 3. Piles / Mulvyadh / Anorectal Care Inquiry (Direct high-priority intent)
+        elseif ($is_piles_inquiry) {
+            $piles_sku = 'AYUR-PILES-60';
+            $piles_prod = isset($all_products[$piles_sku]) ? $all_products[$piles_sku] : ($target_product ? $target_product : null);
+            if ($piles_prod) {
+                $recommended_cards[] = self::format_card_data($piles_prod);
+                if ($lang === 'hi') {
+                    $message = "बवासीर (पाइल्स) व पाचन संबंधी देखभाल के लिए हमारे कैटलॉग में **{$piles_prod['name']}** सूचीबद्ध है। आप यहाँ उत्पाद विवरण देख सकते हैं।\n\n⚠️ **चिकित्सीय सूचना:** यह उत्पाद पाचन स्वास्थ्य और नियमितता के लिए एक सहायक हर्बल पूरक है। यह बवासीर को जड़ से ठीक करने का दावा नहीं करता और न ही चिकित्सीय या शल्य चिकित्सा (सर्जरी) का विकल्प है। यदि अत्यधिक दर्द, सूजन या रक्तस्राव हो तो तुरंत योग्य चिकित्सक से परामर्श लें।";
+                } elseif ($lang === 'mr') {
+                    $message = "मूळव्याध (पाइल्स) व पचन तक्रारींसाठी आमच्या कॅटलॉगमध्ये **{$piles_prod['name']}** सूचीबद्ध आहे. आपण येथे उत्पादनाची माहिती पाहू शकता.\n\n⚠️ **वैद्यकीय सूचना:** हे पचनक्रिया व आरोग्यासाठी एक सहायक आयुर्वेदिक उत्पादन आहे; हे आजार पूर्ण बरा करण्याचा दावा करत नाही आणि डॉक्टरी उपचारांचा पर्याय नाही. तीव्र रक्तस्त्राव किंवा वेदना असल्यास त्वरित डॉक्टरांचा सल्ला घ्या.";
+                } else {
+                    $message = "The Aloe Vera Triphala Piles Care Capsules are listed in our catalog for piles-related wellness. You can review the product details here.\n\n⚠️ **Medical Advisory:** This herbal formulation is a supportive wellness supplement for bowel regularity and digestive comfort. It does not claim to cure piles or replace medical/surgical clinical care. Please consult a qualified physician if experiencing acute bleeding, severe pain, or persistent symptoms.";
+                }
+            } else {
+                $message = "The Aloe Vera Triphala Piles Care Capsules are listed in our catalog for piles-related wellness. You can review the product details here.";
+            }
+        }
+
+        // 4. Product Comparison Inquiry
         elseif (self::contains_any($lower, array('compare', 'difference', 'vs', 'versus', 'तुलना', 'फरक', 'अंतर'))) {
             if (count($matched_products) >= 2) {
                 $p1 = $matched_products[0];
@@ -324,9 +347,10 @@ class Ayur_Chatbot_Engine {
             }
         }
 
-        // 4. Price, Discount & Quantity Offers Inquiry
+        // 5. Price, Discount & Quantity Offers Inquiry
         elseif (self::contains_any($lower, array('price', 'cost', 'mrp', 'rate', 'discount', 'offer', 'offer price', 'किती रुपये', 'किंमत', 'दाम', 'सूट', 'ऑफर'))) {
-            if ($target_product) {
+            $has_product = self::has_product_context($lower, $target_product);
+            if ($has_product && $target_product) {
                 $recommended_cards[] = self::format_card_data($target_product);
                 if ($lang === 'hi') {
                     $message = "💰 **{$target_product['name']} की कीमत व ऑफर्स:**\n• वर्तमान ऑफर मूल्य: **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• पैक का आकार: {$target_product['pack_size']}\n• कॉम्बो बचत: {$target_product['quantity_offers']}\n• स्टॉक स्थिति: " . ($target_product['in_stock'] ? 'उपलब्ध (In Stock)' : 'आउट ऑफ स्टॉक');
@@ -340,7 +364,7 @@ class Ayur_Chatbot_Engine {
             }
         }
 
-        // 5. Shipping & Delivery Policy Inquiry
+        // 6. Shipping & Delivery Policy Inquiry
         elseif (self::contains_any($lower, array('delivery', 'shipping', 'courier', 'charge', 'charges', 'how many days', 'kiti divas', 'डिलिव्हरी', 'शिपिंग', 'पहुंचने में समय'))) {
             $ship = $policies['shipping'];
             if ($lang === 'hi') {
@@ -352,7 +376,7 @@ class Ayur_Chatbot_Engine {
             }
         }
 
-        // 6. Cash on Delivery (COD) & Payment Inquiry
+        // 7. Cash on Delivery (COD) & Payment Inquiry
         elseif (self::contains_any($lower, array('cod', 'cash on delivery', 'payment', 'upi', 'gpay', 'paytm', 'कैश ऑन डिलीवरी', 'सीओडी', 'पैसे कसे द्यावे'))) {
             $pay = $policies['payments'];
             if ($lang === 'hi') {
@@ -364,7 +388,7 @@ class Ayur_Chatbot_Engine {
             }
         }
 
-        // 7. Returns & Refunds Policy Inquiry
+        // 8. Returns & Refunds Policy Inquiry
         elseif (self::contains_any($lower, array('return', 'refund', 'exchange', 'damaged', 'leak', 'वापसी', 'परत', 'पैसे परत'))) {
             $ret = $policies['returns_and_refunds'];
             if ($lang === 'hi') {
@@ -376,7 +400,7 @@ class Ayur_Chatbot_Engine {
             }
         }
 
-        // 8. Contact Support / WhatsApp Helpline Inquiry
+        // 9. Contact Support / WhatsApp Helpline Inquiry
         elseif (self::contains_any($lower, array('support', 'contact', 'whatsapp', 'phone', 'call', 'talk to human', 'customer care', 'कस्टमर केयर', 'व्हाट्सएप', 'फोन', 'संपर्क'))) {
             $care = $policies['customer_care'];
             $wa_url = Ayur_Chatbot_Config::get_whatsapp_url();
@@ -389,43 +413,32 @@ class Ayur_Chatbot_Engine {
             }
         }
 
-        // 9. Specific Product Recommendation by Symptom / Category
-        elseif ($target_product) {
+        // 10. Specific Product Recommendation by Symptom / Category
+        elseif ($target_product && self::has_product_context($lower, $target_product)) {
             $recommended_cards[] = self::format_card_data($target_product);
             $clean_ings = implode(', ', $target_product['clean_ingredients']);
             $benefits   = implode('; ', array_slice($target_product['benefits'], 0, 2));
 
-            // Specialized verified answer for Piles / Anorectal Care (Aloe Vera Triphala Piles Care - AYUR-PILES-60)
-            if ($target_product['sku'] === 'AYUR-PILES-60' || self::contains_any($lower, array('piles', 'pile', 'bavasir', 'bawaseer', 'hemorrhoid', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध'))) {
-                if ($lang === 'hi') {
-                    $message = "🌿 **बवासीर (पाइल्स) व पाचन संबंधी देखभाल के लिए प्रामाणिक उत्पाद:**\n\n**{$target_product['name']}**\n• **वर्तमान मूल्य:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पाद लिंक:** [यहाँ क्लिक करके उत्पाद विवरण देखें]({$target_product['permalink']})\n• **सत्यापित घटक (पैकेजिंग लेबल):** {$clean_ings}\n• **पाचन व राहत सहायता:** कुमारी (एलोवेरा), त्रिफला (आंवला, हरड़, बहेड़ा), नागकेसर, नीम और जिमीकंद का प्राकृतिक संयोजन जो मल त्याग को सुगम बनाने, पाचन तंत्र को ठंडा रखने और गुदा क्षेत्र के ऊतकों को प्राकृतिक राहत प्रदान करने में मदद करता है।\n• **सेवन विधि:** {$target_product['dosage']}\n\n⚠️ **चिकित्सीय सूचना:** यह उत्पाद पाचन स्वास्थ्य और नियमितता के लिए एक सहायक हर्बल पूरक है। यह बवासीर को जड़ से ठीक करने का दावा नहीं करता और न ही चिकित्सीय या शल्य चिकित्सा (सर्जरी) का विकल्प है। यदि अत्यधिक दर्द, सूजन या रक्तस्राव हो तो तुरंत योग्य चिकित्सक से परामर्श लें।";
-                } elseif ($lang === 'mr') {
-                    $message = "🌿 **मूळव्याध (पाइल्स) व पचन तक्रारींसाठी सत्यापित आयुर्वेदिक उत्पाद:**\n\n**{$target_product['name']}**\n• **किंमत:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पादनाची लिंक:** [येथे क्लिक करून उत्पादनाची माहिती पहा]({$target_product['permalink']})\n• **सत्यापित शास्त्रीय घटक (लेबल):** {$clean_ings}\n• **पचन व आराम:** कोरफड (Kumari), त्रिफळा, नागकेशर, कडुलिंब व सुरण (Jimikand) चे शास्त्रीय मिश्रण जे पोट सहज साफ होण्यास मदत करते आणि गुदभागातील जळजळ शांत ठेवण्यास सहाय्य करते.\n• **वापरण्याची पद्धत:** {$target_product['dosage']}\n\n⚠️ **वैद्यकीय सूचना:** हे पचनक्रिया व आरोग्यासाठी एक सहायक आयुर्वेदिक उत्पादन आहे; हे आजार पूर्ण बरा करण्याचा दावा करत नाही आणि डॉक्टरी उपचारांचा पर्याय नाही. तीव्र रक्तस्त्राव किंवा वेदना असल्यास त्वरित डॉक्टरांचा सल्ला घ्या.";
-                } else {
-                    $message = "🌿 **Verified Formulation for Piles & Digestive Anorectal Care:**\n\n**{$target_product['name']}**\n• **Current Price:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **Product Link:** [View Product Details on Storefront]({$target_product['permalink']})\n• **Verified Botanicals (Packaging Label):** {$clean_ings}\n• **Digestive & Anorectal Support:** Classical synergy of Kumari (Aloe Vera), Triphala (Amalaki, Haritaki, Bibhitaki), Nagkesar, Neem, and Jimikand (Suran) formulated to support smooth, effortless bowel evacuation and soothe mucosal tissue discomfort without harsh synthetic laxatives.\n• **Directions for Use:** {$target_product['dosage']}\n\n⚠️ **Medical Advisory:** This herbal formulation is a supportive wellness supplement for bowel regularity and digestive comfort. It does not claim to cure piles or replace medical/surgical clinical care. Please consult a qualified physician if experiencing acute bleeding, severe pain, or persistent symptoms.";
-                }
+            if ($lang === 'hi') {
+                $message = "🌿 आपकी आवश्यकता के लिए हमारे कैटलॉग में सत्यापित उत्पाद:\n\n**{$target_product['name']}**\n• **ऑफर मूल्य:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पाद लिंक:** [यहाँ क्लिक करके विवरण देखें]({$target_product['permalink']})\n• **प्रमुख जड़ी-बूटियां:** {$clean_ings}\n• **मुख्य लाभ:** {$benefits}\n• **सेवन विधि:** {$target_product['dosage']}\n\n💡 **सावधानी:** {$target_product['precautions']}";
+            } elseif ($lang === 'mr') {
+                $message = "🌿 आपल्या गरजेनुसार आमच्या कैटलॉगमधील सत्यापित उत्पादन:\n\n**{$target_product['name']}**\n• **ऑफर किंमत:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पादनाची लिंक:** [येथे क्लिक करून माहिती पहा]({$target_product['permalink']})\n• **प्रमुख वनस्पती:** {$clean_ings}\n• **मुख्य फायदे:** {$benefits}\n• **वापर:** {$target_product['dosage']}\n\n💡 **काळजी:** {$target_product['precautions']}";
             } else {
-                if ($lang === 'hi') {
-                    $message = "🌿 आपकी आवश्यकता के लिए हमारे कैटलॉग में सत्यापित उत्पाद:\n\n**{$target_product['name']}**\n• **ऑफर मूल्य:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पाद लिंक:** [यहाँ क्लिक करके विवरण देखें]({$target_product['permalink']})\n• **प्रमुख जड़ी-बूटियां:** {$clean_ings}\n• **मुख्य लाभ:** {$benefits}\n• **सेवन विधि:** {$target_product['dosage']}\n\n💡 **सावधानी:** {$target_product['precautions']}";
-                } elseif ($lang === 'mr') {
-                    $message = "🌿 आपल्या गरजेनुसार आमच्या कैटलॉगमधील सत्यापित उत्पादन:\n\n**{$target_product['name']}**\n• **ऑफर किंमत:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पादनाची लिंक:** [येथे क्लिक करून माहिती पहा]({$target_product['permalink']})\n• **प्रमुख वनस्पती:** {$clean_ings}\n• **मुख्य फायदे:** {$benefits}\n• **वापर:** {$target_product['dosage']}\n\n💡 **काळजी:** {$target_product['precautions']}";
-                } else {
-                    $message = "🌿 Here is the verified formulation matching your wellness interest:\n\n**{$target_product['name']}**\n• **Current Price:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **Product Link:** [View Product Details on Storefront]({$target_product['permalink']})\n• **Verified Botanicals:** {$clean_ings}\n• **Key Benefits:** {$benefits}\n• **Directions for Use:** {$target_product['dosage']}\n\n💡 **Precautions:** {$target_product['precautions']}";
-                }
+                $message = "🌿 Here is the verified formulation matching your wellness interest:\n\n**{$target_product['name']}**\n• **Current Price:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **Product Link:** [View Product Details on Storefront]({$target_product['permalink']})\n• **Verified Botanicals:** {$clean_ings}\n• **Key Benefits:** {$benefits}\n• **Directions for Use:** {$target_product['dosage']}\n\n💡 **Precautions:** {$target_product['precautions']}";
             }
         }
 
-        // 10. Fallback: Information not verified / General Welcome
+        // 11. Fallback: Information not verified (Concise, no repeated greeting)
         else {
             Ayur_Chatbot_Knowledge::log_unresolved_question($query, 'Fallback: no keyword match');
             $wa_url = Ayur_Chatbot_Config::get_whatsapp_url();
 
             if ($lang === 'hi') {
-                $message = "नमस्ते! 🙏 मैं भाग्योदय आयुर्वेद का उत्पाद सहायक हूँ। आपके इस विशेष प्रश्न के लिए मुझे हमारे कैटलॉग में सत्यापित जानकारी नहीं मिली।\n\nआप हमारे आयुर्वेदिक विशेषज्ञों से सीधे [व्हाट्सएप (+91 8888686858)]({$wa_url}) पर मार्गदर्शन प्राप्त कर सकते हैं।\n\nया आप हमारे उत्पादों (जैसे Men Power, Slim Care Juice, Amrit Heart Juice, Piles Care, Karela Jamun, Ortho Care) के बारे में पूछ सकते हैं।";
+                $message = "आपके इस विशेष प्रश्न के लिए मुझे हमारे कैटलॉग में सत्यापित जानकारी नहीं मिली।\n\nआप हमारे आयुर्वेदिक विशेषज्ञों से सीधे [व्हाट्सएप (+91 8888686858)]({$wa_url}) पर मार्गदर्शन प्राप्त कर सकते हैं, या हमारे किसी उत्पाद (जैसे Men Power, Slim Care Juice, Amrit Heart Juice, Piles Care), डिलीवरी या भुगतान के बारे में पूछ सकते हैं।";
             } elseif ($lang === 'mr') {
-                $message = "नमस्कार! 🙏 मी भाग्योदय आयुर्वेदाचा उत्पादन मार्गदर्शक आहे. या प्रश्नासाठी थेट सत्यापित माहिती उपलब्ध नाही.\n\nतुम्ही आमच्या आयुर्वेदिक तज्ज्ञांशी थेट [व्हॉट्सॲपवर (+91 8888686858)]({$wa_url}) बोलू शकता.\n\nकिंवा आपण आमच्या औषधी उत्पादनांबद्दल (उदा. Men Power, Slim Care, Piles Care, Amrit Juice) विचारू शकता.";
+                $message = "या प्रश्नासाठी आमच्या कॅटलॉगमध्ये थेट सत्यापित माहिती उपलब्ध नाही.\n\nतुम्ही आमच्या आयुर्वेदिक तज्ज्ञांशी थेट [व्हॉट्सॲपवर (+91 8888686858)]({$wa_url}) बोलू शकता, किंवा आमच्या उत्पादनांबद्दल (उदा. Men Power, Slim Care, Piles Care), डिलिव्हरी किंवा पेमेंटबद्दल विचारू शकता.";
             } else {
-                $message = "Namaste! 🙏 I am your Bhagyoday Ayurveda Product Expert. That exact question is not currently verified in our store documentation.\n\nFor personalized advice or special health queries, please [chat with our Ayurvedic consultant on WhatsApp (+91 8888686858)]({$wa_url}).\n\nYou can also ask me about any product's ingredients, how to use them, delivery timelines, or payment options!";
+                $message = "That exact question is not currently verified in our store catalog documentation.\n\nFor personalized advice or special health queries, please [chat with our Ayurvedic consultant on WhatsApp (+91 8888686858)]({$wa_url}). You can also ask me about any product's ingredients, usage instructions, pricing, or delivery options!";
             }
         }
 
@@ -504,14 +517,14 @@ class Ayur_Chatbot_Engine {
     private static function get_generic_text($key, $lang) {
         $texts = array(
             'specify_product_for_ingredients' => array(
-                'en' => "Please mention which product you'd like to inspect (e.g. Slim Care Juice, Men Power Capsules, Amrit Heart Juice, Piles Care, Karela Jamun, or Ortho Care) and I'll share its exact verified botanical composition.",
-                'hi' => "कृपया बताएं कि आप किस उत्पाद के घटकों के बारे में जानना चाहते हैं (जैसे Slim Care, Men Power, Amrit Heart, Piles Care, आदि) और मैं उसकी प्रामाणिक सामग्री बताऊंगा।",
-                'mr' => "कृपया उत्पादन सांगा (उदा. Slim Care Juice, Men Power, Piles Care, इत्यादी) आणि मी त्याचे सर्व आयुर्वेदिक घटक सांगेन."
+                'en' => "Our formulations contain different herbal ingredients depending on the product. Which product would you like to know about?",
+                'hi' => "हमारे प्रत्येक उत्पाद में अलग-अलग आयुर्वेदिक घटक होते हैं। आप किस उत्पाद के घटकों के बारे में जानना चाहते हैं?",
+                'mr' => "आमच्या प्रत्येक उत्पादनात वेगवेगळे आयुर्वेदिक घटक आहेत. आपल्याला कोणत्या उत्पादनाचे घटक जाणून घ्यायचे आहेत?"
             ),
             'specify_product_for_dosage' => array(
-                'en' => "Which formulation would you like directions for? (e.g. Slim Care, Men Power, Shallaki Joint Care, etc.). All our products feature clear label directions.",
-                'hi' => "आप किस उत्पाद के सेवन के तरीके के बारे में जानना चाहते हैं? कृपया उत्पाद का नाम बताएं।",
-                'mr' => "आपल्याला कोणत्या उत्पादनाचा वापर जाणून घ्यायचा आहे? कृपया नाव सांगा."
+                'en' => "Please follow the usage instructions on the product label. If you share the exact product name, I can help you find the listed directions.",
+                'hi' => "कृपया उत्पाद के लेबल पर दिए गए निर्देशों का पालन करें। यदि आप सटीक उत्पाद का नाम बताएंगे, तो मैं उसके सही सेवन के निर्देश बता सकता हूँ।",
+                'mr' => "कृपया उत्पादनाच्या लेबलवरील निर्देशांचे पालन करा. आपण उत्पादनाचे नाव सांगितल्यास मी त्याचे योग्य निर्देश सांगू शकेन."
             ),
             'comparison_hint' => array(
                 'en' => "Please name any two products you wish to compare (for example: Men Power vs Amrit Heart Juice, or Slim Care vs Karela Jamun).",
@@ -519,13 +532,53 @@ class Ayur_Chatbot_Engine {
                 'mr' => "तुलना करण्यासाठी कृपया दोन उत्पादने सांगा (उदा. Slim Care आणि Karela Jamun)."
             ),
             'all_pricing_overview' => array(
-                'en' => "All 7 core Bhagyoday Ayurveda formulations are available at a special offer price of **₹890** (MRP: ₹1,990 / Save 55%). Value 2-product combos are priced at **₹1,690** (Save 58%). Which product's details would you like?",
-                'hi' => "हमारे सभी 7 मुख्य आयुर्वेदिक उत्पाद विशेष ऑफर मूल्य **₹890** (MRP: ₹1,990 / 55% छूट) पर उपलब्ध हैं। कॉम्बो पैक **₹1,690** पर उपलब्ध हैं। आप किस उत्पाद की जानकारी चाहते हैं?",
-                'mr' => "सर्व ७ मुख्य आयुर्वेदिक उत्पादने विशेष ऑफर किमतीत **₹८९०** (MRP: ₹१,९९०) मध्ये उपलब्ध आहेत. कॉम्बो पॅक **₹१,६९०** ला आहेत. आपल्याला कोणत्या उत्पादनाची माहिती हवी आहे?"
+                'en' => "Our core Bhagyoday Ayurveda formulations are available at a special offer price of **₹890** (MRP: ₹1,990 / Save 55%). Value 2-product combos are priced at **₹1,690** (Save 58%). Which product's details would you like?",
+                'hi' => "हमारे मुख्य आयुर्वेदिक उत्पाद विशेष ऑफर मूल्य **₹890** (MRP: ₹1,990 / 55% छूट) पर उपलब्ध हैं। कॉम्बो पैक **₹1,690** पर उपलब्ध हैं। आप किस उत्पाद की जानकारी चाहते हैं?",
+                'mr' => "मुख्य आयुर्वेदिक उत्पादने विशेष ऑफर किमतीत **₹८९०** (MRP: ₹१,९९०) मध्ये उपलब्ध आहेत. कॉम्बो पॅक **₹१,६९०** ला आहेत. आपल्याला कोणत्या उत्पादनाची माहिती हवी आहे?"
             )
         );
 
         return isset($texts[$key][$lang]) ? $texts[$key][$lang] : $texts[$key]['en'];
+    }
+
+    /**
+     * Determines whether user query has specific product/condition context
+     */
+    private static function has_product_context($query, $product) {
+        if (!$product) return false;
+        $q = strtolower($query);
+        $checks = array_merge(
+            array(strtolower($product['name']), strtolower($product['sku'])),
+            array_map('strtolower', $product['aliases'])
+        );
+        foreach ($checks as $item) {
+            if (strlen($item) >= 3 && strpos($q, $item) !== false) {
+                return true;
+            }
+        }
+        $conditions = array('piles', 'pile', 'bavasir', 'bawasir', 'mulvyadh', 'sugar', 'diabetes', 'joint', 'knee', 'ortho', 'shallaki', 'slim', 'weight', 'heart', 'cholesterol', 'arjuna', 'shilajit', 'men power', 'stamina', 'shatavari', 'karela');
+        foreach ($conditions as $cond) {
+            if (strpos($q, $cond) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove greeting prefixes (Namaste, Welcome, etc.) from ongoing conversation turns
+     */
+    public static function strip_leading_greeting($text) {
+        $patterns = array(
+            '/^(?:Namaste|Namaskar|Pranam|Hello|Hi)[\s,!–—\-]+(?:🙏\s*)?(?:Welcome to Bhagyoday Ayurveda[!\.,\s]*)?(?:I(?:’|\')?m your Ayur(?:vedic)? Product Expert[!\.,\s]*)?/iu',
+            '/^(?:नमस्ते|नमस्कार|प्रणाम)[\s,!–—\-]+(?:🙏\s*)?(?:भाग्योदय आयुर्वेद में आपका स्वागत है[!\.,\s]*)?/iu',
+            '/^(?:Welcome to Bhagyoday Ayurveda[!\.,\s]*)/iu',
+        );
+        $cleaned = $text;
+        foreach ($patterns as $pattern) {
+            $cleaned = preg_replace($pattern, '', $cleaned);
+        }
+        return trim($cleaned);
     }
 
     private static function contains_any($haystack, array $needles) {

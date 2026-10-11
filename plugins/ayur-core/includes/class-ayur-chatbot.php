@@ -140,6 +140,11 @@ class Ayur_Chatbot {
                         </div>
                     </div>
                     <div class="ayur-chat-header-actions">
+                        <button type="button" id="ayur-chat-reset" class="ayur-chat-btn-icon" aria-label="<?php esc_attr_e('New conversation', 'ayur-core'); ?>" title="<?php esc_attr_e('New conversation', 'ayur-core'); ?>">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                            </svg>
+                        </button>
                         <button type="button" id="ayur-chat-minimize" class="ayur-chat-btn-icon" aria-label="<?php esc_attr_e('Minimize chat', 'ayur-core'); ?>" title="<?php esc_attr_e('Minimize', 'ayur-core'); ?>">
                             <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         </button>
