@@ -78,6 +78,9 @@ class Ayur_Chatbot_Safety {
             'stop insulin', 'stop my insulin', 'stop taking insulin', 'leave insulin', 'stop injection',
             'stop my medicine', 'stop medicine', 'leave my medicine', 'leave medicine', 'stop allopathy',
             'stop taking my tablets', 'stop tablets', 'replace my insulin', 'replace insulin',
+            'stop prescription', 'stop my prescription', "stop doctor's prescription", 'stop doctor prescription',
+            'stop medication', 'stop my medication', 'stop medications', 'stop taking prescription', 'stop taking medication',
+            'replace prescription', 'replace medication', 'replace my doctor', 'leave prescription',
             'band kar du', 'dawai band', 'goli band', 'aushadh thambva', 'thambvu ka',
             'दवाई बंद', 'दवा बंद', 'गोली बंद', 'दवाईयाँ बंद', 'औषध बंद', 'औषधे थांबवू', 'थांबवू का'
         );

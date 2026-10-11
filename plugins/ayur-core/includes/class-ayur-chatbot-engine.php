@@ -266,7 +266,7 @@ class Ayur_Chatbot_Engine {
         }
 
         // 2. How to Use / Dosage Inquiry
-        elseif (self::contains_any($lower, array('how to use', 'how should i use', 'dosage', 'how to take', 'directions', 'usage', 'sevan', 'kaise lena', 'kase ghyayche', 'वापर कसा', 'कसे घ्यावे', 'कधी घ्यावे', 'उपयोग'))) {
+        elseif (self::contains_any($lower, array('how to use', 'how should i use', 'dosage', 'how to take', 'directions', 'usage', 'sevan', 'kaise lena', 'kase ghyayche', 'वापर कसा', 'कसे घ्यावे', 'कधी घ्यावे', 'उपयोग', 'कैसे इस्तेमाल', 'इस्तेमाल कैसे', 'इस्तेमाल', 'कसा वापरावा'))) {
             if ($target_product) {
                 $recommended_cards[] = self::format_card_data($target_product);
                 if ($lang === 'hi') {
