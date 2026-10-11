@@ -431,6 +431,125 @@ add_action('init', function() {
                 'fallback_products'    => $fallback['products'],
             ));
         }
+
+        // 16. Audit Fastrr Plugin & Checkout Page
+        if ($action === 'audit_fastrr_plugin' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            $plugin_dir = WP_PLUGIN_DIR . '/fastrr-checkout';
+            $main_file = $plugin_dir . '/pickrr-woocommerce-shipping-calculator.php';
+            $files = array();
+            if (is_dir($plugin_dir)) {
+                $dir_iter = new RecursiveDirectoryIterator($plugin_dir, RecursiveDirectoryIterator::SKIP_DOTS);
+                $iter = new RecursiveIteratorIterator($dir_iter);
+                foreach ($iter as $file) {
+                    $files[] = str_replace(WP_PLUGIN_DIR . '/', '', $file->getPathname());
+                }
+            }
+
+            // Get main plugin file header
+            $header_data = array();
+            if (file_exists($main_file)) {
+                $header_data = get_file_data($main_file, array(
+                    'Name'        => 'Plugin Name',
+                    'PluginURI'   => 'Plugin URI',
+                    'Version'     => 'Version',
+                    'Description' => 'Description',
+                    'Author'      => 'Author',
+                ));
+            }
+
+            // Inspect checkout page post content
+            $checkout_page_id = wc_get_page_id('checkout');
+            $checkout_post = get_post($checkout_page_id);
+            $cart_page_id = wc_get_page_id('cart');
+            $cart_post = get_post($cart_page_id);
+
+            // Options matching fastrr or pickrr
+            global $wpdb;
+            $fastrr_options = $wpdb->get_results("SELECT option_name, SUBSTRING(option_value, 1, 100) as preview FROM {$wpdb->options} WHERE option_name LIKE '%fastrr%' OR option_name LIKE '%pickrr%'");
+
+            wp_send_json_success(array(
+                'fastrr_plugin_exists'   => is_dir($plugin_dir),
+                'main_file_exists'       => file_exists($main_file),
+                'header_data'            => $header_data,
+                'files'                  => array_slice($files, 0, 50),
+                'total_files'            => count($files),
+                'fastrr_options'         => $fastrr_options,
+                'checkout_page_id'       => $checkout_page_id,
+                'checkout_post_content'  => $checkout_post ? $checkout_post->post_content : '',
+                'cart_page_id'           => $cart_page_id,
+                'cart_post_content'      => $cart_post ? $cart_post->post_content : '',
+                'active_plugins'         => get_option('active_plugins', array()),
+            ));
+        }
+
+        // 17. Deactivate Fastrr Plugin & Clean Up Fastrr Options
+        if ($action === 'deactivate_fastrr_and_clean_options' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+            $plugin_file = 'fastrr-checkout/pickrr-woocommerce-shipping-calculator.php';
+            $was_active = is_plugin_active($plugin_file);
+
+            if ($was_active) {
+                deactivate_plugins($plugin_file);
+            }
+
+            // Remove fastrr options
+            $deleted_options = array();
+            global $wpdb;
+            $options = $wpdb->get_col("SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%fastrr%' OR option_name LIKE '%pickrr%'");
+            foreach ($options as $opt) {
+                delete_option($opt);
+                $deleted_options[] = $opt;
+            }
+
+            // Clear transients and cache
+            wp_cache_flush();
+
+            wp_send_json_success(array(
+                'was_active'      => $was_active,
+                'is_active_now'   => is_plugin_active($plugin_file),
+                'deleted_options' => $deleted_options,
+                'active_plugins'  => get_option('active_plugins', array()),
+            ));
+        }
+
+        // 18. Restore Native WooCommerce Pages (Checkout & Cart Shortcodes)
+        if ($action === 'restore_native_woocommerce_pages' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            $checkout_page_id = wc_get_page_id('checkout');
+            $cart_page_id = wc_get_page_id('cart');
+
+            $checkout_updated = false;
+            if ($checkout_page_id) {
+                wp_update_post(array(
+                    'ID'           => $checkout_page_id,
+                    'post_content' => '[woocommerce_checkout]',
+                ));
+                $checkout_updated = true;
+            }
+
+            $cart_updated = false;
+            if ($cart_page_id) {
+                wp_update_post(array(
+                    'ID'           => $cart_page_id,
+                    'post_content' => '[woocommerce_cart]',
+                ));
+                $cart_updated = true;
+            }
+
+            // Clear cache
+            wp_cache_flush();
+
+            $updated_checkout = get_post($checkout_page_id);
+            $updated_cart = get_post($cart_page_id);
+
+            wp_send_json_success(array(
+                'checkout_page_id'      => $checkout_page_id,
+                'checkout_updated'      => $checkout_updated,
+                'checkout_post_content' => $updated_checkout ? $updated_checkout->post_content : '',
+                'cart_page_id'          => $cart_page_id,
+                'cart_updated'          => $cart_updated,
+                'cart_post_content'     => $updated_cart ? $updated_cart->post_content : '',
+            ));
+        }
     }
 });
 

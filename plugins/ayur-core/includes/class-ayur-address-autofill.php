@@ -12,19 +12,13 @@ if (!defined('ABSPATH')) {
 class Ayur_Address_Autofill {
 
     public static function init() {
-        // Enqueue Google Places script if key configured
-        add_action('wp_enqueue_scripts', array(__CLASS__, 'enqueue_address_scripts'));
-
-        // AJAX Pincode Lookup
-        add_action('wp_ajax_ayur_lookup_pincode', array(__CLASS__, 'ajax_lookup_pincode'));
-        add_action('wp_ajax_nopriv_ayur_lookup_pincode', array(__CLASS__, 'ajax_lookup_pincode'));
-
-        // Inject standard autocomplete attributes on checkout fields
+        // Enforce Manual Address Entry (Phase 4 requirement)
+        // Only inject standard HTML5 browser autofill attributes on checkout fields
         add_filter('woocommerce_checkout_fields', array(__CLASS__, 'add_browser_autofill_attributes'), 30);
     }
 
     public static function is_enabled() {
-        return get_option('ayur_address_autocomplete_enabled', 'yes') === 'yes';
+        return false;
     }
 
     public static function get_api_key() {

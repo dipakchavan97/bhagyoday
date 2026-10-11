@@ -639,4 +639,107 @@
     color: #9CA3AF;
 }
 
+/* ==========================================================================
+   PHASE 4: NATIVE CHECKOUT & COMPACT HEADER ENHANCEMENTS
+   ========================================================================== */
+.ayur-checkout-compact-header {
+    background: #FAF7F0;
+    border-bottom: 1px solid rgba(23, 59, 47, 0.1);
+    padding: 14px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.ayur-checkout-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ayur-checkout-brand {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.ayur-checkout-brand .ayur-brand-name {
+    font-family: var(--font-heading, "Cormorant Garamond", Georgia, serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: #173B2F;
+    line-height: 1;
+}
+
+.ayur-checkout-brand .ayur-brand-tagline {
+    font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #315C45;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.ayur-secure-checkout-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    background: rgba(49, 92, 69, 0.08);
+    border: 1px solid rgba(49, 92, 69, 0.22);
+    border-radius: 24px;
+    color: #173B2F;
+    font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.ayur-secure-lock-icon {
+    display: inline-flex;
+    color: #315C45;
+}
+
+.ayur-checkout-table-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ayur-checkout-product-img {
+    width: 52px !important;
+    height: 52px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(23, 59, 47, 0.1) !important;
+    background: #FAF7F0 !important;
+    flex-shrink: 0 !important;
+}
+
+.ayur-checkout-table-details {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.ayur-checkout-table-name {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #173B2F !important;
+    line-height: 1.3 !important;
+}
+
+.ayur-checkout-table-qty {
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    color: #5F6762 !important;
+    background: #F3EFE6 !important;
+    padding: 2px 8px !important;
+    border-radius: 12px !important;
+    width: fit-content;
+}
+
+
 

@@ -12,6 +12,26 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<?php
+$is_checkout_active = function_exists('is_checkout') && is_checkout() && !is_wc_endpoint_url('order-received');
+if ($is_checkout_active) :
+?>
+<!-- Compact Logo Header with Subtle Secure-Checkout Indicator (Phase 4) -->
+<header class="ayur-checkout-compact-header">
+    <div class="ayur-container">
+        <div class="ayur-checkout-header-inner">
+            <a href="<?php echo esc_url(home_url('/')); ?>" class="ayur-brand ayur-checkout-brand" aria-label="<?php esc_attr_e('Bhagyoday Ayurveda Home', 'ayur-wellness'); ?>">
+                <span class="ayur-brand-name">Bhagyoday</span>
+                <span class="ayur-brand-tagline">Ayurveda</span>
+            </a>
+            <div class="ayur-secure-checkout-badge">
+                <span class="ayur-secure-lock-icon"><?php echo function_exists('ayur_svg_icon') ? ayur_svg_icon('shield-check', '', 16) : '🔒'; ?></span>
+                <span class="ayur-secure-badge-text"><?php _e('100% SECURE CHECKOUT', 'ayur-wellness'); ?></span>
+            </div>
+        </div>
+    </div>
+</header>
+<?php else : ?>
 <!-- Subtle Announcement Bar / Auto-Scrolling Ticker -->
 <div class="ayur-announcement-bar notification-bar" role="region" aria-label="<?php esc_attr_e('Announcement', 'ayur-wellness'); ?>">
     <div class="ayur-announcement-viewport notification-viewport">
@@ -93,6 +113,7 @@
         </div>
     </div>
 </header>
+<?php endif; ?>
 
 <!-- Mobile Slide-Out Navigation Drawer (Phase 3) -->
 <div class="ayur-mobile-drawer-wrap" id="ayurMobileDrawerWrap" aria-hidden="true">
