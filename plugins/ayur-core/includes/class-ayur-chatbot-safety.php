@@ -74,6 +74,15 @@ class Ayur_Chatbot_Safety {
         }
 
         // 2. Prescription Medication Discontinuation (Stopping insulin, BP meds, etc.)
+        if (preg_match('/\b(stop|leave|discontinue|replace|quit)\b.{0,40}\b(medicine|medication|medicines|medications|insulin|prescription|allopathy|tablet|tablets|pill|pills|doctor)\b/i', $query)) {
+            return array(
+                'triggered' => true,
+                'type'      => 'stop_medication',
+                'message'   => self::get_safety_message('stop_medication', $lang),
+                'refusal'   => true
+            );
+        }
+
         $stop_med_terms = array(
             'stop insulin', 'stop my insulin', 'stop taking insulin', 'leave insulin', 'stop injection',
             'stop my medicine', 'stop medicine', 'leave my medicine', 'leave medicine', 'stop allopathy',
@@ -90,7 +99,7 @@ class Ayur_Chatbot_Safety {
                     'triggered' => true,
                     'type'      => 'stop_medication',
                     'message'   => self::get_safety_message('stop_medication', $lang),
-                    'refusal'   => false
+                    'refusal'   => true
                 );
             }
         }
