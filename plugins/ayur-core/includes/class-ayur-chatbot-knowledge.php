@@ -495,8 +495,16 @@ class Ayur_Chatbot_Knowledge {
     public static function search_relevant_products($query, $limit = 3) {
         $products = self::get_all_products();
         $query_clean = strtolower(trim($query));
+        $stopwords = array(
+            'the', 'and', 'for', 'which', 'what', 'who', 'how', 'product', 'products', 'item', 'items',
+            'please', 'tell', 'show', 'give', 'about', 'with', 'from', 'have', 'does', 'this', 'that',
+            'medicine', 'medicines', 'dawa', 'dawai', 'aushadh', 'kaun', 'kya', 'kise', 'konta', 'konti',
+            'konte', 'wala', 'wali', 'vale', 'sa', 'se', 'hai', 'ahe', 'sanga', 'batao'
+        );
         $tokens = preg_split('/[\s,\.\?\!\-\+]+/', $query_clean);
-        $tokens = array_filter($tokens, function($t) { return strlen($t) >= 3; });
+        $tokens = array_filter($tokens, function($t) use ($stopwords) {
+            return strlen($t) >= 3 && !in_array($t, $stopwords);
+        });
 
         $scores = array();
 
@@ -618,7 +626,7 @@ class Ayur_Chatbot_Knowledge {
 
             foreach ($synonyms as $term => $target_skus) {
                 if (in_array($sku, $target_skus) && strpos($query_clean, $term) !== false) {
-                    $score += 20;
+                    $score += 35;
                 }
             }
 

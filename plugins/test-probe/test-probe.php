@@ -342,14 +342,23 @@ add_action('init', function() {
         if ($action === 'diagnose_chatbot' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
             $knowledge = class_exists('Ayur_Chatbot_Knowledge') ? Ayur_Chatbot_Knowledge::get_knowledge_summary() : null;
             $stats = class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_stats() : null;
+            $client_ip = class_exists('Ayur_Chatbot_Engine') ? Ayur_Chatbot_Engine::get_client_ip() : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
+            $rate_limit_val = class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_rate_limit_per_minute() : 15;
+            $transient_key = 'ayur_chat_rl_' . md5($client_ip);
+            $current_transient = get_transient($transient_key);
+
             wp_send_json_success(array(
-                'chatbot_active' => class_exists('Ayur_Chatbot'),
-                'enabled'        => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::is_enabled() : false,
-                'provider'       => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_provider() : '',
-                'model'          => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_model() : '',
-                'position'       => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_position() : '',
-                'products_count' => $knowledge ? count($knowledge['products']) : 0,
-                'stats'          => $stats,
+                'chatbot_active'    => class_exists('Ayur_Chatbot'),
+                'enabled'           => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::is_enabled() : false,
+                'provider'          => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_provider() : '',
+                'model'             => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_model() : '',
+                'position'          => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_position() : '',
+                'products_count'    => $knowledge ? count($knowledge['products']) : 0,
+                'client_ip'         => $client_ip,
+                'rate_limit_per_min'=> $rate_limit_val,
+                'current_transient' => $current_transient,
+                'api_key_set'       => class_exists('Ayur_Chatbot_Config') ? !empty(Ayur_Chatbot_Config::get_api_key()) : false,
+                'stats'             => $stats,
             ));
         }
 
@@ -357,9 +366,69 @@ add_action('init', function() {
         if ($action === 'reset_chatbot_rate_limit' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
             global $wpdb;
             $deleted = $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_ayur_chat_rl_%' OR option_name LIKE '_transient_timeout_ayur_chat_rl_%'");
+            update_option('ayur_chatbot_rate_limit', 15);
+            update_option('ayur_chatbot_max_input_length', 500);
+            if (function_exists('opcache_reset')) {
+                @opcache_reset();
+            }
             wp_send_json_success(array(
-                'message' => 'Rate limit transients cleared',
+                'message' => 'Rate limit transients cleared and options verified',
                 'deleted' => $deleted,
+                'rate_limit' => get_option('ayur_chatbot_rate_limit'),
+                'max_input_len' => get_option('ayur_chatbot_max_input_length'),
+                'opcache_reset' => function_exists('opcache_reset') ? @opcache_reset() : false,
+            ));
+        }
+
+        if ($action === 'opcache_reset' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            $reset = function_exists('opcache_reset') ? @opcache_reset() : false;
+            $engine_file = WP_PLUGIN_DIR . '/ayur-core/includes/class-ayur-chatbot-engine.php';
+            $file_contents = file_exists($engine_file) ? file_get_contents($engine_file) : '';
+            wp_send_json_success(array(
+                'opcache_reset' => $reset,
+                'engine_mtime'  => file_exists($engine_file) ? date('Y-m-d H:i:s', filemtime($engine_file)) : 0,
+                'has_deflection' => strpos($file_contents, 'is_piles_inquiry') !== false,
+            ));
+        }
+
+        // 15. Test Full Chatbot Simulation
+        if ($action === 'test_full_chatbot_simulation' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            $raw_message = isset($_GET['q']) ? sanitize_text_field($_GET['q']) : 'Which product is for piles?';
+            $lang = Ayur_Chatbot_Safety::detect_language($raw_message);
+            $safety = Ayur_Chatbot_Safety::evaluate_safety($raw_message, $lang);
+            $matched_products = Ayur_Chatbot_Knowledge::search_relevant_products($raw_message, 3);
+            $all_products     = Ayur_Chatbot_Knowledge::get_all_products();
+            $policies         = Ayur_Chatbot_Knowledge::get_store_policies();
+            
+            $api_key = Ayur_Chatbot_Config::get_api_key();
+            $method = new ReflectionMethod('Ayur_Chatbot_Engine', 'call_ai_provider');
+            $method->setAccessible(true);
+            $ai_response = $method->invoke(null, $raw_message, $lang, $matched_products, $policies);
+
+            $contains_method = new ReflectionMethod('Ayur_Chatbot_Engine', 'contains_any');
+            $contains_method->setAccessible(true);
+
+            $is_piles_inquiry = $contains_method->invoke(null, strtolower($raw_message), array('piles', 'pile', 'bawasir', 'bawaseer', 'hemorrhoid', 'haemorrhoids', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध', 'fissure'));
+            $reply_text_original = $ai_response ? $ai_response['text'] : null;
+            $deflection_triggered = false;
+            if ($is_piles_inquiry && !empty($reply_text_original)) {
+                $has_needle = $contains_method->invoke(null, strtolower($reply_text_original), array('piles care', 'triphala', 'ayur-piles', 'aloe vera triphala', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'kumari', 'nagkesar'));
+                if (!$has_needle) {
+                    $deflection_triggered = true;
+                    $ai_response = null;
+                }
+            }
+
+            $fallback = Ayur_Chatbot_Engine::execute_grounded_fallback($raw_message, $lang, $matched_products, $all_products, $policies, $safety);
+
+            wp_send_json_success(array(
+                'raw_message'          => $raw_message,
+                'matched_skus'         => array_keys($matched_products),
+                'ai_response_original' => $reply_text_original,
+                'is_piles_inquiry'     => $is_piles_inquiry,
+                'deflection_triggered' => $deflection_triggered,
+                'fallback_message'     => $fallback['message'],
+                'fallback_products'    => $fallback['products'],
             ));
         }
     }

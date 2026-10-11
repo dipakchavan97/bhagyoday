@@ -88,11 +88,13 @@ class Ayur_Chatbot_Config {
     }
 
     public static function get_rate_limit_per_minute() {
-        return absint(get_option(self::OPTION_RATE_LIMIT, 15));
+        $val = absint(get_option(self::OPTION_RATE_LIMIT, 15));
+        return $val > 0 ? $val : 15;
     }
 
     public static function get_max_input_length() {
-        return absint(get_option(self::OPTION_MAX_INPUT_LENGTH, 500));
+        $val = absint(get_option(self::OPTION_MAX_INPUT_LENGTH, 500));
+        return $val > 0 ? $val : 500;
     }
 
     public static function get_welcome_message() {

@@ -44,7 +44,7 @@ class Ayur_Chatbot_Engine {
             wp_send_json_error(array('message' => 'Please enter a question.'), 400);
         }
 
-        $max_len = Ayur_Chatbot_Config::get_max_input_length();
+        $max_len = max(100, Ayur_Chatbot_Config::get_max_input_length());
         if (mb_strlen($raw_message) > $max_len) {
             $raw_message = mb_substr($raw_message, 0, $max_len);
         }
@@ -97,6 +97,18 @@ class Ayur_Chatbot_Engine {
         }
 
         // 9. If AI responded successfully, format and return
+        if ($ai_response && !empty($ai_response['text'])) {
+            $reply_text = $ai_response['text'];
+
+            // Deflection check: If user asked about piles/hemorrhoids/bawasir/mulvyadh,
+            // ensure the response actually addresses piles and mentions the verified formulation.
+            // If the model produced a generic greeting without mentioning the piles product, fallback to verified branch.
+            $is_piles_inquiry = self::contains_any(strtolower($raw_message), array('piles', 'pile', 'bawasir', 'bawaseer', 'hemorrhoid', 'haemorrhoids', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध', 'fissure'));
+            if ($is_piles_inquiry && !self::contains_any(strtolower($reply_text), array('piles care', 'triphala', 'ayur-piles', 'aloe vera triphala', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'kumari', 'nagkesar'))) {
+                $ai_response = null;
+            }
+        }
+
         if ($ai_response && !empty($ai_response['text'])) {
             $reply_text = $ai_response['text'];
 
@@ -574,7 +586,7 @@ class Ayur_Chatbot_Engine {
         delete_transient($key);
     }
 
-    private static function get_client_ip() {
+    public static function get_client_ip() {
         if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
             return sanitize_text_field($_SERVER['HTTP_CF_CONNECTING_IP']);
         }
