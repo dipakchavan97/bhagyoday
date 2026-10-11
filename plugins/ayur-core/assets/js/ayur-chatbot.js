@@ -365,26 +365,75 @@
         var timeStr = getCurrentTime();
         var formattedText = formatMarkdown(text);
 
-        var html = '<div class="ayur-chat-msg ayur-chat-msg-bot">' +
+        var hasProducts = products && products.length > 0;
+        var html = '<div class="ayur-chat-msg ayur-chat-msg-bot' + (hasProducts ? ' ayur-chat-msg-has-products' : '') + '">' +
                    '<div class="ayur-chat-msg-content">' + formattedText + '</div>';
 
         // Render Interactive Product Cards
-        if (products && products.length > 0) {
+        if (hasProducts) {
             html += '<div class="ayur-chat-product-cards">';
             for (var i = 0; i < products.length; i++) {
                 var p = products[i];
-                html += '<a href="' + escapeAttr(p.permalink) + '" class="ayur-chat-card" target="_blank" rel="noopener">' +
-                        '  <img src="' + escapeAttr(p.image_url) + '" alt="' + escapeAttr(p.name) + '" class="ayur-chat-card-img" loading="lazy" />' +
+                if (!p || !p.name) continue;
+
+                var permalink = p.permalink || '#';
+                var name = p.name || '';
+                var price = p.formatted_price || (p.price ? ('₹' + p.price) : '');
+
+                // Format MRP with strikethrough if present and distinct from selling price
+                var mrpHtml = '';
+                if (p.formatted_mrp && typeof p.formatted_mrp === 'string' && p.formatted_mrp.trim() && p.formatted_mrp.trim() !== price.trim()) {
+                    var mrpText = p.formatted_mrp.trim();
+                    if (!/^MRP/i.test(mrpText)) {
+                        mrpText = 'MRP ' + mrpText;
+                    }
+                    mrpHtml = '<span class="ayur-chat-card-mrp">' + escapeHtml(mrpText) + '</span>';
+                }
+
+                // Format Discount Badge if available (e.g. 55% OFF)
+                var badgeHtml = '';
+                if (p.discount && typeof p.discount === 'string' && p.discount.trim() && p.discount.trim() !== '0%' && p.discount.trim() !== '0% OFF') {
+                    badgeHtml = '<span class="ayur-chat-card-badge">' + escapeHtml(p.discount.trim()) + '</span>';
+                }
+
+                // Format Stock Status
+                var inStock = (p.in_stock === true || p.in_stock === '1' || p.in_stock === 1 || p.in_stock === 'yes' || p.in_stock === undefined);
+                var stockText = inStock ? 
+                    ((params.strings && params.strings.in_stock) ? params.strings.in_stock : 'In Stock') : 
+                    ((params.strings && params.strings.out_of_stock) ? params.strings.out_of_stock : 'Out of Stock');
+                var stockClass = inStock ? 'is-in-stock' : 'is-out-of-stock';
+                var stockHtml = '<div class="ayur-chat-card-stock ' + stockClass + '">' +
+                                '<span class="ayur-chat-stock-dot" aria-hidden="true"></span>' +
+                                '<span class="ayur-chat-stock-text">' + escapeHtml(stockText) + '</span>' +
+                                '</div>';
+
+                // Image or Fallback SVG Icon
+                var imgHtml = '';
+                if (p.image_url && typeof p.image_url === 'string' && p.image_url.trim()) {
+                    imgHtml = '<img src="' + escapeAttr(p.image_url.trim()) + '" alt="' + escapeAttr(name) + '" class="ayur-chat-card-img" loading="lazy" />';
+                } else {
+                    imgHtml = '<div class="ayur-chat-card-img ayur-chat-card-img-placeholder" aria-hidden="true">' +
+                              '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#315C45" stroke-width="1.8">' +
+                              '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>' +
+                              '<path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>' +
+                              '</svg>' +
+                              '</div>';
+                }
+
+                var btnText = (params.strings && params.strings.view_prod) ? params.strings.view_prod : 'View Product';
+
+                html += '<a href="' + escapeAttr(permalink) + '" class="ayur-chat-card" target="_blank" rel="noopener">' +
+                        '  ' + imgHtml +
                         '  <div class="ayur-chat-card-info">' +
-                        '    <div class="ayur-chat-card-title">' + escapeHtml(p.name) + '</div>' +
+                        '    <div class="ayur-chat-card-title">' + escapeHtml(name) + '</div>' +
                         '    <div class="ayur-chat-card-pricing">' +
-                        '      <span class="ayur-chat-card-price">' + escapeHtml(p.formatted_price) + '</span>' +
-                        '      <span class="ayur-chat-card-mrp">' + escapeHtml(p.formatted_mrp) + '</span>' +
-                        '      <span class="ayur-chat-card-badge">' + escapeHtml(p.discount) + '</span>' +
+                        '      <span class="ayur-chat-card-price">' + escapeHtml(price) + '</span>' +
+                        '      ' + mrpHtml +
+                        '      ' + badgeHtml +
                         '    </div>' +
-                        '    <div class="ayur-chat-card-stock">● In Stock</div>' +
+                        '    ' + stockHtml +
                         '  </div>' +
-                        '  <span class="ayur-chat-card-btn">' + params.strings.view_prod + ' →</span>' +
+                        '  <span class="ayur-chat-card-btn">' + escapeHtml(btnText) + ' <span class="ayur-chat-card-btn-arrow" aria-hidden="true">→</span></span>' +
                         '</a>';
             }
             html += '</div>';

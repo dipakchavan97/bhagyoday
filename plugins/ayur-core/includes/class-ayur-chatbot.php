@@ -80,6 +80,8 @@ class Ayur_Chatbot {
                 'error'       => __('Unable to reach assistant. Please retry or contact support.', 'ayur-core'),
                 'retry'       => __('Retry', 'ayur-core'),
                 'view_prod'   => __('View Product', 'ayur-core'),
+                'in_stock'    => __('In Stock', 'ayur-core'),
+                'out_of_stock'=> __('Out of Stock', 'ayur-core'),
                 'chat_wa'     => __('Chat on WhatsApp', 'ayur-core'),
                 'disclaimer'  => __('Product & shopping guide. Not a medical doctor.', 'ayur-core'),
             )
