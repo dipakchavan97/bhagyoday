@@ -2,11 +2,18 @@
  * Bhagyoday Ayurveda — AI Product Expert Chatbot Client
  *
  * Handles widget interaction, accessible keyboard controls, AJAX messaging,
- * dynamic product cards rendering, and privacy-conscious analytics tracking.
+ * dynamic product cards rendering, duplicate submission prevention, rate-limit
+ * countdown timers, and mobile responsive bottom-sheet ergonomics.
  */
 
 (function($) {
     'use strict';
+
+    // Prevent multi-initialization if script is evaluated multiple times
+    if (window.ayurChatInitialized) {
+        return;
+    }
+    window.ayurChatInitialized = true;
 
     if (typeof window.ayurChatParams === 'undefined') {
         return;
@@ -16,12 +23,15 @@
     var $root, $launcher, $window, $messages, $form, $input, $sendBtn, $typing, $error, $errorMsg, $retryBtn, $quickActions;
     var isOpen = false;
     var isSending = false;
+    var isRateLimitedBlocked = false;
+    var rateLimitTimer = null;
     var lastFailedMessage = '';
 
     $(document).ready(function() {
         initElements();
         bindEvents();
         initSession();
+        setupViewportHandling();
     });
 
     function initElements() {
@@ -40,68 +50,71 @@
     }
 
     function bindEvents() {
-        // Toggle chat window
-        $launcher.on('click', toggleChat);
-        $('#ayur-chat-close, #ayur-chat-minimize').on('click', closeChat);
+        // Toggle & close controls
+        $launcher.off('click.ayurchat').on('click.ayurchat', toggleChat);
+        $('#ayur-chat-close, #ayur-chat-minimize').off('click.ayurchat').on('click.ayurchat', closeChat);
 
         // Escape key to close
-        $(document).on('keydown', function(e) {
+        $(document).off('keydown.ayurchat').on('keydown.ayurchat', function(e) {
             if (e.key === 'Escape' && isOpen) {
                 closeChat();
             }
         });
 
-        // Submit message form
-        $form.on('submit', function(e) {
+        // Form submit (Send button click or mobile Go)
+        $form.off('submit.ayurchat').on('submit.ayurchat', function(e) {
             e.preventDefault();
-            var text = $.trim($input.val());
-            if (text.length > 0 && !isSending) {
-                sendMessage(text);
-            }
+            e.stopPropagation();
+            submitUserMessage();
         });
 
         // Enter key to submit (Shift+Enter for newline)
-        $input.on('keydown', function(e) {
+        // Directly calls submitUserMessage without triggering form submit to avoid event duplication
+        $input.off('keydown.ayurchat').on('keydown.ayurchat', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                $form.trigger('submit');
+                e.stopPropagation();
+                submitUserMessage();
             }
         });
 
-        // Auto-resize input
-        $input.on('input', function() {
+        // Auto-resize input height smoothly up to 72px
+        $input.off('input.ayurchat').on('input.ayurchat', function() {
             this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+            this.style.height = Math.min(this.scrollHeight, 72) + 'px';
         });
 
-        // Retry failed message
-        $retryBtn.on('click', function() {
-            if (lastFailedMessage) {
-                $error.hide();
-                sendMessage(lastFailedMessage);
-            }
+        // Retry failed message — retries once without duplicating user bubble
+        $retryBtn.off('click.ayurchat').on('click.ayurchat', function(e) {
+            e.preventDefault();
+            handleRetry();
         });
 
-        // Quick action chip click
-        $root.on('click', '.ayur-chat-chip', function() {
+        // Quick action chip clicks
+        $root.off('click.ayurchat', '.ayur-chat-chip').on('click.ayurchat', '.ayur-chat-chip', function(e) {
+            e.preventDefault();
+            if (isSending || isRateLimitedBlocked) return;
+
             var actionText = $(this).text().trim();
-            if (actionText.indexOf('WhatsApp') !== false || actionText.indexOf('व्हाट्सएप') !== false || actionText.indexOf('व्हॉट्सॲप') !== false) {
+            if (actionText.indexOf('WhatsApp') !== -1 || actionText.indexOf('व्हाट्सएप') !== -1 || actionText.indexOf('व्हॉट्सॲप') !== -1) {
                 trackEvent('ayur_chat_whatsapp_clicked', { source: 'quick_chip' });
                 window.open(params.whatsapp_url, '_blank');
                 return;
             }
-            sendMessage(actionText);
+
+            // Populate and submit directly
+            $input.val(actionText);
+            submitUserMessage();
         });
 
         // Product card click tracking
-        $root.on('click', '.ayur-chat-card', function() {
+        $root.off('click.ayurchat', '.ayur-chat-card').on('click.ayurchat', '.ayur-chat-card', function() {
             var prodName = $(this).find('.ayur-chat-card-title').text();
             trackEvent('ayur_chat_product_clicked', { product_name: prodName });
         });
     }
 
     function initSession() {
-        // Load initial welcome message if messages container is empty
         if ($messages.children().length === 0) {
             appendBotMessage(params.welcome_message, [], false);
             renderQuickChips(params.prompt_chips);
@@ -121,8 +134,7 @@
         $window.removeAttr('hidden').addClass('ayur-chat-open');
         $launcher.attr('aria-expanded', 'true');
         $launcher.find('.ayur-chat-launcher-badge').hide();
-        
-        // Track chat opened
+
         trackEvent('ayur_chat_opened');
         if (typeof window.fbq === 'function') {
             window.fbq('trackCustom', 'AyurChatOpened');
@@ -140,27 +152,67 @@
         $launcher.attr('aria-expanded', 'false');
     }
 
-    function sendMessage(text) {
+    /**
+     * Submit a New User Message
+     * Guarded against:
+     * 1. Already sending
+     * 2. Rate-limit active lockout
+     * 3. Empty text
+     * 4. Double event triggers
+     */
+    function submitUserMessage() {
+        if (isSending || isRateLimitedBlocked) {
+            return;
+        }
+
+        var text = $.trim($input.val());
+        if (text.length === 0) {
+            return;
+        }
+
+        // 1. Immediately reset input field to prevent double submission
+        $input.val('').css('height', 'auto');
+
+        // 2. Append user bubble ONCE for new submissions
+        appendUserMessage(text);
+        lastFailedMessage = text;
+        scrollToBottom();
+
+        // 3. Track question submitted
+        trackEvent('ayur_chat_question_submitted', { query_length: text.length });
+
+        // 4. Dispatch API request
+        dispatchMessageRequest(text, false);
+    }
+
+    /**
+     * Handle Retry
+     * Retries the failed question ONCE without duplicating the user-message bubble
+     */
+    function handleRetry() {
+        if (isSending || isRateLimitedBlocked || !lastFailedMessage) {
+            return;
+        }
+
+        $error.hide();
+        // Dispatch API request with isRetry = true (no duplicate bubble created)
+        dispatchMessageRequest(lastFailedMessage, true);
+    }
+
+    /**
+     * Core AJAX Dispatcher
+     * @param {string} text - Message content
+     * @param {boolean} isRetry - Whether this is a retry attempt
+     */
+    function dispatchMessageRequest(text, isRetry) {
         if (isSending) return;
 
         isSending = true;
-        lastFailedMessage = text;
-        $input.val('').css('height', 'auto');
-        $sendBtn.prop('disabled', true);
+        setSendingUI(true);
         $error.hide();
-
-        // 1. Append User Message
-        appendUserMessage(text);
-        scrollToBottom();
-
-        // 2. Track question submitted
-        trackEvent('ayur_chat_question_submitted', { query_length: text.length });
-
-        // 3. Show Typing Indicator
         $typing.show();
         scrollToBottom();
 
-        // 4. Send AJAX Request
         $.ajax({
             url: params.ajax_url,
             type: 'POST',
@@ -170,16 +222,19 @@
                 nonce: params.nonce,
                 message: text
             },
-            timeout: 20000,
+            timeout: 25000,
             success: function(res) {
-                $typing.hide();
                 isSending = false;
-                $sendBtn.prop('disabled', false);
+                $typing.hide();
+                setSendingUI(false);
 
                 if (res && res.success && res.data) {
                     var data = res.data;
+                    lastFailedMessage = ''; // Clear failed message on success
+
                     appendBotMessage(data.message, data.products || [], true);
-                    
+
+                    // Render max 3 compact contextual quick action chips
                     if (data.quick_replies && data.quick_replies.length > 0) {
                         renderQuickChips(data.quick_replies);
                     }
@@ -193,44 +248,125 @@
 
                     scrollToBottom();
                 } else {
-                    handleError(res && res.data && res.data.message ? res.data.message : params.strings.error);
+                    var errMsg = (res && res.data && res.data.message) ? res.data.message : params.strings.error;
+                    handleError(errMsg, false, 0);
                 }
             },
             error: function(xhr, status, err) {
-                $typing.hide();
                 isSending = false;
-                $sendBtn.prop('disabled', false);
+                $typing.hide();
+                setSendingUI(false);
 
+                var is429 = (xhr && xhr.status === 429);
+                var retryAfter = 15;
                 var errText = params.strings.error;
-                if (xhr.status === 429) {
-                    errText = 'You are sending questions too fast. Please wait a moment.';
+
+                if (is429) {
+                    try {
+                        if (xhr.responseJSON && xhr.responseJSON.data) {
+                            if (xhr.responseJSON.data.retry_after) {
+                                retryAfter = parseInt(xhr.responseJSON.data.retry_after, 10);
+                            }
+                            if (xhr.responseJSON.data.message) {
+                                errText = xhr.responseJSON.data.message;
+                            }
+                        } else if (xhr.getResponseHeader('Retry-After')) {
+                            retryAfter = parseInt(xhr.getResponseHeader('Retry-After'), 10);
+                            errText = 'You are asking questions quickly. Please wait a moment.';
+                        }
+                    } catch(e) {}
+
+                    if (isNaN(retryAfter) || retryAfter <= 0) {
+                        retryAfter = 15;
+                    }
+                    handleError(errText, true, retryAfter);
+                } else {
+                    if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+                        errText = xhr.responseJSON.data.message;
+                    }
+                    handleError(errText, false, 0);
                 }
-                handleError(errText);
             }
         });
     }
 
-    function handleError(msg) {
+    /**
+     * Set Sending UI State
+     * Disables Send button and toggles loading spinner
+     */
+    function setSendingUI(busy) {
+        if (busy) {
+            $sendBtn.prop('disabled', true).addClass('ayur-chat-loading').attr('aria-busy', 'true');
+        } else {
+            if (!isRateLimitedBlocked) {
+                $sendBtn.prop('disabled', false).removeClass('ayur-chat-loading').attr('aria-busy', 'false');
+            }
+        }
+    }
+
+    /**
+     * Handle Errors & 429 Rate-Limit Countdown
+     */
+    function handleError(msg, is429, retryAfterSeconds) {
         $errorMsg.text(msg);
         $error.show();
+
+        if (rateLimitTimer) {
+            clearInterval(rateLimitTimer);
+            rateLimitTimer = null;
+        }
+
+        if (is429 && retryAfterSeconds > 0) {
+            isRateLimitedBlocked = true;
+            $sendBtn.prop('disabled', true);
+            $retryBtn.prop('disabled', true).addClass('ayur-chat-btn-disabled');
+
+            var remaining = retryAfterSeconds;
+            $retryBtn.text('Wait ' + remaining + 's');
+            $errorMsg.text('Rate limit reached. Please wait ' + remaining + ' seconds before retrying.');
+
+            rateLimitTimer = setInterval(function() {
+                remaining--;
+                if (remaining > 0) {
+                    $retryBtn.text('Wait ' + remaining + 's');
+                    $errorMsg.text('Rate limit reached. Please wait ' + remaining + ' seconds before retrying.');
+                } else {
+                    clearInterval(rateLimitTimer);
+                    rateLimitTimer = null;
+                    isRateLimitedBlocked = false;
+                    $retryBtn.prop('disabled', false).removeClass('ayur-chat-btn-disabled').text(params.strings.retry || 'Retry');
+                    $sendBtn.prop('disabled', false);
+                    $errorMsg.text('You can now send your question or click Retry.');
+                }
+            }, 1000);
+        } else {
+            $retryBtn.prop('disabled', false).removeClass('ayur-chat-btn-disabled').text(params.strings.retry || 'Retry');
+        }
+
         scrollToBottom();
     }
 
+    /**
+     * Append User Message Bubble (Used strictly once per new message)
+     */
     function appendUserMessage(text) {
         var timeStr = getCurrentTime();
         var html = '<div class="ayur-chat-msg ayur-chat-msg-user">' +
-                   escapeHtml(text) +
+                   '<div class="ayur-chat-msg-content">' + escapeHtml(text) + '</div>' +
                    '<span class="ayur-chat-msg-time">' + timeStr + '</span>' +
                    '</div>';
         $messages.append(html);
     }
 
+    /**
+     * Append Bot Message Bubble
+     */
     function appendBotMessage(text, products, animate) {
         var timeStr = getCurrentTime();
         var formattedText = formatMarkdown(text);
 
         var html = '<div class="ayur-chat-msg ayur-chat-msg-bot">' +
-                   formattedText;
+                   '<div class="ayur-chat-msg-content">' + formattedText + '</div>';
 
         // Render Interactive Product Cards
         if (products && products.length > 0) {
@@ -238,7 +374,7 @@
             for (var i = 0; i < products.length; i++) {
                 var p = products[i];
                 html += '<a href="' + escapeAttr(p.permalink) + '" class="ayur-chat-card" target="_blank" rel="noopener">' +
-                        '  <img src="' + escapeAttr(p.image_url) + '" alt="' + escapeAttr(p.name) + '" class="ayur-chat-card-img" />' +
+                        '  <img src="' + escapeAttr(p.image_url) + '" alt="' + escapeAttr(p.name) + '" class="ayur-chat-card-img" loading="lazy" />' +
                         '  <div class="ayur-chat-card-info">' +
                         '    <div class="ayur-chat-card-title">' + escapeHtml(p.name) + '</div>' +
                         '    <div class="ayur-chat-card-pricing">' +
@@ -261,13 +397,18 @@
         scrollToBottom();
     }
 
+    /**
+     * Render Contextual Quick Chips (Limited to max 3 compact chips)
+     */
     function renderQuickChips(chips) {
         if (!chips || chips.length === 0) return;
         var html = '';
+        var count = 0;
         for (var i = 0; i < chips.length; i++) {
             var chip = chips[i];
-            if (chip && chip.trim().length > 0) {
+            if (chip && chip.trim().length > 0 && count < 3) {
                 html += '<button type="button" class="ayur-chat-chip">' + escapeHtml(chip.trim()) + '</button>';
+                count++;
             }
         }
         $quickActions.html(html);
@@ -275,20 +416,20 @@
 
     function formatMarkdown(str) {
         if (!str) return '';
-        
-        // Escape basic HTML
+
+        // Escape HTML
         var s = str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-        // Bold: **text**
+        // Bold
         s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-        // Italic: *text*
+        // Italic
         s = s.replace(/\*([^\*]+)\*/g, '<em>$1</em>');
 
-        // Markdown Links: [label](url)
+        // Markdown Links
         s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 
-        // Bullet lists
+        // Lists
         var lines = s.split('\n');
         var inList = false;
         var out = [];
@@ -322,7 +463,7 @@
         if ($messages.length) {
             $messages.stop().animate({
                 scrollTop: $messages[0].scrollHeight
-            }, 200);
+            }, 180);
         }
     }
 
@@ -344,6 +485,38 @@
                 event: eventName,
                 chatbot: 'ayur_expert'
             }, payload));
+        }
+    }
+
+    /**
+     * Mobile Visual Viewport & Keyboard Handling
+     * Prevents virtual keyboard from covering the message input
+     */
+    function setupViewportHandling() {
+        if (window.visualViewport && window.matchMedia('(max-width: 768px)').matches) {
+            var onViewportChange = function() {
+                if (!isOpen) return;
+                var vh = window.visualViewport.height;
+                var offsetTop = window.visualViewport.offsetTop;
+                // If keyboard is visible, adapt height and keep footer locked to bottom
+                if (window.innerHeight - vh > 120) {
+                    $window.css({
+                        'height': vh + 'px',
+                        'max-height': vh + 'px',
+                        'bottom': '0px'
+                    });
+                    scrollToBottom();
+                } else {
+                    $window.css({
+                        'height': '',
+                        'max-height': '',
+                        'bottom': ''
+                    });
+                }
+            };
+
+            window.visualViewport.addEventListener('resize', onViewportChange);
+            window.visualViewport.addEventListener('scroll', onViewportChange);
         }
     }
 

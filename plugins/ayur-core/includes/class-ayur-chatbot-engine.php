@@ -49,10 +49,21 @@ class Ayur_Chatbot_Engine {
             $raw_message = mb_substr($raw_message, 0, $max_len);
         }
 
-        // 4. Rate Limiting (IP-based sliding window)
+        // 4. Rate Limiting (IP-based sliding window with Retry-After header)
         $client_ip = self::get_client_ip();
-        if (self::is_rate_limited($client_ip)) {
-            wp_send_json_error(array('message' => 'You are sending messages too quickly. Please wait a moment before asking again.'), 429);
+        $rate_check = self::check_rate_limit($client_ip);
+        if ($rate_check['limited']) {
+            $retry_after = (int)$rate_check['retry_after'];
+            @header('Retry-After: ' . $retry_after);
+            status_header(429);
+            wp_send_json_error(array(
+                'message'     => sprintf(
+                    __('You are asking questions quickly. Please wait %d seconds before your next question.', 'ayur-core'),
+                    $retry_after
+                ),
+                'retry_after' => $retry_after,
+                'code'        => 'rate_limit_exceeded'
+            ), 429);
         }
 
         // 5. Language Detection
@@ -369,15 +380,26 @@ class Ayur_Chatbot_Engine {
         // 9. Specific Product Recommendation by Symptom / Category
         elseif ($target_product) {
             $recommended_cards[] = self::format_card_data($target_product);
-            $clean_ings = implode(', ', array_slice($target_product['clean_ingredients'], 0, 5));
-            $benefits = implode('; ', array_slice($target_product['benefits'], 0, 2));
+            $clean_ings = implode(', ', $target_product['clean_ingredients']);
+            $benefits   = implode('; ', array_slice($target_product['benefits'], 0, 2));
 
-            if ($lang === 'hi') {
-                $message = "🌿 आपकी आवश्यकता के लिए हमारी प्रामाणिक सिफारिश:\n\n**{$target_product['name']}** ({$target_product['formatted_price']})\n• **मुख्य लाभ:** {$benefits}\n• **प्रमुख जड़ी-बूटियां:** {$clean_ings}...\n• **सेवन विधि:** {$target_product['dosage']}\n\nयह उत्पाद प्रामाणिक शास्त्रीय जड़ी-बूटियों से तैयार किया गया है।";
-            } elseif ($lang === 'mr') {
-                $message = "🌿 आपल्या गरजेनुसार आमची प्रामाणिक शिफारस:\n\n**{$target_product['name']}** ({$target_product['formatted_price']})\n• **मुख्य फायदे:** {$benefits}\n• **प्रमुख वनस्पती:** {$clean_ings}...\n• **वापर:** {$target_product['dosage']}\n\nहे १००% शुद्ध आयुर्वेदिक उत्पाद आहे.";
+            // Specialized verified answer for Piles / Anorectal Care (Aloe Vera Triphala Piles Care - AYUR-PILES-60)
+            if ($target_product['sku'] === 'AYUR-PILES-60' || self::contains_any($lower, array('piles', 'pile', 'bavasir', 'bawaseer', 'hemorrhoid', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध'))) {
+                if ($lang === 'hi') {
+                    $message = "🌿 **बवासीर (पाइल्स) व पाचन संबंधी देखभाल के लिए प्रामाणिक उत्पाद:**\n\n**{$target_product['name']}**\n• **वर्तमान मूल्य:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पाद लिंक:** [यहाँ क्लिक करके उत्पाद विवरण देखें]({$target_product['permalink']})\n• **सत्यापित घटक (पैकेजिंग लेबल):** {$clean_ings}\n• **पाचन व राहत सहायता:** कुमारी (एलोवेरा), त्रिफला (आंवला, हरड़, बहेड़ा), नागकेसर, नीम और जिमीकंद का प्राकृतिक संयोजन जो मल त्याग को सुगम बनाने, पाचन तंत्र को ठंडा रखने और गुदा क्षेत्र के ऊतकों को प्राकृतिक राहत प्रदान करने में मदद करता है।\n• **सेवन विधि:** {$target_product['dosage']}\n\n⚠️ **चिकित्सीय सूचना:** यह उत्पाद पाचन स्वास्थ्य और नियमितता के लिए एक सहायक हर्बल पूरक है। यह बवासीर को जड़ से ठीक करने का दावा नहीं करता और न ही चिकित्सीय या शल्य चिकित्सा (सर्जरी) का विकल्प है। यदि अत्यधिक दर्द, सूजन या रक्तस्राव हो तो तुरंत योग्य चिकित्सक से परामर्श लें।";
+                } elseif ($lang === 'mr') {
+                    $message = "🌿 **मूळव्याध (पाइल्स) व पचन तक्रारींसाठी सत्यापित आयुर्वेदिक उत्पाद:**\n\n**{$target_product['name']}**\n• **किंमत:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पादनाची लिंक:** [येथे क्लिक करून उत्पादनाची माहिती पहा]({$target_product['permalink']})\n• **सत्यापित शास्त्रीय घटक (लेबल):** {$clean_ings}\n• **पचन व आराम:** कोरफड (Kumari), त्रिफळा, नागकेशर, कडुलिंब व सुरण (Jimikand) चे शास्त्रीय मिश्रण जे पोट सहज साफ होण्यास मदत करते आणि गुदभागातील जळजळ शांत ठेवण्यास सहाय्य करते.\n• **वापरण्याची पद्धत:** {$target_product['dosage']}\n\n⚠️ **वैद्यकीय सूचना:** हे पचनक्रिया व आरोग्यासाठी एक सहायक आयुर्वेदिक उत्पादन आहे; हे आजार पूर्ण बरा करण्याचा दावा करत नाही आणि डॉक्टरी उपचारांचा पर्याय नाही. तीव्र रक्तस्त्राव किंवा वेदना असल्यास त्वरित डॉक्टरांचा सल्ला घ्या.";
+                } else {
+                    $message = "🌿 **Verified Formulation for Piles & Digestive Anorectal Care:**\n\n**{$target_product['name']}**\n• **Current Price:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **Product Link:** [View Product Details on Storefront]({$target_product['permalink']})\n• **Verified Botanicals (Packaging Label):** {$clean_ings}\n• **Digestive & Anorectal Support:** Classical synergy of Kumari (Aloe Vera), Triphala (Amalaki, Haritaki, Bibhitaki), Nagkesar, Neem, and Jimikand (Suran) formulated to support smooth, effortless bowel evacuation and soothe mucosal tissue discomfort without harsh synthetic laxatives.\n• **Directions for Use:** {$target_product['dosage']}\n\n⚠️ **Medical Advisory:** This herbal formulation is a supportive wellness supplement for bowel regularity and digestive comfort. It does not claim to cure piles or replace medical/surgical clinical care. Please consult a qualified physician if experiencing acute bleeding, severe pain, or persistent symptoms.";
+                }
             } else {
-                $message = "🌿 Here is the verified formulation matching your wellness interest:\n\n**{$target_product['name']}** ({$target_product['formatted_price']})\n• **Key Benefits:** {$benefits}\n• **Authentic Herbs:** {$clean_ings}...\n• **Usage:** {$target_product['dosage']}\n\nCrafted according to classical Ayurvedic standards with zero synthetic additives.";
+                if ($lang === 'hi') {
+                    $message = "🌿 आपकी आवश्यकता के लिए हमारे कैटलॉग में सत्यापित उत्पाद:\n\n**{$target_product['name']}**\n• **ऑफर मूल्य:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पाद लिंक:** [यहाँ क्लिक करके विवरण देखें]({$target_product['permalink']})\n• **प्रमुख जड़ी-बूटियां:** {$clean_ings}\n• **मुख्य लाभ:** {$benefits}\n• **सेवन विधि:** {$target_product['dosage']}\n\n💡 **सावधानी:** {$target_product['precautions']}";
+                } elseif ($lang === 'mr') {
+                    $message = "🌿 आपल्या गरजेनुसार आमच्या कैटलॉगमधील सत्यापित उत्पादन:\n\n**{$target_product['name']}**\n• **ऑफर किंमत:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **उत्पादनाची लिंक:** [येथे क्लिक करून माहिती पहा]({$target_product['permalink']})\n• **प्रमुख वनस्पती:** {$clean_ings}\n• **मुख्य फायदे:** {$benefits}\n• **वापर:** {$target_product['dosage']}\n\n💡 **काळजी:** {$target_product['precautions']}";
+                } else {
+                    $message = "🌿 Here is the verified formulation matching your wellness interest:\n\n**{$target_product['name']}**\n• **Current Price:** **{$target_product['formatted_price']}** (MRP: {$target_product['formatted_mrp']} - {$target_product['discount']})\n• **Product Link:** [View Product Details on Storefront]({$target_product['permalink']})\n• **Verified Botanicals:** {$clean_ings}\n• **Key Benefits:** {$benefits}\n• **Directions for Use:** {$target_product['dosage']}\n\n💡 **Precautions:** {$target_product['precautions']}";
+                }
             }
         }
 
@@ -504,19 +526,52 @@ class Ayur_Chatbot_Engine {
     }
 
     /**
-     * Sliding Window IP Rate Limiter
+     * Sliding Window IP Rate Limiter (60-second window storing timestamps)
      */
-    private static function is_rate_limited($ip) {
-        $key = 'ayur_chat_rl_' . md5($ip);
-        $count = (int)get_transient($key);
+    public static function check_rate_limit($ip) {
         $limit = Ayur_Chatbot_Config::get_rate_limit_per_minute();
-
-        if ($count >= $limit) {
-            return true;
+        if ($limit <= 0) {
+            return array('limited' => false, 'retry_after' => 0);
         }
 
-        set_transient($key, $count + 1, 60);
-        return false;
+        $window = 60; // 60 seconds window
+        $now    = time();
+        $key    = 'ayur_chat_rl_' . md5($ip);
+
+        $stored = get_transient($key);
+        $timestamps = is_array($stored) ? $stored : array();
+
+        // Prune timestamps outside the 60-second window
+        $valid_timestamps = array();
+        foreach ($timestamps as $ts) {
+            if (($now - (int)$ts) < $window) {
+                $valid_timestamps[] = (int)$ts;
+            }
+        }
+
+        if (count($valid_timestamps) >= $limit) {
+            // Find how many seconds until the earliest timestamp leaves the window
+            $oldest = min($valid_timestamps);
+            $retry_after = max(1, ($oldest + $window) - $now);
+            return array(
+                'limited'     => true,
+                'retry_after' => $retry_after,
+            );
+        }
+
+        // Add current timestamp and save
+        $valid_timestamps[] = $now;
+        set_transient($key, $valid_timestamps, $window);
+
+        return array(
+            'limited'     => false,
+            'retry_after' => 0,
+        );
+    }
+
+    public static function reset_ip_rate_limit($ip) {
+        $key = 'ayur_chat_rl_' . md5($ip);
+        delete_transient($key);
     }
 
     private static function get_client_ip() {

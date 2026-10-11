@@ -176,9 +176,13 @@ class Ayur_Chatbot {
                     <form id="ayur-chat-form" class="ayur-chat-form" autocomplete="off">
                         <textarea id="ayur-chat-input" class="ayur-chat-input" rows="1" placeholder="<?php esc_attr_e('Ask about ingredients, usage, delivery...', 'ayur-core'); ?>" maxlength="500" aria-label="<?php esc_attr_e('Type your question', 'ayur-core'); ?>"></textarea>
                         <button type="submit" id="ayur-chat-send" class="ayur-chat-send" aria-label="<?php esc_attr_e('Send Message', 'ayur-core'); ?>">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="ayur-chat-send-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="22" y1="2" x2="11" y2="13"></line>
                                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            <svg class="ayur-chat-send-spinner" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.25"></circle>
+                                <path d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" stroke-linecap="round"></path>
                             </svg>
                         </button>
                     </form>

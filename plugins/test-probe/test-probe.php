@@ -352,6 +352,16 @@ add_action('init', function() {
                 'stats'          => $stats,
             ));
         }
+
+        // 13. Reset Chatbot Rate Limit for Automated Testing
+        if ($action === 'reset_chatbot_rate_limit' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            global $wpdb;
+            $deleted = $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_ayur_chat_rl_%' OR option_name LIKE '_transient_timeout_ayur_chat_rl_%'");
+            wp_send_json_success(array(
+                'message' => 'Rate limit transients cleared',
+                'deleted' => $deleted,
+            ));
+        }
     }
 });
 
