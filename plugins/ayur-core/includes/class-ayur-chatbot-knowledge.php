@@ -216,20 +216,37 @@ class Ayur_Chatbot_Knowledge {
                 'in_stock'        => true,
                 'permalink'       => $site_url . '/product/arjuna-amrit-heart-vitality-juice/',
                 'image_url'       => $assets_url . 'bhagyoday-amrit-heart-juice-featured.webp',
-                'clean_ingredients' => array('Arjuna Bark', 'Fresh Wild Amla', 'Ginger', 'Garlic', 'Raw Forest Honey', 'Apple Cider Vinegar'),
+                'clean_ingredients' => array(
+                    'Noni', 'Aloevera', 'Acai Bery', 'Sea Backthrone (Sea Buckthorn)', 'Beetroot', 'Harad', 'Baheda',
+                    'Bhumi Amla', 'Shilajit', 'Mulethi', 'Giloy', 'Shatavari', 'Ashwagandha', 'Amla', 'Moringa Oleifera',
+                    'Anjeer', 'Punarnava', 'Ginkgo Biloba', 'Garcinia Cambogia', 'Mangosteen', 'Spirulina', 'Haridra',
+                    'Arjuna', 'Brahmi', 'Draksha Extract', 'Manjistha', 'Siberian Ginseng', 'Ganoderma Extract',
+                    'Blue Berry', 'Cordyceps Extract', 'Chiku', 'Neem', 'Kesar', 'Elaichi', 'Shankapushpi', 'Sarpagandha',
+                    'Faneel Seed (Fennel)', 'Lemon Gras', 'Apple', 'Curcumin', 'Goji Berry Extract', 'Black Current Extract',
+                    'Straw Berry Extract', 'Elder Berry Extract', 'Wild Berry Extract', 'Rasp Berry Extract', 'Sour Cherry Extract',
+                    'Maca Root Extract', 'Cran Berry Extract', 'Pomegranate Extract', 'Basil Extract', 'Green Tea Extract',
+                    'Carrot Extract', 'Vasa Extract', 'Vitamin B12', 'Vitamin D3', 'Amla Extract', 'Ashwagandha Extract',
+                    'Tulsi Extract', 'Rest of all Berry\'s & Extracts'
+                ),
                 'label_composition' => array(
-                    'Standardized Arjuna Bark Extract (Terminalia arjuna) 35%',
-                    'Fresh Wild Amla Juice (Phyllanthus emblica) 30%',
-                    'Ginger Juice (Zingiber officinale) 15%',
-                    'Purified Garlic Juice (Allium sativum) 10%',
-                    'Raw Forest Honey 5%',
-                    'Pure Apple Cider Vinegar 5%'
+                    'Noni 400mg', 'Aloevera 300mg', 'Acai Bery 400mg', 'Sea Backthrone 300mg', 'Beetroot 300mg',
+                    'Harad 300mg', 'Baheda 300mg', 'Bhumi Amla 300mg', 'Shilajit 300mg', 'Mulethi 300mg',
+                    'Giloy 300mg', 'Shatavari 300mg', 'Ashwagandha 300mg', 'Amla 400mg', 'Moringa Oleifera 500mg',
+                    'Anjeer 200mg', 'Punarnava 200mg', 'Ginkgo Biloba 200mg', 'Garcinia Cambogia 200mg', 'Mangosteen 300mg',
+                    'Spirulina 300mg', 'Haridra 300mg', 'Arjuna 200mg', 'Brahmi 200mg', 'Draksha Extract 200mg',
+                    'Manjistha 200mg', 'Siberian Ginseng 200mg', 'Ganoderma Extract 200mg', 'Blue Berry 200mg', 'Cordyceps Extract 100mg',
+                    'Chiku 100mg', 'Neem 100mg', 'Kesar 100mg', 'Elaichi 50mg', 'Shankapushpi 100mg',
+                    'Sarpagandha 100mg', 'Faneel Seed 100mg', 'Lemon Gras 100mg', 'Apple 100mg', 'Curcumin 100mg',
+                    'Goji Berry Extract 100mg', 'Black Current Extract 100mg', 'Straw Berry Extract 100mg', 'Elder Berry Extract 100mg', 'Wild Berry Extract 100mg',
+                    'Rasp Berry Extract 100mg', 'Sour Cherry Extract 100mg', 'Maca Root Extract 100mg', 'Cran Berry Extract 100mg', 'Pomegranate Extract 100mg',
+                    'Basil Extract 100mg', 'Green Tea Extract 100mg', 'Carrot Extract 100mg', 'Vasa Extract 100mg', 'Vitamin B12 100mg',
+                    'Vitamin D3 100mg', 'Amla Extract 100mg', 'Ashwagandha Extract 100mg', 'Tulsi Extract 100mg', 'Rest of all Berry\'s & Extracts 100mg'
                 ),
                 'benefits' => array(
-                    'Classical Hridaya Rasayana tonic supporting arterial flexibility and tone',
-                    'Terminalia arjuna supports robust cardiac muscle tone and daily stamina',
-                    'Synergistic garlic, ginger, and amla support healthy lipid balance and circulation',
-                    'Rich in natural antioxidant polyphenols and bio-available Vitamin C'
+                    'Multi-botanical Rasayana synergy featuring 60 verified herbs, fruits, and extracts',
+                    'Supports natural daily immunity, detoxification, and overall cellular vitality',
+                    'Promotes cardiovascular health, arterial flexibility, and physical stamina',
+                    '100% natural Ayurvedic proprietary medicine with zero added sugar and zero artificial colours'
                 ),
                 'dosage' => 'Shake well before use. Mix 15 to 25 ml of Amrit Juice in a glass of normal or lukewarm water. Drink once daily on an empty stomach in the morning.',
                 'precautions' => 'Refrigerate after opening and consume within 30 days. If on prescription blood thinners or cardiac medications, consult your doctor. Wellness dietary tonic, not a replacement for medical treatment.',
@@ -675,7 +692,342 @@ class Ayur_Chatbot_Knowledge {
         return is_array($items) ? $items : array();
     }
 
-    public static function clear_unresolved_questions() {
-        update_option('ayur_chatbot_unresolved_queries', array(), false);
+    /**
+     * Authoritative Canonical Ingredient Records for All Catalog Products
+     */
+    public static function get_canonical_ingredient_records() {
+        return array(
+            'AYUR-ARJ-500' => array(
+                'product_id'          => 33,
+                'sku'                 => 'AYUR-ARJ-500',
+                'name'                => 'Amrit Heart Health Immunity Juice 500ml',
+                'source'              => 'Official Packaging Label & Composition Specification (bhagyoday-amrit-heart-juice-composition.webp)',
+                'verification_status' => 'Verified Complete from Official Packaging Label',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Each 10ml contains specified extracts:',
+                'items'               => array(
+                    array('name' => 'Noni', 'quantity' => '400mg'),
+                    array('name' => 'Aloevera', 'quantity' => '300mg'),
+                    array('name' => 'Acai Bery', 'quantity' => '400mg'),
+                    array('name' => 'Sea Backthrone (Sea Buckthorn)', 'quantity' => '300mg'),
+                    array('name' => 'Beetroot', 'quantity' => '300mg'),
+                    array('name' => 'Harad', 'quantity' => '300mg'),
+                    array('name' => 'Baheda', 'quantity' => '300mg'),
+                    array('name' => 'Bhumi Amla', 'quantity' => '300mg'),
+                    array('name' => 'Shilajit', 'quantity' => '300mg'),
+                    array('name' => 'Mulethi', 'quantity' => '300mg'),
+                    array('name' => 'Giloy', 'quantity' => '300mg'),
+                    array('name' => 'Shatavari', 'quantity' => '300mg'),
+                    array('name' => 'Ashwagandha', 'quantity' => '300mg'),
+                    array('name' => 'Amla', 'quantity' => '400mg'),
+                    array('name' => 'Moringa Oleifera', 'quantity' => '500mg'),
+                    array('name' => 'Anjeer', 'quantity' => '200mg'),
+                    array('name' => 'Punarnava', 'quantity' => '200mg'),
+                    array('name' => 'Ginkgo Biloba', 'quantity' => '200mg'),
+                    array('name' => 'Garcinia Cambogia', 'quantity' => '200mg'),
+                    array('name' => 'Mangosteen', 'quantity' => '300mg'),
+                    array('name' => 'Spirulina', 'quantity' => '300mg'),
+                    array('name' => 'Haridra', 'quantity' => '300mg'),
+                    array('name' => 'Arjuna', 'quantity' => '200mg'),
+                    array('name' => 'Brahmi', 'quantity' => '200mg'),
+                    array('name' => 'Draksha Extract', 'quantity' => '200mg'),
+                    array('name' => 'Manjistha', 'quantity' => '200mg'),
+                    array('name' => 'Siberian Ginseng', 'quantity' => '200mg'),
+                    array('name' => 'Ganoderma Extract', 'quantity' => '200mg'),
+                    array('name' => 'Blue Berry', 'quantity' => '200mg'),
+                    array('name' => 'Cordyceps Extract', 'quantity' => '100mg'),
+                    array('name' => 'Chiku', 'quantity' => '100mg'),
+                    array('name' => 'Neem', 'quantity' => '100mg'),
+                    array('name' => 'Kesar', 'quantity' => '100mg'),
+                    array('name' => 'Elaichi', 'quantity' => '50mg'),
+                    array('name' => 'Shankapushpi', 'quantity' => '100mg'),
+                    array('name' => 'Sarpagandha', 'quantity' => '100mg'),
+                    array('name' => 'Faneel Seed (Fennel Seed)', 'quantity' => '100mg'),
+                    array('name' => 'Lemon Gras', 'quantity' => '100mg'),
+                    array('name' => 'Apple', 'quantity' => '100mg'),
+                    array('name' => 'Curcumin', 'quantity' => '100mg'),
+                    array('name' => 'Goji Berry Extract', 'quantity' => '100mg'),
+                    array('name' => 'Black Current Extract', 'quantity' => '100mg'),
+                    array('name' => 'Straw Berry Extract', 'quantity' => '100mg'),
+                    array('name' => 'Elder Berry Extract', 'quantity' => '100mg'),
+                    array('name' => 'Wild Berry Extract', 'quantity' => '100mg'),
+                    array('name' => 'Rasp Berry Extract', 'quantity' => '100mg'),
+                    array('name' => 'Sour Cherry Extract', 'quantity' => '100mg'),
+                    array('name' => 'Maca Root Extract', 'quantity' => '100mg'),
+                    array('name' => 'Cran Berry Extract', 'quantity' => '100mg'),
+                    array('name' => 'Pomegranate Extract', 'quantity' => '100mg'),
+                    array('name' => 'Basil Extract', 'quantity' => '100mg'),
+                    array('name' => 'Green Tea Extract', 'quantity' => '100mg'),
+                    array('name' => 'Carrot Extract', 'quantity' => '100mg'),
+                    array('name' => 'Vasa Extract', 'quantity' => '100mg'),
+                    array('name' => 'Vitamin B12', 'quantity' => '100mg'),
+                    array('name' => 'Vitamin D3', 'quantity' => '100mg'),
+                    array('name' => 'Amla Extract', 'quantity' => '100mg'),
+                    array('name' => 'Ashwagandha Extract', 'quantity' => '100mg'),
+                    array('name' => 'Tulsi Extract', 'quantity' => '100mg'),
+                    array('name' => "Rest of all Berry's & Extracts", 'quantity' => '100mg')
+                ),
+                'notes'               => 'Total 60 powerful herbs, fruits & extracts. 100% Natural Ayurvedic Proprietary Medicine. Zero added sugar, no artificial colour, no artificial flavour.'
+            ),
+
+            'AYUR-PILES-60' => array(
+                'product_id'          => 32,
+                'sku'                 => 'AYUR-PILES-60',
+                'name'                => 'Aloe Vera Triphala Piles Care Capsules 500mg (60 Capsules)',
+                'source'              => 'Official Packaging Box Label (bhagyoday-piles-care-capsules-packaging.webp)',
+                'verification_status' => 'Verified from Official Packaging Label',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Per 500mg Vegetarian Capsule:',
+                'items'               => array(
+                    array('name' => 'Kumari / Aloe Vera Inner Gel Extract', 'quantity' => '150mg'),
+                    array('name' => 'Classical Triphala (Amalaki, Haritaki, Bibhitaki)', 'quantity' => '150mg'),
+                    array('name' => 'Nagkesar Flower Extract (Mesua ferrea)', 'quantity' => '100mg'),
+                    array('name' => 'Neem Leaf Extract (Azadirachta indica)', 'quantity' => '50mg'),
+                    array('name' => 'Jimikand / Suran Tubers (Amorphophallus paeoniifolius)', 'quantity' => '50mg'),
+                    array('name' => 'Haritaki Extract (Terminalia chebula)', 'quantity' => 'Active standardized extract'),
+                    array('name' => 'Arshoghni (Classical Ayurvedic botanical complex)', 'quantity' => 'Active classical compound'),
+                    array('name' => 'Mulethi Extract (Glycyrrhiza glabra)', 'quantity' => 'Active soothing extract')
+                ),
+                'notes'               => 'Encased in 100% plant-derived vegetable cellulose capsules. Zero synthetic binders or artificial colors.'
+            ),
+
+            'AYUR-SHIL-30' => array(
+                'product_id'          => 30,
+                'sku'                 => 'AYUR-SHIL-30',
+                'name'                => 'Men Power Capsule 800mg (30 Capsules)',
+                'source'              => 'Official Packaging Box Label (bhagyoday-ashwagandha-shilajit-capsules-packaging.webp)',
+                'verification_status' => 'Verified from Official Packaging Label',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Per 800mg Vegetarian Capsule:',
+                'items'               => array(
+                    array('name' => 'Ashwagandha Extract (Withania somnifera)', 'quantity' => '50mg'),
+                    array('name' => 'Safed Musli Extract (Chlorophytum borivilianum)', 'quantity' => '50mg'),
+                    array('name' => 'Kaunch Beej Extract (Mucuna pruriens)', 'quantity' => '50mg'),
+                    array('name' => 'Gokhru Extract (Tribulus terrestris)', 'quantity' => '30mg'),
+                    array('name' => 'Shudh Shilajeet Extract (Purified Asphaltum)', 'quantity' => '20mg'),
+                    array('name' => 'Garlic Extract (Allium sativum)', 'quantity' => '20mg'),
+                    array('name' => 'Jaiphal Extract (Myristica fragrans)', 'quantity' => '20mg'),
+                    array('name' => 'Vidarikand Extract (Pueraria tuberosa)', 'quantity' => '20mg'),
+                    array('name' => 'Akarkara Extract (Anacyclus pyrethrum)', 'quantity' => 'Active standardized extract'),
+                    array('name' => 'Maca Root Extract (Lepidium meyenii)', 'quantity' => '10mg'),
+                    array('name' => 'Kali Mirch Extract (Piper nigrum)', 'quantity' => '10mg')
+                ),
+                'notes'               => '100% vegetarian capsules. Classical non-hormonal, non-stimulant herbal formulation.'
+            ),
+
+            'AYUR-SUGAR-60' => array(
+                'product_id'          => 34,
+                'sku'                 => 'AYUR-SUGAR-60',
+                'name'                => 'Karela Jamun Blood Sugar Control Capsules 500mg (60 Capsules)',
+                'source'              => 'Official Packaging Box Label (bhagyoday-karela-jamun-capsules-packaging.webp)',
+                'verification_status' => 'Verified from Official Packaging Label',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Per 500mg Vegetarian Capsule:',
+                'items'               => array(
+                    array('name' => 'Jamun Seed Extract (Syzygium cumini)', 'quantity' => '200mg'),
+                    array('name' => 'Karela Extract (Momordica charantia)', 'quantity' => '100mg'),
+                    array('name' => 'Methi / Fenugreek Extract (Trigonella foenum-graecum)', 'quantity' => '200mg'),
+                    array('name' => 'Gurmar Extract (Gymnema sylvestre)', 'quantity' => '200mg'),
+                    array('name' => 'Vijaysar Extract (Pterocarpus marsupium)', 'quantity' => '100mg'),
+                    array('name' => 'Tulsi Extract (Ocimum sanctum)', 'quantity' => '200mg'),
+                    array('name' => 'Costus Igneus / Insulin Plant Extract', 'quantity' => '200mg'),
+                    array('name' => 'Neem Leaf Extract (Azadirachta indica)', 'quantity' => '200mg'),
+                    array('name' => 'Periwinkle / Sadabahar Extract (Catharanthus roseus)', 'quantity' => '200mg'),
+                    array('name' => 'Stevia Extract (Stevia rebaudiana)', 'quantity' => '100mg')
+                ),
+                'notes'               => 'Classical bitter botanical synergy for glucose metabolism. Zero added sugar or synthetic chemical binders.'
+            ),
+
+            'AYUR-SHAL-60' => array(
+                'product_id'          => 35,
+                'sku'                 => 'AYUR-SHAL-60',
+                'name'                => 'Shallaki Joint Bone Care Capsules 500mg (60 Capsules)',
+                'source'              => 'Official Packaging Box Label (bhagyoday-shallaki-joint-care-capsules-packaging.webp)',
+                'verification_status' => 'Verified from Official Packaging Label',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Per 500mg Vegetarian Capsule:',
+                'items'               => array(
+                    array('name' => 'Shallaki Extract (Boswellia serrata)', 'quantity' => '100mg'),
+                    array('name' => 'Ashwagandha Extract (Withania somnifera)', 'quantity' => '100mg'),
+                    array('name' => 'Hadjod Extract (Cissus quadrangularis)', 'quantity' => '100mg'),
+                    array('name' => 'Nirgundi Extract (Vitex negundo)', 'quantity' => '70mg'),
+                    array('name' => 'Methi / Fenugreek Extract (Trigonella foenum-graecum)', 'quantity' => '100mg'),
+                    array('name' => 'Rasna Extract (Pluchea lanceolata)', 'quantity' => 'Active standardized extract'),
+                    array('name' => 'Shuddha Guggulu (Commiphora mukul)', 'quantity' => '100mg'),
+                    array('name' => 'Saunth / Ginger (Zingiber officinale)', 'quantity' => '80mg'),
+                    array('name' => 'Haldi Extract (Curcuma longa)', 'quantity' => '70mg'),
+                    array('name' => 'Aloe Vera Extract (Aloe barbadensis)', 'quantity' => '80mg')
+                ),
+                'notes'               => 'Classical Sandhivata botanical formula supporting cartilage mobility, joint lubrication, and bone strength.'
+            ),
+
+            'AYUR-SHAT-500' => array(
+                'product_id'          => 36,
+                'sku'                 => 'AYUR-SHAT-500',
+                'name'                => 'Shatavari Ashoka Women Wellness Juice 500ml (Lady Care Juice)',
+                'source'              => 'Official Packaging Bottle Label (bhagyoday-shatavari-ashoka-juice-packaging.webp)',
+                'verification_status' => 'Verified from Official Packaging Label',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Each 10ml contains specified extracts:',
+                'items'               => array(
+                    array('name' => 'Shatavari (Asparagus racemosus)', 'quantity' => '200mg'),
+                    array('name' => 'Ashoka Bark (Saraca asoca)', 'quantity' => '200mg'),
+                    array('name' => 'Lodhra (Symplocos racemosa)', 'quantity' => '200mg'),
+                    array('name' => 'Ashwagandha (Withania somnifera)', 'quantity' => '200mg'),
+                    array('name' => 'Classical Triphala (Amalaki, Haritaki, Bibhitaki)', 'quantity' => '200mg'),
+                    array('name' => 'Kanchanar Guggulu', 'quantity' => '200mg'),
+                    array('name' => 'Guduchi / Giloy (Tinospora cordifolia)', 'quantity' => '200mg'),
+                    array('name' => 'Moringa Oleifera', 'quantity' => '200mg'),
+                    array('name' => 'Cinnamon (Dalchini)', 'quantity' => '200mg'),
+                    array('name' => 'Turmeric (Haldi)', 'quantity' => '100mg'),
+                    array('name' => 'Pippali (Piper longum)', 'quantity' => '100mg'),
+                    array('name' => 'Varuna (Crataeva nurvala)', 'quantity' => '100mg'),
+                    array('name' => 'Bilva (Aegle marmelos)', 'quantity' => '100mg'),
+                    array('name' => 'Punarnava (Boerhavia diffusa)', 'quantity' => '100mg')
+                ),
+                'notes'               => 'Traditional Nari Rasayana botanical juice supporting hormonal balance, menstrual regularity, and uterine vitality.'
+            ),
+
+            'AYUR-SLIM-500' => array(
+                'product_id'          => 31,
+                'sku'                 => 'AYUR-SLIM-500',
+                'name'                => 'Slim Care Weight Management Juice 500ml',
+                'source'              => 'Official Packaging Bottle Label (bhagyoday-slim-care-juice-packaging.webp)',
+                'verification_status' => 'Verified from Official Packaging Label',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Each 10ml contains specified extracts:',
+                'items'               => array(
+                    array('name' => 'Garcinia Cambogia (Vrikshamla)', 'quantity' => '200mg'),
+                    array('name' => 'Organic Aloe Vera Leaf Juice (Ghritkumari)', 'quantity' => 'Active botanical juice base'),
+                    array('name' => 'Triphala Extract (Amla 300mg, Harad 300mg, Baheda 300mg)', 'quantity' => '900mg total'),
+                    array('name' => 'Shuddha Guggulu (Commiphora mukul)', 'quantity' => '400mg'),
+                    array('name' => 'Punarnava (Boerhavia diffusa)', 'quantity' => '300mg'),
+                    array('name' => 'Methi / Fenugreek (Trigonella foenum-graecum)', 'quantity' => '300mg'),
+                    array('name' => 'Cinnamon (Dalchini)', 'quantity' => '400mg'),
+                    array('name' => 'Moringa Oleifera', 'quantity' => '500mg'),
+                    array('name' => 'Ginger (Zingiber officinale)', 'quantity' => '300mg'),
+                    array('name' => 'Jeera / Cumin (Cuminum cyminum)', 'quantity' => '300mg'),
+                    array('name' => 'Giloy (Tinospora cordifolia)', 'quantity' => '200mg'),
+                    array('name' => 'Ashwagandha (Withania somnifera)', 'quantity' => '200mg'),
+                    array('name' => 'Garlic (Allium sativum)', 'quantity' => '100mg'),
+                    array('name' => 'Green Tea Extract (Camellia sinensis)', 'quantity' => '200mg')
+                ),
+                'notes'               => 'Pure herbal juice formulated to support digestive Agni and natural metabolic rate. Zero added sugar or synthetic stimulants.'
+            ),
+
+            'AYUR-COMBO-VIT' => array(
+                'product_id'          => 58,
+                'sku'                 => 'AYUR-COMBO-VIT',
+                'name'                => 'Daily Energy & Vitality Duo (Bundle)',
+                'source'              => 'Combined Official Packaging of Men Power 30s & Amrit Heart Juice 500ml',
+                'verification_status' => 'Verified Component Formulations',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Curated combo containing 2 full-size formulations:',
+                'items'               => array(
+                    array('name' => 'Men Power Capsule 800mg (30 Capsules)', 'quantity' => '11 verified botanicals including Shilajit (20mg), Ashwagandha (50mg), Safed Musli (50mg), Kaunch Beej (50mg), Gokhru (30mg), Akarkara, Vidarikand (20mg)'),
+                    array('name' => 'Amrit Heart Health Immunity Juice 500ml', 'quantity' => '60 verified herbs, fruits & extracts per 10ml including Noni (400mg), Aloe Vera (300mg), Amla (400mg), Moringa (500mg), Shilajit (300mg), Giloy (300mg), Shatavari (300mg), Arjuna (200mg), Ashwagandha (300mg)')
+                ),
+                'notes'               => 'Comprehensive vitality and cardiovascular stamina combo pack.'
+            ),
+
+            'AYUR-COMBO-DETOX' => array(
+                'product_id'          => 59,
+                'sku'                 => 'AYUR-COMBO-DETOX',
+                'name'                => 'Metabolic Detox & Sugar Balance Duo (Bundle)',
+                'source'              => 'Combined Official Packaging of Karela Jamun 60s & Slim Care Juice 500ml',
+                'verification_status' => 'Verified Component Formulations',
+                'last_verified'       => '2026-10-11',
+                'basis'               => 'Curated combo containing 2 full-size formulations:',
+                'items'               => array(
+                    array('name' => 'Karela Jamun Blood Sugar Control Capsules 500mg (60 Capsules)', 'quantity' => '10 verified botanicals including Jamun (200mg), Karela (100mg), Methi (200mg), Gurmar (200mg), Vijaysar (100mg), Tulsi (200mg), Costus Igneus (200mg)'),
+                    array('name' => 'Slim Care Weight Management Juice 500ml', 'quantity' => '14 verified botanicals including Garcinia Cambogia (200mg), Aloe Vera, Triphala (900mg), Guggulu (400mg), Punarnava (300mg), Green Tea (200mg)')
+                ),
+                'notes'               => 'Dual-action metabolic cleanse and carbohydrate digestion balance combo pack.'
+            )
+        );
+    }
+
+    /**
+     * Retrieve Canonical Ingredient Record by SKU or ID
+     */
+    public static function get_canonical_ingredient_record($sku_or_id) {
+        $records = self::get_canonical_ingredient_records();
+        if (isset($records[$sku_or_id])) {
+            return $records[$sku_or_id];
+        }
+
+        foreach ($records as $rec) {
+            if ($rec['product_id'] == $sku_or_id || strtolower($rec['sku']) === strtolower($sku_or_id)) {
+                return $rec;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Format Canonical Ingredient Record for Chatbot Responses
+     */
+    public static function format_canonical_ingredients_response($record, $lang = 'en') {
+        if (!$record || empty($record['items'])) {
+            return "Complete verified ingredient specifications are available on the product packaging label.";
+        }
+
+        if ($lang === 'hi') {
+            $msg = "🌿 **{$record['name']} के पूर्ण सत्यापित घटक:**\n";
+            $msg .= "*स्रोत: {$record['source']} (सत्यापित: {$record['last_verified']})*\n";
+            if (!empty($record['basis'])) {
+                $msg .= "*मात्रा आधार: {$record['basis']}*\n\n";
+            } else {
+                $msg .= "\n";
+            }
+            foreach ($record['items'] as $idx => $item) {
+                $num = $idx + 1;
+                $qty = !empty($item['quantity']) ? " — {$item['quantity']}" : '';
+                $msg .= "{$num}. **{$item['name']}**{$qty}\n";
+            }
+            if (!empty($record['notes'])) {
+                $msg .= "\n💡 *{$record['notes']}*";
+            }
+            return $msg;
+        }
+
+        if ($lang === 'mr') {
+            $msg = "🌿 **{$record['name']} चे संपूर्ण सत्यापित घटक:**\n";
+            $msg .= "*स्रोत: {$record['source']} (सत्यापित: {$record['last_verified']})*\n";
+            if (!empty($record['basis'])) {
+                $msg .= "*प्रमाण आधार: {$record['basis']}*\n\n";
+            } else {
+                $msg .= "\n";
+            }
+            foreach ($record['items'] as $idx => $item) {
+                $num = $idx + 1;
+                $qty = !empty($item['quantity']) ? " — {$item['quantity']}" : '';
+                $msg .= "{$num}. **{$item['name']}**{$qty}\n";
+            }
+            if (!empty($record['notes'])) {
+                $msg .= "\n💡 *{$record['notes']}*";
+            }
+            return $msg;
+        }
+
+        // Default English
+        $msg = "🌿 **Verified Complete Ingredients for {$record['name']}:**\n";
+        $msg .= "*Source: {$record['source']} (Verification Status: {$record['verification_status']})*\n";
+        if (!empty($record['basis'])) {
+            $msg .= "*{$record['basis']}*\n\n";
+        } else {
+            $msg .= "\n";
+        }
+        foreach ($record['items'] as $idx => $item) {
+            $num = $idx + 1;
+            $qty = !empty($item['quantity']) ? " — {$item['quantity']}" : '';
+            $msg .= "{$num}. **{$item['name']}**{$qty}\n";
+        }
+        if (!empty($record['notes'])) {
+            $msg .= "\n💡 *{$record['notes']}*";
+        }
+        return $msg;
     }
 }
+

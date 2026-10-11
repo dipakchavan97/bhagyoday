@@ -162,17 +162,26 @@ class Ayur_Chatbot_Safety {
             $lang_instruction = "IMPORTANT: The user is communicating in Marathi (मराठी). Respond in polite, authentic Marathi using Devanagari script.";
         }
 
-        // Format Product Catalog Snippet
+        // Format Product Catalog Snippet with Complete Ingredients
         $catalog_text = "";
         foreach ($matched_products as $p) {
-            $clean_ings = implode(', ', $p['clean_ingredients']);
+            $canonical  = Ayur_Chatbot_Knowledge::get_canonical_ingredient_record($p['sku']);
+            $ings_list  = "";
+            if ($canonical && !empty($canonical['items'])) {
+                foreach ($canonical['items'] as $item) {
+                    $ings_list .= "  • " . $item['name'] . (!empty($item['quantity']) ? " ({$item['quantity']})" : "") . "\n";
+                }
+            } else {
+                $ings_list = "  • " . implode("\n  • ", $p['clean_ingredients']) . "\n";
+            }
+
             $benefits   = implode('; ', $p['benefits']);
             $catalog_text .= "PRODUCT:\n";
             $catalog_text .= "- Title: {$p['name']}\n";
             $catalog_text .= "- SKU: {$p['sku']} | ID: {$p['id']}\n";
             $catalog_text .= "- Price: {$p['formatted_price']} (MRP: {$p['formatted_mrp']} - {$p['discount']})\n";
             $catalog_text .= "- Pack Size: {$p['pack_size']}\n";
-            $catalog_text .= "- Verified Ingredients (Botanicals): {$clean_ings}\n";
+            $catalog_text .= "- Complete Verified Ingredients (from packaging label):\n{$ings_list}";
             $catalog_text .= "- Benefits: {$benefits}\n";
             $catalog_text .= "- Dosage: {$p['dosage']}\n";
             $catalog_text .= "- Precautions: {$p['precautions']}\n";
@@ -206,7 +215,10 @@ STRICT AYURVEDA SAFETY INVARIANTS:
 2. NEVER diagnose illnesses, prescribe medications, or guarantee disease cures/reversals/prevention.
 3. NEVER instruct a customer to stop or alter doctor-prescribed pharmaceuticals (such as insulin, blood pressure drugs, or heart medicines).
 4. For questions on diabetes, heart conditions, pregnancy, or prescription drug interactions, emphasize lifestyle wellness and advise consulting their treating physician.
-5. COMPOSITION POLICY: Display ingredient names cleanly WITHOUT milligram (mg) numbers by default. Only provide milligram quantities if the customer explicitly requests quantitative label specifications.
+5. INGREDIENTS POLICY (AUTHORITATIVE): When the customer asks about ingredients of a product ("What are the ingredients?", "List all ingredients", "What does this product contain?", "Tell me all ingredients in Amrit Heart Juice"), return the COMPLETE, VERIFIED list of all ingredients documented for that exact product under a clear product heading, with verified quantities as documented on the packaging label.
+   - For Amrit Heart Health Immunity Juice, it contains the 60 herbs, fruits and extracts specified in the catalog — NEVER abbreviate to 6 herbs or invent ingredients.
+   - Never mix ingredients across products.
+   - Separate ingredients from dosage or precautions; only provide dosage if specifically requested.
 6. NEVER fabricate unverified herbs, dosages, prices, discounts, fake testimonials, or stock urgency.
 7. If an answer or product is not in the verified catalog below, clearly state that the information is not verified and invite them to connect with our Ayurvedic experts on WhatsApp (+91 8888686858).
 8. ZERO force-selling: Help the customer understand which formulation aligns with their lifestyle routine.

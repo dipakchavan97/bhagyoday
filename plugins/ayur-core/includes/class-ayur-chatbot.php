@@ -65,15 +65,27 @@ class Ayur_Chatbot {
             true
         );
 
+        $current_product_sku = '';
+        if (function_exists('is_product') && is_product()) {
+            global $post;
+            if ($post && function_exists('wc_get_product')) {
+                $product = wc_get_product($post->ID);
+                if ($product) {
+                    $current_product_sku = $product->get_sku() ?: (string)$product->get_id();
+                }
+            }
+        }
+
         wp_localize_script('ayur-chatbot-script', 'ayurChatParams', array(
-            'ajax_url'        => admin_url('admin-ajax.php'),
-            'nonce'           => wp_create_nonce('ayur_chatbot_nonce'),
-            'welcome_message' => Ayur_Chatbot_Config::get_welcome_message(),
-            'prompt_chips'    => Ayur_Chatbot_Config::get_prompt_chips(),
-            'position'        => Ayur_Chatbot_Config::get_position(),
-            'whatsapp_url'    => Ayur_Chatbot_Config::get_whatsapp_url(),
-            'max_length'      => Ayur_Chatbot_Config::get_max_input_length(),
-            'site_name'       => 'Bhagyoday Ayurveda',
+            'ajax_url'            => admin_url('admin-ajax.php'),
+            'nonce'               => wp_create_nonce('ayur_chatbot_nonce'),
+            'welcome_message'     => Ayur_Chatbot_Config::get_welcome_message(),
+            'prompt_chips'        => Ayur_Chatbot_Config::get_prompt_chips(),
+            'position'            => Ayur_Chatbot_Config::get_position(),
+            'whatsapp_url'        => Ayur_Chatbot_Config::get_whatsapp_url(),
+            'max_length'          => Ayur_Chatbot_Config::get_max_input_length(),
+            'current_product_sku' => $current_product_sku,
+            'site_name'           => 'Bhagyoday Ayurveda',
             'strings'         => array(
                 'send'        => __('Send', 'ayur-core'),
                 'typing'      => __('Ayurvedic Expert is typing...', 'ayur-core'),

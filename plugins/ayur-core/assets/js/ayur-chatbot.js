@@ -26,6 +26,7 @@
     var isRateLimitedBlocked = false;
     var rateLimitTimer = null;
     var lastFailedMessage = '';
+    var activeProductSku = (params && params.current_product_sku) ? params.current_product_sku : '';
 
     $(document).ready(function() {
         initElements();
@@ -111,10 +112,14 @@
             submitUserMessage();
         });
 
-        // Product card click tracking
-        $root.off('click.ayurchat', '.ayur-chat-card').on('click.ayurchat', '.ayur-chat-card', function() {
-            var prodName = $(this).find('.ayur-chat-card-title').text();
-            trackEvent('ayur_chat_product_clicked', { product_name: prodName });
+        // Product card click tracking and active product context resolution
+        $root.off('click.ayurchat', '.product-card, .ayur-chat-card').on('click.ayurchat', '.product-card, .ayur-chat-card', function() {
+            var sku = $(this).data('product-sku');
+            if (sku) {
+                activeProductSku = sku;
+            }
+            var prodName = $(this).find('.product-card__title, .ayur-chat-card-title').text();
+            trackEvent('ayur_chat_product_clicked', { product_name: prodName, sku: sku });
         });
     }
 
@@ -148,6 +153,7 @@
         $error.hide();
         $typing.hide();
         clearSession();
+        activeProductSku = (params && params.current_product_sku) ? params.current_product_sku : '';
         ensureWelcomeMessage();
         scrollToBottom();
         $input.focus();
@@ -256,7 +262,8 @@
             data: {
                 action: 'ayur_chatbot_message',
                 nonce: params.nonce,
-                message: text
+                message: text,
+                active_product: activeProductSku || ''
             },
             timeout: 25000,
             success: function(res) {
@@ -276,6 +283,9 @@
                     }
 
                     if (data.products && data.products.length > 0) {
+                        if (data.products[0].sku) {
+                            activeProductSku = data.products[0].sku;
+                        }
                         trackEvent('ayur_chat_product_recommended', {
                             count: data.products.length,
                             product_id: data.products[0].id
@@ -406,8 +416,12 @@
         var html = '<div class="ayur-chat-msg ayur-chat-msg-bot' + (hasProducts ? ' ayur-chat-msg-has-products' : '') + '">' +
                    '<div class="ayur-chat-msg-content">' + formattedText + '</div>';
 
-        // Render Interactive Product Cards
+        // Render Interactive Product Cards (Semantic BEM 3-Row Layout)
         if (hasProducts) {
+            if (products[0] && products[0].sku) {
+                activeProductSku = products[0].sku;
+            }
+
             html += '<div class="ayur-chat-product-cards">';
             for (var i = 0; i < products.length; i++) {
                 var p = products[i];
@@ -424,13 +438,13 @@
                     if (!/^MRP/i.test(mrpText)) {
                         mrpText = 'MRP ' + mrpText;
                     }
-                    mrpHtml = '<span class="ayur-chat-card-mrp">' + escapeHtml(mrpText) + '</span>';
+                    mrpHtml = '<span class="product-card__mrp ayur-chat-card-mrp">' + escapeHtml(mrpText) + '</span>';
                 }
 
                 // Format Discount Badge if available (e.g. 55% OFF)
                 var badgeHtml = '';
                 if (p.discount && typeof p.discount === 'string' && p.discount.trim() && p.discount.trim() !== '0%' && p.discount.trim() !== '0% OFF') {
-                    badgeHtml = '<span class="ayur-chat-card-badge">' + escapeHtml(p.discount.trim()) + '</span>';
+                    badgeHtml = '<span class="product-card__discount ayur-chat-card-badge">' + escapeHtml(p.discount.trim()) + '</span>';
                 }
 
                 // Format Stock Status
@@ -439,9 +453,9 @@
                     ((params.strings && params.strings.in_stock) ? params.strings.in_stock : 'In Stock') : 
                     ((params.strings && params.strings.out_of_stock) ? params.strings.out_of_stock : 'Out of Stock');
                 var stockClass = inStock ? 'is-in-stock' : 'is-out-of-stock';
-                var stockHtml = '<div class="ayur-chat-card-stock ' + stockClass + '">' +
-                                '<span class="ayur-chat-stock-dot" aria-hidden="true"></span>' +
-                                '<span class="ayur-chat-stock-text">' + escapeHtml(stockText) + '</span>' +
+                var stockHtml = '<div class="product-card__stock ayur-chat-card-stock ' + stockClass + '">' +
+                                '<span class="product-card__stock-dot ayur-chat-stock-dot" aria-hidden="true"></span>' +
+                                '<span class="product-card__stock-text ayur-chat-stock-text">' + escapeHtml(stockText) + '</span>' +
                                 '</div>';
 
                 // Image or Fallback SVG Icon
@@ -459,27 +473,33 @@
 
                 var btnText = (params.strings && params.strings.view_prod) ? params.strings.view_prod : 'View Product';
 
-                // Responsive 3-Row Layout:
-                // Row 1: Product image on left; product name and pricing on right.
-                // Row 2: Stock status and discount badge, arranged without overlap.
-                // Row 3: Full-width View Product button.
-                html += '<a href="' + escapeAttr(permalink) + '" class="ayur-chat-card" target="_blank" rel="noopener">' +
-                        '  <div class="ayur-chat-card-row-top">' +
-                        '    <div class="ayur-chat-card-thumb">' + imgHtml + '</div>' +
-                        '    <div class="ayur-chat-card-info">' +
-                        '      <div class="ayur-chat-card-title">' + escapeHtml(name) + '</div>' +
-                        '      <div class="ayur-chat-card-pricing">' +
-                        '        <span class="ayur-chat-card-price">' + escapeHtml(price) + '</span>' +
-                        '        ' + mrpHtml +
+                // Semantic BEM Product Card Structure:
+                // 1. product-card__main: Image on left; Title & Stock status on right (title wraps naturally, never constrained by price).
+                // 2. product-card__pricing: Dedicated full-width row with selling price, MRP, and discount badge. Unbreakable & never split!
+                // 3. product-card__actions: Full-width CTA button.
+                html += '<div class="product-card ayur-chat-card" data-product-id="' + escapeAttr(p.id || '') + '" data-product-sku="' + escapeAttr(p.sku || '') + '">' +
+                        '  <div class="product-card__main ayur-chat-card-row-top">' +
+                        '    <div class="product-card__image ayur-chat-card-thumb">' +
+                        '      <a href="' + escapeAttr(permalink) + '" target="_blank" rel="noopener">' + imgHtml + '</a>' +
+                        '    </div>' +
+                        '    <div class="product-card__details ayur-chat-card-info">' +
+                        '      <div class="product-card__title ayur-chat-card-title">' +
+                        '        <a href="' + escapeAttr(permalink) + '" target="_blank" rel="noopener">' + escapeHtml(name) + '</a>' +
                         '      </div>' +
+                        '      ' + stockHtml +
                         '    </div>' +
                         '  </div>' +
-                        '  <div class="ayur-chat-card-row-meta">' +
-                        '    ' + stockHtml +
+                        '  <div class="product-card__pricing ayur-chat-card-pricing">' +
+                        '    <span class="product-card__sale-price ayur-chat-card-price">' + escapeHtml(price) + '</span>' +
+                        '    ' + mrpHtml +
                         '    ' + badgeHtml +
                         '  </div>' +
-                        '  <span class="ayur-chat-card-btn">' + escapeHtml(btnText) + ' <span class="ayur-chat-card-btn-arrow" aria-hidden="true">→</span></span>' +
-                        '</a>';
+                        '  <div class="product-card__actions">' +
+                        '    <a href="' + escapeAttr(permalink) + '" class="product-card__btn ayur-chat-card-btn" target="_blank" rel="noopener">' +
+                        '      ' + escapeHtml(btnText) + ' <span class="ayur-chat-card-btn-arrow" aria-hidden="true">→</span>' +
+                        '    </a>' +
+                        '  </div>' +
+                        '</div>';
             }
             html += '</div>';
         }

@@ -83,10 +83,17 @@ class Ayur_Chatbot_Engine {
             return;
         }
 
+        $active_product_sku = isset($_POST['active_product']) ? sanitize_text_field(wp_unslash($_POST['active_product'])) : '';
+
         // 7. Search Grounded Product Catalog
         $matched_products = Ayur_Chatbot_Knowledge::search_relevant_products($raw_message, 3);
         $all_products     = Ayur_Chatbot_Knowledge::get_all_products();
         $policies         = Ayur_Chatbot_Knowledge::get_store_policies();
+
+        // If matched_products is empty but active_product_sku was supplied from active session:
+        if (empty($matched_products) && !empty($active_product_sku) && isset($all_products[$active_product_sku])) {
+            $matched_products[] = $all_products[$active_product_sku];
+        }
 
         // 8. Attempt External AI API Generation
         $api_key = Ayur_Chatbot_Config::get_api_key();
@@ -103,7 +110,7 @@ class Ayur_Chatbot_Engine {
             // Deflection check: If user asked about piles/hemorrhoids/bawasir/mulvyadh,
             // ensure the response actually addresses piles and mentions the verified formulation.
             // If the model produced a generic greeting without mentioning the piles product, fallback to verified branch.
-            $is_piles_inquiry = self::contains_any(strtolower($raw_message), array('piles', 'pile', 'bawasir', 'bawaseer', 'hemorrhoid', 'haemorrhoids', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध', 'fissure'));
+            $is_piles_inquiry = self::contains_any(strtolower($raw_message), array('piles', 'pile', 'bavasir', 'bawaseer', 'hemorrhoid', 'haemorrhoids', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध', 'fissure'));
             if ($is_piles_inquiry && !self::contains_any(strtolower($reply_text), array('piles care', 'triphala', 'ayur-piles', 'aloe vera triphala', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'kumari', 'nagkesar'))) {
                 $ai_response = null;
             }
@@ -134,7 +141,7 @@ class Ayur_Chatbot_Engine {
         }
 
         // 10. Intelligent Grounded Fallback (when AI key is empty or API call fails)
-        $fallback = self::execute_grounded_fallback($raw_message, $lang, $matched_products, $all_products, $policies, $safety);
+        $fallback = self::execute_grounded_fallback($raw_message, $lang, $matched_products, $all_products, $policies, $safety, $active_product_sku);
 
         // Record query and error stats if external key failed
         if (!empty($api_key)) {
@@ -252,39 +259,34 @@ class Ayur_Chatbot_Engine {
      * Intelligent Grounded Fallback Engine
      * Generates 100% verified answers using local catalog knowledge when AI is unreachable.
      */
-    public static function execute_grounded_fallback($query, $lang, $matched_products, $all_products, $policies, $safety = null) {
+    public static function execute_grounded_fallback($query, $lang, $matched_products, $all_products, $policies, $safety = null, $active_product_sku = '') {
         $lower = strtolower($query);
         $message = "";
         $recommended_cards = array();
         $target_product = !empty($matched_products) ? reset($matched_products) : null;
+        if (!$target_product && !empty($active_product_sku) && isset($all_products[$active_product_sku])) {
+            $target_product = $all_products[$active_product_sku];
+        }
 
         // Check if query is about piles / bawasir / mulvyadh
         $is_piles_inquiry = self::contains_any($lower, array('piles', 'pile', 'bavasir', 'bawasir', 'bawaseer', 'hemorrhoid', 'haemorrhoids', 'mulvyadh', 'moolvyadh', 'बवासीर', 'मूळव्याध', 'पाइल्स', 'मुलव्याध', 'fissure'));
 
         // 1. Ingredients / Composition Inquiry
-        if (self::contains_any($lower, array('ingredient', 'ingredients', 'whats inside', 'what is inside', 'content', 'herb', 'herbs', 'composition', ' घटक', 'साहित्य', 'सामग्री', 'घटक काय'))) {
-            $has_product = self::has_product_context($lower, $target_product);
+        if (self::contains_any($lower, array('ingredient', 'ingredients', 'whats inside', 'what is inside', 'content', 'contents', 'herb', 'herbs', 'composition', 'घटक', 'साहित्य', 'सामग्री', 'घटक काय', 'what does this product contain', 'list all ingredients', 'tell me all ingredients', 'what are the ingredients'))) {
+            $has_product = self::has_product_context($lower, $target_product, $active_product_sku);
             if ($has_product && $target_product) {
                 $recommended_cards[] = self::format_card_data($target_product);
-                $names = implode(', ', $target_product['clean_ingredients']);
-
-                // If user explicitly asks for milligrams / quantities
-                if (self::contains_any($lower, array('mg', 'milligram', 'quantity', 'label', 'exact dosage', 'dose', 'प्रमाण', 'मात्रा'))) {
-                    $detailed = implode("\n• ", $target_product['label_composition']);
-                    if ($lang === 'hi') {
-                        $message = "🌿 **{$target_product['name']} की प्रामाणिक संरचना (लेबल विवरण):**\n• {$detailed}\n\nयह 100% शाकाहारी वनस्पति कैप्सूल में निर्मित है।";
-                    } elseif ($lang === 'mr') {
-                        $message = "🌿 **{$target_product['name']} चे लेबल तपशील (प्रमाण):**\n• {$detailed}\n\nहे १००% शाकाहारी वनस्पती कॅप्सूलमध्ये उपलब्ध आहे.";
-                    } else {
-                        $message = "🌿 **Verified Packaging Label Composition for {$target_product['name']}:**\n• {$detailed}\n\nFormulated with 100% vegetarian plant-cellulose capsules with zero artificial fillers.";
-                    }
+                $canonical = Ayur_Chatbot_Knowledge::get_canonical_ingredient_record($target_product['sku']);
+                if ($canonical) {
+                    $message = Ayur_Chatbot_Knowledge::format_canonical_ingredients_response($canonical, $lang);
                 } else {
+                    $names = implode(', ', $target_product['clean_ingredients']);
                     if ($lang === 'hi') {
-                        $message = "🌿 **{$target_product['name']} के प्रामाणिक घटक:**\nइसमें निम्नलिखित शुद्ध आयुर्वेदिक जड़ी-बूटियां शामिल हैं: **{$names}**।\n\nसभी घटक उच्च गुणवत्ता और आयुष मानकों के अनुसार तैयार किए गए हैं।";
+                        $message = "🌿 **{$target_product['name']} के पूर्ण सत्यापित घटक:**\n• " . implode("\n• ", $target_product['clean_ingredients']);
                     } elseif ($lang === 'mr') {
-                        $message = "🌿 **{$target_product['name']} मधील घटक:**\nयामध्ये पुढील शुद्ध आयुर्वेदिक वनस्पती समाविष्ट आहेत: **{$names}**।\n\nसर्व घटक उच्च दर्जाचे व आयुष प्रमाणित आहेत.";
+                        $message = "🌿 **{$target_product['name']} चे संपूर्ण सत्यापित घटक:**\n• " . implode("\n• ", $target_product['clean_ingredients']);
                     } else {
-                        $message = "🌿 **Verified Ingredients in {$target_product['name']}:**\nIt contains authentic classical botanicals: **{$names}**.\n\nAll ingredients adhere strictly to our verified packaging specifications.";
+                        $message = "🌿 **Verified Complete Ingredients for {$target_product['name']}:**\n• " . implode("\n• ", $target_product['clean_ingredients']);
                     }
                 }
             } else {
@@ -293,8 +295,8 @@ class Ayur_Chatbot_Engine {
         }
 
         // 2. How to Use / Dosage Inquiry
-        elseif (self::contains_any($lower, array('how to use', 'how should i use', 'dosage', 'how to take', 'directions', 'usage', 'sevan', 'kaise lena', 'kase ghyayche', 'वापर कसा', 'कसे घ्यावे', 'कधी घ्यावे', 'उपयोग', 'कैसे इस्तेमाल', 'इस्तेमाल कैसे', 'इस्तेमाल', 'कसा वापरावा', 'how do i use it'))) {
-            $has_product = self::has_product_context($lower, $target_product);
+        elseif (self::contains_any($lower, array('how to use', 'how should i use', 'dosage', 'how to take', 'directions', 'usage', 'sevan', 'kaise lena', 'kase ghyayche', 'वापर कसा', 'कसे घ्यावे', 'कधी घ्यावे', 'उपयोग', 'कैसे इस्तेमाल', 'इस्तेमाल कैसे', 'इस्तेमाल', 'कसा वापरावा', 'how do i use it', 'what is the dosage', 'dose', 'how to use it'))) {
+            $has_product = self::has_product_context($lower, $target_product, $active_product_sku);
             if ($has_product && $target_product) {
                 $recommended_cards[] = self::format_card_data($target_product);
                 if ($lang === 'hi') {

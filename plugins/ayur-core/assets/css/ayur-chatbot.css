@@ -379,7 +379,7 @@ body[class*="cart"] .ayur-chat-root {
 }
 
 /* ==========================================================================
-   Product Cards in Chat (Responsive 2-Tier CSS Grid: Image + Info, Full CTA)
+   Product Cards in Chat (Semantic BEM 3-Row Layout: Main, Pricing, CTA)
    ========================================================================== */
 .ayur-chat-msg-has-products {
     width: 100% !important;
@@ -396,14 +396,16 @@ body[class*="cart"] .ayur-chat-root {
     box-sizing: border-box;
 }
 
+/* Card Container */
+.product-card,
 .ayur-chat-card {
     background: var(--ayur-white, #FFFFFF);
     border: 1.5px solid #E2E8F0;
     border-radius: var(--ayur-radius-md, 10px);
-    padding: 11px 12px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
-    gap: 9px;
+    gap: 8px;
     box-shadow: 0 2px 8px rgba(23, 59, 47, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     text-decoration: none !important;
@@ -415,34 +417,41 @@ body[class*="cart"] .ayur-chat-root {
     overflow: hidden;
 }
 
+.product-card:hover,
 .ayur-chat-card:hover {
-    transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(23, 59, 47, 0.12);
     border-color: var(--ayur-muted-gold, #B79552);
 }
 
-.ayur-chat-card:active {
-    transform: translateY(0);
-}
-
-/* Row 1: Product Image Left + Title & Pricing Right */
+/* Row 1: Main (Image Left + Title & Stock Right) */
+.product-card__main,
 .ayur-chat-card-row-top {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
 }
 
+.product-card__image,
 .ayur-chat-card-thumb {
-    flex-shrink: 0;
-    width: 72px;
-    height: 72px;
-    min-width: 72px;
-    max-width: 72px;
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    max-width: 64px;
 }
 
+.product-card__image a,
+.ayur-chat-card-thumb a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+
+.product-card__image img,
 .ayur-chat-card-img {
     width: 100%;
     height: 100%;
@@ -464,16 +473,17 @@ body[class*="cart"] .ayur-chat-root {
     color: var(--ayur-herbal-green, #315C45);
 }
 
+.product-card__details,
 .ayur-chat-card-info {
     flex: 1 1 0%;
     min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    overflow: hidden;
     box-sizing: border-box;
 }
 
+.product-card__title,
 .ayur-chat-card-title {
     font-family: var(--font-heading, "Cormorant Garamond", Georgia, serif);
     font-size: 14.5px;
@@ -481,61 +491,27 @@ body[class*="cart"] .ayur-chat-root {
     color: var(--ayur-deep-forest, #173B2F);
     margin: 0;
     line-height: 1.35;
+    word-break: normal;
+    overflow-wrap: break-word;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    word-break: break-word;
     text-overflow: ellipsis;
 }
 
-.ayur-chat-card-pricing {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 5px 8px;
-    min-width: 0;
-    margin-top: 2px;
-    line-height: 1.25;
+.product-card__title a,
+.ayur-chat-card-title a {
+    color: inherit;
+    text-decoration: none;
 }
 
-.ayur-chat-card-price {
-    font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
-    font-size: 15px;
-    font-weight: 800;
+.product-card__title a:hover,
+.ayur-chat-card-title a:hover {
     color: var(--ayur-herbal-green, #315C45);
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-    overflow-wrap: normal !important;
-    flex-shrink: 0;
-    display: inline-block;
 }
 
-.ayur-chat-card-mrp {
-    font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--ayur-text-muted, #64748B);
-    text-decoration: line-through;
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-    overflow-wrap: normal !important;
-    flex-shrink: 0;
-    display: inline-block;
-}
-
-/* Row 2: Stock Status & Discount Badge (Full-width row without overlap) */
-.ayur-chat-card-row-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    padding-top: 2px;
-}
-
+.product-card__stock,
 .ayur-chat-card-stock {
     display: inline-flex;
     align-items: center;
@@ -547,6 +523,7 @@ body[class*="cart"] .ayur-chat-root {
     white-space: nowrap !important;
     word-break: keep-all !important;
     flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .ayur-chat-stock-dot {
@@ -557,24 +534,72 @@ body[class*="cart"] .ayur-chat-root {
     flex-shrink: 0;
 }
 
+.product-card__stock.is-in-stock,
 .ayur-chat-card-stock.is-in-stock {
     color: #16A34A;
 }
 
+.product-card__stock.is-in-stock .ayur-chat-stock-dot,
 .ayur-chat-card-stock.is-in-stock .ayur-chat-stock-dot {
     background: #16A34A;
     box-shadow: 0 0 4px rgba(22, 163, 74, 0.4);
 }
 
+.product-card__stock.is-out-of-stock,
 .ayur-chat-card-stock.is-out-of-stock {
     color: #DC2626;
 }
 
+.product-card__stock.is-out-of-stock .ayur-chat-stock-dot,
 .ayur-chat-card-stock.is-out-of-stock .ayur-chat-stock-dot {
     background: #DC2626;
     box-shadow: 0 0 4px rgba(220, 38, 38, 0.4);
 }
 
+/* Row 2: Dedicated Full-Width Pricing Section (Unbreakable & Never Split) */
+.product-card__pricing,
+.ayur-chat-card-pricing {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 3px 0 2px 0;
+    line-height: 1;
+}
+
+.product-card__sale-price,
+.ayur-chat-card-price {
+    font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
+    font-size: 15.5px;
+    font-weight: 800;
+    color: var(--ayur-herbal-green, #315C45);
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    flex-shrink: 0;
+    display: inline-block;
+    letter-spacing: -0.01em;
+}
+
+.product-card__mrp,
+.ayur-chat-card-mrp {
+    font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ayur-text-muted, #64748B);
+    text-decoration: line-through;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.product-card__discount,
 .ayur-chat-card-badge {
     display: inline-flex;
     align-items: center;
@@ -592,9 +617,18 @@ body[class*="cart"] .ayur-chat-root {
     overflow-wrap: normal !important;
     flex-shrink: 0;
     line-height: 1.2;
+    margin-left: auto; /* Pushes discount badge to far right */
 }
 
 /* Row 3: Action Button (Full Width Below Details, Comfortable Mobile Tap Area) */
+.product-card__actions {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    margin-top: 1px;
+}
+
+.product-card__btn,
 .ayur-chat-card-btn {
     display: flex;
     align-items: center;
@@ -621,7 +655,8 @@ body[class*="cart"] .ayur-chat-root {
     word-break: keep-all !important;
 }
 
-.ayur-chat-card:hover .ayur-chat-card-btn {
+.product-card__btn:hover,
+.ayur-chat-card-btn:hover {
     background: var(--ayur-herbal-green, #315C45);
     box-shadow: 0 4px 10px rgba(23, 59, 47, 0.22);
 }
@@ -632,7 +667,8 @@ body[class*="cart"] .ayur-chat-root {
     font-size: 13px;
 }
 
-.ayur-chat-card:hover .ayur-chat-card-btn-arrow {
+.product-card__btn:hover .ayur-chat-card-btn-arrow,
+.ayur-chat-card-btn:hover .ayur-chat-card-btn-arrow {
     transform: translateX(3px);
 }
 
@@ -968,41 +1004,56 @@ body[class*="cart"] .ayur-chat-root {
         width: 100% !important;
     }
 
+    .product-card,
     .ayur-chat-card {
         padding: 9px 10px;
         gap: 8px;
     }
 
+    .product-card__main,
     .ayur-chat-card-row-top {
         gap: 10px;
     }
 
+    .product-card__image,
     .ayur-chat-card-thumb {
-        width: 66px;
-        height: 66px;
-        min-width: 66px;
-        max-width: 66px;
+        flex: 0 0 60px;
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        max-width: 60px;
     }
 
+    .product-card__image img,
     .ayur-chat-card-img {
-        width: 66px;
-        height: 66px;
-        min-width: 66px;
-        max-width: 66px;
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        max-width: 60px;
     }
 
+    .product-card__title,
     .ayur-chat-card-title {
         font-size: 13.5px;
     }
 
+    .product-card__sale-price,
     .ayur-chat-card-price {
-        font-size: 14.5px;
+        font-size: 15px;
     }
 
+    .product-card__mrp,
     .ayur-chat-card-mrp {
-        font-size: 11.5px;
+        font-size: 12px;
     }
 
+    .product-card__discount,
+    .ayur-chat-card-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .product-card__btn,
     .ayur-chat-card-btn {
         min-height: 35px;
         height: 35px;
@@ -1049,51 +1100,63 @@ body[class*="cart"] .ayur-chat-root {
         padding: 6px 8px !important;
     }
 
+    .product-card,
     .ayur-chat-card {
         padding: 8px;
         gap: 7px;
     }
 
+    .product-card__main,
     .ayur-chat-card-row-top {
         gap: 8px;
     }
 
+    .product-card__image,
     .ayur-chat-card-thumb {
-        width: 58px;
-        height: 58px;
-        min-width: 58px;
-        max-width: 58px;
+        flex: 0 0 54px;
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
+        max-width: 54px;
     }
 
+    .product-card__image img,
     .ayur-chat-card-img {
-        width: 58px;
-        height: 58px;
-        min-width: 58px;
-        max-width: 58px;
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
+        max-width: 54px;
     }
 
+    .product-card__title,
     .ayur-chat-card-title {
         font-size: 13px;
         line-height: 1.3;
     }
 
+    .product-card__pricing,
     .ayur-chat-card-pricing {
-        gap: 3px 6px;
+        gap: 6px;
+        padding: 2px 0;
     }
 
+    .product-card__sale-price,
     .ayur-chat-card-price {
-        font-size: 13.5px;
+        font-size: 14px;
     }
 
+    .product-card__mrp,
     .ayur-chat-card-mrp {
         font-size: 11px;
     }
 
+    .product-card__discount,
     .ayur-chat-card-badge {
         font-size: 9.5px;
         padding: 2px 5px;
     }
 
+    .product-card__btn,
     .ayur-chat-card-btn {
         min-height: 34px;
         height: 34px;
