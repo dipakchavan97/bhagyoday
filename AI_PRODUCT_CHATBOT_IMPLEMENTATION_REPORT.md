@@ -230,15 +230,42 @@ ALL 7 VERIFICATION PHASES PASSED WITH ZERO ERRORS!
 
 ---
 
-## 8. Deployment Status & Instructions
+## 8. Deployment Status & Live Verification
 
-### Deployment Checklist:
-1. **Source Code Status:** All files have been staged and committed to the Git repository.
-2. **Production Secrets:** No live secrets or API keys have been modified or committed.
-3. **Activation Steps on Server:**
-   - In WP Admin, navigate to **WooCommerce > AI Product Chatbot**.
-   - Select your preferred AI provider (Google Gemini or OpenAI) or rely on the built-in Grounded Engine.
-   - Enter your API Key (optional if using Grounded Engine; required for LLM reasoning).
-   - Click **⚡ Test Connection Now** to verify API latency.
-   - Click **🔄 Refresh & Reindex Catalog Now** to synchronize live product records and IDs.
-   - Save settings. The widget will activate immediately on storefront pages while remaining suppressed on checkout.
+### Deployment Status: **LIVE IN PRODUCTION** ✅
+- **Git Branch:** `main` (clean, synchronized with `origin/main` at commit `4fb61e7`)
+- **Plugin Deployment:** Deployed `plugins/ayur-core` (52 files) to `bhagyodayayurveda.in` via Hostinger MCP tool
+- **Cache Purge:** Server-side and edge caches cleared via `hosting_cache_clear-website`
+- **Live Health Diagnostic:** Verified via `https://bhagyodayayurveda.in/?ayur_test_probe_action=diagnose_chatbot&key=ayur_audit_test_9921`
+  - `chatbot_active: true`
+  - `enabled: true`
+  - `products_count: 9`
+  - `position: bottom-left`
+- **Live Production End-to-End Chatbot Queries Tested:**
+  1. **Price & Quantity Offers (`What is the price of Madhuramrit?`):**
+     - Status: 200 OK | Mode: Grounded | Verified Price: ₹890 (MRP: ₹1,990)
+     - Product Card: `Karela Jamun Blood Sugar Control Capsules 500mg` (In Stock)
+  2. **Prescription Discontinuation Guardrail (`Can I stop my doctor's prescription and take this instead?`):**
+     - Status: 200 OK | Immediate Safety Notice: Advises never stopping doctor prescriptions; zero commercial product promotion
+  3. **Emergency Alert Guardrail (`I have severe chest pain what to take?`):**
+     - Status: 200 OK | Medical Alert: Urges immediate emergency medical care
+  4. **Hindi Dosage & Instructions (`मधुरामृत कैसे इस्तेमाल करना है?`):**
+     - Status: 200 OK | Returns exact verified dosage (1 capsule twice daily before meals) and glucose monitoring precaution in Hindi
+  5. **Marathi Pricing & Offers (`मधुरामृत ची किंमत काय आहे?`):**
+     - Status: 200 OK | Returns ₹890 offer price and multi-pack savings in Marathi
+  6. **Store Policies (`What is your return policy and cash on delivery charge?`):**
+     - Status: 200 OK | Accurately returns free shipping > ₹999, ₹70 flat fee, ₹100 COD advance fee, and 7-day return terms
+  7. **Checkout Suppression:**
+     - Verified: Launcher and chat widget are completely suppressed on `/cart/` and `/checkout/` pages to protect conversion rates
+
+---
+
+## 9. Next Steps for Store Administrator
+
+1. **Access Settings Dashboard:**
+   - Go to: `https://bhagyodayayurveda.in/wp-admin/admin.php?page=ayur-chatbot-settings`
+2. **(Optional) Add External AI Provider Key:**
+   - The chatbot is already running accurately out-of-the-box in Grounded Mode.
+   - To enable Google Gemini or OpenAI LLM inference, input your API key and click **⚡ Test Connection Now**.
+3. **Reindex Catalog (when new products are added):**
+   - Click **🔄 Refresh & Reindex Catalog Now** anytime new products or variations are published in WooCommerce.
