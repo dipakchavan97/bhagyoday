@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_CORE_VERSION', '1.0.5');
+define('AYUR_CORE_VERSION', '1.1.0');
 define('AYUR_CORE_PATH', plugin_dir_path(__FILE__));
 define('AYUR_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -32,6 +32,7 @@ require_once AYUR_CORE_PATH . 'includes/class-ayur-address-autofill.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-cod-confirmation.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-commerce-settings.php';
 require_once AYUR_CORE_PATH . 'includes/class-ayur-reviews.php';
+require_once AYUR_CORE_PATH . 'includes/class-ayur-chatbot.php';
 
 /**
  * Main Plugin Initialization
@@ -68,6 +69,7 @@ class Ayur_Core {
         Ayur_COD_Confirmation::init();
         Ayur_Commerce_Settings::init();
         Ayur_Reviews::init();
+        Ayur_Chatbot::init();
     }
 
     public function enqueue_assets() {

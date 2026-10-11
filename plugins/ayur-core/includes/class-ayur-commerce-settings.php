@@ -102,6 +102,7 @@ class Ayur_Commerce_Settings {
                 <a href="?page=ayur-commerce-settings&tab=address_autofill" class="nav-tab <?php echo $active_tab === 'address_autofill' ? 'nav-tab-active' : ''; ?>"><?php _e('📍 Address Autocomplete', 'ayur-core'); ?></a>
                 <a href="?page=ayur-commerce-settings&tab=cod_confirmation" class="nav-tab <?php echo $active_tab === 'cod_confirmation' ? 'nav-tab-active' : ''; ?>"><?php _e('💵 COD Confirmation Fee', 'ayur-core'); ?></a>
                 <a href="?page=ayur-commerce-settings&tab=quantity_offers" class="nav-tab <?php echo $active_tab === 'quantity_offers' ? 'nav-tab-active' : ''; ?>"><?php _e('🏷️ Quantity Offers', 'ayur-core'); ?></a>
+                <a href="?page=ayur-chatbot-settings" class="nav-tab" style="background:#FAF7F0; color:#173B2F; font-weight:600;"><?php _e('🤖 AI Product Chatbot', 'ayur-core'); ?></a>
             </nav>
 
             <form method="post" action="options.php" style="background:#fff; padding:24px 28px; border-radius:8px; border:1px solid #ccd0d4; box-shadow:0 1px 3px rgba(0,0,0,0.04);">

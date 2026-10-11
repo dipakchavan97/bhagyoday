@@ -1,0 +1,734 @@
+/**
+ * Bhagyoday Ayurveda — AI Product Expert Chatbot Styles
+ *
+ * Brand Palette:
+ * - Deep Forest: #173B2F
+ * - Herbal Green: #315C45
+ * - Warm Ivory:  #FAF7F0
+ * - Muted Gold:   #B79552
+ * - White:        #FFFFFF
+ */
+
+:root {
+    --ayur-deep-forest:  #173B2F;
+    --ayur-herbal-green: #315C45;
+    --ayur-warm-ivory:   #FAF7F0;
+    --ayur-muted-gold:   #B79552;
+    --ayur-white:        #FFFFFF;
+    --ayur-text-main:    #1F2937;
+    --ayur-text-muted:   #64748B;
+    --ayur-border-subtle:#E2E8F0;
+    --ayur-shadow-lg:    0 12px 32px rgba(23, 59, 47, 0.18), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --ayur-shadow-md:    0 6px 18px rgba(23, 59, 47, 0.12);
+    --ayur-font-sans:    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    --ayur-radius-lg:    16px;
+    --ayur-radius-md:    10px;
+    --ayur-radius-sm:    6px;
+}
+
+/* ==========================================================================
+   Root Container & Positioning
+   ========================================================================== */
+.ayur-chat-root {
+    position: fixed;
+    z-index: 9998;
+    bottom: 24px;
+    font-family: var(--ayur-font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.ayur-chat-pos-left {
+    left: 24px;
+}
+
+.ayur-chat-pos-right {
+    right: 96px; /* Offset to sit gracefully next to floating WhatsApp button on desktop */
+}
+
+/* Suppress on checkout */
+body.woocommerce-checkout .ayur-chat-root,
+body[class*="checkout"] .ayur-chat-root {
+    display: none !important;
+}
+
+/* ==========================================================================
+   Floating Launcher Button
+   ========================================================================== */
+.ayur-chat-launcher {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ayur-deep-forest) 0%, var(--ayur-herbal-green) 100%);
+    color: var(--ayur-white);
+    border: 2px solid var(--ayur-muted-gold);
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(23, 59, 47, 0.35);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    padding: 0;
+    outline: none;
+}
+
+.ayur-chat-launcher:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 24px rgba(23, 59, 47, 0.45);
+}
+
+.ayur-chat-launcher:focus-visible {
+    box-shadow: 0 0 0 4px rgba(183, 149, 82, 0.5);
+}
+
+.ayur-chat-launcher-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--ayur-muted-gold);
+    opacity: 0.4;
+    animation: ayur-chat-ripple 2.4s infinite ease-out;
+    z-index: -1;
+}
+
+@keyframes ayur-chat-ripple {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+.ayur-chat-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: var(--ayur-warm-ivory);
+}
+
+.ayur-chat-launcher-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #DC2626;
+    color: var(--ayur-white);
+    font-size: 11px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--ayur-white);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.ayur-chat-launcher-tooltip {
+    display: none;
+    position: absolute;
+    left: 74px;
+    white-space: nowrap;
+    background: var(--ayur-deep-forest);
+    color: var(--ayur-white);
+    padding: 6px 12px;
+    border-radius: var(--ayur-radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border: 1px solid var(--ayur-muted-gold);
+}
+
+.ayur-chat-pos-right .ayur-chat-launcher-tooltip {
+    left: auto;
+    right: 74px;
+}
+
+.ayur-chat-launcher:hover .ayur-chat-launcher-tooltip {
+    display: block;
+}
+
+/* ==========================================================================
+   Chat Window (Desktop Floating Panel)
+   ========================================================================== */
+.ayur-chat-window {
+    position: absolute;
+    bottom: 74px;
+    left: 0;
+    width: 380px;
+    height: 560px;
+    max-height: calc(85vh - 80px);
+    background: var(--ayur-white);
+    border-radius: var(--ayur-radius-lg);
+    box-shadow: var(--ayur-shadow-lg);
+    border: 1px solid rgba(23, 59, 47, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom left;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.ayur-chat-pos-right .ayur-chat-window {
+    left: auto;
+    right: 0;
+    transform-origin: bottom right;
+}
+
+.ayur-chat-window[hidden] {
+    display: none !important;
+}
+
+.ayur-chat-window.ayur-chat-open {
+    display: flex !important;
+    animation: ayur-chat-pop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ayur-chat-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ==========================================================================
+   Chat Header
+   ========================================================================== */
+.ayur-chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, var(--ayur-deep-forest) 0%, #1e4537 100%);
+    color: var(--ayur-white);
+    border-bottom: 2px solid var(--ayur-muted-gold);
+    flex-shrink: 0;
+}
+
+.ayur-chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ayur-chat-avatar {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--ayur-muted-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ayur-muted-gold);
+    flex-shrink: 0;
+}
+
+.ayur-chat-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ayur-white);
+    line-height: 1.2;
+}
+
+.ayur-chat-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #CBD5E1;
+    margin-top: 2px;
+}
+
+.ayur-chat-status-dot {
+    width: 7px;
+    height: 7px;
+    background: #10B981;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #10B981;
+}
+
+.ayur-chat-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ayur-chat-btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--ayur-warm-ivory);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.85;
+    transition: opacity 0.2s, background 0.2s;
+    padding: 0;
+}
+
+.ayur-chat-btn-icon:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   Messages Area
+   ========================================================================== */
+.ayur-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--ayur-warm-ivory);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+.ayur-chat-messages::-webkit-scrollbar {
+    width: 5px;
+}
+.ayur-chat-messages::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+}
+
+.ayur-chat-msg {
+    max-width: 86%;
+    padding: 11px 14px;
+    border-radius: var(--ayur-radius-md);
+    font-size: 13.5px;
+    line-height: 1.5;
+    word-break: break-word;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    position: relative;
+    animation: ayur-msg-fade 0.25s ease forwards;
+}
+
+@keyframes ayur-msg-fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ayur-chat-msg-bot {
+    align-self: flex-start;
+    background: var(--ayur-white);
+    color: var(--ayur-text-main);
+    border: 1px solid #E5E7EB;
+    border-top-left-radius: 2px;
+}
+
+.ayur-chat-msg-bot p {
+    margin: 0 0 8px 0;
+}
+.ayur-chat-msg-bot p:last-child {
+    margin-bottom: 0;
+}
+
+.ayur-chat-msg-bot ul, 
+.ayur-chat-msg-bot ol {
+    margin: 6px 0 8px 18px;
+    padding: 0;
+}
+
+.ayur-chat-msg-bot li {
+    margin-bottom: 4px;
+}
+
+.ayur-chat-msg-bot strong {
+    color: var(--ayur-deep-forest);
+}
+
+.ayur-chat-msg-bot a {
+    color: var(--ayur-herbal-green);
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.ayur-chat-msg-user {
+    align-self: flex-end;
+    background: var(--ayur-deep-forest);
+    color: var(--ayur-white);
+    border-top-right-radius: 2px;
+}
+
+.ayur-chat-msg-time {
+    display: block;
+    font-size: 10px;
+    color: var(--ayur-text-muted);
+    margin-top: 4px;
+    text-align: right;
+}
+
+.ayur-chat-msg-user .ayur-chat-msg-time {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   Product Cards in Chat
+   ========================================================================== */
+.ayur-chat-product-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.ayur-chat-card {
+    background: var(--ayur-white);
+    border: 1px solid #E2E8F0;
+    border-radius: var(--ayur-radius-md);
+    padding: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.ayur-chat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(23, 59, 47, 0.12);
+    border-color: var(--ayur-muted-gold);
+}
+
+.ayur-chat-card-img {
+    width: 62px;
+    height: 62px;
+    object-fit: contain;
+    background: #F8FAFC;
+    border-radius: var(--ayur-radius-sm);
+    border: 1px solid #F1F5F9;
+    flex-shrink: 0;
+}
+
+.ayur-chat-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ayur-chat-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ayur-deep-forest);
+    margin: 0 0 3px 0;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ayur-chat-card-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.ayur-chat-card-price {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ayur-herbal-green);
+}
+
+.ayur-chat-card-mrp {
+    font-size: 11px;
+    color: var(--ayur-text-muted);
+    text-decoration: line-through;
+}
+
+.ayur-chat-card-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    background: #FEF3C7;
+    color: #92400E;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.ayur-chat-card-stock {
+    font-size: 10px;
+    font-weight: 600;
+    color: #16A34A;
+}
+
+.ayur-chat-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ayur-white);
+    background: var(--ayur-deep-forest);
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    align-self: center;
+    white-space: nowrap;
+}
+
+.ayur-chat-card-btn:hover {
+    background: var(--ayur-herbal-green);
+}
+
+/* ==========================================================================
+   Quick Actions & Starter Chips
+   ========================================================================== */
+.ayur-chat-quick-actions {
+    padding: 8px 12px;
+    background: #F1EFEA;
+    border-top: 1px solid #E2E8F0;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+.ayur-chat-quick-actions::-webkit-scrollbar {
+    display: none;
+}
+
+.ayur-chat-chip {
+    display: inline-block;
+    background: var(--ayur-white);
+    color: var(--ayur-deep-forest);
+    border: 1px solid #CBD5E1;
+    border-radius: 16px;
+    padding: 5px 11px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.ayur-chat-chip:hover {
+    background: var(--ayur-deep-forest);
+    color: var(--ayur-white);
+    border-color: var(--ayur-deep-forest);
+}
+
+/* ==========================================================================
+   Typing Indicator
+   ========================================================================== */
+.ayur-chat-typing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid #E2E8F0;
+    font-size: 11.5px;
+    color: var(--ayur-text-muted);
+}
+
+.ayur-chat-typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ayur-chat-typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--ayur-muted-gold);
+    border-radius: 50%;
+    animation: ayur-dot-bounce 1.3s infinite ease-in-out;
+}
+
+.ayur-chat-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.ayur-chat-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes ayur-dot-bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ==========================================================================
+   Error & Retry Banner
+   ========================================================================== */
+.ayur-chat-error {
+    background: #FEE2E2;
+    color: #991B1B;
+    padding: 8px 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #FCA5A5;
+}
+
+.ayur-chat-btn-retry {
+    background: #991B1B;
+    color: var(--ayur-white);
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   Input Form & Footer
+   ========================================================================== */
+.ayur-chat-footer {
+    padding: 10px 12px 8px 12px;
+    background: var(--ayur-white);
+    border-top: 1px solid #E5E7EB;
+    flex-shrink: 0;
+}
+
+.ayur-chat-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ayur-warm-ivory);
+    border: 1px solid #D1D5DB;
+    border-radius: 22px;
+    padding: 4px 6px 4px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ayur-chat-form:focus-within {
+    border-color: var(--ayur-deep-forest);
+    box-shadow: 0 0 0 3px rgba(23, 59, 47, 0.12);
+}
+
+.ayur-chat-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 13.5px;
+    color: var(--ayur-text-main);
+    padding: 6px 0;
+    resize: none;
+    max-height: 80px;
+    outline: none !important;
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+.ayur-chat-input::placeholder {
+    color: #9CA3AF;
+}
+
+.ayur-chat-send {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--ayur-deep-forest);
+    color: var(--ayur-white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, transform 0.15s;
+    outline: none;
+    padding: 0;
+}
+
+.ayur-chat-send:hover {
+    background: var(--ayur-herbal-green);
+    transform: scale(1.05);
+}
+
+.ayur-chat-send:disabled {
+    background: #CBD5E1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ayur-chat-disclaimer {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 10px;
+    color: #94A3B8;
+    line-height: 1.3;
+}
+
+/* ==========================================================================
+   Mobile Responsive Experience (Bottom-Sheet / Modal)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .ayur-chat-root {
+        bottom: calc(76px + 16px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .ayur-chat-pos-left {
+        left: 16px;
+    }
+
+    .ayur-chat-pos-right {
+        right: 16px;
+    }
+
+    /* Keep launcher above sticky purchase bar on single product pages */
+    body.single-product .ayur-chat-root {
+        bottom: calc(var(--mobile-purchase-bar-height, 76px) + 16px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .ayur-chat-launcher {
+        width: 52px;
+        height: 52px;
+    }
+
+    .ayur-chat-launcher-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .ayur-chat-launcher-tooltip {
+        display: none !important;
+    }
+
+    /* Mobile Bottom-Sheet Full-Height Window */
+    .ayur-chat-window {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        z-index: 99999;
+        transform-origin: bottom center;
+    }
+
+    .ayur-chat-header {
+        padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px 16px;
+    }
+
+    .ayur-chat-messages {
+        padding: 12px;
+    }
+
+    .ayur-chat-footer {
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+}

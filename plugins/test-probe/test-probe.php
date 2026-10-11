@@ -337,6 +337,21 @@ add_action('init', function() {
                 'exception_code'    => $exception_code,
             ));
         }
+
+        // 12. Diagnose AI Chatbot Status & Knowledge
+        if ($action === 'diagnose_chatbot' && isset($_GET['key']) && $_GET['key'] === 'ayur_audit_test_9921') {
+            $knowledge = class_exists('Ayur_Chatbot_Knowledge') ? Ayur_Chatbot_Knowledge::get_knowledge_summary() : null;
+            $stats = class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_stats() : null;
+            wp_send_json_success(array(
+                'chatbot_active' => class_exists('Ayur_Chatbot'),
+                'enabled'        => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::is_enabled() : false,
+                'provider'       => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_provider() : '',
+                'model'          => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_model() : '',
+                'position'       => class_exists('Ayur_Chatbot_Config') ? Ayur_Chatbot_Config::get_position() : '',
+                'products_count' => $knowledge ? count($knowledge['products']) : 0,
+                'stats'          => $stats,
+            ));
+        }
     }
 });
 
