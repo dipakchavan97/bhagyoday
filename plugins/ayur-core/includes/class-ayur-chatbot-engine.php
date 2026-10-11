@@ -136,6 +136,38 @@ class Ayur_Chatbot_Engine {
             }
         }
 
+        // Direct Dosage / Directions Handler (Priority 2):
+        // Return verified usage instructions for the resolved or active product without confusing with ingredients
+        $is_dosage_inquiry = self::contains_any($lower_msg, array(
+            'how to use', 'how should i use', 'dosage', 'how to take', 'directions',
+            'usage', 'sevan', 'kaise lena', 'kase ghyayche', 'वापर कसा', 'कसे घ्यावे',
+            'कधी घ्यावे', 'उपयोग', 'कैसे इस्तेमाल', 'इस्तेमाल कैसे', 'इस्तेमाल',
+            'कसा वापरावा', 'what is the dosage', 'dose', 'how do i use it'
+        ));
+
+        if ($is_dosage_inquiry) {
+            $target_prod = !empty($matched_products) ? $matched_products[0] : $active_product;
+            if ($target_prod) {
+                if ($lang === 'hi') {
+                    $dosage_reply = "🌿 **{$target_prod['name']} के सेवन की विधि (Dosage & Directions):**\n• **अनुशंसित सेवन विधि:** {$target_prod['dosage']}\n• **सावधानी:** {$target_prod['precautions']}\n\n💡 *सर्वोत्तम परिणामों के लिए संतुलित आहार के साथ 60 से 90 दिनों तक नियमित सेवन करें।*";
+                } elseif ($lang === 'mr') {
+                    $dosage_reply = "🌿 **{$target_prod['name']} घेण्याची पद्धत (वापर / Dosage):**\n• **प्रमाण व वेळ:** {$target_prod['dosage']}\n• **काळजी / सूचना:** {$target_prod['precautions']}\n\n💡 *उत्तम परिणामांसाठी सकस आहारासोबत ६० ते ९० दिवस नियमित सेवन करा.*";
+                } else {
+                    $dosage_reply = "🌿 **Directions for Use / Recommended Dosage for {$target_prod['name']}:**\n• **Intake Directions:** {$target_prod['dosage']}\n• **Precautions:** {$target_prod['precautions']}\n\n💡 *For optimal results, consume consistently for 60 to 90 days alongside balanced hydration and nutrition.*";
+                }
+
+                $recommended_cards = array(self::format_card_data($target_prod));
+                wp_send_json_success(array(
+                    'status'        => 'success',
+                    'message'       => $dosage_reply,
+                    'products'      => $recommended_cards,
+                    'quick_replies' => self::generate_quick_replies(array($target_prod), $lang),
+                    'language'      => $lang,
+                ));
+                return;
+            }
+        }
+
         // 8. Attempt External AI API Generation
         $api_key = Ayur_Chatbot_Config::get_api_key();
         $ai_response = null;
