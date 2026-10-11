@@ -194,8 +194,12 @@ class Ayur_Chatbot {
 
     private static function is_checkout_context() {
         if (function_exists('is_checkout') && is_checkout()) return true;
-        if (function_exists('is_page') && is_page('checkout')) return true;
-        if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/checkout') !== false) return true;
+        if (function_exists('is_cart') && is_cart()) return true;
+        if (function_exists('is_page') && (is_page('checkout') || is_page('cart'))) return true;
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $uri = $_SERVER['REQUEST_URI'];
+            if (strpos($uri, 'checkout') !== false || strpos($uri, 'cart') !== false) return true;
+        }
         return false;
     }
 }

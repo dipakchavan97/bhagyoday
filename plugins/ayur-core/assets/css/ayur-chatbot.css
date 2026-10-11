@@ -46,9 +46,11 @@
     right: 96px; /* Offset to sit gracefully next to floating WhatsApp button on desktop */
 }
 
-/* Suppress on checkout */
+/* Suppress on checkout and cart pages */
 body.woocommerce-checkout .ayur-chat-root,
-body[class*="checkout"] .ayur-chat-root {
+body.woocommerce-cart .ayur-chat-root,
+body[class*="checkout"] .ayur-chat-root,
+body[class*="cart"] .ayur-chat-root {
     display: none !important;
 }
 
