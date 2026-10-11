@@ -86,13 +86,54 @@ class Ayur_Chatbot_Engine {
         $active_product_sku = isset($_POST['active_product']) ? sanitize_text_field(wp_unslash($_POST['active_product'])) : '';
 
         // 7. Search Grounded Product Catalog
-        $matched_products = Ayur_Chatbot_Knowledge::search_relevant_products($raw_message, 3);
         $all_products     = Ayur_Chatbot_Knowledge::get_all_products();
         $policies         = Ayur_Chatbot_Knowledge::get_store_policies();
+        $matched_products = Ayur_Chatbot_Knowledge::search_relevant_products($raw_message, 3);
+        $active_product   = (!empty($active_product_sku) && isset($all_products[$active_product_sku])) ? $all_products[$active_product_sku] : null;
 
-        // If matched_products is empty but active_product_sku was supplied from active session:
-        if (empty($matched_products) && !empty($active_product_sku) && isset($all_products[$active_product_sku])) {
-            $matched_products[] = $all_products[$active_product_sku];
+        $lower_msg = strtolower($raw_message);
+
+        // If active product exists and either matched_products is empty or query refers to "this", "it", ingredients, dosage, etc.:
+        $has_pronoun_or_context = self::contains_any($lower_msg, array('this', 'it', 'this product', 'is product', 'ya utpadan', 'is utpadan', 'ise', 'yaat', 'isme', 'all ingredients', 'ingredients', 'dosage', 'how to use', 'directions', 'price', 'cost'));
+        if ($active_product) {
+            if (empty($matched_products) || $has_pronoun_or_context) {
+                // Ensure active product is the primary matched product
+                array_unshift($matched_products, $active_product);
+                $deduped = array();
+                foreach ($matched_products as $mp) {
+                    $deduped[$mp['sku']] = $mp;
+                }
+                $matched_products = array_values($deduped);
+            }
+        }
+
+        // Direct Canonical Ingredient Handler (Priority 2):
+        // When asked about ingredients, return the 100% verified canonical record without risk of AI hallucination or abbreviation
+        $is_ingredient_inquiry = self::contains_any($lower_msg, array(
+            'ingredient', 'ingredients', 'whats inside', 'what is inside', 'content', 'contents',
+            'herb', 'herbs', 'composition', 'घटक', 'साहित्य', 'सामग्री', 'घटक काय',
+            'what does this product contain', 'list all ingredients', 'tell me all ingredients',
+            'what are the ingredients', 'samagri', 'ghatak'
+        ));
+
+        if ($is_ingredient_inquiry) {
+            $target_prod = !empty($matched_products) ? $matched_products[0] : $active_product;
+            if ($target_prod) {
+                $canonical = Ayur_Chatbot_Knowledge::get_canonical_ingredient_record($target_prod['sku']);
+                if ($canonical) {
+                    $formatted_reply = Ayur_Chatbot_Knowledge::format_canonical_ingredients_response($canonical, $lang);
+                    $recommended_cards = array(self::format_card_data($target_prod));
+                    
+                    wp_send_json_success(array(
+                        'status'        => 'success',
+                        'message'       => $formatted_reply,
+                        'products'      => $recommended_cards,
+                        'quick_replies' => self::generate_quick_replies(array($target_prod), $lang),
+                        'language'      => $lang,
+                    ));
+                    return;
+                }
+            }
         }
 
         // 8. Attempt External AI API Generation
