@@ -210,17 +210,26 @@
     /**
      * Address Entry Enforcement: Strictly Manual Address Entry
      * Suppress address autofill and browser address suggestion dropdowns.
+     * Enforce explicit Mobile Number label.
      */
     function initAddressAutofill() {
         var addressInputs = '#billing_phone, #shipping-phone, #billing_address_1, #billing_address_2, #billing_city, #billing_state, #billing_postcode, #shipping_address_1, #shipping_address_2, #shipping_city, #shipping_state, #shipping_postcode';
 
         function enforceManualAddressAttributes() {
             $(addressInputs).attr('autocomplete', 'off');
+            var $phoneLabel = $('label[for="billing_phone"]');
+            if ($phoneLabel.length) {
+                $phoneLabel.contents().filter(function() {
+                    return this.nodeType === 3 && this.nodeValue.indexOf('Phone') !== -1;
+                }).each(function() {
+                    this.nodeValue = this.nodeValue.replace('Phone', 'Mobile Number');
+                });
+            }
         }
 
         enforceManualAddressAttributes();
         $(document).ajaxComplete(enforceManualAddressAttributes);
-        $(document.body).on('updated_checkout', enforceManualAddressAttributes);
+        $(document.body).on('updated_checkout country_to_state_changed', enforceManualAddressAttributes);
     }
 
     /**

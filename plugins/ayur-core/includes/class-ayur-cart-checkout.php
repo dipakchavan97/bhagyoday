@@ -22,7 +22,10 @@ class Ayur_Cart_Checkout {
         add_filter('woocommerce_add_to_cart_fragments', array(__CLASS__, 'add_cart_fragments'));
 
         // Checkout Field Optimization for India (Single clean manual delivery address form)
-        add_filter('woocommerce_checkout_fields', array(__CLASS__, 'optimize_indian_checkout_fields'));
+        add_filter('woocommerce_billing_fields', array(__CLASS__, 'optimize_billing_fields'), 999);
+        add_filter('woocommerce_checkout_fields', array(__CLASS__, 'optimize_indian_checkout_fields'), 999);
+        add_filter('woocommerce_get_country_locale', array(__CLASS__, 'filter_country_locale'), 999);
+        add_filter('gettext', array(__CLASS__, 'filter_phone_gettext'), 20, 3);
 
         // Enforce Server-Side Phone Number Validation & Sanitization
         add_action('woocommerce_checkout_process', array(__CLASS__, 'validate_indian_phone_number'), 10);
@@ -71,6 +74,8 @@ class Ayur_Cart_Checkout {
             update_option('woocommerce_enable_guest_checkout', 'yes');
             update_option('woocommerce_enable_signup_and_login_from_checkout', 'no');
             update_option('woocommerce_ship_to_destination', 'billing');
+            update_option('woocommerce_checkout_phone_field', 'required');
+            update_option('woocommerce_checkout_company_field', 'hidden');
 
             // Remove all leftover fastrr/pickrr options from database
             global $wpdb;
@@ -89,6 +94,86 @@ class Ayur_Cart_Checkout {
                 ));
             }
         }
+    }
+
+    /**
+     * Pre-filter Billing Fields to guarantee phone is mandatory and labeled Mobile Number
+     */
+    public static function optimize_billing_fields($fields) {
+        unset($fields['billing_company']);
+
+        if (isset($fields['billing_phone'])) {
+            $fields['billing_phone']['label'] = __('Mobile Number', 'ayur-core');
+            $fields['billing_phone']['placeholder'] = __('10-digit mobile number', 'ayur-core');
+            $fields['billing_phone']['priority'] = 20;
+            $fields['billing_phone']['class'] = array('form-row-wide', 'ayur-phone-field');
+            $fields['billing_phone']['required'] = true;
+            $fields['billing_phone']['type'] = 'tel';
+            $fields['billing_phone']['autocomplete'] = 'off';
+            if (!isset($fields['billing_phone']['custom_attributes'])) {
+                $fields['billing_phone']['custom_attributes'] = array();
+            }
+            $fields['billing_phone']['custom_attributes']['autocomplete'] = 'off';
+            $fields['billing_phone']['custom_attributes']['inputmode'] = 'tel';
+            $fields['billing_phone']['custom_attributes']['maxlength'] = '16';
+        }
+
+        if (isset($fields['billing_address_1'])) {
+            $fields['billing_address_1']['autocomplete'] = 'off';
+        }
+        if (isset($fields['billing_address_2'])) {
+            $fields['billing_address_2']['autocomplete'] = 'off';
+        }
+        if (isset($fields['billing_city'])) {
+            $fields['billing_city']['autocomplete'] = 'off';
+        }
+        if (isset($fields['billing_state'])) {
+            $fields['billing_state']['autocomplete'] = 'off';
+        }
+        if (isset($fields['billing_postcode'])) {
+            $fields['billing_postcode']['autocomplete'] = 'off';
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Filter Country Locales for India and Default to guarantee Mobile Number label and autocomplete=off in wc-address-i18n
+     */
+    public static function filter_country_locale($locales) {
+        $keys = array('IN', 'default');
+        foreach ($keys as $k) {
+            if (!isset($locales[$k])) {
+                $locales[$k] = array();
+            }
+            if (!isset($locales[$k]['phone'])) {
+                $locales[$k]['phone'] = array();
+            }
+            $locales[$k]['phone']['label'] = __('Mobile Number', 'ayur-core');
+            $locales[$k]['phone']['placeholder'] = __('10-digit mobile number', 'ayur-core');
+            $locales[$k]['phone']['required'] = true;
+            $locales[$k]['phone']['autocomplete'] = 'off';
+
+            foreach (array('address_1', 'address_2', 'city', 'state', 'postcode') as $addr_field) {
+                if (!isset($locales[$k][$addr_field])) {
+                    $locales[$k][$addr_field] = array();
+                }
+                $locales[$k][$addr_field]['autocomplete'] = 'off';
+            }
+        }
+        return $locales;
+    }
+
+    /**
+     * Filter gettext on checkout to display Mobile Number
+     */
+    public static function filter_phone_gettext($translated_text, $text, $domain) {
+        if ($domain === 'woocommerce' && $text === 'Phone') {
+            if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+                return __('Mobile Number', 'ayur-core');
+            }
+        }
+        return $translated_text;
     }
 
     /**
