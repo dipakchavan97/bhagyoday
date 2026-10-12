@@ -127,8 +127,8 @@ class Ayur_Tracking {
         $pixel_id = get_option('ayur_meta_pixel_id', '');
         $ga4_id   = get_option('ayur_ga4_id', '');
 
-        // Meta Pixel Base Code
-        if (!empty($pixel_id)) {
+        // Meta Pixel Base Code (rendered in header.php if present)
+        if (!empty($pixel_id) && !defined('AYUR_PIXEL_RENDERED')) {
             ?>
             <!-- Meta Pixel Code -->
             <script>
