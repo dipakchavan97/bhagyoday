@@ -101,20 +101,82 @@ class Ayur_Tracking {
         $currency = function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : 'INR';
         $timezone = wp_timezone_string();
 
+        $capi_verification = array(
+            'tested'          => false,
+            'api_accessible'  => false,
+            'http_code'       => 0,
+            'events_received' => 0,
+            'fbtrace_id'      => '',
+            'message'         => '',
+        );
+
+        if (!empty($pixel_id) && !empty($capi_token)) {
+            $capi_verification['tested'] = true;
+            $meta_url = "https://graph.facebook.com/v19.0/" . rawurlencode($pixel_id) . "/events?access_token=" . rawurlencode($capi_token);
+            $test_event = array(
+                'data' => array(
+                    array(
+                        'event_name'       => 'PageView',
+                        'event_time'       => time(),
+                        'event_id'         => 'capi_audit_' . time(),
+                        'event_source_url' => home_url('/'),
+                        'action_source'    => 'website',
+                        'user_data'        => array(
+                            'client_ip_address' => !empty($_SERVER['REMOTE_ADDR']) ? sanitize_text_field($_SERVER['REMOTE_ADDR']) : '127.0.0.1',
+                            'client_user_agent' => !empty($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field($_SERVER['HTTP_USER_AGENT']) : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                            'em'                => array(hash('sha256', 'test@bhagyodayayurveda.in')),
+                        ),
+                    ),
+                ),
+            );
+            if (!empty($test_code)) {
+                $test_event['test_event_code'] = $test_code;
+            }
+
+            $meta_res = wp_remote_post($meta_url, array(
+                'headers' => array('Content-Type' => 'application/json'),
+                'body'    => json_encode($test_event),
+                'timeout' => 12,
+            ));
+
+            if (is_wp_error($meta_res)) {
+                $capi_verification['message'] = $meta_res->get_error_message();
+            } else {
+                $code = wp_remote_retrieve_response_code($meta_res);
+                $resp_body = json_decode(wp_remote_retrieve_body($meta_res), true);
+                $capi_verification['http_code'] = $code;
+                $capi_verification['api_accessible'] = ($code === 200);
+                if (isset($resp_body['events_received'])) {
+                    $capi_verification['events_received'] = (int)$resp_body['events_received'];
+                }
+                if (isset($resp_body['fbtrace_id'])) {
+                    $capi_verification['fbtrace_id'] = $resp_body['fbtrace_id'];
+                }
+                if (isset($resp_body['error'])) {
+                    $capi_verification['message'] = isset($resp_body['error']['message']) ? $resp_body['error']['message'] : 'Graph API Error';
+                    $capi_verification['error_type'] = isset($resp_body['error']['type']) ? $resp_body['error']['type'] : '';
+                    $capi_verification['error_code'] = isset($resp_body['error']['code']) ? $resp_body['error']['code'] : 0;
+                    $capi_verification['error_subcode'] = isset($resp_body['error']['error_subcode']) ? $resp_body['error']['error_subcode'] : 0;
+                    $capi_verification['error_user_msg'] = isset($resp_body['error']['error_user_msg']) ? $resp_body['error']['error_user_msg'] : '';
+                }
+            }
+        }
+
         wp_send_json_success(array(
-            'site_name'        => get_bloginfo('name'),
-            'site_url'         => home_url(),
-            'currency'         => $currency,
-            'timezone'         => $timezone,
-            'pixel_id'         => $pixel_id,
-            'has_capi_token'   => !empty($capi_token),
-            'capi_token_hint'  => !empty($capi_token) ? substr($capi_token, 0, 8) . '...' . substr($capi_token, -4) : '',
-            'test_code'        => $test_code,
-            'ga4_id'           => $ga4_id,
-            'privacy_url'      => $privacy_url,
-            'active_plugins'   => $active_plugins,
-            'product_count'    => count($products),
-            'products'         => $products,
+            'site_name'         => get_bloginfo('name'),
+            'site_url'          => home_url(),
+            'currency'          => $currency,
+            'timezone'          => $timezone,
+            'pixel_id'          => $pixel_id,
+            'has_capi_token'    => !empty($capi_token),
+            'capi_token_hint'   => !empty($capi_token) ? substr($capi_token, 0, 8) . '...' . substr($capi_token, -4) : '',
+            'test_code'         => $test_code,
+            'ga4_id'            => $ga4_id,
+            'privacy_url'       => $privacy_url,
+            'active_plugins'    => $active_plugins,
+            'capi_verification' => $capi_verification,
+            'product_count'     => count($products),
+            'products'          => $products,
         ));
     }
 
