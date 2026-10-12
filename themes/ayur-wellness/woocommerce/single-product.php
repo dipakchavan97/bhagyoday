@@ -237,12 +237,12 @@ while (have_posts()) :
                                 </div>
                             <?php endif; ?>
 
-                            <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product_id); ?>" class="ayur-btn-add-cart single_add_to_cart_button button alt">
+                            <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product_id); ?>" data-product_sku="<?php echo esc_attr($product->get_sku() ?: (string)$product_id); ?>" class="ayur-btn-add-cart single_add_to_cart_button button alt">
                                 <?php echo ayur_svg_icon('shopping-bag', '', 16); ?>
                                 <span><?php _e('ADD TO CART', 'ayur-wellness'); ?></span>
                             </button>
 
-                            <a href="<?php echo esc_url(add_query_arg(array('ayur_instant_buy' => $product_id, 'quantity' => 1), home_url('/'))); ?>" class="ayur-btn-buy-now" id="ayurBtnBuyNow" data-product-id="<?php echo esc_attr($product_id); ?>">
+                            <a href="<?php echo esc_url(add_query_arg(array('ayur_instant_buy' => $product_id, 'quantity' => 1), home_url('/'))); ?>" class="ayur-btn-buy-now" id="ayurBtnBuyNow" data-product-id="<?php echo esc_attr($product_id); ?>" data-product-sku="<?php echo esc_attr($product->get_sku() ?: (string)$product_id); ?>">
                                 <span><?php _e('BUY NOW', 'ayur-wellness'); ?></span>
                                 <?php echo ayur_svg_icon('arrow-right', '', 14); ?>
                             </a>

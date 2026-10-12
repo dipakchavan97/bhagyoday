@@ -165,7 +165,9 @@
         // Single Product Page Form Add to Cart Tracking
         $('form.cart.ayur-cart-form').on('submit', function() {
             var $form = $(this);
-            var prodId = $form.find('button[name="add-to-cart"]').val();
+            var $btn = $form.find('button[name="add-to-cart"]');
+            var prodId = $btn.val();
+            var prodSku = $btn.data('product_sku') || prodId;
             var qty = parseInt($form.find('input[name="quantity"]').val(), 10) || 1;
             var prodName = $('.ayur-product-title').first().text().trim() || 'Ayurvedic Formulation';
             var prodPrice = parseFloat($('.ayur-single-price').first().text().replace(/[^0-9.]/g, '')) || 0;
@@ -179,7 +181,7 @@
                         'currency': 'INR',
                         'value': prodValue > 0 ? prodValue : undefined,
                         'items': [{
-                            'item_id': String(prodId),
+                            'item_id': String(prodSku),
                             'item_name': prodName,
                             'price': prodPrice > 0 ? prodPrice : undefined,
                             'quantity': qty
@@ -191,7 +193,7 @@
             if (typeof fbq === 'function') {
                 fbq('track', 'AddToCart', {
                     content_name: prodName,
-                    content_ids: [String(prodId)],
+                    content_ids: [String(prodSku)],
                     content_type: 'product',
                     value: prodValue > 0 ? prodValue : undefined,
                     currency: 'INR'
@@ -704,6 +706,7 @@
             e.preventDefault();
             var $btn = $(this);
             var prodId = $btn.data('product-id') || $('form.cart button[name="add-to-cart"]').val();
+            var prodSku = $btn.data('product-sku') || $('form.cart button[name="add-to-cart"]').data('product_sku') || prodId;
             var qty = parseInt($('form.cart input[name="quantity"]').val(), 10) || 1;
 
             if (!prodId) {
@@ -723,7 +726,7 @@
                         'currency': 'INR',
                         'value': value,
                         'items': [{
-                            'item_id': String(prodId),
+                            'item_id': String(prodSku),
                             'item_name': prodName,
                             'quantity': qty,
                             'price': price
@@ -735,7 +738,7 @@
             if (typeof fbq === 'function') {
                 fbq('track', 'InitiateCheckout', {
                     content_name: prodName,
-                    content_ids: [String(prodId)],
+                    content_ids: [String(prodSku)],
                     content_type: 'product',
                     value: value,
                     currency: 'INR',
