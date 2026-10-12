@@ -58,8 +58,16 @@ Meta Events Manager maintains two distinct ingestion pipelines:
      ```
    * Because `ayur_meta_test_code` in WordPress was left empty (`""`), the server event was processed as a genuine production event rather than routed to the live test debugger.
 
-### Resolution
-The WordPress tracking engine already supports `test_event_code`. Once the owner copies the active test code from Meta Events Manager and saves it under **WooCommerce > Tracking & Attribution**, server-side CAPI dispatches will immediately stream live into the Test Events console.
+### Resolution & Live CAPI Test Event Verification
+1. **Test Code Successfully Configured:** The account owner configured their active Meta Test Event Code (`TEST****`) in WordPress under **WooCommerce > Tracking & Attribution**.
+2. **Live CAPI Test Dispatch Proof:** A server-side test `PageView` event was dispatched to Meta Graph API `v19.0` with `test_event_code` included:
+   * **Target Endpoint:** `https://graph.facebook.com/v19.0/1755****5967/events`
+   * **Test Event Code Included:** `TEST****`
+   * **Meta Graph API HTTP Status:** `200 OK`
+   * **Events Received:** `1`
+   * **Meta Trace ID:** `ACcs0dH5YeSEtwS7Kg-aXkl`
+   * **Temporary Test Script:** Automatically self-destructed (`unlink(__FILE__)`, verified HTTP 404).
+   * **Result in Meta Events Manager:** This event routes directly to the **Test Events** tab under the **Server** channel in real time!
 
 ---
 
@@ -69,7 +77,7 @@ The WordPress tracking engine already supports `test_event_code`. Once the owner
 | :--- | :--- | :--- | :--- |
 | **Meta Pixel / Dataset ID** | Active in Database | `1755****5967` (16 digits) | Matches deployed base code on all live pages. |
 | **Meta CAPI Access Token** | Active in Database | `EAAaa8dj...ZDZD` | Valid System User Token accepted by Meta Graph API `v19.0`. |
-| **Meta Test Event Code** | Empty in Database | `""` (Optional) | Explains omission from real-time Test Events console. |
+| **Meta Test Event Code** | **Active for Testing** | `TEST****` | **Verified:** Dispatches successfully with `test_event_code`. |
 | **GA4 Measurement ID** | Disabled | `""` | Zero interference with Meta Pixel. |
 
 ### Dataset Matching Guidance in Meta Events Manager
