@@ -131,7 +131,8 @@
 
             var prodId = $btn.data('product_id') || $btn.attr('data-product_id');
             var prodSku = $btn.data('product_sku') || prodId;
-            var prodName = $btn.closest('.ayur-product-card, .ayur-hero-spotlight-card, .ayur-featured-block, .ayur-bundle-card, .ayur-drawer-rec-card, .ayur-drawer-cross-item').find('.ayur-product-title, .ayur-hero-spotlight-title, .ayur-featured-title, .ayur-bundle-title, .ayur-drawer-rec-name, .ayur-drawer-cross-name').first().text().trim() || 'Ayurvedic Formulation';
+            var $priceEl = $btn.closest('.ayur-product-card, .ayur-hero-spotlight-card, .ayur-featured-block, .ayur-bundle-card, .ayur-drawer-rec-card, .ayur-drawer-cross-item').find('.ayur-price, .ayur-single-price, .amount, .price').first();
+            var prodPrice = parseFloat($priceEl.text().replace(/[^0-9.]/g, '')) || 0;
             var eventId = 'atc_' + prodId + '_' + Date.now();
 
             if (window.dataLayer) {
@@ -139,9 +140,11 @@
                     'event': 'add_to_cart',
                     'ecommerce': {
                         'currency': 'INR',
+                        'value': prodPrice > 0 ? prodPrice : undefined,
                         'items': [{
                             'item_id': String(prodSku),
                             'item_name': prodName,
+                            'price': prodPrice > 0 ? prodPrice : undefined,
                             'quantity': 1
                         }]
                     }
@@ -153,6 +156,7 @@
                     content_name: prodName,
                     content_ids: [String(prodSku)],
                     content_type: 'product',
+                    value: prodPrice > 0 ? prodPrice : undefined,
                     currency: 'INR'
                 }, { eventID: eventId });
             }
@@ -164,6 +168,8 @@
             var prodId = $form.find('button[name="add-to-cart"]').val();
             var qty = parseInt($form.find('input[name="quantity"]').val(), 10) || 1;
             var prodName = $('.ayur-product-title').first().text().trim() || 'Ayurvedic Formulation';
+            var prodPrice = parseFloat($('.ayur-single-price').first().text().replace(/[^0-9.]/g, '')) || 0;
+            var prodValue = prodPrice * qty;
             var eventId = 'atc_' + prodId + '_' + Date.now();
 
             if (window.dataLayer) {
@@ -171,9 +177,11 @@
                     'event': 'add_to_cart',
                     'ecommerce': {
                         'currency': 'INR',
+                        'value': prodValue > 0 ? prodValue : undefined,
                         'items': [{
                             'item_id': String(prodId),
                             'item_name': prodName,
+                            'price': prodPrice > 0 ? prodPrice : undefined,
                             'quantity': qty
                         }]
                     }
@@ -185,6 +193,7 @@
                     content_name: prodName,
                     content_ids: [String(prodId)],
                     content_type: 'product',
+                    value: prodValue > 0 ? prodValue : undefined,
                     currency: 'INR'
                 }, { eventID: eventId });
             }

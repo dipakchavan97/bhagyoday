@@ -29,6 +29,66 @@ class Ayur_Tracking {
         // Admin Settings Page
         add_action('admin_menu', array(__CLASS__, 'register_admin_menu'));
         add_action('admin_init', array(__CLASS__, 'register_settings'));
+
+        // Secure Audit Diagnostic Probe for Meta Ads Implementation
+        if (isset($_GET['ayur_audit_tracking']) && $_GET['ayur_audit_tracking'] === 'ayur_audit_test_9921') {
+            add_action('init', array(__CLASS__, 'audit_tracking_state'), 1);
+        }
+    }
+
+    /**
+     * Audit Diagnostic State for Meta Ads Implementation
+     */
+    public static function audit_tracking_state() {
+        $pixel_id   = get_option('ayur_meta_pixel_id', '');
+        $capi_token = get_option('ayur_meta_capi_token', '');
+        $test_code  = get_option('ayur_meta_test_code', '');
+        $ga4_id     = get_option('ayur_ga4_id', '');
+
+        $products = array();
+        if (function_exists('wc_get_products')) {
+            $wc_products = wc_get_products(array('limit' => 50, 'status' => 'publish'));
+            foreach ($wc_products as $p) {
+                $image_id = $p->get_image_id();
+                $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
+                $products[] = array(
+                    'id'            => $p->get_id(),
+                    'name'          => $p->get_name(),
+                    'slug'          => $p->get_slug(),
+                    'sku'           => $p->get_sku() ?: (string)$p->get_id(),
+                    'regular_price' => $p->get_regular_price(),
+                    'sale_price'    => $p->get_sale_price(),
+                    'current_price' => $p->get_price(),
+                    'stock_status'  => $p->get_stock_status(),
+                    'stock_qty'     => $p->get_stock_quantity(),
+                    'url'           => $p->get_permalink(),
+                    'image_url'     => $image_url,
+                );
+            }
+        }
+
+        $active_plugins = get_option('active_plugins', array());
+        $privacy_page_id = get_option('wp_page_for_privacy_policy');
+        $privacy_url = $privacy_page_id ? get_permalink($privacy_page_id) : '';
+
+        $currency = function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : 'INR';
+        $timezone = wp_timezone_string();
+
+        wp_send_json_success(array(
+            'site_name'        => get_bloginfo('name'),
+            'site_url'         => home_url(),
+            'currency'         => $currency,
+            'timezone'         => $timezone,
+            'pixel_id'         => $pixel_id,
+            'has_capi_token'   => !empty($capi_token),
+            'capi_token_hint'  => !empty($capi_token) ? substr($capi_token, 0, 8) . '...' . substr($capi_token, -4) : '',
+            'test_code'        => $test_code,
+            'ga4_id'           => $ga4_id,
+            'privacy_url'      => $privacy_url,
+            'active_plugins'   => $active_plugins,
+            'product_count'    => count($products),
+            'products'         => $products,
+        ));
     }
 
     /**
@@ -215,6 +275,13 @@ class Ayur_Tracking {
             if ($cart && !$cart->is_empty()) {
                 $total = $cart->get_total('edit');
                 $event_id = 'ic_' . time();
+                $content_ids = array();
+                foreach ($cart->get_cart() as $cart_item) {
+                    if (isset($cart_item['data']) && is_object($cart_item['data'])) {
+                        $p = $cart_item['data'];
+                        $content_ids[] = $p->get_sku() ?: (string)$p->get_id();
+                    }
+                }
                 
                 echo "<script>
                 window.dataLayer = window.dataLayer || [];
@@ -232,6 +299,8 @@ class Ayur_Tracking {
                         fbq('track', 'InitiateCheckout', {
                             value: {$total},
                             currency: 'INR',
+                            content_ids: " . json_encode($content_ids) . ",
+                            content_type: 'product',
                             num_items: " . $cart->get_cart_contents_count() . "
                         }, { eventID: '{$event_id}' });
                     }";
