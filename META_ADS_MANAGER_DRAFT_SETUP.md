@@ -4,7 +4,7 @@
 **Ad Set Name:** `India | Broad | Purchase | Test 01`  
 **Brand:** Bhagyoday Ayurveda  
 **Target Product URL:** [Amrit Heart Health Immunity Juice 500ml](https://bhagyodayayurveda.in/product/arjuna-amrit-heart-vitality-juice/)  
-**Initial Daily Budget:** **₹300 / day** (₹2,100 planned for initial 7-day test)  
+**Initial Daily Budget:** **₹300 / day** (Ad Set Level Budget)  
 **Safety Gate:** **ALL ADS REMAIN IN DRAFT / PAUSED STATUS (ZERO AD SPEND)**  
 
 ---
@@ -13,7 +13,8 @@
 
 In accordance with strict security protocols:
 * Antigravity **never** requests or stores your Meta account password, two-factor authentication (2FA) tokens, or browser session cookies.
-* Because direct API write tokens for Meta Ads Manager creation are restricted to authorized account owners, this guide provides the exact parameter-by-parameter specification to configure the campaign directly in your authenticated [Meta Ads Manager](https://adsmanager.facebook.com/) dashboard in under 5 minutes.
+* An automated browser session test to access Meta Ads Manager encountered an execution environment dependency limitation (Playwright driver CDN 404), and Meta strictly mandates interactive two-factor authentication (2FA) and Business Portfolio admin rights that cannot and should not be automated programmatically.
+* Because the automated session cannot bypass your 2FA authentication, this guide provides the exact parameter-by-parameter specification to configure the campaign directly in your authenticated [Meta Ads Manager](https://adsmanager.facebook.com/) dashboard in under 5 minutes.
 
 ---
 
@@ -45,7 +46,7 @@ Configure the ad set with broad, compliant targeting:
 2. **Conversion:**
    * Conversion location: **Website**
    * Performance goal: **Maximize number of conversions**
-   * Dataset / Pixel: Select Dataset **`1755****5967`**
+   * Dataset / Pixel: Select Dataset **`1755****5967`** (Bhagyoday Ayurveda Dataset)
    * Conversion event: Select **Purchase**
 3. **Budget & Schedule:**
    * Budget: **Daily Budget**
@@ -70,14 +71,14 @@ Configure the ad set with broad, compliant targeting:
 
 ## 4. Step 3: Creative & Ad Configuration (Level 3)
 
-Create two active test ads (Ad A and Ad B), with Ad C retained as an alternative.
+Configure two active test ads (Ad 01 and Ad 02), with Ad 03 retained as an alternative.
 
 ---
 
-### Ad A: Lifestyle Creative (Indian Couple)
-1. **Ad Name:** Enter:  
-   `Ad A — Lifestyle Couple — Amrit Juice 500ml`
-2. **Identity:** Select your official **Bhagyoday Ayurveda Facebook Page** and **Instagram Account**.
+### Ad 01: Lifestyle Focus
+1. **Ad Name:** Enter exactly:  
+   `Ad 01 | Lifestyle | 4x5 + 9x16`
+2. **Identity:** Select your official **Bhagyoday Ayurveda Facebook Page** and connected **Instagram Account**.
 3. **Ad Setup:** **Single image or video**.
 4. **Media Upload:**
    * Click **Add Media** -> **Add Image**.
@@ -85,11 +86,11 @@ Create two active test ads (Ad A and Ad B), with Ad C retained as an alternative
    * For **Stories & Reels (9:16)** placements: Click **Replace** on the 9:16 crop and upload `assets/meta-creatives/ad_creative_amrit_lifestyle_story_9x16.jpg`.
 5. **Ad Copy:**
    * **Primary Text:**  
-     `Discover Bhagyoday Ayurveda’s Amrit Juice, a traditional Ayurvedic herbal formulation. Explore the product details, ingredients and usage information on our official website.`
+     `Discover Bhagyoday Ayurveda’s Amrit Juice, a traditional Ayurvedic herbal formulation. Explore the product details, ingredients and recommended usage on our official website. Free delivery on orders above ₹999.`
    * **Headline:**  
-     `Discover Amrit Juice`
+     `Discover Amrit Juice | 500 ml`
    * **Description:**  
-     `Explore the 500 ml formulation online.`
+     `Traditional Ayurvedic herbal formulation.`
    * **Call to Action (CTA):** Select **Shop Now**.
 6. **Destination:**
    * Website URL:  
@@ -97,21 +98,21 @@ Create two active test ads (Ad A and Ad B), with Ad C retained as an alternative
 
 ---
 
-### Ad B: Premium Product Hero Creative (Ingredients Focus)
-1. In the left navigation tree, click the three dots next to `Ad A` and select **Duplicate**.
-2. **Ad Name:** Enter:  
-   `Ad B — Product Hero Ingredients — Amrit Juice 500ml`
+### Ad 02: Product Hero & Formulation Focus
+1. In the left navigation tree, click the three dots next to `Ad 01` and select **Duplicate**.
+2. **Ad Name:** Enter exactly:  
+   `Ad 02 | Product Hero | 4x5 + 9x16`
 3. **Media:**
    * Click **Edit** -> **Change Media**.
    * For **Feed placements**: Upload `assets/meta-creatives/ad_creative_amrit_product_hero_feed_4x5.jpg`.
    * For **Stories & Reels placements**: Upload `assets/meta-creatives/ad_creative_amrit_product_hero_story_9x16.jpg`.
 4. **Ad Copy:**
    * **Primary Text:**  
-     `Explore Bhagyoday Ayurveda Amrit Juice and learn more about its listed ingredients, product details and recommended usage. Visit our official store for current pricing and delivery information.`
+     `Explore Bhagyoday Ayurveda Amrit Juice (500 ml). Visit our official store for product details, listed ingredients, pricing and delivery information.`
    * **Headline:**  
      `Explore Amrit Juice 500 ml`
    * **Description:**  
-     `Product details and ordering online.`
+     `Discover the product online.`
    * **Call to Action (CTA):** Select **Shop Now**.
 5. **Destination:**
    * Website URL:  
@@ -119,28 +120,29 @@ Create two active test ads (Ad A and Ad B), with Ad C retained as an alternative
 
 ---
 
-### Ad C: Hindi-First Alternative Creative (Optional / Regional Test)
-*(Can be launched alongside Ad A & B or kept as reserve)*
-1. **Ad Name:** `Ad C — Hindi Vitality — Amrit Juice 500ml`
-2. **Media:** `ad_creative_amrit_hindi_hero_feed_4x5.jpg` and `ad_creative_amrit_hindi_hero_story_9x16.jpg`.
+### Ad 03: Hindi-First Alternative Creative (Reserve / Test)
+*(Optional: Can be launched alongside Ad 01 & 02 or kept in draft reserve)*
+1. **Ad Name:** `Ad 03 | Hindi-First Hero | 4x5 + 9x16`
+2. **Media:** `assets/meta-creatives/ad_creative_amrit_hindi_hero_feed_4x5.jpg` and `ad_creative_amrit_hindi_hero_story_9x16.jpg`.
 3. **Primary Text (Hindi):**  
-   `भाग्योदय आयुर्वेद के अमृत जूस के बारे में जानें — अर्जुन, आंवला और पारंपरिक जड़ी-बूटियों से तैयार एक आयुर्वेदिक फॉर्मूलेशन। उत्पाद सामग्री, उपयोग विधि और प्रामाणिक विवरण जानने के लिए हमारी आधिकारिक वेबसाइट देखें।`
-4. **Headline:** `अमृत जूस 500ml | प्रामाणिक आयुर्वेद`
-5. **Description:** `वेबसाइट पर पूरी जानकारी देखें • कैश ऑन डिलीवरी उपलब्ध`
+   `भाग्योदय आयुर्वेद अमृत जूस — अर्जुन छाल और पारंपरिक आयुर्वेदिक जड़ी-बूटियों से निर्मित प्राकृतिक फॉर्मूलेशन। सामग्री, सेवन विधि और प्रामाणिक जानकारी के लिए हमारी वेबसाइट पर जाएं। ₹999 से अधिक के ऑर्डर पर मुफ्त डिलीवरी।`
+4. **Headline:** `अमृत जूस 500 ml | भाग्योदय आयुर्वेद`
+5. **Description:** `पारंपरिक आयुर्वेदिक जड़ी-बूटियों का संगम।`
 6. **CTA:** `Shop Now`
 7. **Destination URL:**  
-   `https://bhagyodayayurveda.in/product/arjuna-amrit-heart-vitality-juice/?utm_source=meta&utm_medium=paid_social&utm_campaign=BA_Sales_India_Test01&utm_content=hindi_companion`
+   `https://bhagyodayayurveda.in/product/arjuna-amrit-heart-vitality-juice/?utm_source=meta&utm_medium=paid_social&utm_campaign=BA_Sales_India_Test01&utm_content=hindi_hero`
 
 ---
 
 ## 5. Step 4: Save as Draft & Keep Paused (CRITICAL SAFETY STEP)
 
-1. Once Ad A and Ad B are configured, look at the top-right corner of Meta Ads Manager.
+1. Once Ad 01 and Ad 02 are configured, look at the top-right corner of Meta Ads Manager.
 2. **DO NOT CLICK "PUBLISH"**.
 3. Click the small **Close (X)** icon in the top right.
 4. Meta will display a notice: *"Your changes have been saved as a draft."*
 5. In the Ads Manager table, confirm that the toggle switch next to `BA | Sales | India | ₹300 Daily | Test 01` is set to **OFF (Grey / Paused)**.
-6. The campaign is now safely stored as a draft without spending any money.
+6. Also confirm that the Ad Set and both Ads are set to **OFF / Paused**.
+7. The campaign is now safely stored as a draft with **zero ad spend**.
 
 ---
 
