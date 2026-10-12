@@ -43,65 +43,48 @@ class Ayur_Address_Autofill {
      * - Address & Phone: autocomplete="off" to prevent automated address autofill
      */
     public static function add_browser_autofill_attributes($fields) {
-        // Billing fields
+        $manual_off_fields = array(
+            'billing_phone', 'billing_address_1', 'billing_address_2',
+            'billing_city', 'billing_state', 'billing_postcode', 'billing_country',
+            'shipping_phone', 'shipping_address_1', 'shipping_address_2',
+            'shipping_city', 'shipping_state', 'shipping_postcode', 'shipping_country'
+        );
+
+        foreach (array('billing', 'shipping') as $type) {
+            if (!isset($fields[$type]) || !is_array($fields[$type])) continue;
+            foreach ($fields[$type] as $key => &$field) {
+                if (in_array($key, $manual_off_fields, true)) {
+                    $field['autocomplete'] = 'off';
+                    if (!isset($field['custom_attributes'])) {
+                        $field['custom_attributes'] = array();
+                    }
+                    $field['custom_attributes']['autocomplete'] = 'off';
+                }
+            }
+        }
+        unset($field);
+
+        // Standard browser attributes for customer identification
         if (isset($fields['billing']['billing_first_name'])) {
+            $fields['billing']['billing_first_name']['autocomplete'] = 'given-name';
             $fields['billing']['billing_first_name']['custom_attributes']['autocomplete'] = 'given-name';
         }
         if (isset($fields['billing']['billing_last_name'])) {
+            $fields['billing']['billing_last_name']['autocomplete'] = 'family-name';
             $fields['billing']['billing_last_name']['custom_attributes']['autocomplete'] = 'family-name';
         }
         if (isset($fields['billing']['billing_email'])) {
+            $fields['billing']['billing_email']['autocomplete'] = 'email';
             $fields['billing']['billing_email']['custom_attributes']['autocomplete'] = 'email';
         }
-        if (isset($fields['billing']['billing_phone'])) {
-            $fields['billing']['billing_phone']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['billing']['billing_address_1'])) {
-            $fields['billing']['billing_address_1']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['billing']['billing_address_2'])) {
-            $fields['billing']['billing_address_2']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['billing']['billing_city'])) {
-            $fields['billing']['billing_city']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['billing']['billing_state'])) {
-            $fields['billing']['billing_state']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['billing']['billing_postcode'])) {
-            $fields['billing']['billing_postcode']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['billing']['billing_country'])) {
-            $fields['billing']['billing_country']['custom_attributes']['autocomplete'] = 'off';
-        }
 
-        // Shipping fields
         if (isset($fields['shipping']['shipping_first_name'])) {
+            $fields['shipping']['shipping_first_name']['autocomplete'] = 'given-name';
             $fields['shipping']['shipping_first_name']['custom_attributes']['autocomplete'] = 'given-name';
         }
         if (isset($fields['shipping']['shipping_last_name'])) {
+            $fields['shipping']['shipping_last_name']['autocomplete'] = 'family-name';
             $fields['shipping']['shipping_last_name']['custom_attributes']['autocomplete'] = 'family-name';
-        }
-        if (isset($fields['shipping']['shipping_address_1'])) {
-            $fields['shipping']['shipping_address_1']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['shipping']['shipping_address_2'])) {
-            $fields['shipping']['shipping_address_2']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['shipping']['shipping_city'])) {
-            $fields['shipping']['shipping_city']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['shipping']['shipping_state'])) {
-            $fields['shipping']['shipping_state']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['shipping']['shipping_postcode'])) {
-            $fields['shipping']['shipping_postcode']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['shipping']['shipping_phone'])) {
-            $fields['shipping']['shipping_phone']['custom_attributes']['autocomplete'] = 'off';
-        }
-        if (isset($fields['shipping']['shipping_country'])) {
-            $fields['shipping']['shipping_country']['custom_attributes']['autocomplete'] = 'off';
         }
 
         return $fields;

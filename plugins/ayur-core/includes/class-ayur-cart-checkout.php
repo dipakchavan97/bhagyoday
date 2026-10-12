@@ -186,6 +186,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_first_name']['priority'] = 10;
             $fields['billing']['billing_first_name']['class'] = array('form-row-first');
             $fields['billing']['billing_first_name']['required'] = true;
+            $fields['billing']['billing_first_name']['autocomplete'] = 'given-name';
             $fields['billing']['billing_first_name']['custom_attributes'] = array('autocomplete' => 'given-name');
         }
 
@@ -196,6 +197,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_last_name']['priority'] = 15;
             $fields['billing']['billing_last_name']['class'] = array('form-row-last');
             $fields['billing']['billing_last_name']['required'] = true;
+            $fields['billing']['billing_last_name']['autocomplete'] = 'family-name';
             $fields['billing']['billing_last_name']['custom_attributes'] = array('autocomplete' => 'family-name');
         }
 
@@ -208,6 +210,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_phone']['required'] = true;
             $fields['billing']['billing_phone']['type'] = 'tel';
             $fields['billing']['billing_phone']['validate'] = array('phone');
+            $fields['billing']['billing_phone']['autocomplete'] = 'off';
             $fields['billing']['billing_phone']['custom_attributes'] = array(
                 'autocomplete' => 'off',
                 'inputmode'    => 'tel',
@@ -224,6 +227,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_email']['class'] = array('form-row-wide');
             $fields['billing']['billing_email']['required'] = true;
             $fields['billing']['billing_email']['type'] = 'email';
+            $fields['billing']['billing_email']['autocomplete'] = 'email';
             $fields['billing']['billing_email']['custom_attributes'] = array('autocomplete' => 'email');
         }
 
@@ -234,6 +238,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_address_1']['priority'] = 30;
             $fields['billing']['billing_address_1']['class'] = array('form-row-wide');
             $fields['billing']['billing_address_1']['required'] = true;
+            $fields['billing']['billing_address_1']['autocomplete'] = 'off';
             $fields['billing']['billing_address_1']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
@@ -244,6 +249,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_address_2']['priority'] = 35;
             $fields['billing']['billing_address_2']['class'] = array('form-row-wide');
             $fields['billing']['billing_address_2']['required'] = false;
+            $fields['billing']['billing_address_2']['autocomplete'] = 'off';
             $fields['billing']['billing_address_2']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
@@ -254,6 +260,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_city']['priority'] = 40;
             $fields['billing']['billing_city']['class'] = array('form-row-first');
             $fields['billing']['billing_city']['required'] = true;
+            $fields['billing']['billing_city']['autocomplete'] = 'off';
             $fields['billing']['billing_city']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
@@ -263,6 +270,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_state']['priority'] = 45;
             $fields['billing']['billing_state']['class'] = array('form-row-last');
             $fields['billing']['billing_state']['required'] = true;
+            $fields['billing']['billing_state']['autocomplete'] = 'off';
             $fields['billing']['billing_state']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
@@ -273,6 +281,7 @@ class Ayur_Cart_Checkout {
             $fields['billing']['billing_postcode']['priority'] = 50;
             $fields['billing']['billing_postcode']['class'] = array('form-row-wide');
             $fields['billing']['billing_postcode']['required'] = true;
+            $fields['billing']['billing_postcode']['autocomplete'] = 'off';
             $fields['billing']['billing_postcode']['custom_attributes'] = array(
                 'autocomplete' => 'off',
                 'inputmode'    => 'numeric',
@@ -284,6 +293,7 @@ class Ayur_Cart_Checkout {
         if (isset($fields['billing']['billing_country'])) {
             $fields['billing']['billing_country']['priority'] = 55;
             $fields['billing']['billing_country']['default'] = 'IN';
+            $fields['billing']['billing_country']['autocomplete'] = 'off';
             $fields['billing']['billing_country']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
