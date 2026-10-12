@@ -89,11 +89,14 @@ class Ayur_COD_Confirmation {
         // Validate basic required fields
         $billing_phone = isset($checkout_data['billing_phone']) ? sanitize_text_field($checkout_data['billing_phone']) : '';
         $shipping_phone = isset($checkout_data['shipping_phone']) ? sanitize_text_field($checkout_data['shipping_phone']) : $billing_phone;
-        $phone = !empty($shipping_phone) ? $shipping_phone : $billing_phone;
+        $phone = !empty($billing_phone) ? $billing_phone : $shipping_phone;
 
-        if (empty($phone)) {
-            wp_send_json_error(array('message' => __('Please enter a valid mobile number for courier tracking.', 'ayur-core')));
+        $normalized_phone = class_exists('Ayur_Cart_Checkout') ? Ayur_Cart_Checkout::normalize_indian_mobile($phone) : preg_replace('/\D/', '', $phone);
+        if (empty($phone) || !$normalized_phone) {
+            wp_send_json_error(array('message' => __('Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).', 'ayur-core')));
         }
+        $checkout_data['billing_phone'] = $normalized_phone;
+        $checkout_data['shipping_phone'] = $normalized_phone;
 
         // Server-Side Totals Recalculation (Never trust browser amounts)
         WC()->cart->calculate_totals();

@@ -84,29 +84,143 @@
     }
 
     /**
-     * Indian Phone & Pincode Formatting
+     * Helper: Validate and normalize Indian mobile phone number according to explicit documented rule:
+     * 1. Strips non-digits (+, spaces, hyphens).
+     * 2. If 12 digits starting with '91' (+91 prefix), strip '91'.
+     * 3. If 11 digits starting with '0' (trunk prefix), strip '0'.
+     * 4. Must be exactly 10 digits starting with 6, 7, 8, or 9.
+     */
+    function normalizeIndianMobile(raw) {
+        if (!raw) return null;
+        var digits = String(raw).replace(/\D/g, '');
+        if (digits.length === 12 && digits.indexOf('91') === 0) {
+            digits = digits.substring(2);
+        } else if (digits.length === 11 && digits.indexOf('0') === 0) {
+            digits = digits.substring(1);
+        }
+        if (/^[6-9]\d{9}$/.test(digits)) {
+            return digits;
+        }
+        return null;
+    }
+
+    /**
+     * Inline Field Error Helpers
+     */
+    function showFieldError($field, message) {
+        var $row = $field.closest('.form-row');
+        $row.addClass('woocommerce-invalid ayur-field-has-error').removeClass('woocommerce-validated');
+        $field.addClass('ayur-input-invalid');
+        var $err = $row.find('.ayur-field-error-msg');
+        if (!$err.length) {
+            $err = $('<span class="ayur-field-error-msg" role="alert" style="display:block; color:#B91C1C; font-size:12px; margin-top:5px; font-weight:600; line-height:1.3;"></span>');
+            $row.append($err);
+        }
+        $err.text(message).show();
+    }
+
+    function clearFieldError($field) {
+        var $row = $field.closest('.form-row');
+        $row.removeClass('woocommerce-invalid ayur-field-has-error').addClass('woocommerce-validated');
+        $field.removeClass('ayur-input-invalid');
+        $row.find('.ayur-field-error-msg').hide().text('');
+    }
+
+    /**
+     * Indian Phone & Pincode Formatting & Live Validation
      */
     function initIndianFormValidation() {
-        $(document).on('input', '#shipping-phone, #billing_phone', function() {
-            var val = $(this).val().replace(/[^0-9]/g, '');
-            if (val.length > 10) val = val.substring(0, 10);
-            $(this).val(val);
+        var phoneSelector = '#billing_phone, #shipping-phone, input[name="billing_phone"]';
+
+        // Phone Input: Flexible entry without an inflexible mask
+        $(document).on('input', phoneSelector, function() {
+            var val = $(this).val();
+            // Allow digits, +, spaces, and hyphens
+            var cleaned = val.replace(/[^\d\s\+\-]/g, '');
+            if (cleaned.length > 16) {
+                cleaned = cleaned.substring(0, 16);
+            }
+            if (cleaned !== val) {
+                $(this).val(cleaned);
+            }
+
+            // Real-time error clearance once valid
+            if (normalizeIndianMobile(cleaned)) {
+                clearFieldError($(this));
+            }
         });
 
-        $(document).on('input', '#shipping-postcode, #billing_postcode', function() {
+        // Phone Blur: Helpful validation message
+        $(document).on('blur', phoneSelector, function() {
+            var val = $(this).val().trim();
+            if (!val) {
+                showFieldError($(this), 'Mobile Number is required for courier tracking.');
+            } else if (!normalizeIndianMobile(val)) {
+                showFieldError($(this), 'Please enter a valid 10-digit Indian mobile number (e.g. 9876543210 or +91 9876543210).');
+            } else {
+                clearFieldError($(this));
+            }
+        });
+
+        // PIN Code Input: Exactly up to 6 numeric digits
+        $(document).on('input', '#billing_postcode, #shipping-postcode', function() {
             var val = $(this).val().replace(/[^0-9]/g, '');
             if (val.length > 6) val = val.substring(0, 6);
             $(this).val(val);
         });
+
+        // Checkout Place Order Hook: Validate phone & prevent double submissions
+        $('form.checkout').on('checkout_place_order', function() {
+            var $phoneField = $(phoneSelector).first();
+            if ($phoneField.length) {
+                var rawVal = $phoneField.val().trim();
+                var norm = normalizeIndianMobile(rawVal);
+                if (!norm) {
+                    showFieldError($phoneField, 'Please enter a valid 10-digit Indian mobile number before placing your order.');
+                    $('html, body').animate({
+                        scrollTop: Math.max(0, $phoneField.offset().top - 120)
+                    }, 300);
+                    $phoneField.focus();
+                    return false;
+                } else {
+                    clearFieldError($phoneField);
+                }
+            }
+
+            // Add Place Order button loading state & protect against double submissions
+            var $placeOrderBtn = $('#place_order, .wc-block-components-checkout-place-order-button');
+            if ($placeOrderBtn.length && !$placeOrderBtn.hasClass('ayur-btn-submitting')) {
+                $placeOrderBtn.addClass('ayur-btn-submitting').attr('data-orig-html', $placeOrderBtn.html());
+                $placeOrderBtn.css({ 'opacity': '0.75', 'pointer-events': 'none' });
+            }
+        });
+
+        // On WooCommerce checkout error, restore button loading state
+        $(document.body).on('checkout_error', function() {
+            var $placeOrderBtn = $('#place_order, .wc-block-components-checkout-place-order-button');
+            if ($placeOrderBtn.length && $placeOrderBtn.hasClass('ayur-btn-submitting')) {
+                $placeOrderBtn.removeClass('ayur-btn-submitting');
+                $placeOrderBtn.css({ 'opacity': '', 'pointer-events': '' });
+                var orig = $placeOrderBtn.attr('data-orig-html');
+                if (orig) $placeOrderBtn.html(orig);
+            }
+        });
     }
 
     /**
-     * Address Entry Enforcement (Phase 4: Manual Address Entry Only)
-     * Google Places and PIN-based autofill disabled.
+     * Address Entry Enforcement: Strictly Manual Address Entry
+     * Suppress address autofill and browser address suggestion dropdowns.
      */
     function initAddressAutofill() {
-        // Manual address entry only per Phase 4 specification.
-        // Third-party Places scripts and PIN lookups disabled.
+        var addressInputs = '#billing_phone, #shipping-phone, #billing_address_1, #billing_address_2, #billing_city, #billing_state, #billing_postcode, #shipping_address_1, #shipping_address_2, #shipping_city, #shipping_state, #shipping_postcode';
+
+        function enforceManualAddressAttributes() {
+            $(addressInputs).attr('autocomplete', 'off');
+        }
+
+        enforceManualAddressAttributes();
+        $(document).ajaxComplete(enforceManualAddressAttributes);
+        $(document.body).on('updated_checkout', enforceManualAddressAttributes);
     }
 
     /**
@@ -218,11 +332,13 @@
             var firstName = $('#shipping-first_name, input[name="shipping-first_name"], #billing_first_name, input[name="billing_first_name"]').first().val() || 'Customer';
             var lastName = $('#shipping-last_name, input[name="shipping-last_name"], #billing_last_name, input[name="billing_last_name"]').first().val() || '';
 
-            if (!phone || phone.replace(/\D/g, '').length < 10) {
-                alert('Please enter a valid 10-digit mobile number for courier tracking.');
-                $('#shipping-phone, #billing_phone, input[type="tel"]').first().focus();
+            var validMobile = normalizeIndianMobile(phone);
+            if (!validMobile) {
+                alert('Please enter a valid 10-digit Indian mobile number for courier tracking.');
+                $('#billing_phone, #shipping-phone, input[type="tel"]').first().focus();
                 return;
             }
+            phone = validMobile;
 
             if (!address1 || !city || !postcode || postcode.replace(/\D/g, '').length < 6) {
                 alert('Please complete your delivery address and 6-digit PIN code.');

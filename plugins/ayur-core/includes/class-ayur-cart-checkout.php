@@ -24,6 +24,13 @@ class Ayur_Cart_Checkout {
         // Checkout Field Optimization for India (Single clean manual delivery address form)
         add_filter('woocommerce_checkout_fields', array(__CLASS__, 'optimize_indian_checkout_fields'));
 
+        // Enforce Server-Side Phone Number Validation & Sanitization
+        add_action('woocommerce_checkout_process', array(__CLASS__, 'validate_indian_phone_number'), 10);
+        add_action('woocommerce_checkout_create_order', array(__CLASS__, 'save_normalized_phone_to_order'), 10, 2);
+
+        // Hide Order Notes by default for clean minimal mobile checkout
+        add_filter('woocommerce_enable_order_notes_field', '__return_false');
+
         // Quick "Buy Now" handler
         add_action('wp_loaded', array(__CLASS__, 'handle_quick_buy'));
 
@@ -151,97 +158,207 @@ class Ayur_Cart_Checkout {
 
     /**
      * Streamlined Indian D2C Checkout Fields (Manual Delivery Address Form)
+     * Sequence:
+     * 1. First Name (form-row-first)
+     * 2. Last Name (form-row-last)
+     * 3. Mobile Number (Mandatory, form-row-wide, placed near top after name)
+     * 4. Email Address (form-row-wide)
+     * 5. House/Flat No., Building & Street (Address 1, form-row-wide)
+     * 6. Locality / Area / Landmark (Optional, form-row-wide)
+     * 7. City / District (form-row-first)
+     * 8. State (form-row-last)
+     * 9. PIN Code (form-row-wide)
      */
     public static function optimize_indian_checkout_fields($fields) {
         // Remove unneeded company fields for clean mobile checkout
         unset($fields['billing']['billing_company']);
         unset($fields['shipping']['shipping_company']);
 
-        // First Name
+        // Hide optional order notes for fast, uncluttered mobile checkout
+        if (isset($fields['order']['order_comments'])) {
+            unset($fields['order']['order_comments']);
+        }
+
+        // 1. First Name
         if (isset($fields['billing']['billing_first_name'])) {
             $fields['billing']['billing_first_name']['label'] = __('First Name', 'ayur-core');
             $fields['billing']['billing_first_name']['placeholder'] = __('First name', 'ayur-core');
             $fields['billing']['billing_first_name']['priority'] = 10;
             $fields['billing']['billing_first_name']['class'] = array('form-row-first');
+            $fields['billing']['billing_first_name']['required'] = true;
+            $fields['billing']['billing_first_name']['custom_attributes'] = array('autocomplete' => 'given-name');
         }
 
-        // Last Name
+        // 2. Last Name
         if (isset($fields['billing']['billing_last_name'])) {
             $fields['billing']['billing_last_name']['label'] = __('Last Name', 'ayur-core');
             $fields['billing']['billing_last_name']['placeholder'] = __('Last name', 'ayur-core');
             $fields['billing']['billing_last_name']['priority'] = 15;
             $fields['billing']['billing_last_name']['class'] = array('form-row-last');
+            $fields['billing']['billing_last_name']['required'] = true;
+            $fields['billing']['billing_last_name']['custom_attributes'] = array('autocomplete' => 'family-name');
         }
 
-        // Billing Phone (Crucial for Indian Logistics / Courier Tracking)
+        // 3. Mobile Number (Mandatory, near top after customer name)
         if (isset($fields['billing']['billing_phone'])) {
-            $fields['billing']['billing_phone']['label'] = __('Mobile Number (For Courier Tracking & Updates)', 'ayur-core');
-            $fields['billing']['billing_phone']['placeholder'] = __('10-digit mobile number (e.g. 9876543210)', 'ayur-core');
+            $fields['billing']['billing_phone']['label'] = __('Mobile Number', 'ayur-core');
+            $fields['billing']['billing_phone']['placeholder'] = __('10-digit mobile number', 'ayur-core');
             $fields['billing']['billing_phone']['priority'] = 20;
             $fields['billing']['billing_phone']['class'] = array('form-row-wide', 'ayur-phone-field');
             $fields['billing']['billing_phone']['required'] = true;
+            $fields['billing']['billing_phone']['type'] = 'tel';
+            $fields['billing']['billing_phone']['validate'] = array('phone');
+            $fields['billing']['billing_phone']['custom_attributes'] = array(
+                'autocomplete' => 'off',
+                'inputmode'    => 'tel',
+                'maxlength'    => '16',
+                'data-rule'    => 'indian-phone',
+            );
         }
 
-        // Email
+        // 4. Email Address
         if (isset($fields['billing']['billing_email'])) {
             $fields['billing']['billing_email']['label'] = __('Email Address', 'ayur-core');
             $fields['billing']['billing_email']['placeholder'] = __('For order confirmation & invoice', 'ayur-core');
             $fields['billing']['billing_email']['priority'] = 25;
             $fields['billing']['billing_email']['class'] = array('form-row-wide');
             $fields['billing']['billing_email']['required'] = true;
+            $fields['billing']['billing_email']['type'] = 'email';
+            $fields['billing']['billing_email']['custom_attributes'] = array('autocomplete' => 'email');
         }
 
-        // Delivery Street Address (Address 1)
+        // 5. Delivery Street Address (Address 1)
         if (isset($fields['billing']['billing_address_1'])) {
-            $fields['billing']['billing_address_1']['label'] = __('Delivery Street Address', 'ayur-core');
+            $fields['billing']['billing_address_1']['label'] = __('House / Flat No., Building & Street', 'ayur-core');
             $fields['billing']['billing_address_1']['placeholder'] = __('House / Flat No., Building, Street', 'ayur-core');
             $fields['billing']['billing_address_1']['priority'] = 30;
             $fields['billing']['billing_address_1']['class'] = array('form-row-wide');
             $fields['billing']['billing_address_1']['required'] = true;
+            $fields['billing']['billing_address_1']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
-        // Landmark / Colony (Address 2)
+        // 6. Locality / Landmark (Address 2 - Optional)
         if (isset($fields['billing']['billing_address_2'])) {
-            $fields['billing']['billing_address_2']['label'] = __('Landmark / Locality (Optional)', 'ayur-core');
+            $fields['billing']['billing_address_2']['label'] = __('Locality / Area / Landmark (Optional)', 'ayur-core');
             $fields['billing']['billing_address_2']['placeholder'] = __('Nearby landmark, apartment or area', 'ayur-core');
             $fields['billing']['billing_address_2']['priority'] = 35;
             $fields['billing']['billing_address_2']['class'] = array('form-row-wide');
             $fields['billing']['billing_address_2']['required'] = false;
+            $fields['billing']['billing_address_2']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
-        // PIN Code
-        if (isset($fields['billing']['billing_postcode'])) {
-            $fields['billing']['billing_postcode']['label'] = __('PIN Code', 'ayur-core');
-            $fields['billing']['billing_postcode']['placeholder'] = __('6-digit PIN Code', 'ayur-core');
-            $fields['billing']['billing_postcode']['priority'] = 40;
-            $fields['billing']['billing_postcode']['class'] = array('form-row-first');
-            $fields['billing']['billing_postcode']['required'] = true;
-        }
-
-        // City
+        // 7. City / District (Compact 2-col with State on desktop)
         if (isset($fields['billing']['billing_city'])) {
             $fields['billing']['billing_city']['label'] = __('City / District', 'ayur-core');
             $fields['billing']['billing_city']['placeholder'] = __('City or District', 'ayur-core');
-            $fields['billing']['billing_city']['priority'] = 45;
-            $fields['billing']['billing_city']['class'] = array('form-row-last');
+            $fields['billing']['billing_city']['priority'] = 40;
+            $fields['billing']['billing_city']['class'] = array('form-row-first');
             $fields['billing']['billing_city']['required'] = true;
+            $fields['billing']['billing_city']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
-        // State
+        // 8. State (Compact 2-col with City on desktop)
         if (isset($fields['billing']['billing_state'])) {
             $fields['billing']['billing_state']['label'] = __('State', 'ayur-core');
-            $fields['billing']['billing_state']['priority'] = 50;
-            $fields['billing']['billing_state']['class'] = array('form-row-wide');
+            $fields['billing']['billing_state']['priority'] = 45;
+            $fields['billing']['billing_state']['class'] = array('form-row-last');
             $fields['billing']['billing_state']['required'] = true;
+            $fields['billing']['billing_state']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
-        // Country
+        // 9. PIN Code
+        if (isset($fields['billing']['billing_postcode'])) {
+            $fields['billing']['billing_postcode']['label'] = __('PIN Code', 'ayur-core');
+            $fields['billing']['billing_postcode']['placeholder'] = __('6-digit PIN Code', 'ayur-core');
+            $fields['billing']['billing_postcode']['priority'] = 50;
+            $fields['billing']['billing_postcode']['class'] = array('form-row-wide');
+            $fields['billing']['billing_postcode']['required'] = true;
+            $fields['billing']['billing_postcode']['custom_attributes'] = array(
+                'autocomplete' => 'off',
+                'inputmode'    => 'numeric',
+                'maxlength'    => '6',
+            );
+        }
+
+        // 10. Country
         if (isset($fields['billing']['billing_country'])) {
             $fields['billing']['billing_country']['priority'] = 55;
             $fields['billing']['billing_country']['default'] = 'IN';
+            $fields['billing']['billing_country']['custom_attributes'] = array('autocomplete' => 'off');
         }
 
         return $fields;
+    }
+
+    /**
+     * Normalize and validate Indian mobile phone number
+     *
+     * Rules:
+     * - Strips all non-digit characters.
+     * - Handles optional +91 prefix (12 digits starting with 91).
+     * - Handles optional 0 trunk prefix (11 digits starting with 0).
+     * - Valid numbers must be exactly 10 digits starting with 6, 7, 8, or 9.
+     *
+     * @param string $raw_phone
+     * @return string|false Normalized 10-digit phone number or false if invalid.
+     */
+    public static function normalize_indian_mobile($raw_phone) {
+        if (empty($raw_phone)) {
+            return false;
+        }
+
+        $digits = preg_replace('/\D/', '', (string) $raw_phone);
+
+        if (strlen($digits) === 12 && substr($digits, 0, 2) === '91') {
+            $digits = substr($digits, 2);
+        } elseif (strlen($digits) === 11 && substr($digits, 0, 1) === '0') {
+            $digits = substr($digits, 1);
+        }
+
+        if (preg_match('/^[6-9]\d{9}$/', $digits)) {
+            return $digits;
+        }
+
+        return false;
+    }
+
+    /**
+     * Enforce server-side phone number validation on checkout submission
+     */
+    public static function validate_indian_phone_number() {
+        $raw_phone = isset($_POST['billing_phone']) ? sanitize_text_field(wp_unslash($_POST['billing_phone'])) : '';
+
+        if (empty(trim($raw_phone))) {
+            wc_add_notice(__('<strong>Mobile Number</strong> is required. Please enter your 10-digit mobile number.', 'ayur-core'), 'error');
+            return;
+        }
+
+        $normalized = self::normalize_indian_mobile($raw_phone);
+        if (!$normalized) {
+            wc_add_notice(__('Please enter a valid 10-digit Indian mobile number (e.g. 9876543210 or +91 9876543210).', 'ayur-core'), 'error');
+            return;
+        }
+
+        // Overwrite $_POST with clean 10-digit normalized phone number
+        $_POST['billing_phone'] = $normalized;
+        if (isset($_POST['shipping_phone'])) {
+            $_POST['shipping_phone'] = $normalized;
+        }
+    }
+
+    /**
+     * Save verified normalized phone number to WooCommerce order
+     */
+    public static function save_normalized_phone_to_order($order, $data) {
+        if (isset($_POST['billing_phone'])) {
+            $normalized = self::normalize_indian_mobile($_POST['billing_phone']);
+            if ($normalized && $order instanceof WC_Order) {
+                $order->set_billing_phone($normalized);
+                if (is_callable(array($order, 'set_shipping_phone'))) {
+                    $order->set_shipping_phone($normalized);
+                }
+            }
+        }
     }
 
     /**

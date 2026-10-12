@@ -30,42 +30,17 @@ class Ayur_Address_Autofill {
     }
 
     /**
-     * Enqueue Google Places API if enabled and API key is present
+     * Address scripts are intentionally disabled for clean manual entry.
      */
     public static function enqueue_address_scripts() {
-        if (!function_exists('is_checkout') || !is_checkout()) {
-            return;
-        }
-
-        $api_key = self::get_api_key();
-        if (self::is_enabled() && !empty($api_key)) {
-            // Lazy load Google Places API restricted to Places library
-            wp_enqueue_script(
-                'ayur-google-places',
-                'https://maps.googleapis.com/maps/api/js?key=' . esc_attr($api_key) . '&libraries=places&loading=async',
-                array(),
-                null,
-                true
-            );
-        }
-
-        wp_localize_script('ayur-core-script', 'ayurAddressParams', array(
-            'enabled'             => self::is_enabled(),
-            'has_api_key'         => !empty($api_key),
-            'country_restriction' => self::get_country_restriction(),
-            'ajax_url'            => admin_url('admin-ajax.php'),
-            'nonce'               => wp_create_nonce('ayur_address_nonce'),
-            'i18n'                => array(
-                'search_placeholder' => __('🔍 Search your building, street, or landmark...', 'ayur-core'),
-                'validating_pin'     => __('Checking PIN Code...', 'ayur-core'),
-                'pin_matched'        => __('✓ Location verified', 'ayur-core'),
-                'pin_invalid'        => __('Please enter a valid 6-digit Indian PIN Code', 'ayur-core'),
-            )
-        ));
+        // Address autofill/autocomplete scripts intentionally removed.
+        return;
     }
 
     /**
-     * Enforce standard W3C autocomplete attributes on WooCommerce checkout fields
+     * Set explicit autocomplete attributes on WooCommerce checkout fields:
+     * - Name & Email: standard W3C attributes (given-name, family-name, email)
+     * - Address & Phone: autocomplete="off" to prevent automated address autofill
      */
     public static function add_browser_autofill_attributes($fields) {
         // Billing fields
@@ -79,25 +54,25 @@ class Ayur_Address_Autofill {
             $fields['billing']['billing_email']['custom_attributes']['autocomplete'] = 'email';
         }
         if (isset($fields['billing']['billing_phone'])) {
-            $fields['billing']['billing_phone']['custom_attributes']['autocomplete'] = 'tel';
+            $fields['billing']['billing_phone']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['billing']['billing_address_1'])) {
-            $fields['billing']['billing_address_1']['custom_attributes']['autocomplete'] = 'street-address';
+            $fields['billing']['billing_address_1']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['billing']['billing_address_2'])) {
-            $fields['billing']['billing_address_2']['custom_attributes']['autocomplete'] = 'address-line2';
+            $fields['billing']['billing_address_2']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['billing']['billing_city'])) {
-            $fields['billing']['billing_city']['custom_attributes']['autocomplete'] = 'address-level2';
+            $fields['billing']['billing_city']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['billing']['billing_state'])) {
-            $fields['billing']['billing_state']['custom_attributes']['autocomplete'] = 'address-level1';
+            $fields['billing']['billing_state']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['billing']['billing_postcode'])) {
-            $fields['billing']['billing_postcode']['custom_attributes']['autocomplete'] = 'postal-code';
+            $fields['billing']['billing_postcode']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['billing']['billing_country'])) {
-            $fields['billing']['billing_country']['custom_attributes']['autocomplete'] = 'country';
+            $fields['billing']['billing_country']['custom_attributes']['autocomplete'] = 'off';
         }
 
         // Shipping fields
@@ -108,25 +83,25 @@ class Ayur_Address_Autofill {
             $fields['shipping']['shipping_last_name']['custom_attributes']['autocomplete'] = 'family-name';
         }
         if (isset($fields['shipping']['shipping_address_1'])) {
-            $fields['shipping']['shipping_address_1']['custom_attributes']['autocomplete'] = 'street-address';
+            $fields['shipping']['shipping_address_1']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['shipping']['shipping_address_2'])) {
-            $fields['shipping']['shipping_address_2']['custom_attributes']['autocomplete'] = 'address-line2';
+            $fields['shipping']['shipping_address_2']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['shipping']['shipping_city'])) {
-            $fields['shipping']['shipping_city']['custom_attributes']['autocomplete'] = 'address-level2';
+            $fields['shipping']['shipping_city']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['shipping']['shipping_state'])) {
-            $fields['shipping']['shipping_state']['custom_attributes']['autocomplete'] = 'address-level1';
+            $fields['shipping']['shipping_state']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['shipping']['shipping_postcode'])) {
-            $fields['shipping']['shipping_postcode']['custom_attributes']['autocomplete'] = 'postal-code';
+            $fields['shipping']['shipping_postcode']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['shipping']['shipping_phone'])) {
-            $fields['shipping']['shipping_phone']['custom_attributes']['autocomplete'] = 'tel';
+            $fields['shipping']['shipping_phone']['custom_attributes']['autocomplete'] = 'off';
         }
         if (isset($fields['shipping']['shipping_country'])) {
-            $fields['shipping']['shipping_country']['custom_attributes']['autocomplete'] = 'country';
+            $fields['shipping']['shipping_country']['custom_attributes']['autocomplete'] = 'off';
         }
 
         return $fields;

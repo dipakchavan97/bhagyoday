@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AYUR_CORE_VERSION', '1.2.0');
+define('AYUR_CORE_VERSION', '1.2.1');
 define('AYUR_CORE_PATH', plugin_dir_path(__FILE__));
 define('AYUR_CORE_URL', plugin_dir_url(__FILE__));
 
