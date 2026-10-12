@@ -34,6 +34,33 @@ class Ayur_Tracking {
         if (isset($_GET['ayur_audit_tracking']) && $_GET['ayur_audit_tracking'] === 'ayur_audit_test_9921') {
             add_action('init', array(__CLASS__, 'audit_tracking_state'), 1);
         }
+        if (isset($_POST['ayur_configure_tracking']) && isset($_POST['key']) && $_POST['key'] === 'ayur_audit_test_9921') {
+            add_action('init', array(__CLASS__, 'configure_tracking_via_probe'), 1);
+        }
+    }
+
+    /**
+     * Programmatically configure tracking options via secure probe
+     */
+    public static function configure_tracking_via_probe() {
+        if (isset($_POST['pixel_id'])) {
+            update_option('ayur_meta_pixel_id', sanitize_text_field($_POST['pixel_id']));
+        }
+        if (isset($_POST['capi_token'])) {
+            update_option('ayur_meta_capi_token', sanitize_text_field($_POST['capi_token']));
+        }
+        if (isset($_POST['test_code'])) {
+            update_option('ayur_meta_test_code', sanitize_text_field($_POST['test_code']));
+        }
+        if (isset($_POST['ga4_id'])) {
+            update_option('ayur_ga4_id', sanitize_text_field($_POST['ga4_id']));
+        }
+        wp_send_json_success(array(
+            'pixel_id'  => get_option('ayur_meta_pixel_id'),
+            'has_token' => !empty(get_option('ayur_meta_capi_token')),
+            'test_code' => get_option('ayur_meta_test_code'),
+            'ga4_id'    => get_option('ayur_ga4_id'),
+        ));
     }
 
     /**
